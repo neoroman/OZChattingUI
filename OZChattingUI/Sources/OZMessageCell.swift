@@ -1,0 +1,761 @@
+//
+//  OZMessageCell.swift
+//  OZChattingUI
+//
+//  Created by Henry Kim on 2020/05/03.
+//  Copyright © 2020 ALTERANT. All rights reserved.
+//
+
+import UIKit
+import CollectionKit
+import NVActivityIndicatorView
+
+public var kCornerRadius: CGFloat = 7
+public var kTextFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
+
+open class IncomingTextMessageCell: OZMessageCell {
+    var textLabel = OZBubbleLabel()
+    var iconImage = UIImageView()
+    var timeLabel = UILabel()
+    
+    override public var message: OZMessage! {
+        didSet {
+            textLabel.attributedText = NSAttributedString(string: message.content, attributes: [ NSAttributedString.Key.font: kTextFont as Any ])
+            textLabel.textColor = message.textColor
+            textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
+            textLabel.incomingColor = message.bubbleColor
+            if message.iconImage.lowercased().hasPrefix("file"),
+                let anUrl = URL(string: message.iconImage),
+                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
+                // Local file with fileURL
+                iconImage.image = anImage
+            }
+            else if message.iconImage.hasPrefix("/"),
+                let anImage = UIImage(contentsOfFile: message.iconImage) {
+                // Local file with relative path
+                iconImage.image = anImage
+            }
+            else {
+                // 내장 이미지명
+                if let anImage = UIImage(named: message.iconImage) {
+                    iconImage.image = anImage
+                }
+                else if Bundle.isFramework() {
+                    iconImage.image = UIImage.frameworkImage(named: "nopic@2x", ofType: "png")
+                }
+            }
+            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            
+            timeLabel.textColor = message.timeFontColor
+            timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
+            timeLabel.frame.size = CGSize(width: 50, height: 12)
+            if message.timestamp > 0 {
+                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+            }
+            else {
+                #if DEBUG
+                timeLabel.text = "3:52 PM"
+                #endif
+            }
+            setNeedsLayout()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        textLabel.frame = frame
+        textLabel.numberOfLines = 0
+        textLabel.isIncoming = true
+        addSubview(textLabel)
+        addSubview(iconImage)
+        timeLabel.frame = frame
+        addSubview(timeLabel)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        iconImage.layer.cornerRadius = iconImage.frame.height / 2
+        iconImage.layer.masksToBounds = true
+        let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
+        timeLabel.frame.origin = CGPoint(x: self.bounds.maxX+5, y: timeLabelOriginY)
+        
+        textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
+    }
+}
+
+open class OutgoingTextMessageCell: OZMessageCell {
+    var textLabel = OZBubbleLabel()
+    var timeLabel = UILabel()
+    
+    override public var message: OZMessage! {
+        didSet {
+            textLabel.attributedText = NSAttributedString(string: message.content, attributes: [ NSAttributedString.Key.font: kTextFont as Any ])
+            textLabel.textColor = message.textColor
+            textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
+            textLabel.outgoingColor = message.bubbleColor
+            
+            timeLabel.textColor = message.timeFontColor
+            timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
+            timeLabel.frame.size = CGSize(width: 50, height: 12)
+            timeLabel.textAlignment = .right
+            if message.timestamp > 0 {
+                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+            }
+            else {
+                #if DEBUG
+                timeLabel.text = "3:52 PM"
+                #endif
+            }
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        textLabel.frame = frame
+        textLabel.numberOfLines = 0
+        textLabel.isIncoming = false
+        addSubview(textLabel)
+        timeLabel.frame = frame
+        addSubview(timeLabel)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
+        timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+
+        textLabel.frame = bounds
+    }
+}
+
+
+open class TextMessageCell: OZMessageCell {
+    var textLabel = UILabel()
+    var seperator = UIImageView()
+    
+    override public var message: OZMessage! {
+        didSet {
+            textLabel.text = message.content
+            textLabel.textColor = message.textColor
+            textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
+            textLabel.backgroundColor = message.backgroundColor
+            if message.type == .announcement {
+                textLabel.textAlignment = .center
+                seperator.isHidden = false
+                seperator.backgroundColor = message.seperatorColor
+            }
+            else {
+                seperator.isHidden = true
+            }
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        seperator.frame = frame
+        addSubview(seperator)
+        textLabel.frame = frame
+        textLabel.numberOfLines = 0
+        addSubview(textLabel)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        textLabel.frame = bounds.insetBy(dx: message.cellPadding, dy: message.cellPadding)
+        if message.type == .announcement {
+            seperator.isHidden = false
+            seperator.frame.size.width = UIScreen.main.bounds.width * message.bubbleWidthRatio
+            seperator.frame.size.height = 1.0
+            seperator.center = bounds.center
+        }
+    }
+}
+
+open class IncomingStatusMessageCell: OZMessageCell {
+    var textLabel = UILabel()
+    var iconImage = UIImageView()
+    var timeLabel = UILabel()
+    
+    override public var message: OZMessage! {
+        didSet {
+            textLabel.text = message.content
+            textLabel.textColor = message.textColor
+            textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
+            if let aType = message.deviceStatus {
+                if message.iconImage.count > 0, let anImg = UIImage(named: message.iconImage) {
+                    iconImage.image = anImg
+                }
+                else if !aType.imageName().hasSuffix("@2x"), let anImg = UIImage(named: "\(aType.imageName())@2x") {
+                    iconImage.image = anImg
+                }
+                else if !aType.imageName().hasSuffix("@3x"), let anImg = UIImage(named: "\(aType.imageName())@3x") {
+                    iconImage.image = anImg
+                }
+                else if let anImg = UIImage(named: aType.imageName()) {
+                    iconImage.image = anImg
+                }
+                else if Bundle.isFramework() {
+                    iconImage.image = UIImage.frameworkImage(named: "\(aType.imageName())@2x", ofType: "png")
+                }
+                
+                iconImage.frame.origin = CGPoint(x: 0, y: 0)
+                iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+                iconImage.center.y = textLabel.center.y
+            }
+            
+            timeLabel.textColor = message.timeFontColor
+            timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
+            if message.timestamp > 0 {
+                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+            }
+            else {
+                #if DEBUG
+                timeLabel.text = "3:52 PM"
+                #endif
+            }
+            timeLabel.sizeToFit()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        textLabel.frame = frame
+        textLabel.numberOfLines = 2
+        addSubview(textLabel)
+        iconImage.frame = frame
+        addSubview(iconImage)
+        timeLabel.frame = frame
+        addSubview(timeLabel)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
+        iconImage.center.y = textLabel.center.y
+        iconImage.layer.cornerRadius = iconImage.frame.height / 2
+        iconImage.layer.masksToBounds = true
+        timeLabel.frame.origin = CGPoint(x: message.cellLeftPadding, y: textLabel.frame.maxY - 12)
+    }
+}
+
+open class ImagePlusIconMessageCell: ImageMessageCell {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isIconHidden = false
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        // TODO: do something here by Henry on 2020.05.09
+        if let aSuper = self.superview {
+            let p = self.convert(self.frame.origin, to: aSuper)
+            if p.x > aSuper.bounds.minX + message.cellLeftPadding {
+                isIconHidden = true
+                layoutIfNeeded()
+            }
+        }
+    }
+}
+
+open class ImageMessageCell: OZMessageCell {
+    open var imageView = UIImageView()
+    var bubbleImageView = OZBubbleImageView()
+    var iconImage = UIImageView()
+    var isIconHidden = true
+    var timeLabel = UILabel()
+    
+    override public var message: OZMessage! {
+        didSet {
+            imageView.isHidden = !isIconHidden
+            if message.content.lowercased().hasPrefix("file"),
+                let anUrl = URL(string: message.content),
+                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
+                // Local file with fileURL
+                imageView.image = anImage
+                bubbleImageView.image = anImage
+            }
+            else if message.content.hasPrefix("/"),
+                let anImage = UIImage(contentsOfFile: message.content) {
+                // Local file with relative path
+                imageView.image = anImage
+                bubbleImageView.image = anImage
+            }
+            else {
+                // 내장 이미지명
+                if let anImage = UIImage(named: message.content) {
+                    imageView.image = anImage
+                    bubbleImageView.image = anImage
+                }
+                else if Bundle.isFramework() {
+                    imageView.image = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png")
+                    bubbleImageView.image = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png")
+                }
+            }
+            imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
+            
+            bubbleImageView.isHidden = isIconHidden
+            bubbleImageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
+            
+            if message.type == .emoticon {
+                timeLabel.textColor = message.timeFontColor
+                timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
+                timeLabel.frame.size = CGSize(width: 50, height: 12)
+                timeLabel.textAlignment = .right
+                if message.timestamp > 0 {
+                    timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+                }
+                else {
+                    #if DEBUG
+                    timeLabel.text = "3:52 PM"
+                    #endif
+                }
+                timeLabel.isHidden = false
+            }
+            else {
+                timeLabel.isHidden = true
+            }
+
+            iconImage.isHidden = isIconHidden
+            if message.iconImage.lowercased().hasPrefix("file"),
+                let anUrl = URL(string: message.iconImage),
+                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
+                // Local file with fileURL
+                iconImage.image = anImage
+            }
+            else if message.iconImage.hasPrefix("/"),
+                let anImage = UIImage(contentsOfFile: message.iconImage) {
+                // Local file with relative path
+                iconImage.image = anImage
+            }
+            else {
+                // 내장 이미지명
+                if let anImage = UIImage(named: message.iconImage) {
+                    iconImage.image = anImage
+                }
+                else if Bundle.isFramework() {
+                    iconImage.image = UIImage.frameworkImage(named: "nopic@2x", ofType: "png")
+                }
+            }
+            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            setNeedsLayout()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        imageView.frame = bounds
+        imageView.contentMode = .scaleAspectFill
+        //clipsToBounds = true
+        addSubview(imageView)
+        iconImage.frame = frame
+        addSubview(iconImage)
+        bubbleImageView.frame = frame
+        addSubview(bubbleImageView)
+        timeLabel.frame = frame
+        addSubview(timeLabel)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        imageView.isHidden = !isIconHidden
+        if isIconHidden {
+            imageView.frame = bounds
+        }
+        else {
+            imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
+        }
+        imageView.layer.cornerRadius = kCornerRadius
+        imageView.layer.masksToBounds = true
+        
+        bubbleImageView.isHidden = isIconHidden
+        bubbleImageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
+        bubbleImageView.layer.cornerRadius = kCornerRadius
+        bubbleImageView.layer.masksToBounds = true
+        
+        if message.type == .emoticon {
+            let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
+            if message.alignment == .right {
+                timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+            }
+            else {
+                timeLabel.frame.origin = CGPoint(x: self.bounds.maxX+5, y: timeLabelOriginY)
+            }
+        }
+
+        iconImage.isHidden = isIconHidden
+        iconImage.layer.cornerRadius = iconImage.frame.height / 2
+        iconImage.layer.masksToBounds = true
+    }
+}
+
+open class AudioPlusIconMessageCell: AudioMessageCell {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isIconHidden = false
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+open class AudioMessageCell: OZMessageCell {
+    open var pauseImg = UIImage(named: "pause")
+    open var playImg = UIImage(named: "play")
+    open var audioPlayer = OZAudioPlayer()
+    open var activityIndicator = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 25, height: 25), type: .circleStrokeSpin, color: UIColor.gray.withAlphaComponent(0.5), padding: 0)
+    var textLabel = UILabel()
+    var backView = OZProgressBarView(frame: CGRect(x: 0, y: 0, width: 120, height: 40))
+    var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+    var iconImage = UIImageView()
+    var eTimeLabel = UILabel()
+    var isIconHidden = true
+    
+    open var isPlaying = false {
+        didSet {
+            if isPlaying {
+                self.playImage.image = self.pauseImg
+            }
+            else {
+                self.playImage.image = self.playImg
+                self.backView.progress = 0.0
+                self.activityIndicator.stopAnimating()
+            }
+        }
+    }
+    
+    override public var message: OZMessage! {
+        didSet {
+            if playImg == nil, Bundle.isFramework() {
+                playImg = UIImage.frameworkImage(named: "play@2x", ofType: "png")
+            }
+            if pauseImg == nil, Bundle.isFramework() {
+                pauseImg = UIImage.frameworkImage(named: "pause@2x", ofType: "png")
+            }
+            if let aDur = message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.05.22
+                textLabel.text = String(format: "%02d:%02d", aDur / 60, aDur % 60)
+            }
+            else if let anUrl = OZAudioPlayer.getUrlFromPath(path: message.content),
+                let aPlayer = OZAudioPlayer.getAudioPlayer(fileURL: anUrl) {
+                if message.type == .voice {
+                    let aDur = OZAudioPlayer.getAmrDuration(fileURL: anUrl)
+                    textLabel.text = String(format: "%02d:%02d", Int(aDur) / 60, Int(aDur) % 60)
+                }
+                else {
+                    textLabel.text = String(format: "%02d:%02d", Int(aPlayer.duration) / 60, Int(aPlayer.duration) % 60)
+                }
+            }
+            else {
+                textLabel.text = ""
+            }
+            textLabel.textColor = message.textColor
+            textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
+            textLabel.backgroundColor = .clear
+            textLabel.textAlignment = .right
+            
+            if message.iconImage.lowercased().hasPrefix("file"),
+                let anUrl = URL(string: message.iconImage),
+                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
+                // Local file with fileURL
+                iconImage.image = anImage
+            }
+            else if message.iconImage.hasPrefix("/"),
+                let anImage = UIImage(contentsOfFile: message.iconImage) {
+                // Local file with relative path
+                iconImage.image = anImage
+            }
+            else {
+                // 내장 이미지명
+                if let anImage = UIImage(named: message.iconImage) {
+                    iconImage.image = anImage
+                }
+                else if Bundle.isFramework() {
+                    iconImage.image = UIImage.frameworkImage(named: "nopic@2x", ofType: "png")
+                }
+            }
+            iconImage.frame.origin = CGPoint(x: 0, y: 0)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            
+            playImage.image = isPlaying ? pauseImg : playImg
+            
+            backView.backgroundColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)
+            backView.center.y = iconImage.center.y
+            backView.tintColoredImageView = playImage
+            backView.tintColoredImage = pauseImg
+            
+            eTimeLabel.textColor = message.timeFontColor
+            eTimeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
+            if message.timestamp > 0 {
+                eTimeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+            }
+            else {
+                #if DEBUG
+                eTimeLabel.text = "3:52 PM"
+                #endif
+            }
+            eTimeLabel.sizeToFit()
+            setNeedsLayout()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(backView)
+        textLabel.frame = frame
+        textLabel.numberOfLines = 1
+        backView.addSubview(textLabel)
+        iconImage.frame = frame
+        addSubview(iconImage)
+        eTimeLabel.frame = frame
+        addSubview(eTimeLabel)
+        backView.addSubview(playImage)
+        addSubview(activityIndicator)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        if isIconHidden {
+            backView.frame = bounds
+        }
+        else {
+            backView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
+        }
+        textLabel.layer.cornerRadius = kCornerRadius
+        textLabel.layer.masksToBounds = true
+        textLabel.frame = backView.bounds.insetBy(dx: 14, dy: 11)
+        
+        backView.layer.cornerRadius = kCornerRadius
+        backView.layer.masksToBounds = true
+        
+        playImage.frame = CGRect(x: 10, y: 10, width: 20, height: 20)
+        
+        iconImage.isHidden = isIconHidden
+        iconImage.layer.cornerRadius = iconImage.frame.height / 2
+        iconImage.layer.masksToBounds = true
+        
+        if isIconHidden {
+            eTimeLabel.frame.origin = CGPoint(x: bounds.minX-55, y: bounds.maxY-12)
+        }
+        else {
+            eTimeLabel.frame.origin = CGPoint(x: bounds.maxX + 5, y: bounds.maxY-12)
+        }
+        activityIndicator.center = CGPoint(x: eTimeLabel.frame.midX, y: eTimeLabel.frame.midY - 20)
+    }
+    
+    open func preparePlay(file: String) {
+        activityIndicator.startAnimating()
+    }
+    
+    open func playOrStop(named: String? = nil) {
+        activityIndicator.stopAnimating()
+        
+        if audioPlayer.status == .playing {
+            isPlaying = false
+            audioPlayer.pause()
+        }
+        else if audioPlayer.status == .paused {
+            isPlaying = true
+            audioPlayer.resume()
+        }
+        else {
+            isPlaying = true
+            if let aFile = named,
+                FileManager.isFileExist(named: aFile) {
+                audioPlayer.play(named: aFile) { (elapse, dur) in
+                    self.playProgress(elapse, dur)
+                }
+            }
+            else {
+                #if DEBUG
+                audioPlayer.play(named: "test") { (elapse, dur) in
+                    self.playProgress(elapse, dur)
+                }
+                #endif
+            }
+        }
+    }
+    func playProgress(_ elapsed: TimeInterval, _ duration: TimeInterval) {
+        self.backView.progress = CGFloat(elapsed / duration)
+        if elapsed < 60 {
+            self.textLabel.text = String(format: "00:%02d", Int(elapsed))
+        }
+        else {
+            self.textLabel.text = String(format: "%02d:%02d", Int(elapsed) / 60, Int(elapsed) % 60)
+        }
+        if self.backView.progress >= 1 {
+            self.isPlaying = false
+            self.backView.progress = 0
+        }
+    }
+}
+
+
+
+open class OZMessageCell: DynamicView {
+    
+    public var message: OZMessage! {
+        didSet {
+            layer.cornerRadius = message.roundedCornder ? 12 : 0
+            
+            if message.showShadow {
+                layer.shadowOffset = CGSize(width: 0, height: 5)
+                layer.shadowOpacity = 0.3
+                layer.shadowRadius = 8
+                layer.shadowColor = message.shadowColor.cgColor
+                layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
+            } else {
+                layer.shadowOpacity = 0
+                layer.shadowColor = nil
+            }
+            
+            backgroundColor = message.backgroundColor
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
+        isOpaque = true
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        if message?.showShadow ?? false {
+            // TODO: 여기서 subview들에 shadow를 먹이는 것이 좋겠다. HOW ?!? by Henry on 2020.05.04
+            // TOOD: 근데 여기는 superclass 이닷...ㅜ.ㅜ  by Henry on 2020.05.04
+            layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
+        }
+    }
+
+    // MARK: - Helpers from MessageKit
+    public static func labelRect(for text: String, font: UIFont, considering maxSize: CGSize) -> CGRect {
+        let attributedText = NSAttributedString(string: text, attributes: [ NSAttributedString.Key.font: font as Any ])
+        let rect = attributedText.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
+        return rect
+    }
+
+    fileprivate static let magifyWidthRatio: CGFloat = 2
+    public static func sizeForText(_ text: String, fontName: String = "AppleSDGothicNeo-Medium",
+                            fontSize: CGFloat = 16, maxWidth: CGFloat,
+                            paddingX: CGFloat, paddingY: CGFloat) -> CGSize {
+        let maxSize = CGSize(width: maxWidth - paddingX * magifyWidthRatio, height: 0)
+        let font = UIFont(name: fontName, size: fontSize) ?? kTextFont ?? UIFont.systemFont(ofSize: 16)
+        var rect = OZMessageCell.labelRect(for: text, font: font, considering: maxSize)
+        rect.size = CGSize(width: floor(rect.size.width) + magifyWidthRatio * paddingX, height: floor(rect.size.height) + 2 * paddingY)
+        return rect.size
+    }
+        
+    static func frameForMessage(_ message: OZMessage, containerWidth: CGFloat) -> CGRect {
+        let aMaxWidth = containerWidth * message.bubbleWidthRatio
+        var xOrigin: CGFloat = 0
+        if message.alignment == .right {
+            xOrigin = containerWidth - (containerWidth * message.bubbleWidthRatio)
+        }
+        
+        if message.type == .image || message.type == .emoticon {
+            var imageSize = CGSize.zero
+            if message.content.lowercased().hasPrefix("file"),
+                let anUrl = URL(string: message.content),
+                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
+                // Local file with fileURL
+                imageSize = anImage.size
+            }
+            else if message.content.hasPrefix("/"),
+                let anImage = UIImage(contentsOfFile: message.content) {
+                // Local file with relative path
+                imageSize = anImage.size
+            }
+            else if let anImg = UIImage(named: message.content) {
+                // 내장 이미지명
+                imageSize = anImg.size
+            }
+            else if Bundle.isFramework(),
+                let anImg = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png") {
+                // 내장 이미지명
+                imageSize = anImg.size
+            }
+            
+            let maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 120)
+            if imageSize.width > maxImageSize.width {
+                imageSize.height /= imageSize.width/maxImageSize.width
+                imageSize.width = maxImageSize.width
+            }
+            if imageSize.height > maxImageSize.height {
+                imageSize.width /= imageSize.height/maxImageSize.height
+                imageSize.height = maxImageSize.height
+            }
+            if message.alignment == .left {
+                imageSize.width += message.cellLeftPadding
+                return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: imageSize)
+            }
+            else {
+                return CGRect(origin: CGPoint(x: containerWidth - imageSize.width, y: 0), size: imageSize)
+            }
+        }
+        else if message.type == .deviceStatus {
+            let size = CGSize(width: containerWidth, height: message.cellHeight)
+            return CGRect(origin: CGPoint(x: 0, y: 0), size: size)
+        }
+        else if message.type == .mp3 || message.type == .voice {
+            if message.alignment == .left {
+                let size = CGSize(width: 120 + message.cellLeftPadding + message.cellPadding, height: message.cellHeight)
+                return CGRect(origin: CGPoint(x: 0, y: 0), size: size)
+            }
+            else {
+                let size = CGSize(width: 120 + message.cellPadding, height: message.cellHeight)
+                return CGRect(origin: CGPoint(x: containerWidth - 120 - message.cellPadding, y: 0), size: size)
+            }
+        }
+        
+        // Alignment: left, center,  right
+        if message.alignment == .center {
+            let size = sizeForText(message.content, fontName: message.fontName,
+                                   fontSize: message.fontSize, maxWidth: containerWidth,
+                                   paddingX: message.cellPadding, paddingY: message.cellPadding)
+            return CGRect(x: (containerWidth - size.width)/2, y: 0, width: size.width + message.cellPadding * 4, height: size.height)
+        } else {
+            let size = sizeForText(message.content, fontName: message.fontName,
+                                   fontSize: message.fontSize, maxWidth: aMaxWidth - 50,
+                                   paddingX: (message.alignment == .left) ? message.cellLeftPadding : message.cellPadding,
+                                   paddingY: message.cellPadding)
+            let origin: CGPoint = (message.alignment == .left) ? .zero : CGPoint(x: containerWidth - size.width, y: 0)
+            return CGRect(origin: origin, size: size)
+        }
+    }
+}

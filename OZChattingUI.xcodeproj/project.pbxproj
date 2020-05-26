@@ -1,0 +1,581 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BA94A71F247CF6E2000AE9CB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BA94A71E247CF6E2000AE9CB /* Info.plist */; };
+		BABC606F2463C48C00C2D82C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BABC606E2463C48C00C2D82C /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		BAFE5E75247CEF81002B0A4B /* OZMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */; };
+		BAFE5E76247CEF81002B0A4B /* OZEmoticonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E4E247CEF81002B0A4B /* OZEmoticonViewController.swift */; };
+		BAFE5E77247CEF81002B0A4B /* OZChattingUI.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFE5E4F247CEF81002B0A4B /* OZChattingUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BAFE5E78247CEF81002B0A4B /* OZEmoticons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E50247CEF81002B0A4B /* OZEmoticons.swift */; };
+		BAFE5E79247CEF81002B0A4B /* OZMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E51247CEF81002B0A4B /* OZMessages.swift */; };
+		BAFE5E7A247CEF81002B0A4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5E53247CEF81002B0A4B /* Localizable.strings */; };
+		BAFE5E7C247CEF81002B0A4B /* OZEmoticonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E56247CEF81002B0A4B /* OZEmoticonCell.swift */; };
+		BAFE5E7D247CEF81002B0A4B /* OZMessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E57247CEF81002B0A4B /* OZMessagesViewController.swift */; };
+		BAFE5E7E247CEF81002B0A4B /* OZVoiceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E58247CEF81002B0A4B /* OZVoiceRecordViewController.swift */; };
+		BAFE5E7F247CEF81002B0A4B /* OZMessagesExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E59247CEF81002B0A4B /* OZMessagesExtension.swift */; };
+		BAFE5E81247CEF81002B0A4B /* OZEmoticonList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E5D247CEF81002B0A4B /* OZEmoticonList.swift */; };
+		BAFE5E82247CEF81002B0A4B /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E5E247CEF81002B0A4B /* TestData.swift */; };
+		BAFE5E83247CEF81002B0A4B /* OZDateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E5F247CEF81002B0A4B /* OZDateHelper.swift */; };
+		BAFE5E84247CEF81002B0A4B /* OZChoosePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E61247CEF81002B0A4B /* OZChoosePopup.swift */; };
+		BAFE5E85247CEF81002B0A4B /* interf_dec.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFE5E63247CEF81002B0A4B /* interf_dec.h */; };
+		BAFE5E86247CEF81002B0A4B /* amrFileCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFE5E64247CEF81002B0A4B /* amrFileCodec.h */; };
+		BAFE5E87247CEF81002B0A4B /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFE5E65247CEF81002B0A4B /* libopencore-amrnb.a */; };
+		BAFE5E88247CEF81002B0A4B /* interf_enc.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFE5E66247CEF81002B0A4B /* interf_enc.h */; };
+		BAFE5E89247CEF81002B0A4B /* amrFileCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E67247CEF81002B0A4B /* amrFileCodec.m */; };
+		BAFE5E8A247CEF81002B0A4B /* DynamicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E68247CEF81002B0A4B /* DynamicView.swift */; };
+		BAFE5E8B247CEF81002B0A4B /* OZCircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E69247CEF81002B0A4B /* OZCircleProgressView.swift */; };
+		BAFE5E8C247CEF81002B0A4B /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E6A247CEF81002B0A4B /* Util.swift */; };
+		BAFE5E8D247CEF81002B0A4B /* OZSwime.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E6B247CEF81002B0A4B /* OZSwime.swift */; };
+		BAFE5E8E247CEF81002B0A4B /* WobbleAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E6D247CEF81002B0A4B /* WobbleAnimator.swift */; };
+		BAFE5E8F247CEF81002B0A4B /* OZBubbleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E6E247CEF81002B0A4B /* OZBubbleLabel.swift */; };
+		BAFE5E90247CEF81002B0A4B /* OZAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E6F247CEF81002B0A4B /* OZAudioPlayer.swift */; };
+		BAFE5E91247CEF81002B0A4B /* OZBubbleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E70247CEF81002B0A4B /* OZBubbleImageView.swift */; };
+		BAFE5E92247CEF81002B0A4B /* OZMimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E71247CEF81002B0A4B /* OZMimeType.swift */; };
+		BAFE5E93247CEF81002B0A4B /* OZProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E72247CEF81002B0A4B /* OZProgressBarView.swift */; };
+		BAFE5E94247CEF81002B0A4B /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E73247CEF81002B0A4B /* CollectionViewController.swift */; };
+		BAFE5E95247CEF81002B0A4B /* OZTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E74247CEF81002B0A4B /* OZTextView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BA94A71E247CF6E2000AE9CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BABC602E2463BAF100C2D82C /* OZChattingUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OZChattingUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BABC606E2463C48C00C2D82C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		BAEE1AA3246436B200EE3414 /* CollectionKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BAEE1AA4246436B200EE3414 /* NVActivityIndicatorView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NVActivityIndicatorView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BAEE1AA6246436B200EE3414 /* YetAnotherAnimationLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = YetAnotherAnimationLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessageCell.swift; sourceTree = "<group>"; };
+		BAFE5E4E247CEF81002B0A4B /* OZEmoticonViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZEmoticonViewController.swift; sourceTree = "<group>"; };
+		BAFE5E4F247CEF81002B0A4B /* OZChattingUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OZChattingUI.h; sourceTree = "<group>"; };
+		BAFE5E50247CEF81002B0A4B /* OZEmoticons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZEmoticons.swift; sourceTree = "<group>"; };
+		BAFE5E51247CEF81002B0A4B /* OZMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessages.swift; sourceTree = "<group>"; };
+		BAFE5E54247CEF81002B0A4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		BAFE5E56247CEF81002B0A4B /* OZEmoticonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZEmoticonCell.swift; sourceTree = "<group>"; };
+		BAFE5E57247CEF81002B0A4B /* OZMessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesViewController.swift; sourceTree = "<group>"; };
+		BAFE5E58247CEF81002B0A4B /* OZVoiceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZVoiceRecordViewController.swift; sourceTree = "<group>"; };
+		BAFE5E59247CEF81002B0A4B /* OZMessagesExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesExtension.swift; sourceTree = "<group>"; };
+		BAFE5E5D247CEF81002B0A4B /* OZEmoticonList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZEmoticonList.swift; sourceTree = "<group>"; };
+		BAFE5E5E247CEF81002B0A4B /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		BAFE5E5F247CEF81002B0A4B /* OZDateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZDateHelper.swift; sourceTree = "<group>"; };
+		BAFE5E61247CEF81002B0A4B /* OZChoosePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZChoosePopup.swift; sourceTree = "<group>"; };
+		BAFE5E63247CEF81002B0A4B /* interf_dec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_dec.h; sourceTree = "<group>"; };
+		BAFE5E64247CEF81002B0A4B /* amrFileCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amrFileCodec.h; sourceTree = "<group>"; };
+		BAFE5E65247CEF81002B0A4B /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrnb.a"; sourceTree = "<group>"; };
+		BAFE5E66247CEF81002B0A4B /* interf_enc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_enc.h; sourceTree = "<group>"; };
+		BAFE5E67247CEF81002B0A4B /* amrFileCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = amrFileCodec.m; sourceTree = "<group>"; };
+		BAFE5E68247CEF81002B0A4B /* DynamicView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicView.swift; sourceTree = "<group>"; };
+		BAFE5E69247CEF81002B0A4B /* OZCircleProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZCircleProgressView.swift; sourceTree = "<group>"; };
+		BAFE5E6A247CEF81002B0A4B /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		BAFE5E6B247CEF81002B0A4B /* OZSwime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZSwime.swift; sourceTree = "<group>"; };
+		BAFE5E6D247CEF81002B0A4B /* WobbleAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WobbleAnimator.swift; sourceTree = "<group>"; };
+		BAFE5E6E247CEF81002B0A4B /* OZBubbleLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZBubbleLabel.swift; sourceTree = "<group>"; };
+		BAFE5E6F247CEF81002B0A4B /* OZAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZAudioPlayer.swift; sourceTree = "<group>"; };
+		BAFE5E70247CEF81002B0A4B /* OZBubbleImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZBubbleImageView.swift; sourceTree = "<group>"; };
+		BAFE5E71247CEF81002B0A4B /* OZMimeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMimeType.swift; sourceTree = "<group>"; };
+		BAFE5E72247CEF81002B0A4B /* OZProgressBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZProgressBarView.swift; sourceTree = "<group>"; };
+		BAFE5E73247CEF81002B0A4B /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		BAFE5E74247CEF81002B0A4B /* OZTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZTextView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BABC602B2463BAF100C2D82C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BABC606F2463C48C00C2D82C /* AVFoundation.framework in Frameworks */,
+				BAFE5E87247CEF81002B0A4B /* libopencore-amrnb.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7B735F3F49F4E0D7AF7DEFC6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BAEE1AA3246436B200EE3414 /* CollectionKit.framework */,
+				BAEE1AA4246436B200EE3414 /* NVActivityIndicatorView.framework */,
+				BAEE1AA6246436B200EE3414 /* YetAnotherAnimationLibrary.framework */,
+				BABC606E2463C48C00C2D82C /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BA94A71D247CF6E2000AE9CB /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				BA94A71E247CF6E2000AE9CB /* Info.plist */,
+			);
+			name = Supporting;
+			path = OZChattingUI/Supporting;
+			sourceTree = "<group>";
+		};
+		BABC60242463BAF100C2D82C = {
+			isa = PBXGroup;
+			children = (
+				BAFE5E01247CEEE8002B0A4B /* OZChattingUI */,
+				BA94A71D247CF6E2000AE9CB /* Supporting */,
+				BABC602F2463BAF100C2D82C /* Products */,
+				E11A707CEC4D0DAB90AC7110 /* Pods */,
+				7B735F3F49F4E0D7AF7DEFC6 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		BABC602F2463BAF100C2D82C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BABC602E2463BAF100C2D82C /* OZChattingUI.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BAFE5E01247CEEE8002B0A4B /* OZChattingUI */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5E4C247CEF81002B0A4B /* Sources */,
+			);
+			path = OZChattingUI;
+			sourceTree = "<group>";
+		};
+		BAFE5E4C247CEF81002B0A4B /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5E4F247CEF81002B0A4B /* OZChattingUI.h */,
+				BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */,
+				BAFE5E4E247CEF81002B0A4B /* OZEmoticonViewController.swift */,
+				BAFE5E50247CEF81002B0A4B /* OZEmoticons.swift */,
+				BAFE5E51247CEF81002B0A4B /* OZMessages.swift */,
+				BAFE5E52247CEF81002B0A4B /* Resources */,
+				BAFE5E56247CEF81002B0A4B /* OZEmoticonCell.swift */,
+				BAFE5E57247CEF81002B0A4B /* OZMessagesViewController.swift */,
+				BAFE5E58247CEF81002B0A4B /* OZVoiceRecordViewController.swift */,
+				BAFE5E59247CEF81002B0A4B /* OZMessagesExtension.swift */,
+				BAFE5E5C247CEF81002B0A4B /* OZHelpers */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		BAFE5E52247CEF81002B0A4B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5E53247CEF81002B0A4B /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BAFE5E5C247CEF81002B0A4B /* OZHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5E5D247CEF81002B0A4B /* OZEmoticonList.swift */,
+				BAFE5E5E247CEF81002B0A4B /* TestData.swift */,
+				BAFE5E5F247CEF81002B0A4B /* OZDateHelper.swift */,
+				BAFE5E60247CEF81002B0A4B /* OZPopup */,
+				BAFE5E62247CEF81002B0A4B /* LibAMRNB */,
+				BAFE5E68247CEF81002B0A4B /* DynamicView.swift */,
+				BAFE5E69247CEF81002B0A4B /* OZCircleProgressView.swift */,
+				BAFE5E6A247CEF81002B0A4B /* Util.swift */,
+				BAFE5E6B247CEF81002B0A4B /* OZSwime.swift */,
+				BAFE5E6C247CEF81002B0A4B /* OZWobbleAnimator */,
+				BAFE5E6E247CEF81002B0A4B /* OZBubbleLabel.swift */,
+				BAFE5E6F247CEF81002B0A4B /* OZAudioPlayer.swift */,
+				BAFE5E70247CEF81002B0A4B /* OZBubbleImageView.swift */,
+				BAFE5E71247CEF81002B0A4B /* OZMimeType.swift */,
+				BAFE5E72247CEF81002B0A4B /* OZProgressBarView.swift */,
+				BAFE5E73247CEF81002B0A4B /* CollectionViewController.swift */,
+				BAFE5E74247CEF81002B0A4B /* OZTextView.swift */,
+			);
+			path = OZHelpers;
+			sourceTree = "<group>";
+		};
+		BAFE5E60247CEF81002B0A4B /* OZPopup */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5E61247CEF81002B0A4B /* OZChoosePopup.swift */,
+			);
+			path = OZPopup;
+			sourceTree = "<group>";
+		};
+		BAFE5E62247CEF81002B0A4B /* LibAMRNB */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5E63247CEF81002B0A4B /* interf_dec.h */,
+				BAFE5E64247CEF81002B0A4B /* amrFileCodec.h */,
+				BAFE5E65247CEF81002B0A4B /* libopencore-amrnb.a */,
+				BAFE5E66247CEF81002B0A4B /* interf_enc.h */,
+				BAFE5E67247CEF81002B0A4B /* amrFileCodec.m */,
+			);
+			path = LibAMRNB;
+			sourceTree = "<group>";
+		};
+		BAFE5E6C247CEF81002B0A4B /* OZWobbleAnimator */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5E6D247CEF81002B0A4B /* WobbleAnimator.swift */,
+			);
+			path = OZWobbleAnimator;
+			sourceTree = "<group>";
+		};
+		E11A707CEC4D0DAB90AC7110 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BABC60292463BAF100C2D82C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BAFE5E77247CEF81002B0A4B /* OZChattingUI.h in Headers */,
+				BAFE5E86247CEF81002B0A4B /* amrFileCodec.h in Headers */,
+				BAFE5E85247CEF81002B0A4B /* interf_dec.h in Headers */,
+				BAFE5E88247CEF81002B0A4B /* interf_enc.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BABC602D2463BAF100C2D82C /* OZChattingUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BABC60362463BAF100C2D82C /* Build configuration list for PBXNativeTarget "OZChattingUI" */;
+			buildPhases = (
+				7DEA438F4888A8D020E4DD28 /* [CP] Check Pods Manifest.lock */,
+				BABC60292463BAF100C2D82C /* Headers */,
+				BABC602A2463BAF100C2D82C /* Sources */,
+				BABC602B2463BAF100C2D82C /* Frameworks */,
+				BABC602C2463BAF100C2D82C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OZChattingUI;
+			productName = OZChattingUI;
+			productReference = BABC602E2463BAF100C2D82C /* OZChattingUI.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BABC60252463BAF100C2D82C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = OZ;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = ALTERANT;
+				TargetAttributes = {
+					BABC602D2463BAF100C2D82C = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = BABC60282463BAF100C2D82C /* Build configuration list for PBXProject "OZChattingUI" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BABC60242463BAF100C2D82C;
+			productRefGroup = BABC602F2463BAF100C2D82C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BABC602D2463BAF100C2D82C /* OZChattingUI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BABC602C2463BAF100C2D82C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA94A71F247CF6E2000AE9CB /* Info.plist in Resources */,
+				BAFE5E7A247CEF81002B0A4B /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7DEA438F4888A8D020E4DD28 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OZChattingUI-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BABC602A2463BAF100C2D82C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BAFE5E84247CEF81002B0A4B /* OZChoosePopup.swift in Sources */,
+				BAFE5E93247CEF81002B0A4B /* OZProgressBarView.swift in Sources */,
+				BAFE5E7E247CEF81002B0A4B /* OZVoiceRecordViewController.swift in Sources */,
+				BAFE5E90247CEF81002B0A4B /* OZAudioPlayer.swift in Sources */,
+				BAFE5E89247CEF81002B0A4B /* amrFileCodec.m in Sources */,
+				BAFE5E91247CEF81002B0A4B /* OZBubbleImageView.swift in Sources */,
+				BAFE5E8E247CEF81002B0A4B /* WobbleAnimator.swift in Sources */,
+				BAFE5E8C247CEF81002B0A4B /* Util.swift in Sources */,
+				BAFE5E81247CEF81002B0A4B /* OZEmoticonList.swift in Sources */,
+				BAFE5E79247CEF81002B0A4B /* OZMessages.swift in Sources */,
+				BAFE5E82247CEF81002B0A4B /* TestData.swift in Sources */,
+				BAFE5E83247CEF81002B0A4B /* OZDateHelper.swift in Sources */,
+				BAFE5E94247CEF81002B0A4B /* CollectionViewController.swift in Sources */,
+				BAFE5E7F247CEF81002B0A4B /* OZMessagesExtension.swift in Sources */,
+				BAFE5E8B247CEF81002B0A4B /* OZCircleProgressView.swift in Sources */,
+				BAFE5E8A247CEF81002B0A4B /* DynamicView.swift in Sources */,
+				BAFE5E7D247CEF81002B0A4B /* OZMessagesViewController.swift in Sources */,
+				BAFE5E8D247CEF81002B0A4B /* OZSwime.swift in Sources */,
+				BAFE5E75247CEF81002B0A4B /* OZMessageCell.swift in Sources */,
+				BAFE5E7C247CEF81002B0A4B /* OZEmoticonCell.swift in Sources */,
+				BAFE5E78247CEF81002B0A4B /* OZEmoticons.swift in Sources */,
+				BAFE5E8F247CEF81002B0A4B /* OZBubbleLabel.swift in Sources */,
+				BAFE5E92247CEF81002B0A4B /* OZMimeType.swift in Sources */,
+				BAFE5E76247CEF81002B0A4B /* OZEmoticonViewController.swift in Sources */,
+				BAFE5E95247CEF81002B0A4B /* OZTextView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BAFE5E53247CEF81002B0A4B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BAFE5E54247CEF81002B0A4B /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BABC60342463BAF100C2D82C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BABC60352463BAF100C2D82C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		BABC60372463BAF100C2D82C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "$(SRCROOT)/OZChattingUI/Supporting/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/OZChattingUI/Sources/OZHelpers/LibAMRNB";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.alterant.OZChattingUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BABC60382463BAF100C2D82C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "$(SRCROOT)/OZChattingUI/Supporting/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/OZChattingUI/Sources/OZHelpers/LibAMRNB";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.alterant.OZChattingUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BABC60282463BAF100C2D82C /* Build configuration list for PBXProject "OZChattingUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BABC60342463BAF100C2D82C /* Debug */,
+				BABC60352463BAF100C2D82C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BABC60362463BAF100C2D82C /* Build configuration list for PBXNativeTarget "OZChattingUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BABC60372463BAF100C2D82C /* Debug */,
+				BABC60382463BAF100C2D82C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BABC60252463BAF100C2D82C /* Project object */;
+}

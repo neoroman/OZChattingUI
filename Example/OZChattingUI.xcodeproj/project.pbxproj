@@ -1,0 +1,697 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
+		AD415759C7BD2ECA7F413B86 /* Pods_OZChattingUI_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98D01C51D89D93EB75FC5CEC /* Pods_OZChattingUI_Example.framework */; };
+		BA714F06247D0FEA00D7F455 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA714F02247D0FEA00D7F455 /* Main.storyboard */; };
+		BA714F07247D0FEA00D7F455 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA714F04247D0FEA00D7F455 /* LaunchScreen.storyboard */; };
+		BAFE5DC9247CEE5E002B0A4B /* AudioExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */; };
+		BAFE5DCA247CEE5E002B0A4B /* DocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */; };
+		BAFE5DCB247CEE5E002B0A4B /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */; };
+		BAFE5DCC247CEE5E002B0A4B /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D8B247CEE5D002B0A4B /* test.mp3 */; };
+		BAFE5DCF247CEE5E002B0A4B /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D91247CEE5D002B0A4B /* CounterView.swift */; };
+		BAFE5DD0247CEE5E002B0A4B /* OZChoosePopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D93247CEE5E002B0A4B /* OZChoosePopup.xib */; };
+		BAFE5DD1247CEE5E002B0A4B /* pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D95247CEE5E002B0A4B /* pause@2x.png */; };
+		BAFE5DD2247CEE5E002B0A4B /* chatClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D96247CEE5E002B0A4B /* chatClose@2x.png */; };
+		BAFE5DD3247CEE5E002B0A4B /* emo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D97247CEE5E002B0A4B /* emo@2x.png */; };
+		BAFE5DD4247CEE5E002B0A4B /* album@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D98247CEE5E002B0A4B /* album@2x.png */; };
+		BAFE5DD5247CEE5E002B0A4B /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D99247CEE5E002B0A4B /* camera@2x.png */; };
+		BAFE5DD6247CEE5E002B0A4B /* call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9A247CEE5E002B0A4B /* call@2x.png */; };
+		BAFE5DD7247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9B247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png */; };
+		BAFE5DD8247CEE5E002B0A4B /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9C247CEE5E002B0A4B /* play@2x.png */; };
+		BAFE5DD9247CEE5E002B0A4B /* voicemsBtnRecord@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9D247CEE5E002B0A4B /* voicemsBtnRecord@2x.png */; };
+		BAFE5DDA247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9E247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png */; };
+		BAFE5DDB247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9F247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png */; };
+		BAFE5DDC247CEE5E002B0A4B /* addFile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA0247CEE5E002B0A4B /* addFile@2x.png */; };
+		BAFE5DDD247CEE5E002B0A4B /* campaign@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA1247CEE5E002B0A4B /* campaign@2x.png */; };
+		BAFE5DDE247CEE5E002B0A4B /* mic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA2247CEE5E002B0A4B /* mic@2x.png */; };
+		BAFE5DDF247CEE5E002B0A4B /* file@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA3247CEE5E002B0A4B /* file@2x.png */; };
+		BAFE5DE0247CEE5E002B0A4B /* step@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA4247CEE5E002B0A4B /* step@2x.png */; };
+		BAFE5DE1247CEE5E002B0A4B /* voicemsBtnRecordPlayPress@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA5247CEE5E002B0A4B /* voicemsBtnRecordPlayPress@2x.png */; };
+		BAFE5DE2247CEE5E002B0A4B /* campaignWatchOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA6247CEE5E002B0A4B /* campaignWatchOff@2x.png */; };
+		BAFE5DE3247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA7247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png */; };
+		BAFE5DE4247CEE5E002B0A4B /* nopic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA8247CEE5E002B0A4B /* nopic@2x.png */; };
+		BAFE5DE5247CEE5E002B0A4B /* OZChattingUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA9247CEE5E002B0A4B /* OZChattingUI.storyboard */; };
+		BAFE5DE6247CEE5E002B0A4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DAC247CEE5E002B0A4B /* Localizable.strings */; };
+		BAFE5DE7247CEE5E002B0A4B /* OZEmoticonList.plist in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DAE247CEE5E002B0A4B /* OZEmoticonList.plist */; };
+		BAFE5DE8247CEE5E002B0A4B /* e1012@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB0247CEE5E002B0A4B /* e1012@2x.png */; };
+		BAFE5DE9247CEE5E002B0A4B /* e1024@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB1247CEE5E002B0A4B /* e1024@2x.png */; };
+		BAFE5DEA247CEE5E002B0A4B /* e1002@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB2247CEE5E002B0A4B /* e1002@2x.png */; };
+		BAFE5DEB247CEE5E002B0A4B /* e1010@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB3247CEE5E002B0A4B /* e1010@2x.png */; };
+		BAFE5DEC247CEE5E002B0A4B /* e1022@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB4247CEE5E002B0A4B /* e1022@2x.png */; };
+		BAFE5DED247CEE5E002B0A4B /* e1014@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB5247CEE5E002B0A4B /* e1014@2x.png */; };
+		BAFE5DEE247CEE5E002B0A4B /* e1006@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB6247CEE5E002B0A4B /* e1006@2x.png */; };
+		BAFE5DEF247CEE5E002B0A4B /* e1018@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB7247CEE5E002B0A4B /* e1018@2x.png */; };
+		BAFE5DF0247CEE5E002B0A4B /* e1020@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB8247CEE5E002B0A4B /* e1020@2x.png */; };
+		BAFE5DF1247CEE5E002B0A4B /* e1004@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DB9247CEE5E002B0A4B /* e1004@2x.png */; };
+		BAFE5DF2247CEE5E002B0A4B /* e1008@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DBA247CEE5E002B0A4B /* e1008@2x.png */; };
+		BAFE5DF3247CEE5E002B0A4B /* e1016@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DBB247CEE5E002B0A4B /* e1016@2x.png */; };
+		BAFE5DF4247CEE5E002B0A4B /* e1013@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DBC247CEE5E002B0A4B /* e1013@2x.png */; };
+		BAFE5DF5247CEE5E002B0A4B /* e1001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DBD247CEE5E002B0A4B /* e1001@2x.png */; };
+		BAFE5DF6247CEE5E002B0A4B /* e1003@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DBE247CEE5E002B0A4B /* e1003@2x.png */; };
+		BAFE5DF7247CEE5E002B0A4B /* e1011@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DBF247CEE5E002B0A4B /* e1011@2x.png */; };
+		BAFE5DF8247CEE5E002B0A4B /* e1015@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DC0247CEE5E002B0A4B /* e1015@2x.png */; };
+		BAFE5DF9247CEE5E002B0A4B /* e1019@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DC1247CEE5E002B0A4B /* e1019@2x.png */; };
+		BAFE5DFA247CEE5E002B0A4B /* e1007@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DC2247CEE5E002B0A4B /* e1007@2x.png */; };
+		BAFE5DFB247CEE5E002B0A4B /* e1023@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DC3247CEE5E002B0A4B /* e1023@2x.png */; };
+		BAFE5DFC247CEE5E002B0A4B /* e1005@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DC4247CEE5E002B0A4B /* e1005@2x.png */; };
+		BAFE5DFD247CEE5E002B0A4B /* e1017@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DC5247CEE5E002B0A4B /* e1017@2x.png */; };
+		BAFE5DFE247CEE5E002B0A4B /* e1009@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DC6247CEE5E002B0A4B /* e1009@2x.png */; };
+		BAFE5DFF247CEE5E002B0A4B /* e1021@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DC7247CEE5E002B0A4B /* e1021@2x.png */; };
+		BAFE5E00247CEE5E002B0A4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5DC8247CEE5E002B0A4B /* AppDelegate.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0603B351033DDB9FB61A8064 /* Pods-OZChattingUI_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OZChattingUI_Example.release.xcconfig"; path = "Target Support Files/Pods-OZChattingUI_Example/Pods-OZChattingUI_Example.release.xcconfig"; sourceTree = "<group>"; };
+		49BA11BF3806BC71B1C1FD54 /* OZChattingUI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = OZChattingUI.podspec; path = ../OZChattingUI.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		607FACD01AFB9204008FA782 /* OZChattingUI_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OZChattingUI_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		98D01C51D89D93EB75FC5CEC /* Pods_OZChattingUI_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OZChattingUI_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5AFB5322B200AE811E66F03 /* Pods-OZChattingUI_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OZChattingUI_Example.debug.xcconfig"; path = "Target Support Files/Pods-OZChattingUI_Example/Pods-OZChattingUI_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		B6546E8303E9335471EB6A86 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		BA714F03247D0FEA00D7F455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BA714F05247D0FEA00D7F455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioExtension.swift; sourceTree = "<group>"; };
+		BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentViewController.swift; sourceTree = "<group>"; };
+		BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
+		BAFE5D8B247CEE5D002B0A4B /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
+		BAFE5D91247CEE5D002B0A4B /* CounterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
+		BAFE5D93247CEE5E002B0A4B /* OZChoosePopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OZChoosePopup.xib; sourceTree = "<group>"; };
+		BAFE5D95247CEE5E002B0A4B /* pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause@2x.png"; sourceTree = "<group>"; };
+		BAFE5D96247CEE5E002B0A4B /* chatClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chatClose@2x.png"; sourceTree = "<group>"; };
+		BAFE5D97247CEE5E002B0A4B /* emo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emo@2x.png"; sourceTree = "<group>"; };
+		BAFE5D98247CEE5E002B0A4B /* album@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "album@2x.png"; sourceTree = "<group>"; };
+		BAFE5D99247CEE5E002B0A4B /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
+		BAFE5D9A247CEE5E002B0A4B /* call@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "call@2x.png"; sourceTree = "<group>"; };
+		BAFE5D9B247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordStopPress@2x.png"; sourceTree = "<group>"; };
+		BAFE5D9C247CEE5E002B0A4B /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
+		BAFE5D9D247CEE5E002B0A4B /* voicemsBtnRecord@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecord@2x.png"; sourceTree = "<group>"; };
+		BAFE5D9E247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordPress@2x.png"; sourceTree = "<group>"; };
+		BAFE5D9F247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordStop@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA0247CEE5E002B0A4B /* addFile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addFile@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA1247CEE5E002B0A4B /* campaign@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "campaign@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA2247CEE5E002B0A4B /* mic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mic@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA3247CEE5E002B0A4B /* file@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "file@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA4247CEE5E002B0A4B /* step@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "step@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA5247CEE5E002B0A4B /* voicemsBtnRecordPlayPress@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordPlayPress@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA6247CEE5E002B0A4B /* campaignWatchOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "campaignWatchOff@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA7247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordPlay@2x.png"; sourceTree = "<group>"; };
+		BAFE5DA8247CEE5E002B0A4B /* nopic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nopic@2x.png"; sourceTree = "<group>"; };
+		BAFE5DAA247CEE5E002B0A4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/OZChattingUI.storyboard; sourceTree = "<group>"; };
+		BAFE5DAD247CEE5E002B0A4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		BAFE5DAE247CEE5E002B0A4B /* OZEmoticonList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = OZEmoticonList.plist; sourceTree = "<group>"; };
+		BAFE5DB0247CEE5E002B0A4B /* e1012@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1012@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB1247CEE5E002B0A4B /* e1024@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1024@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB2247CEE5E002B0A4B /* e1002@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1002@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB3247CEE5E002B0A4B /* e1010@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1010@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB4247CEE5E002B0A4B /* e1022@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1022@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB5247CEE5E002B0A4B /* e1014@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1014@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB6247CEE5E002B0A4B /* e1006@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1006@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB7247CEE5E002B0A4B /* e1018@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1018@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB8247CEE5E002B0A4B /* e1020@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1020@2x.png"; sourceTree = "<group>"; };
+		BAFE5DB9247CEE5E002B0A4B /* e1004@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1004@2x.png"; sourceTree = "<group>"; };
+		BAFE5DBA247CEE5E002B0A4B /* e1008@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1008@2x.png"; sourceTree = "<group>"; };
+		BAFE5DBB247CEE5E002B0A4B /* e1016@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1016@2x.png"; sourceTree = "<group>"; };
+		BAFE5DBC247CEE5E002B0A4B /* e1013@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1013@2x.png"; sourceTree = "<group>"; };
+		BAFE5DBD247CEE5E002B0A4B /* e1001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1001@2x.png"; sourceTree = "<group>"; };
+		BAFE5DBE247CEE5E002B0A4B /* e1003@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1003@2x.png"; sourceTree = "<group>"; };
+		BAFE5DBF247CEE5E002B0A4B /* e1011@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1011@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC0247CEE5E002B0A4B /* e1015@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1015@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC1247CEE5E002B0A4B /* e1019@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1019@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC2247CEE5E002B0A4B /* e1007@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1007@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC3247CEE5E002B0A4B /* e1023@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1023@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC4247CEE5E002B0A4B /* e1005@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1005@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC5247CEE5E002B0A4B /* e1017@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1017@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC6247CEE5E002B0A4B /* e1009@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1009@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC7247CEE5E002B0A4B /* e1021@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e1021@2x.png"; sourceTree = "<group>"; };
+		BAFE5DC8247CEE5E002B0A4B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C3DA0691D20FAE20DEE363DA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		607FACCD1AFB9204008FA782 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD415759C7BD2ECA7F413B86 /* Pods_OZChattingUI_Example.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		607FACC71AFB9204008FA782 = {
+			isa = PBXGroup;
+			children = (
+				607FACF51AFB993E008FA782 /* Podspec Metadata */,
+				607FACD21AFB9204008FA782 /* Example for OZChattingUI */,
+				607FACD11AFB9204008FA782 /* Products */,
+				6BB633EF40B6792DE962F6FB /* Pods */,
+				D87B5C352C52BB15ABCF175C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		607FACD11AFB9204008FA782 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				607FACD01AFB9204008FA782 /* OZChattingUI_Example.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		607FACD21AFB9204008FA782 /* Example for OZChattingUI */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5D92247CEE5E002B0A4B /* __NeedToCopyYourProject__ */,
+				BAFE5DC8247CEE5E002B0A4B /* AppDelegate.swift */,
+				BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */,
+				BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */,
+				BAFE5D91247CEE5D002B0A4B /* CounterView.swift */,
+				BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */,
+				607FACD31AFB9204008FA782 /* Supporting Files */,
+			);
+			name = "Example for OZChattingUI";
+			path = OZChattingUI;
+			sourceTree = "<group>";
+		};
+		607FACD31AFB9204008FA782 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BA714F04247D0FEA00D7F455 /* LaunchScreen.storyboard */,
+				BA714F02247D0FEA00D7F455 /* Main.storyboard */,
+				607FACDC1AFB9204008FA782 /* Images.xcassets */,
+				BAFE5D8A247CEE5D002B0A4B /* Sound */,
+				607FACD41AFB9204008FA782 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
+			isa = PBXGroup;
+			children = (
+				49BA11BF3806BC71B1C1FD54 /* OZChattingUI.podspec */,
+				C3DA0691D20FAE20DEE363DA /* README.md */,
+				B6546E8303E9335471EB6A86 /* LICENSE */,
+			);
+			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		6BB633EF40B6792DE962F6FB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A5AFB5322B200AE811E66F03 /* Pods-OZChattingUI_Example.debug.xcconfig */,
+				0603B351033DDB9FB61A8064 /* Pods-OZChattingUI_Example.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		BAFE5D8A247CEE5D002B0A4B /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5D8B247CEE5D002B0A4B /* test.mp3 */,
+			);
+			path = Sound;
+			sourceTree = "<group>";
+		};
+		BAFE5D92247CEE5E002B0A4B /* __NeedToCopyYourProject__ */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5D93247CEE5E002B0A4B /* OZChoosePopup.xib */,
+				BAFE5D94247CEE5E002B0A4B /* Images */,
+				BAFE5DA9247CEE5E002B0A4B /* OZChattingUI.storyboard */,
+				BAFE5DAB247CEE5E002B0A4B /* Supporting Files */,
+				BAFE5DAF247CEE5E002B0A4B /* Emoticons */,
+			);
+			path = __NeedToCopyYourProject__;
+			sourceTree = "<group>";
+		};
+		BAFE5D94247CEE5E002B0A4B /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5D95247CEE5E002B0A4B /* pause@2x.png */,
+				BAFE5D96247CEE5E002B0A4B /* chatClose@2x.png */,
+				BAFE5D97247CEE5E002B0A4B /* emo@2x.png */,
+				BAFE5D98247CEE5E002B0A4B /* album@2x.png */,
+				BAFE5D99247CEE5E002B0A4B /* camera@2x.png */,
+				BAFE5D9A247CEE5E002B0A4B /* call@2x.png */,
+				BAFE5D9B247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png */,
+				BAFE5D9C247CEE5E002B0A4B /* play@2x.png */,
+				BAFE5D9D247CEE5E002B0A4B /* voicemsBtnRecord@2x.png */,
+				BAFE5D9E247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png */,
+				BAFE5D9F247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png */,
+				BAFE5DA0247CEE5E002B0A4B /* addFile@2x.png */,
+				BAFE5DA1247CEE5E002B0A4B /* campaign@2x.png */,
+				BAFE5DA2247CEE5E002B0A4B /* mic@2x.png */,
+				BAFE5DA3247CEE5E002B0A4B /* file@2x.png */,
+				BAFE5DA4247CEE5E002B0A4B /* step@2x.png */,
+				BAFE5DA5247CEE5E002B0A4B /* voicemsBtnRecordPlayPress@2x.png */,
+				BAFE5DA6247CEE5E002B0A4B /* campaignWatchOff@2x.png */,
+				BAFE5DA7247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png */,
+				BAFE5DA8247CEE5E002B0A4B /* nopic@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		BAFE5DAB247CEE5E002B0A4B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5DAC247CEE5E002B0A4B /* Localizable.strings */,
+				BAFE5DAE247CEE5E002B0A4B /* OZEmoticonList.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BAFE5DAF247CEE5E002B0A4B /* Emoticons */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE5DB0247CEE5E002B0A4B /* e1012@2x.png */,
+				BAFE5DB1247CEE5E002B0A4B /* e1024@2x.png */,
+				BAFE5DB2247CEE5E002B0A4B /* e1002@2x.png */,
+				BAFE5DB3247CEE5E002B0A4B /* e1010@2x.png */,
+				BAFE5DB4247CEE5E002B0A4B /* e1022@2x.png */,
+				BAFE5DB5247CEE5E002B0A4B /* e1014@2x.png */,
+				BAFE5DB6247CEE5E002B0A4B /* e1006@2x.png */,
+				BAFE5DB7247CEE5E002B0A4B /* e1018@2x.png */,
+				BAFE5DB8247CEE5E002B0A4B /* e1020@2x.png */,
+				BAFE5DB9247CEE5E002B0A4B /* e1004@2x.png */,
+				BAFE5DBA247CEE5E002B0A4B /* e1008@2x.png */,
+				BAFE5DBB247CEE5E002B0A4B /* e1016@2x.png */,
+				BAFE5DBC247CEE5E002B0A4B /* e1013@2x.png */,
+				BAFE5DBD247CEE5E002B0A4B /* e1001@2x.png */,
+				BAFE5DBE247CEE5E002B0A4B /* e1003@2x.png */,
+				BAFE5DBF247CEE5E002B0A4B /* e1011@2x.png */,
+				BAFE5DC0247CEE5E002B0A4B /* e1015@2x.png */,
+				BAFE5DC1247CEE5E002B0A4B /* e1019@2x.png */,
+				BAFE5DC2247CEE5E002B0A4B /* e1007@2x.png */,
+				BAFE5DC3247CEE5E002B0A4B /* e1023@2x.png */,
+				BAFE5DC4247CEE5E002B0A4B /* e1005@2x.png */,
+				BAFE5DC5247CEE5E002B0A4B /* e1017@2x.png */,
+				BAFE5DC6247CEE5E002B0A4B /* e1009@2x.png */,
+				BAFE5DC7247CEE5E002B0A4B /* e1021@2x.png */,
+			);
+			path = Emoticons;
+			sourceTree = "<group>";
+		};
+		D87B5C352C52BB15ABCF175C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				98D01C51D89D93EB75FC5CEC /* Pods_OZChattingUI_Example.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		607FACCF1AFB9204008FA782 /* OZChattingUI_Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "OZChattingUI_Example" */;
+			buildPhases = (
+				C2D3F1DE77D227941A4F800A /* [CP] Check Pods Manifest.lock */,
+				607FACCC1AFB9204008FA782 /* Sources */,
+				607FACCD1AFB9204008FA782 /* Frameworks */,
+				607FACCE1AFB9204008FA782 /* Resources */,
+				2C8101CC164EDEA33BC23FF7 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OZChattingUI_Example;
+			productName = OZChattingUI;
+			productReference = 607FACD01AFB9204008FA782 /* OZChattingUI_Example.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		607FACC81AFB9204008FA782 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = CocoaPods;
+				TargetAttributes = {
+					607FACCF1AFB9204008FA782 = {
+						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = N6EG7RK539;
+						LastSwiftMigration = 1130;
+					};
+				};
+			};
+			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "OZChattingUI" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 607FACC71AFB9204008FA782;
+			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				607FACCF1AFB9204008FA782 /* OZChattingUI_Example */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		607FACCE1AFB9204008FA782 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BAFE5DEB247CEE5E002B0A4B /* e1010@2x.png in Resources */,
+				BAFE5DDB247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png in Resources */,
+				BAFE5DD8247CEE5E002B0A4B /* play@2x.png in Resources */,
+				BAFE5DFB247CEE5E002B0A4B /* e1023@2x.png in Resources */,
+				BAFE5DD7247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png in Resources */,
+				BAFE5DD5247CEE5E002B0A4B /* camera@2x.png in Resources */,
+				BA714F06247D0FEA00D7F455 /* Main.storyboard in Resources */,
+				BAFE5DDC247CEE5E002B0A4B /* addFile@2x.png in Resources */,
+				BAFE5DFA247CEE5E002B0A4B /* e1007@2x.png in Resources */,
+				BAFE5DF1247CEE5E002B0A4B /* e1004@2x.png in Resources */,
+				BAFE5DED247CEE5E002B0A4B /* e1014@2x.png in Resources */,
+				BAFE5DE1247CEE5E002B0A4B /* voicemsBtnRecordPlayPress@2x.png in Resources */,
+				BAFE5DE2247CEE5E002B0A4B /* campaignWatchOff@2x.png in Resources */,
+				BAFE5DEE247CEE5E002B0A4B /* e1006@2x.png in Resources */,
+				BAFE5DD4247CEE5E002B0A4B /* album@2x.png in Resources */,
+				BAFE5DE0247CEE5E002B0A4B /* step@2x.png in Resources */,
+				BAFE5DD0247CEE5E002B0A4B /* OZChoosePopup.xib in Resources */,
+				BAFE5DF3247CEE5E002B0A4B /* e1016@2x.png in Resources */,
+				BAFE5DDF247CEE5E002B0A4B /* file@2x.png in Resources */,
+				BAFE5DD3247CEE5E002B0A4B /* emo@2x.png in Resources */,
+				BAFE5DE8247CEE5E002B0A4B /* e1012@2x.png in Resources */,
+				BAFE5DE9247CEE5E002B0A4B /* e1024@2x.png in Resources */,
+				BAFE5DD2247CEE5E002B0A4B /* chatClose@2x.png in Resources */,
+				BAFE5DFE247CEE5E002B0A4B /* e1009@2x.png in Resources */,
+				BAFE5DEA247CEE5E002B0A4B /* e1002@2x.png in Resources */,
+				BAFE5DF9247CEE5E002B0A4B /* e1019@2x.png in Resources */,
+				BAFE5DF0247CEE5E002B0A4B /* e1020@2x.png in Resources */,
+				BAFE5DE7247CEE5E002B0A4B /* OZEmoticonList.plist in Resources */,
+				BAFE5DD6247CEE5E002B0A4B /* call@2x.png in Resources */,
+				BAFE5DF7247CEE5E002B0A4B /* e1011@2x.png in Resources */,
+				BAFE5DF5247CEE5E002B0A4B /* e1001@2x.png in Resources */,
+				BAFE5DFC247CEE5E002B0A4B /* e1005@2x.png in Resources */,
+				BAFE5DEF247CEE5E002B0A4B /* e1018@2x.png in Resources */,
+				BA714F07247D0FEA00D7F455 /* LaunchScreen.storyboard in Resources */,
+				BAFE5DE6247CEE5E002B0A4B /* Localizable.strings in Resources */,
+				BAFE5DF8247CEE5E002B0A4B /* e1015@2x.png in Resources */,
+				BAFE5DF6247CEE5E002B0A4B /* e1003@2x.png in Resources */,
+				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				BAFE5DCC247CEE5E002B0A4B /* test.mp3 in Resources */,
+				BAFE5DDD247CEE5E002B0A4B /* campaign@2x.png in Resources */,
+				BAFE5DF2247CEE5E002B0A4B /* e1008@2x.png in Resources */,
+				BAFE5DE3247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png in Resources */,
+				BAFE5DEC247CEE5E002B0A4B /* e1022@2x.png in Resources */,
+				BAFE5DDE247CEE5E002B0A4B /* mic@2x.png in Resources */,
+				BAFE5DFD247CEE5E002B0A4B /* e1017@2x.png in Resources */,
+				BAFE5DE4247CEE5E002B0A4B /* nopic@2x.png in Resources */,
+				BAFE5DD1247CEE5E002B0A4B /* pause@2x.png in Resources */,
+				BAFE5DFF247CEE5E002B0A4B /* e1021@2x.png in Resources */,
+				BAFE5DE5247CEE5E002B0A4B /* OZChattingUI.storyboard in Resources */,
+				BAFE5DF4247CEE5E002B0A4B /* e1013@2x.png in Resources */,
+				BAFE5DD9247CEE5E002B0A4B /* voicemsBtnRecord@2x.png in Resources */,
+				BAFE5DDA247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2C8101CC164EDEA33BC23FF7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OZChattingUI_Example/Pods-OZChattingUI_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CollectionKit/CollectionKit.framework",
+				"${BUILT_PRODUCTS_DIR}/ImageViewer/ImageViewer.framework",
+				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
+				"${BUILT_PRODUCTS_DIR}/OZChattingUI/OZChattingUI.framework",
+				"${BUILT_PRODUCTS_DIR}/YetAnotherAnimationLibrary/YetAnotherAnimationLibrary.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CollectionKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ImageViewer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OZChattingUI.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YetAnotherAnimationLibrary.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OZChattingUI_Example/Pods-OZChattingUI_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C2D3F1DE77D227941A4F800A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OZChattingUI_Example-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		607FACCC1AFB9204008FA782 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BAFE5DCB247CEE5E002B0A4B /* ExampleViewController.swift in Sources */,
+				BAFE5DC9247CEE5E002B0A4B /* AudioExtension.swift in Sources */,
+				BAFE5DCA247CEE5E002B0A4B /* DocumentViewController.swift in Sources */,
+				BAFE5E00247CEE5E002B0A4B /* AppDelegate.swift in Sources */,
+				BAFE5DCF247CEE5E002B0A4B /* CounterView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BA714F02247D0FEA00D7F455 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA714F03247D0FEA00D7F455 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		BA714F04247D0FEA00D7F455 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA714F05247D0FEA00D7F455 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		BAFE5DA9247CEE5E002B0A4B /* OZChattingUI.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BAFE5DAA247CEE5E002B0A4B /* Base */,
+			);
+			name = OZChattingUI.storyboard;
+			sourceTree = "<group>";
+		};
+		BAFE5DAC247CEE5E002B0A4B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BAFE5DAD247CEE5E002B0A4B /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		607FACED1AFB9204008FA782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		607FACEE1AFB9204008FA782 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		607FACF01AFB9204008FA782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A5AFB5322B200AE811E66F03 /* Pods-OZChattingUI_Example.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = N6EG7RK539;
+				INFOPLIST_FILE = OZChattingUI/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = OZChattingUI_Example;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		607FACF11AFB9204008FA782 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0603B351033DDB9FB61A8064 /* Pods-OZChattingUI_Example.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = N6EG7RK539;
+				INFOPLIST_FILE = OZChattingUI/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = OZChattingUI_Example;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "OZChattingUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				607FACED1AFB9204008FA782 /* Debug */,
+				607FACEE1AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "OZChattingUI_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				607FACF01AFB9204008FA782 /* Debug */,
+				607FACF11AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 607FACC81AFB9204008FA782 /* Project object */;
+}

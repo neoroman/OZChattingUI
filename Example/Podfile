@@ -1,0 +1,10 @@
+platform :ios, '10.0'
+use_frameworks!
+
+target 'OZChattingUI_Example' do
+  pod 'OZChattingUI', :path => '../'
+  pod 'ImageViewer'
+  pod 'NVActivityIndicatorView'
+  pod 'CollectionKit'
+  pod 'YetAnotherAnimationLibrary'
+end
