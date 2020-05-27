@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OZChattingUI'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'OZChattingUI.framework is chatting UI with CollectionKit.'
 
 # This description is used to generate tags and improve search results.
@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
   # s.resource_bundles = {
   #   'OZChattingUI' => ['OZChattingUI/Assets/*.png']
   # }
-  
+
   s.public_header_files = 'Pod/Sources/**/*.h'
   s.weak_frameworks = 'UIKit', 'AVFoundation'
   s.dependency 'CollectionKit'
