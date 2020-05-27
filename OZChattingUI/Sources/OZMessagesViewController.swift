@@ -22,6 +22,14 @@ public protocol OZMessagesViewControllerDelegate {
     func messageAppend(complete: @escaping OZChatFetchCompleteBlock)
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock)
     func messageViewLoaded(isLoaded: Bool)
+    func messageCellDidSetMessage(cell: OZMessageCell)
+    func messageCellLayoutSubviews(cell: OZMessageCell)
+}
+extension OZMessagesViewControllerDelegate {
+    func messageCellDidSetMessage(cell: OZMessageCell) {
+    }
+    func messageCellLayoutSubviews(cell: OZMessageCell) {
+    }
 }
 
 
@@ -126,19 +134,24 @@ open class OZMessagesViewController: CollectionViewController {
     // MARK: - Setup CollectionKit DataProvider
     open func setupDataProvider(newDataSource: OZMessageDataProvider? = nil) {
         let incomingTextMessageViewSource = ClosureViewSource(viewUpdater: { (view: IncomingTextMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
             view.message = data
         })
         let outgoingTextMessageViewSource = ClosureViewSource(viewUpdater: { (view: OutgoingTextMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
             view.message = data
         })
         let textMessageViewSource = ClosureViewSource(viewUpdater: { (view: TextMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
             view.message = data
         })
         let imagePlusIconMessageViewSource = ClosureViewSource(viewUpdater: { (view: ImagePlusIconMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
             view.message = data
             if data.type == .emoticon { view.imageView.contentMode = .scaleAspectFit }
         })
         let imageMessageViewSource = ClosureViewSource(viewUpdater: { (view: ImageMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
             view.message = data
             if data.type == .emoticon { view.imageView.contentMode = .scaleAspectFit }
             // DONE: Emoticon image contentMode, now emoticon image from example project, i.e. not in framework any more.
@@ -148,12 +161,15 @@ open class OZMessagesViewController: CollectionViewController {
 //            }
         })
         let deviceStatusViewSource = ClosureViewSource(viewUpdater: { (view: IncomingStatusMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
             view.message = data
         })
         let audioPlusIconViewSource = ClosureViewSource(viewUpdater: { (view: AudioPlusIconMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
             view.message = data
         })
         let audioViewSource = ClosureViewSource(viewUpdater: { (view: AudioMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
             view.message = data
         })
         if let newDataSrc = newDataSource {
@@ -952,5 +968,19 @@ extension OZMessagesViewController: UIGestureRecognizerDelegate {
         }
         
         return false
+    }
+}
+
+
+extension OZMessagesViewController: OZMessageCellDelegate {
+    public func messageCellDidSetMessage(cell: OZMessageCell) {
+        if let dele = delegate {
+            dele.messageCellDidSetMessage(cell: cell)
+        }
+    }
+    public func messageCellLayoutSubviews(cell: OZMessageCell) {
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: cell)
+        }
     }
 }
