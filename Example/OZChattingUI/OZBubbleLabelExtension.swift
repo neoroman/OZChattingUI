@@ -44,68 +44,51 @@ extension OZBubbleLabel {
         let notchCircle2ndEndPoint = CGPoint(x: width-(2.0/12.0 * radius),
                                                    y: height)
 
-
-        //TODO: (재은) start of old-values for OZBubbleLabel.swift
-        let notchMaxY: CGFloat = (8.0 / 12.0) * radius
-        
-        let notchEndPoint = CGPoint(x: 6.49 / 14.0 * radius, y: 7.9 / 14.0 * radius)
-        let notchControl1 = CGPoint(x: 10.59 / 14.0 * radius, y: 14.09 / 14.0 * radius)
-        let notchControl2 = CGPoint(x: 9.11 / 14.0 * radius, y: 10.52 / 14.0 * radius)
-        
-        let srStartPoint = CGPoint(x: 0.29 / 14.0 * radius, y: 1.71 / 14.0 * radius)
-        
-        let sr1EndPoint = CGPoint(x: 0.29 / 14.0 * radius, y: 0.29 / 14.0 * radius)
-        let sr1Control1 = CGPoint(x: -0.1 / 14.0 * radius, y: 1.32 / 14.0 * radius)
-        let sr1Control2 = CGPoint(x: -0.1 / 14.0 * radius, y: 0.68 / 14.0 * radius)
-        
-        let sr2Control1 = CGPoint(x: 0.48 / 14.0 * radius, y: 0.11 / 14.0 * radius)
-        let sr2Control2X = 0.73 / 14.0 * radius
-        //TODO: (재은) end of old-values for OZBubbleLabel.swift
-
-        
         let bezierPath = UIBezierPath()
 
         if isIncoming {
-            //TODO: (재은) old-values for OZBubbleLabel.swift
-            ///CW
-            // left-top corner
-            bezierPath.move(to: CGPoint(x: startX, y: 0))
+            ///CCW
+            // right-bottom corner
+            bezierPath.move(to: CGPoint(x: width - radius, y: height))
             
-            // top wall
-            bezierPath.addLine(to: CGPoint(x: width - radius, y: 0))
-            
-            // right-top corner
-            bezierPath.addCurve(to: CGPoint(x: width, y: radius),
-                                controlPoint1: CGPoint(x: width-cntlRadius, y: 0),
-                                controlPoint2: CGPoint(x: width, y: cntlRadius))
+            bezierPath.addCurve(to: CGPoint(x: width, y: height - radius),
+                                controlPoint1: CGPoint(x: width - cntlRadius, y: height),
+                                controlPoint2: CGPoint(x: width, y: height - cntlRadius))
             
             // right wall
-            bezierPath.addLine(to: CGPoint(x: width, y: height-radius))
+            bezierPath.addLine(to: CGPoint(x: width, y: radius))
             
-            // right-bottom corner
-            bezierPath.addCurve(to: CGPoint(x: width - radius, y: height),
-                                controlPoint1: CGPoint(x: width, y: height-cntlRadius),
-                                controlPoint2: CGPoint(x: width-cntlRadius, y: height))
+            // right-top corner
+            bezierPath.addCurve(to: CGPoint(x: width - radius, y: 0),
+                                controlPoint1: CGPoint(x: width, y: cntlRadius),
+                                controlPoint2: CGPoint(x: width - cntlRadius, y: 0))
             
-            // bottom line
-            bezierPath.addLine(to: CGPoint(x: notchInsetX+radius, y: height))
+            // top wall
+            bezierPath.addLine(to: CGPoint(x: radius + notchInsetX, y: 0))
             
-            // left-bottom corner
-            bezierPath.addCurve(to: CGPoint(x: notchInsetX, y: height-radius),
-                                controlPoint1: CGPoint(x: notchInsetX+cntlRadius, y: height),
-                                controlPoint2: CGPoint(x: notchInsetX, y: height-cntlRadius))
-
+            // left-top corner
+            bezierPath.addCurve(to: CGPoint(x: notchInsetX, y: radius),
+                controlPoint1: CGPoint(x: notchInsetX + cntlRadius, y: 0),
+                                controlPoint2: CGPoint(x: notchInsetX, y: cntlRadius))
+            
             // left wall
-            bezierPath.addLine(to: CGPoint(x: notchInsetX, y: notchMaxY))
+            bezierPath.addLine(to: CGPoint(x: notchInsetX, y: height - notchHeight))
+            
+            // slope line of notch
+            bezierPath.addLine(to: CGPoint(x: width - notchCircleStartPoint.x, y: notchCircleStartPoint.y))
             
             // bubble notch
-            bezierPath.addCurve(to: notchEndPoint, controlPoint1: notchControl1, controlPoint2: notchControl2)
-            bezierPath.addLine(to: srStartPoint)
-            bezierPath.addCurve(to: sr1EndPoint, controlPoint1: sr1Control1, controlPoint2: sr1Control2)
-            bezierPath.addCurve(to: CGPoint(x: startX, y: 0), controlPoint1: sr2Control1, controlPoint2: CGPoint(x: sr2Control2X, y: 0))
+            bezierPath.addCurve(to: CGPoint(x: width - notchCircle1stEndPoint.x, y: notchCircle1stEndPoint.y),
+                                controlPoint1: CGPoint(x: width - notchCircle1stCntlPoint1.x, y: notchCircle1stCntlPoint1.y),
+                                controlPoint2: CGPoint(x: width - notchCircle1stCntlPoint2.x, y: notchCircle1stCntlPoint2.y))
+            bezierPath.addCurve(to: CGPoint(x: width - notchCircle2ndEndPoint.x, y: notchCircle2ndEndPoint.y),
+                                controlPoint1: CGPoint(x: width - notchCircle2ndCntlPoint1.x, y: notchCircle2ndCntlPoint1.y),
+                                controlPoint2: CGPoint(x: width - notchCircle2ndCntlPoint2.x, y: notchCircle2ndCntlPoint2.y))
             
-            //incomingColor.setFill()
-            UIColor(white: 244.0 / 255.0, alpha: 1.0).setFill()
+            // bottom wall
+            bezierPath.addLine(to: CGPoint(x: width - radius, y: height))
+            
+            UIColor.white.setFill()
             
         } else {
             
