@@ -26,7 +26,7 @@ open class OZVoiceRecordViewController: UIViewController {
 
     // Adaptive Multi-Rate Codec (GSM telephony)
     public var isUsingAMRFormat = true
-    private var amrAudioRecorder = OZAudioRecorder.shared
+    private var amrAudioRecorder: OZAudioRecorder?
     private var voiceData: Data?
     
     // Buttons
@@ -39,6 +39,7 @@ open class OZVoiceRecordViewController: UIViewController {
     
     // Recorder
     public var voiceFilePath: URL?
+    public var tempFilePath: URL?
     // TODO: need to move ozMessageViewSettingsItem()
     public var recordMaxDuration: TimeInterval = 10
     fileprivate var recordElapsedTime: TimeInterval = 0
@@ -157,15 +158,18 @@ open class OZVoiceRecordViewController: UIViewController {
                 voiceSendButton.isEnabled = true
                 if let vpv = voiceProgressView {
                     vpv.removeFromSuperview()
+                    voiceProgressView = nil
                 }
-                voiceProgressView = nil
             }
         case .normal:
             voiceRecordButton.setImage(vpBtnRecord, for: .normal)
             voiceRecordButton.setImage(vpBtnRecordPressed, for: .highlighted)
             voiceTimeLabel.text = ""
             voiceSendButton.isEnabled = false
-            voiceProgressView = nil
+            if let vpv = voiceProgressView {
+                vpv.removeFromSuperview()
+                voiceProgressView = nil
+            }
         }
     }
     
@@ -179,7 +183,9 @@ open class OZVoiceRecordViewController: UIViewController {
         case .playing:
             finishPlaying(!isForceStop)
         case .recording:
-            finishRecording(success: !isForceStop)
+            if let aar = amrAudioRecorder, aar.isRecording {
+                aar.stopRecord()
+            }
         case .stop:
             if checkAudioFile(path: nil) {
                 self.startPlaying()
@@ -302,8 +308,8 @@ extension OZVoiceRecordViewController {
         voiceLevelView.stopAnimating()
         if let vpv = voiceProgressView {
             vpv.removeFromSuperview()
+            voiceProgressView = nil
         }
-        voiceProgressView = nil
         
         if let vPath = voiceFilePath, FileManager.isFileExist(named: vPath.relativePath) {
             voiceSendButton.layer.borderColor = UIColor.red.cgColor
@@ -330,7 +336,24 @@ extension OZVoiceRecordViewController {
         initialTimer()
         
         if isUsingAMRFormat {
-            amrAudioRecorder.stopRecord()
+            guard let url = tempFilePath, let waveData = try? Data(contentsOf: url) else { return }
+            let amrData = OZAudioPlayer.encodeWav2Amr(waveData: waveData, channels: 1, bitsPerSample: 16)
+            voiceData = amrData
+            if let vPath = voiceFilePath {
+                saveAudioFile(data: amrData, path: vPath)
+                if let duration = OZAudioRecorder.amrAudioDuration(from: amrData) {
+                    recordedDuration = duration
+                }
+                if let vpv = voiceProgressView {
+                    vpv.removeFromSuperview()
+                    voiceProgressView = nil
+                }
+
+                if checkAudioFile(path: vPath),
+                    let aar = amrAudioRecorder, !aar.isRecording {
+                    aar.reset()
+                }
+            }
         }
         else {
             self.audioRecorder?.stop()
@@ -356,8 +379,8 @@ extension OZVoiceRecordViewController {
                     recordedDuration = OZAudioPlayer.getAmrDuration(data:amrData)
                     if let vpv = voiceProgressView {
                         vpv.removeFromSuperview()
+                        voiceProgressView = nil
                     }
-                    voiceProgressView = nil
                 }
                 self.audioRecorder = nil
             } else {
@@ -369,19 +392,12 @@ extension OZVoiceRecordViewController {
     }
     
     func finishPlaying(_ success:Bool) {
-        guard let _ = audioPlayer else { return }
+        guard let ap = audioPlayer else { return }
         
-        if isUsingAMRFormat {
-            if amrAudioRecorder.isPlaying {
-                amrAudioRecorder.stopPlay()
-            }
-        }
-        else {
-            self.audioPlayer?.stop()
-            self.audioPlayer = nil
-            initialTimer()
-            resetViews()
-        }
+        ap.stop()
+        audioPlayer = nil
+        initialTimer()
+        resetViews()
         voiceState = .stop
     }
     
@@ -392,17 +408,19 @@ extension OZVoiceRecordViewController {
     
     @objc func progressFn(_ :Timer) {
         if self.voiceState == .recording {
-            if recordElapsedTime <= recordMaxDuration {
+            if recordElapsedTime < recordMaxDuration {
+                recordElapsedTime += 1
                 let aTime = recordMaxDuration - recordElapsedTime
                 print("OZVoice::: maxDuration(\(recordMaxDuration)), elapsedTime(\(recordElapsedTime)), aTime(\(aTime))")
-                recordElapsedTime += 1
                 if aTime >= 0 {
                     voiceTimeLabel.text = String(format: "%02d:%02d", Int(aTime) / 60, Int(aTime) % 60)
                 }
             } else {
                 recordElapsedTime = 0
-                finishRecording(success: true)
                 initialTimer()
+                if let aar = amrAudioRecorder, aar.isRecording {
+                    aar.stopRecord()
+                }
             }
         }
     }
@@ -417,15 +435,18 @@ extension OZVoiceRecordViewController {
         initialVoiceMessage()
         
         if self.isUsingAMRFormat {
-            self.voiceFilePath = self.generateFilePath()
-            self.amrAudioRecorder.delegate = self
-            self.amrAudioRecorder.stopPlay()
-            self.amrAudioRecorder.startRecord()
-            
-            self.recordElapsedTime = 0
-            self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.progressFn(_:)), userInfo: nil, repeats: true)
-            if let vpv = createCircleProgressView() {
-                vpv.progress(from: 0.0, to: 1.0, duration: self.recordMaxDuration)
+            amrAudioRecorder = OZAudioRecorder()
+            if let aar = amrAudioRecorder {
+                self.voiceFilePath = self.generateFilePath()
+                aar.delegate = self
+                aar.stopPlay()
+                aar.startRecord()
+                
+                self.recordElapsedTime = 0
+                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.progressFn(_:)), userInfo: nil, repeats: true)
+                if let vpv = createCircleProgressView() {
+                    vpv.progress(from: 0.0, to: 1.0, duration: self.recordMaxDuration)
+                }
             }
         }
         else {
@@ -617,23 +638,10 @@ extension OZVoiceRecordViewController: OZAudioRecorderDelegate {
         //        state = .normal
     }
     public func audioRecorderDidStopRecording(_ audioRecorder: OZAudioRecorder, withURL url: URL?) {
-        guard let url = url, let waveData = try? Data(contentsOf: url) else { return }
-        let amrData = OZAudioPlayer.encodeWav2Amr(waveData: waveData, channels: 1, bitsPerSample: 16)
-        voiceData = amrData
-        if let vPath = voiceFilePath {
-            saveAudioFile(data: amrData, path: vPath)
-            
-            //guard let voiceData = voiceData else { return }
-            guard let duration = OZAudioRecorder.amrAudioDuration(from: amrData) else {
-                //resetViews()
-                return
-            }
-            recordedDuration = duration
-            if let vpv = voiceProgressView {
-                vpv.removeFromSuperview()
-            }
-            voiceProgressView = nil
-        }
+        print("OZVoiceVC*************Stop recording \(String(describing: url?.relativePath))*********************")
+        guard let url = url else { return }
+        tempFilePath = url
+        finishRecording(success: true)
     }
     public func audioRecorderDidFinishRecording(_ audioRecorder: OZAudioRecorder, successfully flag: Bool) {
         let result = flag ? "successfully" : "unsuccessfully"

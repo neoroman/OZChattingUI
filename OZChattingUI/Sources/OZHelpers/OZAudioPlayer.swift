@@ -306,6 +306,13 @@ open class OZAudioRecorder: NSObject {
         player?.stop()
         player = nil
     }
+    
+    public func reset() {
+        recorder?.stop()
+        recorder = nil
+        player?.stop()
+        player = nil
+    }
 }
 
 extension OZAudioRecorder {
