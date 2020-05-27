@@ -214,3 +214,14 @@ extension UIDevice {
         return self.userInterfaceIdiom == .pad
     }
 }
+
+extension String {
+    func isHangul() -> Bool {
+        let range = NSRange(location: 0, length: self.utf16.count)
+        let regex = try! NSRegularExpression(pattern: "[ㄱ-힣]")
+        if regex.firstMatch(in: self, options: [], range: range) != nil {
+            return true
+        }
+        return false
+    }
+}
