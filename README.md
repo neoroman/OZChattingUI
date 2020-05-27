@@ -22,7 +22,7 @@ pod 'OZChattingUI'
 
 ## Author
 
-neoroman@gmail.com neoroman@alterant.kr
+Henry Kim /  neoroman@gmail.com neoroman@alterant.kr
 
 ## License
 

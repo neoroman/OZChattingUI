@@ -621,8 +621,14 @@ open class AudioMessageCell: OZMessageCell {
 }
 
 
+public protocol OZMessageCellDelegate {
+    func messageCellDidSetMessage(cell: OZMessageCell)
+    func messageCellLayoutSubviews(cell: OZMessageCell)
+}
 
 open class OZMessageCell: DynamicView {
+    
+    public var delegate: OZMessageCellDelegate?
     
     public var message: OZMessage! {
         didSet {
@@ -640,6 +646,10 @@ open class OZMessageCell: DynamicView {
             }
             
             backgroundColor = message.backgroundColor
+            
+            if let dele = delegate {
+                dele.messageCellDidSetMessage(cell: self)
+            }
         }
     }
     
@@ -660,6 +670,10 @@ open class OZMessageCell: DynamicView {
             // TODO: 여기서 subview들에 shadow를 먹이는 것이 좋겠다. HOW ?!? by Henry on 2020.05.04
             // TOOD: 근데 여기는 superclass 이닷...ㅜ.ㅜ  by Henry on 2020.05.04
             layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
+        }
+        
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: self)
         }
     }
 
