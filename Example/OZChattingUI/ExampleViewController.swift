@@ -159,7 +159,20 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell) {
-        // code
+        if cell.message.alignment == .left {
+            switch cell.message.type {
+            case .text:
+                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
+                incomingCell.iconImage.isHidden = true
+                let inset = UIEdgeInsets(top: 0, left: incomingCell.message.cellPadding, bottom: 0, right: 0)
+                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
+            case .image:
+                guard let incomingCell = cell as? ImagePlusIconMessageCell else { return }
+                incomingCell.isIconHidden = true
+            default:
+                print("...")
+            }
+        }
     }
     
     func messageViewLoaded(isLoaded: Bool) {
