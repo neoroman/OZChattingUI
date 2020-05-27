@@ -42,7 +42,7 @@ Pod::Spec.new do |s|
 
   s.public_header_files = 'Pod/Sources/**/*.h'
   s.weak_frameworks = 'UIKit', 'AVFoundation'
-  s.dependency 'CollectionKit'
-  s.dependency 'NVActivityIndicatorView'
-  s.dependency 'YetAnotherAnimationLibrary'
+  s.dependency 'CollectionKit', '~> 2.4.0'
+  s.dependency 'NVActivityIndicatorView', '~> 4.8.0'
+  s.dependency 'YetAnotherAnimationLibrary', '~> 1.4.0'
 end
