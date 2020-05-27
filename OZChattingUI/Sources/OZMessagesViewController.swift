@@ -124,7 +124,7 @@ open class OZMessagesViewController: CollectionViewController {
     
     
     // MARK: - Setup CollectionKit DataProvider
-    open func setupDataProvider(newDataSource: OZMessageDataProvider? = nil) {
+    public func setupDataProvider(newDataSource: OZMessageDataProvider? = nil) {
         let incomingTextMessageViewSource = ClosureViewSource(viewUpdater: { (view: IncomingTextMessageCell, data: OZMessage, at: Int) in
             view.message = data
         })

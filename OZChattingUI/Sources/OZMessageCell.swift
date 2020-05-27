@@ -14,9 +14,9 @@ public var kCornerRadius: CGFloat = 7
 public var kTextFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
 
 open class IncomingTextMessageCell: OZMessageCell {
-    var textLabel = OZBubbleLabel()
-    var iconImage = UIImageView()
-    var timeLabel = UILabel()
+    public var textLabel = OZBubbleLabel()
+    public var iconImage = UIImageView()
+    public var timeLabel = UILabel()
     
     override public var message: OZMessage! {
         didSet {
@@ -89,8 +89,8 @@ open class IncomingTextMessageCell: OZMessageCell {
 }
 
 open class OutgoingTextMessageCell: OZMessageCell {
-    var textLabel = OZBubbleLabel()
-    var timeLabel = UILabel()
+    public var textLabel = OZBubbleLabel()
+    public var timeLabel = UILabel()
     
     override public var message: OZMessage! {
         didSet {

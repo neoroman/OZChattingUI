@@ -11,6 +11,7 @@
 		AD415759C7BD2ECA7F413B86 /* Pods_OZChattingUI_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98D01C51D89D93EB75FC5CEC /* Pods_OZChattingUI_Example.framework */; };
 		BA714F06247D0FEA00D7F455 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA714F02247D0FEA00D7F455 /* Main.storyboard */; };
 		BA714F07247D0FEA00D7F455 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA714F04247D0FEA00D7F455 /* LaunchScreen.storyboard */; };
+		BAA5DB41247E4CFC00495149 /* OZBubbleLabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA5DB40247E4CFC00495149 /* OZBubbleLabelExtension.swift */; };
 		BAFE5DC9247CEE5E002B0A4B /* AudioExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */; };
 		BAFE5DCA247CEE5E002B0A4B /* DocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */; };
 		BAFE5DCB247CEE5E002B0A4B /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */; };
@@ -78,6 +79,7 @@
 		B6546E8303E9335471EB6A86 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		BA714F03247D0FEA00D7F455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BA714F05247D0FEA00D7F455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BAA5DB40247E4CFC00495149 /* OZBubbleLabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OZBubbleLabelExtension.swift; sourceTree = "<group>"; };
 		BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioExtension.swift; sourceTree = "<group>"; };
 		BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentViewController.swift; sourceTree = "<group>"; };
 		BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				BAFE5DC8247CEE5E002B0A4B /* AppDelegate.swift */,
 				BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */,
 				BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */,
+				BAA5DB40247E4CFC00495149 /* OZBubbleLabelExtension.swift */,
 				BAFE5D91247CEE5D002B0A4B /* CounterView.swift */,
 				BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
@@ -487,6 +490,7 @@
 				BAFE5DCA247CEE5E002B0A4B /* DocumentViewController.swift in Sources */,
 				BAFE5E00247CEE5E002B0A4B /* AppDelegate.swift in Sources */,
 				BAFE5DCF247CEE5E002B0A4B /* CounterView.swift in Sources */,
+				BAA5DB41247E4CFC00495149 /* OZBubbleLabelExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

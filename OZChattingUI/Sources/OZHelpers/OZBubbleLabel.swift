@@ -10,18 +10,18 @@ import UIKit
 
 open class OZBubbleLabel: UILabel {
     
-    let radius: CGFloat = 13.0  // chat bubble corner radius
+    public var radius: CGFloat = 13.0  // chat bubble corner radius
 
-    @IBInspectable var topInset: CGFloat = 5.0
-    @IBInspectable var bottomInset: CGFloat = 5.0
-    @IBInspectable var leftInset: CGFloat = 13.0
-    @IBInspectable var rightInset: CGFloat = 10.0
-    @IBInspectable var notchInsetXRatio: CGFloat = 0.67
-    @IBInspectable var heightRatio: CGFloat = 0.95 // Adjust height of chat bubble, 한글과 영어의 높이 상당히 차이가 남, 주의 요망 by Henry on 2020.05.05
+    @IBInspectable public var topInset: CGFloat = 5.0
+    @IBInspectable public var bottomInset: CGFloat = 5.0
+    @IBInspectable public var leftInset: CGFloat = 13.0
+    @IBInspectable public var rightInset: CGFloat = 10.0
+    @IBInspectable public var notchInsetXRatio: CGFloat = 0.67
+    @IBInspectable public var heightRatio: CGFloat = 0.95 // Adjust height of chat bubble, 한글과 영어의 높이 상당히 차이가 남, 주의 요망 by Henry on 2020.05.05
 
-    var isIncoming = false
-    var incomingColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)
-    var outgoingColor = UIColor(red: 229.0 / 255.0, green: 21.0 / 255.0, blue: 0.0, alpha: 1.0)
+    public var isIncoming = false
+    public var incomingColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)
+    public var outgoingColor = UIColor(red: 229.0 / 255.0, green: 21.0 / 255.0, blue: 0.0, alpha: 1.0)
     
     override open func draw(_ rect: CGRect) {
         
