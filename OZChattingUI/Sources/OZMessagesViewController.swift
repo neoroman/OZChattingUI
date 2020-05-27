@@ -75,7 +75,7 @@ open class OZMessagesViewController: CollectionViewController {
     // MARK: - View did loaded
     override open func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor(displayP3Red: 228/255, green: 232/255, blue: 232/255, alpha: 1)
         view.clipsToBounds = true
         self.setupUI()
         view.bringSubviewToFront(inputContainer)
