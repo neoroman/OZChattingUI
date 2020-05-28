@@ -181,11 +181,10 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                 let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
             default:
-                print(".....\(cell.message.type).....")
+                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
             }
         }
     }
-    
     func messageViewLoaded(isLoaded: Bool) {
         print("messageViewLoaded...!")
     }
