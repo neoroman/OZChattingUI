@@ -17,7 +17,6 @@ open class OZBubbleLabel: UILabel {
     @IBInspectable var leftInset: CGFloat = 13.0
     @IBInspectable var rightInset: CGFloat = 10.0
     @IBInspectable var notchInsetXRatio: CGFloat = 0.67
-    @IBInspectable var heightRatio: CGFloat = 0.95 // Adjust height of chat bubble, 한글과 영어의 높이 상당히 차이가 남, 주의 요망 by Henry on 2020.05.05
 
     var isIncoming = false
     var incomingColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)
@@ -25,8 +24,8 @@ open class OZBubbleLabel: UILabel {
     
     override open func draw(_ rect: CGRect) {
         
-        let width = rect.width
-        let height = rect.height * heightRatio
+        let width = bounds.width
+        let height = bounds.height
         
         let notchInsetX: CGFloat = 10.0
         let cornerRatio: CGFloat = 6.27 / 14.0
