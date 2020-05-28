@@ -168,11 +168,14 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                 incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
             case .image, .emoticon:
                 guard let incomingCell = cell as? ImageMessageCell else { return }
-                incomingCell.isIconHidden = true
                 incomingCell.iconImage.isHidden = true
                 let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
-                incomingCell.bubbleImageView.frame = incomingCell.bounds.inset(by: inset)
+            case .voice:
+                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
+                incomingCell.iconImage.isHidden = true
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
             default:
                 print(".....\(cell.message.type).....")
             }

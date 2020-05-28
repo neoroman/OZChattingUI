@@ -329,43 +329,34 @@ open class ImagePlusIconMessageCell: ImageMessageCell {
 
 open class ImageMessageCell: OZMessageCell {
     open var imageView = UIImageView()
-    public var bubbleImageView = OZBubbleImageView()
     public var iconImage = UIImageView()
     public var isIconHidden = true
     public var timeLabel = UILabel()
     
     override public var message: OZMessage! {
         didSet {
-            imageView.isHidden = !isIconHidden
             if message.content.lowercased().hasPrefix("file"),
                 let anUrl = URL(string: message.content),
                 let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
                 // Local file with fileURL
                 imageView.image = anImage
-                bubbleImageView.image = anImage
             }
             else if message.content.hasPrefix("/"),
                 let anImage = UIImage(contentsOfFile: message.content) {
                 // Local file with relative path
                 imageView.image = anImage
-                bubbleImageView.image = anImage
             }
             else {
                 // 내장 이미지명
                 if let anImage = UIImage(named: message.content) {
                     imageView.image = anImage
-                    bubbleImageView.image = anImage
                 }
                 else if Bundle.isFramework() {
                     imageView.image = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png")
-                    bubbleImageView.image = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png")
                 }
             }
             imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
-            
-            bubbleImageView.isHidden = isIconHidden
-            bubbleImageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
-            
+                        
             if message.type == .emoticon {
                 timeLabel.textColor = message.timeFontColor
                 timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
@@ -425,8 +416,6 @@ open class ImageMessageCell: OZMessageCell {
         addSubview(imageView)
         iconImage.frame = frame
         addSubview(iconImage)
-        bubbleImageView.frame = frame
-        addSubview(bubbleImageView)
         timeLabel.frame = frame
         addSubview(timeLabel)
     }
@@ -437,7 +426,6 @@ open class ImageMessageCell: OZMessageCell {
     
     override open func layoutSubviews() {
         super.layoutSubviews()
-        imageView.isHidden = !isIconHidden
         if isIconHidden {
             imageView.frame = bounds
         }
@@ -446,12 +434,7 @@ open class ImageMessageCell: OZMessageCell {
         }
         imageView.layer.cornerRadius = kCornerRadius
         imageView.layer.masksToBounds = true
-        
-        bubbleImageView.isHidden = isIconHidden
-        bubbleImageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
-        bubbleImageView.layer.cornerRadius = kCornerRadius
-        bubbleImageView.layer.masksToBounds = true
-        
+                
         if message.type == .emoticon {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
             if message.alignment == .right {
@@ -489,12 +472,12 @@ open class AudioMessageCell: OZMessageCell {
     open var playImg = UIImage(named: "play")
     open var audioPlayer = OZAudioPlayer()
     open var activityIndicator = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 25, height: 25), type: .circleStrokeSpin, color: UIColor.gray.withAlphaComponent(0.5), padding: 0)
-    var textLabel = UILabel()
-    var backView = OZProgressBarView(frame: CGRect(x: 0, y: 0, width: 120, height: 40))
-    var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-    var iconImage = UIImageView()
-    var eTimeLabel = UILabel()
-    var isIconHidden = true
+    public var textLabel = UILabel()
+    public var backView = OZProgressBarView(frame: CGRect(x: 0, y: 0, width: 120, height: 40))
+    public var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+    public var iconImage = UIImageView()
+    public var eTimeLabel = UILabel()
+    public var isIconHidden = true
     
     open var isPlaying = false {
         didSet {
