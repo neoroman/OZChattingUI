@@ -17,6 +17,7 @@ public enum OZMessageType {
     case mp3
     case voice
     case emoticon
+    case UNKNOWN
     
     func isEchoEnable() -> Bool {
         switch self {
@@ -43,6 +44,11 @@ public class OZMessage: Equatable {
     public var fromCurrentUser = false
     public var timestamp: Int = 0
     public var extra: [String: Any] = [:] // JSON?
+    
+    public init() {
+        self.identifier = ""
+        self.type = .UNKNOWN
+    }
     
     public init(_ fromCurrentUser: Bool, content: String, timestamp: Int = 0, iconImage: String? = nil) {
         self.fromCurrentUser = fromCurrentUser
@@ -147,6 +153,7 @@ public class OZMessage: Equatable {
         case .text, .deviceStatus: return 12
         case .status: return 2
         case .image, .mp3, .emoticon, .voice: return 0
+        default: return 0
         }
     }
     public var cellLeftPadding: CGFloat {
@@ -282,6 +289,8 @@ public class OZMessage: Equatable {
             return OZMessage(fromCurrentUser, mp3: content, duration: 0)
         case .voice:
             return OZMessage(fromCurrentUser, voice: content, duration: 0)
+        default:
+            return OZMessage()
         }
     }
 }
