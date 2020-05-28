@@ -23,6 +23,7 @@ class ExampleViewController: UIViewController {
     fileprivate func testChats(vc: OZMessagesViewController) {
         // Debug
         vc.isEchoMode = true
+        vc.userProfilePath = Bundle.main.path(forResource: "TaylorSwift", ofType: "jpg")
         
         // Message send and receive
         vc.send(msg: "\(Date())", type: .announcement)
@@ -65,7 +66,8 @@ class ExampleViewController: UIViewController {
             }
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
-            
+            vc.messagesConfigurations = addMessageConfiguration()
+
             #if USING_AS_MODAL
             let nc = UINavigationController(rootViewController: vc)
             self.present(nc, animated: true) {
@@ -113,6 +115,7 @@ class ExampleViewController: UIViewController {
                     } else {
                         vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "ClosE", style: .done, target: self, action: #selector(self.closeChatView))
                     }
+                    vc.messagesConfigurations = addMessageConfiguration()
                 }
             }
             #else
@@ -121,6 +124,7 @@ class ExampleViewController: UIViewController {
                 vc.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
                 vc.collectionView.reloadData()
                 vc.collectionView.scrollTo(edge: .bottom, animated:true)
+                vc.messagesConfigurations = addMessageConfiguration()
             }
             #endif
         }
@@ -130,16 +134,31 @@ class ExampleViewController: UIViewController {
     @objc func closeChatView() {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        return [
+            // OZMessageCell
+            OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, true),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, false),
+            // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
+            // OZVoiceRecordViewController
+            OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
+        ]
+    }
 }
 
 
 extension ExampleViewController: OZMessagesViewControllerDelegate {
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
-//        cell.layer.shadowOffset = CGSize(width: 0, height: 5)
-//        cell.layer.shadowOpacity = 0.3
-//        cell.layer.shadowRadius = 8
-//        cell.layer.shadowColor = cell.message.shadowColor.cgColor
-//        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
+        if cell.message.type == .text || cell.message.type == .image {
+            cell.layer.shadowOffset = CGSize(width: 5, height: 5)
+            cell.layer.shadowOpacity = 0.1
+            cell.layer.shadowRadius = 8
+            cell.layer.shadowColor = cell.message.shadowColor.cgColor
+            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
+        }
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {

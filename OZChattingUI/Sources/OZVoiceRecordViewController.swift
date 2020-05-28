@@ -40,7 +40,6 @@ open class OZVoiceRecordViewController: UIViewController {
     // Recorder
     public var voiceFilePath: URL?
     public var tempFilePath: URL?
-    // TODO: need to move ozMessageViewSettingsItem()
     public var recordMaxDuration: TimeInterval = 10
     fileprivate var recordElapsedTime: TimeInterval = 0
     fileprivate var recordedDuration: TimeInterval = 0
