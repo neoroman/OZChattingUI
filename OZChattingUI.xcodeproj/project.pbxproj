@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BA94A71F247CF6E2000AE9CB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BA94A71E247CF6E2000AE9CB /* Info.plist */; };
+		BAA5DB4F247FBEE300495149 /* OZMessagesConfigurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA5DB4E247FBEE300495149 /* OZMessagesConfigurations.swift */; };
 		BABC606F2463C48C00C2D82C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BABC606E2463C48C00C2D82C /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BAFE5E75247CEF81002B0A4B /* OZMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */; };
 		BAFE5E76247CEF81002B0A4B /* OZEmoticonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E4E247CEF81002B0A4B /* OZEmoticonViewController.swift */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		BA94A71E247CF6E2000AE9CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BAA5DB4E247FBEE300495149 /* OZMessagesConfigurations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesConfigurations.swift; sourceTree = "<group>"; };
 		BABC602E2463BAF100C2D82C /* OZChattingUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OZChattingUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BABC606E2463C48C00C2D82C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		BAEE1AA3246436B200EE3414 /* CollectionKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,16 +148,17 @@
 			isa = PBXGroup;
 			children = (
 				BAFE5E4F247CEF81002B0A4B /* OZChattingUI.h */,
-				BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */,
-				BAFE5E4E247CEF81002B0A4B /* OZEmoticonViewController.swift */,
-				BAFE5E50247CEF81002B0A4B /* OZEmoticons.swift */,
 				BAFE5E51247CEF81002B0A4B /* OZMessages.swift */,
-				BAFE5E52247CEF81002B0A4B /* Resources */,
-				BAFE5E56247CEF81002B0A4B /* OZEmoticonCell.swift */,
+				BAA5DB4E247FBEE300495149 /* OZMessagesConfigurations.swift */,
+				BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */,
 				BAFE5E57247CEF81002B0A4B /* OZMessagesViewController.swift */,
+				BAFE5E50247CEF81002B0A4B /* OZEmoticons.swift */,
+				BAFE5E56247CEF81002B0A4B /* OZEmoticonCell.swift */,
+				BAFE5E4E247CEF81002B0A4B /* OZEmoticonViewController.swift */,
 				BAFE5E58247CEF81002B0A4B /* OZVoiceRecordViewController.swift */,
 				BAFE5E59247CEF81002B0A4B /* OZMessagesExtension.swift */,
 				BAFE5E5C247CEF81002B0A4B /* OZHelpers */,
+				BAFE5E52247CEF81002B0A4B /* Resources */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 				BAFE5E78247CEF81002B0A4B /* OZEmoticons.swift in Sources */,
 				BAFE5E8F247CEF81002B0A4B /* OZBubbleLabel.swift in Sources */,
 				BAFE5E92247CEF81002B0A4B /* OZMimeType.swift in Sources */,
+				BAA5DB4F247FBEE300495149 /* OZMessagesConfigurations.swift in Sources */,
 				BAFE5E76247CEF81002B0A4B /* OZEmoticonViewController.swift in Sources */,
 				BAFE5E95247CEF81002B0A4B /* OZTextView.swift in Sources */,
 			);

@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
   #   'OZChattingUI' => ['OZChattingUI/Assets/*.png']
   # }
 
-  s.public_header_files = 'Pod/Sources/**/*.h'
+  # s.public_header_files = 'Pod/Sources/**/*.h'
   s.weak_frameworks = 'UIKit', 'AVFoundation'
   s.dependency 'CollectionKit', '~> 2.4.0'
   s.dependency 'NVActivityIndicatorView', '~> 4.8.0'
