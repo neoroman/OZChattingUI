@@ -43,6 +43,7 @@ class ExampleViewController: UIViewController {
     fileprivate func testChats(vc: OZMessagesViewController) {
         // Debug
         vc.isEchoMode = true
+        vc.userProfilePath = Bundle.main.path(forResource: "TaylorSwift", ofType: "jpg")
         
         // Message send and receive
         vc.send(msg: "\(Date())", type: .announcement)
@@ -85,7 +86,8 @@ class ExampleViewController: UIViewController {
             }
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
-            
+            vc.messagesConfigurations = addMessageConfiguration()
+
             #if USING_AS_MODAL
             let nc = UINavigationController(rootViewController: vc)
             self.present(nc, animated: true) {
@@ -133,6 +135,7 @@ class ExampleViewController: UIViewController {
                     } else {
                         vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "ClosE", style: .done, target: self, action: #selector(self.closeChatView))
                     }
+                    vc.messagesConfigurations = addMessageConfiguration()
                 }
             }
             #else
@@ -141,6 +144,7 @@ class ExampleViewController: UIViewController {
                 vc.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
                 vc.collectionView.reloadData()
                 vc.collectionView.scrollTo(edge: .bottom, animated:true)
+                vc.messagesConfigurations = addMessageConfiguration()
             }
             #endif
         }
@@ -149,6 +153,19 @@ class ExampleViewController: UIViewController {
     
     @objc func closeChatView() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        return [
+            // OZMessageCell
+            OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, true),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, false),
+            // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
+            // OZVoiceRecordViewController
+            OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
+        ]
     }
 }
 

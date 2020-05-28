@@ -10,7 +10,6 @@ import UIKit
 
 open class OZTextView: UITextView {
 
-    // TODO: need to move ozMessageViewSettingsItem()
     public var inputTextViewFontColor = UIColor.black
     
     enum VerticalAlignment: Int {
