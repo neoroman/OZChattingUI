@@ -174,7 +174,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                 outgoingCell.textLabel.layer.shadowPath = UIBezierPath(roundedRect: outgoingCell.textLabel.bounds, cornerRadius: 12).cgPath
             }
         }
-        cell.layoutIfNeeded()
+        cell.setNeedsLayout()
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
