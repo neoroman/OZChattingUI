@@ -16,8 +16,14 @@ extension OZBubbleLabel {
         
         let radius: CGFloat = 12.0
         
-        let width = rect.width
-        let height = rect.height
+        var width = rect.width
+        var height = rect.height
+        if height < 60,
+            let aText = self.attributedText?.string,
+            aText.isHangul() {
+            height = height - 10
+            width = width - 5
+        }
         
         let cornerRatio: CGFloat = 5.37 / 12.0
         let cntlRadius: CGFloat = radius * cornerRatio
@@ -135,8 +141,6 @@ extension OZBubbleLabel {
         }
         
         bezierPath.close()
-        //bezierPath.usesEvenOddFillRule = true
-
         bezierPath.fill()
         
         super.draw(rect)

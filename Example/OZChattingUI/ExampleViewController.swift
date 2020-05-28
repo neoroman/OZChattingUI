@@ -155,35 +155,50 @@ class ExampleViewController: UIViewController {
 
 extension ExampleViewController: OZMessagesViewControllerDelegate {
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
-        cell.layer.shadowOffset = CGSize(width: 0, height: 5)
-        cell.layer.shadowOpacity = 0.3
-        cell.layer.shadowRadius = 8
-        cell.layer.shadowColor = cell.message.shadowColor.cgColor
-        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
+        let shadowColor = UIColor.black
+        if cell.message.type == .text {
+            if let incomingCell = cell as? IncomingTextMessageCell {
+                
+                incomingCell.textLabel.layer.shadowOffset = CGSize(width: 0, height: 3)
+                incomingCell.textLabel.layer.shadowOpacity = 0.2
+                incomingCell.textLabel.layer.shadowRadius = 8
+                incomingCell.textLabel.layer.shadowColor = shadowColor.cgColor
+                incomingCell.textLabel.layer.shadowPath = UIBezierPath(roundedRect: incomingCell.textLabel.bounds, cornerRadius: 12).cgPath
+            }
+            else if let outgoingCell = cell as? OutgoingTextMessageCell {
+                
+                outgoingCell.textLabel.layer.shadowOffset = CGSize(width: 0, height: 3)
+                outgoingCell.textLabel.layer.shadowOpacity = 0.2
+                outgoingCell.textLabel.layer.shadowRadius = 8
+                outgoingCell.textLabel.layer.shadowColor = shadowColor.cgColor
+                outgoingCell.textLabel.layer.shadowPath = UIBezierPath(roundedRect: outgoingCell.textLabel.bounds, cornerRadius: 12).cgPath
+            }
+        }
+        cell.layoutIfNeeded()
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
-        if cell.message.alignment == .left {
-            switch cell.message.type {
-            case .text:
-                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
-            case .image, .emoticon:
-                guard let incomingCell = cell as? ImageMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
-            case .voice, .mp3:
-                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
-            default:
-                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
-            }
-        }
+//        if cell.message.alignment == .left {
+//            switch cell.message.type {
+//            case .text:
+//                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
+//                incomingCell.iconImage.isHidden = true
+//                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
+//            case .image, .emoticon:
+//                guard let incomingCell = cell as? ImageMessageCell else { return }
+//                incomingCell.iconImage.isHidden = true
+//                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
+//            case .voice, .mp3:
+//                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
+//                incomingCell.iconImage.isHidden = true
+//                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
+//            default:
+//                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
+//            }
+//        }
     }
     func messageViewLoaded(isLoaded: Bool) {
         print("messageViewLoaded...!")
