@@ -858,7 +858,7 @@ extension OZMessagesViewController {
 
 // MARK: - UITextViewDelegate
 extension OZMessagesViewController: UITextViewDelegate {
-    func adjustTextViewHeight(_ textView: UITextView) {
+    public func adjustTextViewHeight(_ textView: UITextView) {
         if textView.text.count <= 0 {
             self.textHeightConstraint.constant = minTextViewHeight
             inputContainer.backgroundColor = .white
