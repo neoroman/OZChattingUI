@@ -6,10 +6,10 @@ PODS:
   - NVActivityIndicatorView (4.8.0):
     - NVActivityIndicatorView/Presenter (= 4.8.0)
   - NVActivityIndicatorView/Presenter (4.8.0)
-  - OZChattingUI (0.1.0):
-    - CollectionKit
-    - NVActivityIndicatorView
-    - YetAnotherAnimationLibrary
+  - OZChattingUI (0.1.5):
+    - CollectionKit (~> 2.4.0)
+    - NVActivityIndicatorView (~> 4.8.0)
+    - YetAnotherAnimationLibrary (~> 1.4.0)
   - YetAnotherAnimationLibrary (1.4.0)
 
 DEPENDENCIES:
@@ -34,7 +34,7 @@ SPEC CHECKSUMS:
   CollectionKit: 8f01e7629185bb81072c4aa734d105df5c2d1c8b
   ImageViewer: cb88ef1c0ba19161bc10702adfdcebc116a7a59d
   NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
-  OZChattingUI: 6c57d4a80528498b677de190b0cbed4327783fbd
+  OZChattingUI: 4b13259e2ec13de0b7d60a88dd52e0e4b209b98f
   YetAnotherAnimationLibrary: 7f808b10c2d193dd3e82407e722fa60aa0bdff2d
 
 PODFILE CHECKSUM: b4d94d25c2a76eadd3aac30ed60d5a57b19d4e18
