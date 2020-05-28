@@ -17,14 +17,8 @@ extension OZBubbleLabel {
         if type == .hasOwnDrawing {
             let radius: CGFloat = 12.0
             
-            var width = rect.width
-            var height = rect.height
-            if height < 60,
-                let aText = self.attributedText?.string,
-                aText.isHangul() {
-                height = (height <= 44) ? height : height - 9
-                width = width - 2
-            }
+            let width = bounds.width
+            let height = bounds.height
             
             let cornerRatio: CGFloat = 5.37 / 12.0
             let cntlRadius: CGFloat = radius * cornerRatio
