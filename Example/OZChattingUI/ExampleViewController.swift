@@ -157,21 +157,38 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
         let shadowColor = UIColor.black
         if cell.message.type == .text {
+            
+            cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+            cell.layer.shadowOpacity = 0.2
+            cell.layer.shadowRadius = 8
+            cell.layer.shadowColor = shadowColor.cgColor
+            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 12).cgPath
+
             if let incomingCell = cell as? IncomingTextMessageCell {
                 
-                incomingCell.textLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
-                incomingCell.textLabel.layer.shadowOpacity = 0.04
-                incomingCell.textLabel.layer.shadowRadius = 2
-                incomingCell.textLabel.layer.shadowColor = shadowColor.cgColor
-                incomingCell.textLabel.layer.shadowPath = UIBezierPath(roundedRect: incomingCell.textLabel.bounds, cornerRadius: 12).cgPath
+                if previousMessage.type == .text,
+                    previousMessage.alignment == cell.message.alignment {
+                    incomingCell.textLabel.type = .noDraw
+                    incomingCell.textLabel.layer.cornerRadius = 12.0
+                    incomingCell.textLabel.layer.masksToBounds = true
+                    incomingCell.textLabel.backgroundColor = .white
+                }
+                else {
+                    incomingCell.textLabel.type = .hasOwnDrawing
+                }
             }
             else if let outgoingCell = cell as? OutgoingTextMessageCell {
                 
-                outgoingCell.textLabel.layer.shadowOffset = CGSize(width: 0, height: 2)
-                outgoingCell.textLabel.layer.shadowOpacity = 0.2
-                outgoingCell.textLabel.layer.shadowRadius = 8
-                outgoingCell.textLabel.layer.shadowColor = shadowColor.cgColor
-                outgoingCell.textLabel.layer.shadowPath = UIBezierPath(roundedRect: outgoingCell.textLabel.bounds, cornerRadius: 12).cgPath
+                if previousMessage.type == .text,
+                    previousMessage.alignment == cell.message.alignment {
+                    outgoingCell.textLabel.type = .noDraw
+                    outgoingCell.textLabel.layer.cornerRadius = 12.0
+                    outgoingCell.textLabel.layer.masksToBounds = true
+                    outgoingCell.textLabel.backgroundColor = UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000)
+                }
+                else {
+                    outgoingCell.textLabel.type = .hasOwnDrawing
+                }
             }
         }
         cell.setNeedsLayout()

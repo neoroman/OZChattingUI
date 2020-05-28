@@ -246,7 +246,7 @@ public class OZMessage: Equatable {
         }
     }
     
-    func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
+    public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
         if type == .image && previousMessage.type == .image {
             return 2 + previousMessage.iconSize / 2
         }
@@ -269,7 +269,7 @@ public class OZMessage: Equatable {
             return 20
         }
         if type == .text && type == previousMessage.type && fromCurrentUser == previousMessage.fromCurrentUser {
-            return 25
+            return 10
         }
         return 25
     }
