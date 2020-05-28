@@ -24,7 +24,7 @@ class ChattingViewController: OZMessagesViewController {
         if let fullText = inputTextView.text {
             self.send(msg: fullText)
             self.inputTextView.text = ""
-//            self.adjustTextViewHeight(inputTextView)
+            self.adjustTextViewHeight(inputTextView)
             sendButton.isSelected = false
         }
     }
@@ -35,13 +35,60 @@ class ChattingViewController: OZMessagesViewController {
         inputTextView.layer.borderColor = UIColor(red: 222/255, green: 222/255, blue: 222/255, alpha: 1).cgColor
         inputTextView.layer.borderWidth = 1
         inputTextView.tintColor = UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1)
+        inputTextView.backgroundColor = .white
         
         fileButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         micButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
+        
+        self.messagesConfigurations = addMessageConfiguration()
+    }
+
+    fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        return [
+            // OZMessageCell
+            OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, true),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, false),
+            OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
+            OZMessagesConfigurationItem.cellBackgroundColor(UIColor(red:  204/255, green: 204/255, blue: 204/255, alpha: 1), [.announcement]),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], true),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], false),
+            OZMessagesConfigurationItem.sepratorColor(.clear),
+            // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
+            // OZVoiceRecordViewController
+            OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
+        ]
     }
 
 }
 
-extension ChattingViewController {
+extension ChattingViewController: OZMessagesViewControllerDelegate {
+    func messageSending(identifier: String, type: OZMessageType, data: OZMessage) {
+        // code
+    }
     
+    func messageAppend(complete: @escaping OZChatFetchCompleteBlock) {
+        // code
+    }
+    
+    func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock) {
+        // code
+    }
+    
+    func messageTextViewBeginEditing(textView: UITextView) {
+        // code
+    }
+    
+    func messageTextViewEndEditing(textView: UITextView) {
+        // code
+    }
+    
+    func messageInputTextViewWillShow(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat) {
+        // code
+    }
+    
+    func messageInputTextViewWillHide(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat) {
+        // code
+    }
 }

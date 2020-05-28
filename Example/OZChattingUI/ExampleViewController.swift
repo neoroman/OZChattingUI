@@ -79,8 +79,8 @@ class ExampleViewController: UIViewController {
     }
 
     @IBAction func buttonPressed(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI") as? OZMessagesViewController {
+        let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? OZMessagesViewController {
             if chatViewController == nil {
                 chatViewController = vc
             }
@@ -109,8 +109,8 @@ class ExampleViewController: UIViewController {
     
     
     @IBAction func testButtonPressed(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI") as? OZMessagesViewController {
+        let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? OZMessagesViewController {
             if chatViewController == nil {
                 chatViewController = vc
             }
@@ -161,6 +161,11 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, true),
             OZMessagesConfigurationItem.bubbleBackgroundColor(.red, false),
+            OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
+            OZMessagesConfigurationItem.cellBackgroundColor(UIColor(red:  204/255, green: 204/255, blue: 204/255, alpha: 1), [.announcement]),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], true),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], false),
+            OZMessagesConfigurationItem.sepratorColor(.clear),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
             // OZVoiceRecordViewController
