@@ -22,8 +22,8 @@ public protocol OZMessagesViewControllerDelegate {
     func messageAppend(complete: @escaping OZChatFetchCompleteBlock)
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock)
     func messageViewLoaded(isLoaded: Bool)
-    func messageCellDidSetMessage(cell: OZMessageCell)
-    func messageCellLayoutSubviews(cell: OZMessageCell)
+    func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage)
+    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage)
 }
 extension OZMessagesViewControllerDelegate {
     func messageCellDidSetMessage(cell: OZMessageCell) {
@@ -975,12 +975,26 @@ extension OZMessagesViewController: UIGestureRecognizerDelegate {
 extension OZMessagesViewController: OZMessageCellDelegate {
     public func messageCellDidSetMessage(cell: OZMessageCell) {
         if let dele = delegate {
-            dele.messageCellDidSetMessage(cell: cell)
+            if let currentMessageIndex = dataSource.data.firstIndex(of: cell.message),
+                currentMessageIndex - 1 >= 0 {
+                let previousMessage = dataSource.data(at: currentMessageIndex - 1)
+                dele.messageCellDidSetMessage(cell: cell, previousMessage: previousMessage)
+            }
+            else {
+                dele.messageCellDidSetMessage(cell: cell, previousMessage: OZMessage())
+            }
         }
     }
     public func messageCellLayoutSubviews(cell: OZMessageCell) {
         if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: cell)
+            if let currentMessageIndex = dataSource.data.firstIndex(of: cell.message),
+                currentMessageIndex - 1 >= 0 {
+                let previousMessage = dataSource.data(at: currentMessageIndex - 1)
+                dele.messageCellLayoutSubviews(cell: cell, previousMessage: previousMessage)
+            }
+            else {
+                dele.messageCellLayoutSubviews(cell: cell, previousMessage: OZMessage())
+            }
         }
     }
 }
