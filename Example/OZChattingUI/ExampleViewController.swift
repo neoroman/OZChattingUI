@@ -171,7 +171,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                 incomingCell.iconImage.isHidden = true
                 let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
-            case .voice:
+            case .voice, .mp3:
                 guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
                 incomingCell.iconImage.isHidden = true
                 let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
