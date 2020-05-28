@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		40EF25DB247FA3C500E1E223 /* OZChattingUI2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40EF25DA247FA3C500E1E223 /* OZChattingUI2.storyboard */; };
+		40EF25DF247FABF100E1E223 /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EF25DE247FABF100E1E223 /* ChattingViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		AD415759C7BD2ECA7F413B86 /* Pods_OZChattingUI_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98D01C51D89D93EB75FC5CEC /* Pods_OZChattingUI_Example.framework */; };
 		BA714F06247D0FEA00D7F455 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA714F02247D0FEA00D7F455 /* Main.storyboard */; };
@@ -70,6 +72,8 @@
 
 /* Begin PBXFileReference section */
 		0603B351033DDB9FB61A8064 /* Pods-OZChattingUI_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OZChattingUI_Example.release.xcconfig"; path = "Target Support Files/Pods-OZChattingUI_Example/Pods-OZChattingUI_Example.release.xcconfig"; sourceTree = "<group>"; };
+		40EF25DA247FA3C500E1E223 /* OZChattingUI2.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OZChattingUI2.storyboard; sourceTree = "<group>"; };
+		40EF25DE247FABF100E1E223 /* ChattingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewController.swift; sourceTree = "<group>"; };
 		49BA11BF3806BC71B1C1FD54 /* OZChattingUI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = OZChattingUI.podspec; path = ../OZChattingUI.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		607FACD01AFB9204008FA782 /* OZChattingUI_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OZChattingUI_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 				BAFE5D91247CEE5D002B0A4B /* CounterView.swift */,
 				BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
+				40EF25DE247FABF100E1E223 /* ChattingViewController.swift */,
 			);
 			name = "Example for OZChattingUI";
 			path = OZChattingUI;
@@ -229,6 +234,7 @@
 				BAFE5D93247CEE5E002B0A4B /* OZChoosePopup.xib */,
 				BAFE5D94247CEE5E002B0A4B /* Images */,
 				BAFE5DA9247CEE5E002B0A4B /* OZChattingUI.storyboard */,
+				40EF25DA247FA3C500E1E223 /* OZChattingUI2.storyboard */,
 				BAFE5DAB247CEE5E002B0A4B /* Supporting Files */,
 				BAFE5DAF247CEE5E002B0A4B /* Emoticons */,
 			);
@@ -380,6 +386,7 @@
 				BAFE5DD5247CEE5E002B0A4B /* camera@2x.png in Resources */,
 				BA714F06247D0FEA00D7F455 /* Main.storyboard in Resources */,
 				BAFE5DDC247CEE5E002B0A4B /* addFile@2x.png in Resources */,
+				40EF25DB247FA3C500E1E223 /* OZChattingUI2.storyboard in Resources */,
 				BAFE5DFA247CEE5E002B0A4B /* e1007@2x.png in Resources */,
 				BAFE5DF1247CEE5E002B0A4B /* e1004@2x.png in Resources */,
 				BAFE5DED247CEE5E002B0A4B /* e1014@2x.png in Resources */,
@@ -486,6 +493,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAFE5DCB247CEE5E002B0A4B /* ExampleViewController.swift in Sources */,
+				40EF25DF247FABF100E1E223 /* ChattingViewController.swift in Sources */,
 				BAFE5DC9247CEE5E002B0A4B /* AudioExtension.swift in Sources */,
 				BAFE5DCA247CEE5E002B0A4B /* DocumentViewController.swift in Sources */,
 				BAFE5E00247CEE5E002B0A4B /* AppDelegate.swift in Sources */,
