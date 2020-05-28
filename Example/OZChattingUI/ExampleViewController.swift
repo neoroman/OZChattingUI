@@ -155,7 +155,11 @@ class ExampleViewController: UIViewController {
 
 extension ExampleViewController: OZMessagesViewControllerDelegate {
     func messageCellDidSetMessage(cell: OZMessageCell) {
-        // code
+        cell.layer.shadowOffset = CGSize(width: 0, height: 5)
+        cell.layer.shadowOpacity = 0.3
+        cell.layer.shadowRadius = 8
+        cell.layer.shadowColor = cell.message.shadowColor.cgColor
+        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell) {
