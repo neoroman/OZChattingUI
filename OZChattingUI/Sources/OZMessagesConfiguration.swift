@@ -86,6 +86,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.fontSize(14.0, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.fontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1), OZMessageType.allTypes(), false),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1), OZMessageType.allTypes(), true),  // duplicate on purpose
             OZMessagesConfigurationItem.fontColor(.black, [.deviceStatus, .mp3, .voice, .text], false),
             OZMessagesConfigurationItem.fontColor(.white, [.text], true),
             OZMessagesConfigurationItem.timeFontSize(12),
@@ -110,12 +111,14 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.showShadow(false, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.showShadow(false, [.text, .image]),
             OZMessagesConfigurationItem.shadowColor(.clear, OZMessageType.allTypes(), false),
+            OZMessagesConfigurationItem.shadowColor(.clear, OZMessageType.allTypes(), true), // duplicate on purpose
             OZMessagesConfigurationItem.shadowColor(UIColor(white: 0.4, alpha: 1.0), [.image, .text], false),
             OZMessagesConfigurationItem.shadowColor(UIColor(red: 140/255, green: 0.1, blue: 0.1, alpha: 1.0), [.text], true),
             OZMessagesConfigurationItem.sepratorColor(UIColor(white: 238.0 / 255.0, alpha: 1.0)),
             OZMessagesConfigurationItem.alignment(.right, OZMessageType.allTypes(), true),
             OZMessagesConfigurationItem.alignment(.left, OZMessageType.allTypes(), false),
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], true),
+            OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], false),  // duplicate on purpose
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             // OZVoiceRecordViewController
