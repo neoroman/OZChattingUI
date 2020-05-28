@@ -24,7 +24,7 @@ class ChattingViewController: OZMessagesViewController {
         if let fullText = inputTextView.text {
             self.send(msg: fullText)
             self.inputTextView.text = ""
-            self.adjustTextViewHeight(inputTextView)
+//            self.adjustTextViewHeight(inputTextView)
             sendButton.isSelected = false
         }
     }
