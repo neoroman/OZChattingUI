@@ -143,8 +143,6 @@ open class OZBubbleLabel: UILabel {
             
             bezierPath.close()
             bezierPath.fill()
-            
-            
         }
 
         super.draw(rect)

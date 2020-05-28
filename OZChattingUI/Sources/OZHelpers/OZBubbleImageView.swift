@@ -19,9 +19,10 @@ open class OZBubbleImageView: UIImageView {
     var isIncoming = true
     
     override open func draw(_ rect: CGRect) {
-        
-        let width = rect.width
-        let height = rect.height
+        super.draw(rect)
+
+        let width = bounds.width
+        let height = bounds.height
         
         let radius: CGFloat = 12.0
         let notchInsetX: CGFloat = 10.0
@@ -134,14 +135,11 @@ open class OZBubbleImageView: UIImageView {
         bezierPath.close()
         bezierPath.fill()
 
-        /*
         bezierPath.addClip()
 
-        let mask           = CAShapeLayer()
-        mask.path          = bezierPath.cgPath
-        self.layer.mask         = mask
-        */
-        super.draw(rect)
+        let mask            = CAShapeLayer()
+        mask.path           = bezierPath.cgPath
+        self.layer.mask     = mask
     }
         
     override open func layoutSubviews() {
