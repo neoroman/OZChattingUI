@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,16 +22,14 @@
                                     <constraint firstAttribute="height" constant="30" id="rmK-dP-kl3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="OZChattingUI" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="S0p-cg-2p0">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OZChattingUI" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="S0p-cg-2p0">
                                 <rect key="frame" x="0.0" y="423" width="414" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="kh0-Er-zD3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -40,6 +39,7 @@
                             <constraint firstItem="2kt-Or-ZAI" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.956522" id="KOg-dk-x49"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="2kt-Or-ZAI" secondAttribute="bottom" constant="28" id="RUj-jJ-Zeh"/>
                             <constraint firstItem="S0p-cg-2p0" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="enL-bo-Llw"/>
+                            <constraint firstItem="S0p-cg-2p0" firstAttribute="centerX" secondItem="2kt-Or-ZAI" secondAttribute="centerX" id="qfi-9c-Re3"/>
                             <constraint firstItem="S0p-cg-2p0" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" id="yGf-uk-kyh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

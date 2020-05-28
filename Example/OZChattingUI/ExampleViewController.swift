@@ -164,13 +164,17 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
             case .text:
                 guard let incomingCell = cell as? IncomingTextMessageCell else { return }
                 incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: incomingCell.message.cellPadding, bottom: 0, right: 0)
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
-            case .image:
-                guard let incomingCell = cell as? ImagePlusIconMessageCell else { return }
+            case .image, .emoticon:
+                guard let incomingCell = cell as? ImageMessageCell else { return }
                 incomingCell.isIconHidden = true
+                incomingCell.iconImage.isHidden = true
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
+                incomingCell.bubbleImageView.frame = incomingCell.bounds.inset(by: inset)
             default:
-                print("...")
+                print(".....\(cell.message.type).....")
             }
         }
     }
@@ -212,7 +216,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage) {
-        print("messageSending(id:\(identifier)):::::Sending(Type: \(type)) ==> contentPath: %@", data.content)
+        print("messageSending(id:\(identifier)):::::Sending(Type: \(type)) ==> contentPath: \(data.content)")
         
         guard let chatVC = chatViewController else { return }
         
