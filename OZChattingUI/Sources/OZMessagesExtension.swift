@@ -69,7 +69,10 @@ open class OZMessageLayout: SimpleLayout {
                         yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage)
                     }
                 } else if message.alignment == .left {
-                    let halfIconHeight: CGFloat = message.iconSize / 2
+                    var halfIconHeight: CGFloat = 0
+                    if !message.isSenderIconHide {
+                        halfIconHeight = message.iconSize / 2
+                    }
                     yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage) + halfIconHeight
                 } else {
                     yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage)

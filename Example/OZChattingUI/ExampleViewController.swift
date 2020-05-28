@@ -43,6 +43,7 @@ class ExampleViewController: UIViewController {
     fileprivate func testChats(vc: OZMessagesViewController) {
         // Debug
         vc.isEchoMode = true
+        vc.userProfilePath = Bundle.main.path(forResource: "TaylorSwift", ofType: "jpg")
         
         // Message send and receive
         vc.send(msg: "\(Date())", type: .announcement)
@@ -85,7 +86,8 @@ class ExampleViewController: UIViewController {
             }
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
-            
+            vc.messagesConfigurations = addMessageConfiguration()
+
             #if USING_AS_MODAL
             let nc = UINavigationController(rootViewController: vc)
             self.present(nc, animated: true) {
@@ -133,6 +135,7 @@ class ExampleViewController: UIViewController {
                     } else {
                         vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "ClosE", style: .done, target: self, action: #selector(self.closeChatView))
                     }
+                    vc.messagesConfigurations = addMessageConfiguration()
                 }
             }
             #else
@@ -141,6 +144,7 @@ class ExampleViewController: UIViewController {
                 vc.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
                 vc.collectionView.reloadData()
                 vc.collectionView.scrollTo(edge: .bottom, animated:true)
+                vc.messagesConfigurations = addMessageConfiguration()
             }
             #endif
         }
@@ -150,31 +154,86 @@ class ExampleViewController: UIViewController {
     @objc func closeChatView() {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        return [
+            // OZMessageCell
+            OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, true),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, false),
+            // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
+            // OZVoiceRecordViewController
+            OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
+        ]
+    }
 }
 
 
 extension ExampleViewController: OZMessagesViewControllerDelegate {
-    func messageCellDidSetMessage(cell: OZMessageCell) {
-        // code
+    func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
+        let shadowColor = UIColor.black
+        if cell.message.type == .text {
+            
+            cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+            cell.layer.shadowOpacity = 0.2
+            cell.layer.shadowRadius = 8
+            cell.layer.shadowColor = shadowColor.cgColor
+            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 12).cgPath
+
+            if let incomingCell = cell as? IncomingTextMessageCell {
+                
+                if previousMessage.type == .text,
+                    previousMessage.alignment == cell.message.alignment {
+                    incomingCell.textLabel.type = .noDraw
+                    incomingCell.textLabel.layer.cornerRadius = 12.0
+                    incomingCell.textLabel.layer.masksToBounds = true
+                    incomingCell.textLabel.backgroundColor = .white
+                }
+                else {
+                    incomingCell.textLabel.type = .hasOwnDrawing
+                }
+            }
+            else if let outgoingCell = cell as? OutgoingTextMessageCell {
+                
+                if previousMessage.type == .text,
+                    previousMessage.alignment == cell.message.alignment {
+                    outgoingCell.textLabel.type = .noDraw
+                    outgoingCell.textLabel.layer.cornerRadius = 12.0
+                    outgoingCell.textLabel.layer.masksToBounds = true
+                    outgoingCell.textLabel.backgroundColor = UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000)
+                }
+                else {
+                    outgoingCell.textLabel.type = .hasOwnDrawing
+                }
+            }
+        }
+        cell.setNeedsLayout()
     }
     
-    func messageCellLayoutSubviews(cell: OZMessageCell) {
+    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
         if cell.message.alignment == .left {
             switch cell.message.type {
             case .text:
                 guard let incomingCell = cell as? IncomingTextMessageCell else { return }
                 incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: incomingCell.message.cellPadding, bottom: 0, right: 0)
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
-            case .image:
-                guard let incomingCell = cell as? ImagePlusIconMessageCell else { return }
-                incomingCell.isIconHidden = true
+            case .image, .emoticon:
+                guard let incomingCell = cell as? ImageMessageCell else { return }
+                incomingCell.iconImage.isHidden = true
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
+            case .voice, .mp3:
+                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
+                incomingCell.iconImage.isHidden = true
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
             default:
-                print("...")
+                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
             }
         }
     }
-    
     func messageViewLoaded(isLoaded: Bool) {
         print("messageViewLoaded...!")
     }
@@ -212,7 +271,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage) {
-        print("messageSending(id:\(identifier)):::::Sending(Type: \(type)) ==> contentPath: %@", data.content)
+        print("messageSending(id:\(identifier)):::::Sending(Type: \(type)) ==> contentPath: \(data.content)")
         
         guard let chatVC = chatViewController else { return }
         
