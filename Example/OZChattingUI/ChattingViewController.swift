@@ -24,7 +24,7 @@ class ChattingViewController: OZMessagesViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Important !!!
         self.delegate = self
         setUI()
@@ -35,14 +35,14 @@ class ChattingViewController: OZMessagesViewController {
     
     /// 메시지 전송
     @IBAction func pressedSendButton(_ sender: UIButton) {
-        //        if let fullText = inputTextView.text {
-        //            self.send(msg: fullText) // sent 실패하면 setFailtoSending()
-        //            // 성공하면
-        //            self.inputTextView.text = ""
-        //            self.adjustTextViewHeight(inputTextView)
-        //            sendButton.isSelected = false
-        //        }
-        setFailToSending()
+        if let fullText = inputTextView.text {
+            self.send(msg: fullText) // sent 실패하면 setFailtoSending()
+            // 성공하면
+            self.inputTextView.text = ""
+            self.adjustTextViewHeight(inputTextView)
+            sendButton.isSelected = false
+        }
+        //        setFailToSending()
     }
     
     /// 텍스트 입력 상태로 전환
@@ -72,11 +72,6 @@ class ChattingViewController: OZMessagesViewController {
     @IBAction func pressedMicMotionButton(_ sender: UIButton) {
         
     }
-    
-//    override func textViewDidChange(_ textView: UITextView) {
-//        super.textViewDidChange(textView)
-//        sendButton.isEnabled = true
-//    }
     
     // MARK: - Function
     /// 최초 UI 설정
@@ -117,7 +112,7 @@ class ChattingViewController: OZMessagesViewController {
         keyboardButton.isHidden = true
         
         isSuccessToSend = true
-        sendButton.isEnabled = true // 임시
+        //        sendButton.isEnabled = true // 임시
     }
     
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
@@ -209,7 +204,7 @@ class ChattingViewController: OZMessagesViewController {
         inputTextView.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         inputTextView.centerVerticalText()
     }
-        
+    
     // MARK: - Targets and Actions
     @IBAction func sendButtonPressed(_ sender: UIButton) {
         sender.isSelected.toggle()
@@ -236,7 +231,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
             cell.layer.shadowRadius = 8
             cell.layer.shadowColor = shadowColor.cgColor
             cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 12).cgPath
-
+            
             if let incomingCell = cell as? IncomingTextMessageCell {
                 
                 if previousMessage.type == .text,
@@ -290,7 +285,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
             }
         }
     }
-
+    
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage) {
         // code
     }
@@ -305,11 +300,13 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     
     func messageTextViewBeginEditing(textView: UITextView) {
     }
+    
     func messageTextViewDidChanged(textView: UITextView) {
-        sendButton.isSelected = true
+        sendButton.isEnabled = true
     }
+    
     func messageTextViewEndEditing(textView: UITextView) {
-        sendButton.isSelected = false
+        
     }
     
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
