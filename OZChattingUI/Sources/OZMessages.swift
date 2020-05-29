@@ -155,6 +155,19 @@ public class OZMessage: Equatable {
         }
     }
     
+    private func checkUserType(_ userType: OZMessagesUserSideConfigType) -> Bool {
+        if fromCurrentUser, userType == .fromCurrent {
+            return true
+        }
+        else if !fromCurrentUser, userType == .fromOther {
+            return true
+        }
+        else if userType == .none {
+            return true
+        }
+        return false
+    }
+    
     private func setupConfigurations(config: [OZMessagesConfigurationItem]?) {
         var configItems = OZChattingDefaultConfiguration.messageConfiguration()
         if let items = config {
@@ -163,13 +176,13 @@ public class OZMessage: Equatable {
         for item in configItems {
             
             switch item {
-            case .alignment(let anAlignment, let types, let aFromCurrentUser):
-                if types.contains(type) && fromCurrentUser == aFromCurrentUser {
+            case .alignment(let anAlignment, let types, let userType):
+                if types.contains(type), checkUserType(userType) {
                     alignment = anAlignment
                 }
                 break
-            case .bubbleBackgroundColor(let color, let aFromCurrentUser):
-                if fromCurrentUser == aFromCurrentUser {
+            case .bubbleBackgroundColor(let color, let userType):
+                if checkUserType(userType)  {
                     bubbleColor = color
                 }
                 break
@@ -198,8 +211,8 @@ public class OZMessage: Equatable {
                     cellRightPadding = padding
                 }
                 break
-            case .fontColor(let color, let types, let aFromCurrentUser):
-                if types.contains(type) && fromCurrentUser == aFromCurrentUser {
+            case .fontColor(let color, let types, let userType):
+                if types.contains(type), checkUserType(userType) {
                     textColor = color
                 }
                 break
@@ -234,8 +247,8 @@ public class OZMessage: Equatable {
             case .sepratorColor(let color):
                 seperatorColor = color
                 break
-            case .shadowColor(let color, let types, let aFromCurrentUser):
-                if types.contains(type) && fromCurrentUser == aFromCurrentUser {
+            case .shadowColor(let color, let types, let userType):
+                if types.contains(type), checkUserType(userType) {
                     shadowColor = color
                 }
                 break

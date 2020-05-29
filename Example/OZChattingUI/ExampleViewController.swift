@@ -23,6 +23,8 @@ struct DataItem: Equatable {
     let galleryItem: GalleryItem
 }
 
+fileprivate let kMicButtonTag = 17172008
+fileprivate let kSendButtonTag = kMicButtonTag + 1004
 
 class ExampleViewController: UIViewController {
     
@@ -67,6 +69,7 @@ class ExampleViewController: UIViewController {
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+1.0) {
             vc.send(msg: "Hi... OZChattingUI!", type: .text) { (id, content) in
+                vc.dataSource.data.removeAll(where: { $0.content == "Delivered" })
                 vc.send(msg: "Delivered", type: .status, isDeliveredMsg: true)
             }
         }
@@ -79,8 +82,13 @@ class ExampleViewController: UIViewController {
     }
 
     @IBAction func buttonPressed(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? OZMessagesViewController {
+        var storyName = "OZChattingUI"
+        if let button = sender as? UIButton,
+            button.tag == 1003 {
+            storyName = storyName + "2"
+        }
+        let storyboard = UIStoryboard(name: storyName, bundle: Bundle.main)
+        if let vc = storyboard.instantiateViewController(withIdentifier: storyName) as? OZMessagesViewController {
             if chatViewController == nil {
                 chatViewController = vc
             }
@@ -109,13 +117,19 @@ class ExampleViewController: UIViewController {
     
     
     @IBAction func testButtonPressed(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? OZMessagesViewController {
+        var storyName = "OZChattingUI"
+        if let button = sender as? UIButton,
+            button.tag == 1004 {
+            storyName = storyName + "2"
+        }
+        let storyboard = UIStoryboard(name: storyName, bundle: Bundle.main)
+        if let vc = storyboard.instantiateViewController(withIdentifier: storyName) as? OZMessagesViewController {
             if chatViewController == nil {
                 chatViewController = vc
             }
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
+            vc.messagesConfigurations = addMessageConfiguration()
             if #available(iOS 11.0, *) {
             } else {
 //                vc.fileChoosePopup.setButton
@@ -135,7 +149,6 @@ class ExampleViewController: UIViewController {
                     } else {
                         vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "ClosE", style: .done, target: self, action: #selector(self.closeChatView))
                     }
-                    vc.messagesConfigurations = addMessageConfiguration()
                 }
             }
             #else
@@ -144,7 +157,6 @@ class ExampleViewController: UIViewController {
                 vc.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
                 vc.collectionView.reloadData()
                 vc.collectionView.scrollTo(edge: .bottom, animated:true)
-                vc.messagesConfigurations = addMessageConfiguration()
             }
             #endif
         }
@@ -155,90 +167,36 @@ class ExampleViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
         return [
             // OZMessageCell
-            OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, true),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, false),
+            OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
-            OZMessagesConfigurationItem.cellBackgroundColor(UIColor(red:  204/255, green: 204/255, blue: 204/255, alpha: 1), [.announcement]),
-            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], true),
-            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], false),
-            OZMessagesConfigurationItem.sepratorColor(.clear),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
+            OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
         ]
     }
+
 }
 
 
 extension ExampleViewController: OZMessagesViewControllerDelegate {
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
-        let shadowColor = UIColor.black
         if cell.message.type == .text {
-            
-            cell.layer.shadowOffset = CGSize(width: 0, height: 2)
-            cell.layer.shadowOpacity = 0.2
-            cell.layer.shadowRadius = 8
-            cell.layer.shadowColor = shadowColor.cgColor
-            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 12).cgPath
-
             if let incomingCell = cell as? IncomingTextMessageCell {
-                
-                if previousMessage.type == .text,
-                    previousMessage.alignment == cell.message.alignment {
-                    incomingCell.textLabel.type = .noDraw
-                    incomingCell.textLabel.layer.cornerRadius = 12.0
-                    incomingCell.textLabel.layer.masksToBounds = true
-                    incomingCell.textLabel.backgroundColor = .white
-                }
-                else {
-                    incomingCell.textLabel.type = .hasOwnDrawing
-                }
+                incomingCell.textLabel.type = .basic
             }
             else if let outgoingCell = cell as? OutgoingTextMessageCell {
-                
-                if previousMessage.type == .text,
-                    previousMessage.alignment == cell.message.alignment {
-                    outgoingCell.textLabel.type = .noDraw
-                    outgoingCell.textLabel.layer.cornerRadius = 12.0
-                    outgoingCell.textLabel.layer.masksToBounds = true
-                    outgoingCell.textLabel.backgroundColor = UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000)
-                }
-                else {
-                    outgoingCell.textLabel.type = .hasOwnDrawing
-                }
+                outgoingCell.textLabel.type = .basic
             }
         }
         cell.setNeedsLayout()
     }
     
-    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
-        if cell.message.alignment == .left {
-            switch cell.message.type {
-            case .text:
-                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
-            case .image, .emoticon:
-                guard let incomingCell = cell as? ImageMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
-            case .voice, .mp3:
-                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
-            default:
-                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
-            }
-        }
-    }
     func messageViewLoaded(isLoaded: Bool) {
         print("messageViewLoaded...!")
     }
@@ -285,6 +243,43 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
             chatVC.dataSource.data.removeAll(where: { $0.content == "Delivered" })
             chatVC.send(msg: "Delivered", type: .status)
         }
+    }
+    
+    func messageTextViewBeginEditing(textView: UITextView) {
+    }
+    func messageTextViewDidChanged(textView: UITextView) {
+        if let cvc = self.chatViewController {
+            cvc.micButton.setImage(UIImage(named: "send"), for: .normal)
+            cvc.micButton.tag = kSendButtonTag
+        }
+    }
+    func messageTextViewEndEditing(textView: UITextView) {
+        if let cvc = self.chatViewController {
+            cvc.micButton.setImage(UIImage(named: "mic"), for: .normal)
+            cvc.micButton.tag = kMicButtonTag
+        }
+    }
+    
+    func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+        if let button = sender as? UIButton, button.tag == kSendButtonTag,
+            let fullText = viewController.inputTextView.text {
+            
+            let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.count > 0 {
+                viewController.send(msg: trimmed)
+            }
+            
+            viewController.inputTextView.text = ""
+            viewController.adjustTextViewHeight(viewController.inputTextView)
+            
+            viewController.micButton.setImage(UIImage(named: "mic"), for: .normal)
+            viewController.micButton.tag = kMicButtonTag
+            return false
+        }
+        return true
+    }
+    func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+        return true
     }
 }
 
