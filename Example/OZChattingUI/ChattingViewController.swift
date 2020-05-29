@@ -31,16 +31,18 @@ class ChattingViewController: OZMessagesViewController {
         setDefaultState()
     }
     
-    // MARK: - IBAction
+    // MARK: - Targets and Actions
     
     /// 메시지 전송
     @IBAction func pressedSendButton(_ sender: UIButton) {
         if let fullText = inputTextView.text {
-            self.send(msg: fullText) // sent 실패하면 setFailtoSending()
-            // 성공하면
-            self.inputTextView.text = ""
-            self.adjustTextViewHeight(inputTextView)
-            sendButton.isSelected = false
+            let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.count > 0 {
+                send(msg: trimmed)
+            }
+            inputTextView.text.removeAll()
+            adjustTextViewHeight(inputTextView)
+            sendButton.isEnabled = false
         }
         //        setFailToSending()
     }
@@ -205,19 +207,6 @@ class ChattingViewController: OZMessagesViewController {
         inputTextView.centerVerticalText()
     }
     
-    // MARK: - Targets and Actions
-    @IBAction func sendButtonPressed(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        if let fullText = inputTextView.text {
-            let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
-            if trimmed.count > 0 {
-                send(msg: trimmed)
-            }
-            inputTextView.text = ""
-            adjustTextViewHeight(inputTextView)
-            sendButton.isSelected = false
-        }
-    }
 }
 
 // MARK: - OZMessagesViewControllerDelegate
