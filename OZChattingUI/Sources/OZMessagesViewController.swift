@@ -868,14 +868,15 @@ extension OZMessagesViewController: UITextViewDelegate {
         let size = OZMessageCell.sizeForText(textView.text, maxWidth: width,
                                              paddingX: 20.0, paddingY: 20.0)
         
-        if self.textHeightConstraint.constant > maxTextViewHeight {
-            UIView.animate(withDuration: 0.2, delay: 0.15, options: .curveEaseInOut, animations: {
+        if self.textHeightConstraint.constant >= maxTextViewHeight {
+            UIView.animate(withDuration: 0.35, delay: 0.1, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
                 self.textHeightConstraint.constant = maxTextViewHeight
+                self.view.layoutIfNeeded()
             }) { (complete) in
-                //
             }
         }
-        else if self.textHeightConstraint.constant < size.height {
+        else if self.textHeightConstraint.constant < maxTextViewHeight,
+            self.textHeightConstraint.constant < size.height {
             self.textHeightConstraint.constant = size.height
         }
         else if self.textHeightConstraint.constant < minTextViewHeight {
