@@ -94,6 +94,7 @@ class ExampleViewController: UIViewController {
             }
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
+            vc.messagesConfigurations = addMessageConfiguration()
 
             #if USING_AS_MODAL
             let nc = UINavigationController(rootViewController: vc)
@@ -128,6 +129,7 @@ class ExampleViewController: UIViewController {
             }
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
+            vc.messagesConfigurations = addMessageConfiguration()
             if #available(iOS 11.0, *) {
             } else {
 //                vc.fileChoosePopup.setButton
@@ -165,6 +167,20 @@ class ExampleViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    
+    fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        return [
+            // OZMessageCell
+            OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
+            OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
+            // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
+            OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
+            // OZVoiceRecordViewController
+            OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
+        ]
+    }
+
 }
 
 
