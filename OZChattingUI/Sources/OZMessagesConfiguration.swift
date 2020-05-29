@@ -80,6 +80,9 @@ public enum OZMessagesConfigurationItem {
     /// Input text view font color in OZTextView
     case inputTextViewFontColor(UIColor)
 
+    /// Input text view using `Enter` for sending in OZTextView
+    case inputTextUsingEnterToSend(Bool)
+
     /// Max duration of voice record in OZVoiceRecordViewController
     case voiceRecordMaxDuration(TimeInterval)
 }
@@ -124,20 +127,19 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
+            OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(10.0),
         ]
-        for item in items {
-            switch item {
-            case .profileIconSize(let height, let types):
-                for x in types {
-                    items.append(OZMessagesConfigurationItem.cellLeftPadding(height, [x]))
-                }
-            default:
-                print("do nothing...")
+        
+        for case .profileIconSize(let height, let types) in items {
+            for x in types {
+                items.append(OZMessagesConfigurationItem.cellLeftPadding(height, [x]))
             }
         }
         
         return items
     }
+    
+    // TODO: Implement item(case) exist?!?
 }

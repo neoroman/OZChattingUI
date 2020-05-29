@@ -32,8 +32,8 @@
                                         <rect key="frame" x="-103.5" y="0.0" width="621" height="560"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ov4-aV-u9K" customClass="OZTextView" customModule="OZChatExample" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="10" width="315" height="36"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ov4-aV-u9K" customClass="OZTextView" customModule="OZChattingUI_Example" customModuleProvider="target">
+                                        <rect key="frame" x="68" y="10" width="336" height="36"/>
                                         <color key="backgroundColor" red="0.95624989270000005" green="0.95627218479999998" blue="0.95626014469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <edgeInsets key="layoutMargins" top="8" left="22" bottom="8" right="8"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -46,7 +46,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="PUY-XP-Fe3">
-                                        <rect key="frame" x="265" y="8" width="60" height="40"/>
+                                        <rect key="frame" x="334" y="8" width="60" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RNs-jW-tUL">
                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="40"/>
@@ -78,7 +78,7 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R58-PY-9Yw">
-                                        <rect key="frame" x="346" y="-8" width="48" height="48"/>
+                                        <rect key="frame" x="10" y="-8" width="48" height="48"/>
                                         <state key="normal" image="addFile.png"/>
                                         <connections>
                                             <action selector="addFileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pEv-bF-sED"/>
@@ -87,19 +87,19 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="Ov4-aV-u9K" secondAttribute="trailing" constant="10" id="224-HB-7wb"/>
                                     <constraint firstItem="PUY-XP-Fe3" firstAttribute="centerY" secondItem="Ov4-aV-u9K" secondAttribute="centerY" id="3E4-Qe-1KI"/>
                                     <constraint firstAttribute="bottom" secondItem="R58-PY-9Yw" secondAttribute="bottom" constant="16" id="6MA-r2-nnD"/>
                                     <constraint firstAttribute="height" priority="750" constant="56" id="9cl-4u-PCG"/>
-                                    <constraint firstItem="Ov4-aV-u9K" firstAttribute="leading" secondItem="zj2-mI-3Oj" secondAttribute="leading" constant="20" id="9tq-L0-Dch"/>
                                     <constraint firstItem="iik-rH-12Q" firstAttribute="width" secondItem="zj2-mI-3Oj" secondAttribute="width" multiplier="1.5" id="Cnn-zC-gpG"/>
                                     <constraint firstItem="Ov4-aV-u9K" firstAttribute="top" secondItem="zj2-mI-3Oj" secondAttribute="top" constant="10" id="DQa-LT-1IA"/>
-                                    <constraint firstItem="R58-PY-9Yw" firstAttribute="leading" secondItem="Ov4-aV-u9K" secondAttribute="trailing" constant="11" id="E1F-bp-KgZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="R58-PY-9Yw" secondAttribute="trailing" constant="20" id="XCJ-8E-LSG"/>
+                                    <constraint firstItem="R58-PY-9Yw" firstAttribute="leading" secondItem="zj2-mI-3Oj" secondAttribute="leading" constant="10" id="HCM-ji-rDC"/>
                                     <constraint firstItem="iik-rH-12Q" firstAttribute="height" secondItem="zj2-mI-3Oj" secondAttribute="height" multiplier="10" id="b5y-n0-13A"/>
                                     <constraint firstItem="iik-rH-12Q" firstAttribute="top" secondItem="zj2-mI-3Oj" secondAttribute="top" id="eZ6-jy-6vS"/>
                                     <constraint firstItem="iik-rH-12Q" firstAttribute="centerX" secondItem="zj2-mI-3Oj" secondAttribute="centerX" id="j0U-Oj-pl4"/>
                                     <constraint firstAttribute="bottom" secondItem="Ov4-aV-u9K" secondAttribute="bottom" constant="10" id="nGr-ba-JdX"/>
                                     <constraint firstItem="PUY-XP-Fe3" firstAttribute="trailing" secondItem="Ov4-aV-u9K" secondAttribute="trailing" constant="-10" id="qiG-65-NKi"/>
+                                    <constraint firstItem="Ov4-aV-u9K" firstAttribute="leading" secondItem="R58-PY-9Yw" secondAttribute="trailing" constant="10" id="w6o-iV-hJ8"/>
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rkc-VB-KdD">
