@@ -7,6 +7,12 @@
 
 import Foundation
 
+
+public enum OZMessagesUserSideConfigType {
+    case fromCurrent, fromOther, none
+}
+
+
 public typealias OZMessagesConfigurations = [OZMessagesConfigurationItem]
 
 public enum OZMessagesConfigurationItem {
@@ -18,7 +24,7 @@ public enum OZMessagesConfigurationItem {
     case fontSize(CGFloat, [OZMessageType])
 
     /// Bubble font color in OZMessageCell
-    case fontColor(UIColor, [OZMessageType], _ fromCurrentUser: Bool)
+    case fontColor(UIColor, [OZMessageType], _ userType: OZMessagesUserSideConfigType)
 
     /// Time font size in OZMessageCell
     case timeFontSize(CGFloat)
@@ -48,7 +54,7 @@ public enum OZMessagesConfigurationItem {
     case maxWidthRatio(CGFloat)
     
     /// Bubble background color in OZMessageCell
-    case bubbleBackgroundColor(UIColor, _ fromCurrentUser: Bool)
+    case bubbleBackgroundColor(UIColor, _ userType: OZMessagesUserSideConfigType)
     
     /// Cell background color in OZMessageCell
     case cellBackgroundColor(UIColor, [OZMessageType])
@@ -60,13 +66,13 @@ public enum OZMessagesConfigurationItem {
     case showShadow(Bool, [OZMessageType])
     
     /// Shadow color in OZMessageCell
-    case shadowColor(UIColor, [OZMessageType], _ fromCurrentUser: Bool)
+    case shadowColor(UIColor, [OZMessageType], _ userType: OZMessagesUserSideConfigType)
     
     /// Seperator of status message(type == .announcement) in OZMessageCell
     case sepratorColor(UIColor)
     
     /// Alignment of content in OZMessageCell
-    case alignment(OZMessageAlignment, [OZMessageType], _ fromCurrentUser: Bool)
+    case alignment(OZMessageAlignment, [OZMessageType], _ userType: OZMessagesUserSideConfigType)
     
     /// TODO: Vertical padding between messages in OZMessageCell
     //case verticalPaddingBetweenMessage(_ currentMessage: OZMessage, _ previousMessage: OZMessage)
@@ -85,10 +91,9 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Medium", OZMessageType.allTypes()),
             OZMessagesConfigurationItem.fontSize(14.0, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
-            OZMessagesConfigurationItem.fontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1), OZMessageType.allTypes(), false),
-            OZMessagesConfigurationItem.fontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1), OZMessageType.allTypes(), true),  // duplicate on purpose
-            OZMessagesConfigurationItem.fontColor(.black, [.deviceStatus, .mp3, .voice, .text], false),
-            OZMessagesConfigurationItem.fontColor(.white, [.text], true),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1), OZMessageType.allTypes(), .none),
+            OZMessagesConfigurationItem.fontColor(.black, [.deviceStatus, .mp3, .voice, .text], .fromOther),
+            OZMessagesConfigurationItem.fontColor(.white, [.text], .fromCurrent),
             OZMessagesConfigurationItem.timeFontSize(12),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1)),
             OZMessagesConfigurationItem.profileIconSize(32, OZMessageType.allTypes()),
@@ -102,23 +107,21 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.cellHeight(60, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellHeight(40, [.mp3, .voice]),
             OZMessagesConfigurationItem.maxWidthRatio(0.9),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor(red: 229.0 / 255.0, green: 21.0 / 255.0, blue: 0.0, alpha: 1.0), true),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor(white: 244.0 / 255.0, alpha: 1.0), false),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor(red: 229.0 / 255.0, green: 21.0 / 255.0, blue: 0.0, alpha: 1.0), .fromCurrent),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor(white: 244.0 / 255.0, alpha: 1.0), .fromOther),
             OZMessagesConfigurationItem.cellBackgroundColor(.clear, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellBackgroundColor(.white, [.announcement]),
             OZMessagesConfigurationItem.roundedCorner(true, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.roundedCorner(false, [.announcement]),
             OZMessagesConfigurationItem.showShadow(false, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.showShadow(false, [.text, .image]),
-            OZMessagesConfigurationItem.shadowColor(.clear, OZMessageType.allTypes(), false),
-            OZMessagesConfigurationItem.shadowColor(.clear, OZMessageType.allTypes(), true), // duplicate on purpose
-            OZMessagesConfigurationItem.shadowColor(UIColor(white: 0.4, alpha: 1.0), [.image, .text], false),
-            OZMessagesConfigurationItem.shadowColor(UIColor(red: 140/255, green: 0.1, blue: 0.1, alpha: 1.0), [.text], true),
+            OZMessagesConfigurationItem.shadowColor(.clear, OZMessageType.allTypes(), .none),
+            OZMessagesConfigurationItem.shadowColor(UIColor(white: 0.4, alpha: 1.0), [.image, .text], .fromOther),
+            OZMessagesConfigurationItem.shadowColor(UIColor(red: 140/255, green: 0.1, blue: 0.1, alpha: 1.0), [.text], .fromCurrent),
             OZMessagesConfigurationItem.sepratorColor(UIColor(white: 238.0 / 255.0, alpha: 1.0)),
-            OZMessagesConfigurationItem.alignment(.right, OZMessageType.allTypes(), true),
-            OZMessagesConfigurationItem.alignment(.left, OZMessageType.allTypes(), false),
-            OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], true),
-            OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], false),  // duplicate on purpose
+            OZMessagesConfigurationItem.alignment(.right, OZMessageType.allTypes(), .fromCurrent),
+            OZMessagesConfigurationItem.alignment(.left, OZMessageType.allTypes(), .fromOther),
+            OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             // OZVoiceRecordViewController

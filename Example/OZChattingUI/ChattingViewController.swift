@@ -47,12 +47,11 @@ class ChattingViewController: OZMessagesViewController {
         return [
             // OZMessageCell
             OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, true),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, false),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, .fromCurrent),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, .fromOther),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.cellBackgroundColor(UIColor(red:  204/255, green: 204/255, blue: 204/255, alpha: 1), [.announcement]),
-            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], true),
-            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], false),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.sepratorColor(.clear),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
