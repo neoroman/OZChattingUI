@@ -139,8 +139,9 @@ class ExampleViewController: UIViewController {
         return [
             // OZMessageCell
             OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, true),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, false),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, .fromCurrent),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, .fromOther),
+            OZMessagesConfigurationItem.showShadow(false, OZMessageType.allTypes()),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
             // OZVoiceRecordViewController
