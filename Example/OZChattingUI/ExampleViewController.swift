@@ -185,6 +185,18 @@ class ExampleViewController: UIViewController {
 
 
 extension ExampleViewController: OZMessagesViewControllerDelegate {
+    func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
+        if cell.message.type == .text {
+            if let incomingCell = cell as? IncomingTextMessageCell {
+                incomingCell.textLabel.type = .basic
+            }
+            else if let outgoingCell = cell as? OutgoingTextMessageCell {
+                outgoingCell.textLabel.type = .basic
+            }
+        }
+        cell.setNeedsLayout()
+    }
+    
     func messageViewLoaded(isLoaded: Bool) {
         print("messageViewLoaded...!")
     }
