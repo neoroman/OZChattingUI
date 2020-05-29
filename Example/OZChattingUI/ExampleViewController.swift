@@ -10,6 +10,10 @@ import UIKit
 import OZChattingUI
 import ImageViewer
 
+
+fileprivate let kMicButtonTag = 17172008
+fileprivate let kSendButtonTag = kMicButtonTag + 1004
+
 class ExampleViewController: UIViewController {
     
     var chatViewController: OZMessagesViewController?
@@ -222,6 +226,43 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
             chatVC.dataSource.data.removeAll(where: { $0.content == "Delivered" })
             chatVC.send(msg: "Delivered", type: .status)
         }
+    }
+    
+    func messageTextViewBeginEditing(textView: UITextView) {
+    }
+    func messageTextViewDidChanged(textView: UITextView) {
+        if let cvc = self.chatViewController {
+            cvc.micButton.setImage(UIImage(named: "send"), for: .normal)
+            cvc.micButton.tag = kSendButtonTag
+        }
+    }
+    func messageTextViewEndEditing(textView: UITextView) {
+        if let cvc = self.chatViewController {
+            cvc.micButton.setImage(UIImage(named: "mic"), for: .normal)
+            cvc.micButton.tag = kMicButtonTag
+        }
+    }
+    
+    func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+        if let button = sender as? UIButton, button.tag == kSendButtonTag,
+            let fullText = viewController.inputTextView.text {
+            
+            let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.count > 0 {
+                viewController.send(msg: trimmed)
+            }
+            
+            viewController.inputTextView.text = ""
+            viewController.adjustTextViewHeight(viewController.inputTextView)
+            
+            viewController.micButton.setImage(UIImage(named: "mic"), for: .normal)
+            viewController.micButton.tag = kMicButtonTag
+            return false
+        }
+        return true
+    }
+    func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+        return true
     }
 }
 

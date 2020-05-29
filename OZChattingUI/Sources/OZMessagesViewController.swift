@@ -17,32 +17,6 @@ public enum OZMessagesViewState {
 public typealias OZChatFetchCompleteBlock = (_ newMessages: [OZMessage]) -> Void
 public typealias OZChatTapCompleteBlock = (_ success: Bool, _ path: String) -> Void
 
-public protocol OZMessagesViewControllerDelegate {
-    func messageSending(identifier: String, type: OZMessageType, data: OZMessage)
-    func messageAppend(complete: @escaping OZChatFetchCompleteBlock)
-    func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock)
-    func messageViewLoaded(isLoaded: Bool)
-    func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage)
-    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage)
-    func messageInputTextViewWillShow(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat)
-    func messageInputTextViewWillHide(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat)
-    func messageTextViewBeginEditing(textView: UITextView)
-    func messageTextViewEndEditing(textView: UITextView)
-    func messageConfiguration(configuration: Any)
-}
-// MARK: - Optional OZMessagesViewControllerDelegate
-public extension OZMessagesViewControllerDelegate {
-    func messageViewLoaded(isLoaded: Bool) { }
-    func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) { }
-    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) { }
-    func messageInputTextViewWillShow(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat) { }
-    func messageInputTextViewWillHide(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat) { }
-    func messageTextViewBeginEditing(textView: UITextView) { }
-    func messageTextViewEndEditing(textView: UITextView) { }
-    func messageConfiguration(configuration: Any) { }
-}
-
-
 fileprivate let minTextViewHeight: CGFloat = 56
 fileprivate let maxTextViewHeight: CGFloat = minTextViewHeight * 3 //120
 
@@ -290,6 +264,25 @@ open class OZMessagesViewController: CollectionViewController {
             vc.delegate = self
             voiceViewController = vc
             vc.view.frame = voiceContainer.bounds
+            
+            var aDuration: TimeInterval = 12
+            let voiceConfigs = messagesConfigurations.filter({ (item) -> Bool in
+                switch item {
+                case .voiceRecordMaxDuration(_):
+                    return true
+                default:
+                    return false
+                }
+            })
+            for x in voiceConfigs {
+                switch x {
+                case .voiceRecordMaxDuration(let duration):
+                    aDuration = duration
+                    break
+                default: break
+                }
+            }
+            vc.recordMaxDuration = aDuration
         }
     }
 }
@@ -805,10 +798,16 @@ extension OZMessagesViewController {
         chatState = .file
     }
     @IBAction func emoticonButtonViewPressed(_ sender: Any) {
-        chatState = .emoticon
+        if let dele = delegate,
+            dele.messageEmoticonButtonTapped(viewController: self, sender: sender) {
+            chatState = .emoticon
+        }
     }
     @IBAction func micContainerButtonPressed(_ sender: Any) {
-        chatState = .voice
+        if let dele = delegate,
+            dele.messageMicButtonTapped(viewController: self, sender: sender) {
+            chatState = .voice
+        }
     }
 
     public func addFileButtonToggle(_ isForceRed: Bool) {
@@ -886,6 +885,10 @@ extension OZMessagesViewController: UITextViewDelegate {
     
     public func textViewDidChange(_ textView: UITextView) {
         adjustTextViewHeight(textView)
+        
+        if let dele = delegate {
+            dele.messageTextViewDidChanged(textView: textView)
+        }
     }
     
     public func textViewDidBeginEditing(_ textView: UITextView) {
@@ -893,7 +896,11 @@ extension OZMessagesViewController: UITextViewDelegate {
         chatState = .chat
         
         if let tv = textView as? OZTextView {
-            tv.textColor = tv.inputTextViewFontColor
+            var aFontColor: UIColor = tv.inputTextViewFontColor
+            for case .inputTextViewFontColor(let color) in messagesConfigurations {
+                aFontColor = color
+            }
+            tv.textColor = aFontColor
         }
 
         if let dele = delegate {
@@ -905,7 +912,11 @@ extension OZMessagesViewController: UITextViewDelegate {
         print("textViewDidEndEditing")
         
         if let tv = textView as? OZTextView {
-            tv.textColor = tv.inputTextViewFontColor
+            var aFontColor: UIColor = tv.inputTextViewFontColor
+            for case .inputTextViewFontColor(let color) in messagesConfigurations {
+                aFontColor = color
+            }
+            tv.textColor = aFontColor
         }
         
         if let dele = delegate {
@@ -915,11 +926,17 @@ extension OZMessagesViewController: UITextViewDelegate {
     
     // MARK: Send Button Like...!
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n", let fullText = textView.text {
-            self.send(msg: fullText)
-            self.inputTextView.text = ""
-            self.adjustTextViewHeight(textView)
-            return false;
+        var isUsingEnterForSending = false
+        for case .inputTextUsingEnterToSend(let yesOrNo) in messagesConfigurations {
+            isUsingEnterForSending = yesOrNo
+        }
+        if isUsingEnterForSending {
+            if text == "\n", let fullText = textView.text {
+                self.send(msg: fullText)
+                self.inputTextView.text = ""
+                self.adjustTextViewHeight(textView)
+                return false;
+            }
         }
         
         return true
@@ -940,8 +957,7 @@ extension OZMessagesViewController: OZChoosePopupDelegate {
         case .file:
             // TODO: do something here by Henry on 2020.05.08
             self.showImagePicker(source: .photoLibrary)
-        default:
-            print("do nothing...!")
+        default: break
         }
         
         self.addFileButtonToggle(false)
