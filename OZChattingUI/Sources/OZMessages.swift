@@ -280,7 +280,7 @@ public class OZMessage: Equatable {
     public var cellRightPadding: CGFloat = 0
     public var cellHeight: CGFloat = 0
     public var bubbleWidthRatio: CGFloat = 1
-    public var bubbleColor: UIColor = .green
+    public var bubbleColor: UIColor = UIColor.green.withAlphaComponent(0.85)
     public var showShadow: Bool = false
     public var roundedCornder: Bool = true
     public var textColor: UIColor = .black

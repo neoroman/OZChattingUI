@@ -110,8 +110,8 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.cellHeight(60, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellHeight(40, [.mp3, .voice]),
             OZMessagesConfigurationItem.maxWidthRatio(0.9),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor(red: 229.0 / 255.0, green: 21.0 / 255.0, blue: 0.0, alpha: 1.0), .fromCurrent),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor(white: 244.0 / 255.0, alpha: 1.0), .fromOther),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1), .fromCurrent),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), .fromOther),
             OZMessagesConfigurationItem.cellBackgroundColor(.clear, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellBackgroundColor(.white, [.announcement]),
             OZMessagesConfigurationItem.roundedCorner(true, OZMessageType.allTypes()),
@@ -134,7 +134,7 @@ public class OZChattingDefaultConfiguration: NSObject {
         
         for case .profileIconSize(let height, let types) in items {
             for x in types {
-                items.append(OZMessagesConfigurationItem.cellLeftPadding(height, [x]))
+                items.append(OZMessagesConfigurationItem.cellLeftPadding(height + 8, [x]))
             }
         }
         

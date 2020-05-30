@@ -35,19 +35,19 @@ class ExampleViewController: UIViewController {
 
         let aTimestamp = Int(Date().timeIntervalSince1970)
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
-            vc.receive(msg: "Cindy called with Alice for 11minutes.", type: .deviceStatus, activeType: .call, timestamp: aTimestamp-600)
+            vc.receive(msg: "Sally called with you for 11minutes.", type: .deviceStatus, activeType: .call, timestamp: aTimestamp-600)
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
             vc.receive(msg: "test.mp3", type: .mp3, activeType: nil, timestamp: aTimestamp-400, profileIconPath: "TaylorSwift.jpg")
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-            vc.receive(msg: "Marco joined SID campaign.", type: .deviceStatus, activeType: .campaign, timestamp: aTimestamp-300)
+            vc.receive(msg: "Viviana joined special event.", type: .deviceStatus, activeType: .campaign, timestamp: aTimestamp-300)
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
             vc.receive(msg: "Watch off", type: .deviceStatus, activeType: .watchOff, timestamp: aTimestamp-100)
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.6) {
-            vc.receive(msg: "Jidkdhjn walked 10,000 steps, burned 110kcal", type: .deviceStatus, activeType: .step, timestamp: aTimestamp-50)
+            vc.receive(msg: "Seal walked 1,004 steps, burned 14kcal", type: .deviceStatus, activeType: .step, timestamp: aTimestamp-50)
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+1.0) {
             vc.send(msg: "Hi... OZChattingUI!", type: .text) { (id, content) in
@@ -142,10 +142,10 @@ class ExampleViewController: UIViewController {
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
         return [
             // OZMessageCell
-            OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(.blue, .fromCurrent),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(.red, .fromOther),
-            OZMessagesConfigurationItem.showShadow(false, OZMessageType.allTypes()),
+            OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
+            OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.red.withAlphaComponent(0.7), .fromCurrent),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.blue.withAlphaComponent(0.6), .fromOther),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
             // OZVoiceRecordViewController
