@@ -59,6 +59,9 @@ public enum OZMessagesConfigurationItem {
     /// Cell background color in OZMessageCell
     case cellBackgroundColor(UIColor, [OZMessageType])
     
+    /// Audio background color in OZMessageCell
+    case audioProgressColor(UIColor, _ userType: OZMessagesUserSideConfigType)
+
     /// Rounded corner for content in OZMessageCell
     case roundedCorner(Bool, [OZMessageType])
         
@@ -110,10 +113,11 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.cellHeight(60, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellHeight(40, [.mp3, .voice]),
             OZMessagesConfigurationItem.maxWidthRatio(0.9),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1), .fromCurrent),
-            OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), .fromOther),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1), .fromCurrent),
+            OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), .fromOther),
             OZMessagesConfigurationItem.cellBackgroundColor(.clear, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellBackgroundColor(.white, [.announcement]),
+            OZMessagesConfigurationItem.audioProgressColor(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), .none),
             OZMessagesConfigurationItem.roundedCorner(true, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.roundedCorner(false, [.announcement]),
             OZMessagesConfigurationItem.showShadow(false, OZMessageType.allTypes()),

@@ -550,6 +550,7 @@ open class AudioMessageCell: OZMessageCell {
             
             playImage.image = isPlaying ? pauseImg : playImg
             
+            backView.progressColor = message.audioProgressColor
             backView.backgroundColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)
             backView.center.y = iconImage.center.y
             backView.tintColoredImageView = playImage

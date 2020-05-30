@@ -141,8 +141,8 @@ open class OZEmoticonViewController: CollectionViewController {
     fileprivate func setupPageControl() {
         if pageControl == nil {
             pageControl = UIPageControl(frame: CGRect.zero)
-            pageControl?.pageIndicatorTintColor = UIColor(red: 242/255, green: 250/255, blue: 1, alpha: 1)
-            pageControl?.currentPageIndicatorTintColor = UIColor(red: 159/255, green: 205/255, blue: 230/255, alpha: 1)
+            pageControl?.pageIndicatorTintColor = UIColor.magenta.withAlphaComponent(0.3)
+            pageControl?.currentPageIndicatorTintColor = UIColor.magenta
             pageControl?.backgroundColor = .clear
             pageControl?.isUserInteractionEnabled = false
             pageControl?.currentPage = 0

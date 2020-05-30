@@ -144,7 +144,7 @@ public class OZMessage: Equatable {
             }
             else {
                 self.isSenderIconHide = true
-                self.iconImage = ""
+                self.iconImage = "nopic"
             }
             if tm == 0 { self.timestamp = Int(Date().timeIntervalSince1970) }
             else { self.timestamp = tm }
@@ -179,6 +179,11 @@ public class OZMessage: Equatable {
             case .alignment(let anAlignment, let types, let userType):
                 if types.contains(type), checkUserType(userType) {
                     alignment = anAlignment
+                }
+                break
+            case .audioProgressColor(let color, let userType):
+                if checkUserType(userType) {
+                    audioProgressColor = color
                 }
                 break
             case .bubbleBackgroundColor(let color, let userType):
@@ -268,27 +273,28 @@ public class OZMessage: Equatable {
             }
         }
     }
+    public var alignment: OZMessageAlignment = .center
+    public var audioProgressColor: UIColor = UIColor.green.withAlphaComponent(0.9)
+    public var backgroundColor: UIColor = .clear
+    public var bubbleColor: UIColor = UIColor.green.withAlphaComponent(0.9)
+    public var bubbleWidthRatio: CGFloat = 1
+    public var cellHeight: CGFloat = 0
+    public var cellLeftPadding: CGFloat = 0
+    public var cellPadding: CGFloat = 0
+    public var cellRightPadding: CGFloat = 0
     public var fontName: String = "AppleSDGothicNeo-Medium"
     public var fontSize: CGFloat = 0
-    public var timeFontSize: CGFloat = 0
-    public var timeFontColor: UIColor = .gray
-    public var inputTextFieldFontColor: UIColor = .black
-    public var iconSize: CGFloat = 0
     public var iconPadding: CGFloat = 0
-    public var cellPadding: CGFloat = 0
-    public var cellLeftPadding: CGFloat = 0
-    public var cellRightPadding: CGFloat = 0
-    public var cellHeight: CGFloat = 0
-    public var bubbleWidthRatio: CGFloat = 1
-    public var bubbleColor: UIColor = UIColor.green.withAlphaComponent(0.85)
-    public var showShadow: Bool = false
+    public var iconSize: CGFloat = 0
+    public var inputTextFieldFontColor: UIColor = .black
     public var roundedCornder: Bool = true
-    public var textColor: UIColor = .black
-    public var backgroundColor: UIColor = .clear
-    public var shadowColor: UIColor = .black
     public var seperatorColor: UIColor = UIColor(white: 238.0 / 255.0, alpha: 1.0)
-    public var alignment: OZMessageAlignment = .center
-    
+    public var shadowColor: UIColor = .black
+    public var showShadow: Bool = false
+    public var textColor: UIColor = .black
+    public var timeFontColor: UIColor = .gray
+    public var timeFontSize: CGFloat = 0
+
     public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
         if type == .image && previousMessage.type == .image {
             return 2 + previousMessage.iconSize / 2

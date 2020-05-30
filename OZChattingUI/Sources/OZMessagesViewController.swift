@@ -64,12 +64,22 @@ open class OZMessagesViewController: CollectionViewController {
     public var dataSource = OZMessageDataProvider(data: [])
     public let animator = OZMessageAnimator()
     
-    public var messagesConfigurations: [OZMessagesConfigurationItem] = []
+    private var _messagesConfigurations: [OZMessagesConfigurationItem] = []
+    public var messagesConfigurations: [OZMessagesConfigurationItem] {
+        set { _messagesConfigurations = newValue }
+        get {
+            if let dele = delegate {
+                _messagesConfigurations.append(contentsOf: dele.messageConfiguration(viewController: self))
+            }
+            return _messagesConfigurations
+        }
+    }
     
     // MARK: - View did loaded
     override open func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(displayP3Red: 228/255, green: 232/255, blue: 232/255, alpha: 1)
+        //view.backgroundColor = UIColor(displayP3Red: 228/255, green: 232/255, blue: 232/255, alpha: 1)
+        view.backgroundColor = UIColor.white
         view.clipsToBounds = true
         self.setupUI()
         view.bringSubviewToFront(inputContainer)
@@ -88,7 +98,7 @@ open class OZMessagesViewController: CollectionViewController {
             dele.messageViewLoaded(isLoaded: true)
         }
     }
-    
+        
     // MARK: - Orientations
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
@@ -266,21 +276,8 @@ open class OZMessagesViewController: CollectionViewController {
             vc.view.frame = voiceContainer.bounds
             
             var aDuration: TimeInterval = 12
-            let voiceConfigs = messagesConfigurations.filter({ (item) -> Bool in
-                switch item {
-                case .voiceRecordMaxDuration(_):
-                    return true
-                default:
-                    return false
-                }
-            })
-            for x in voiceConfigs {
-                switch x {
-                case .voiceRecordMaxDuration(let duration):
-                    aDuration = duration
-                    break
-                default: break
-                }
+            for case .voiceRecordMaxDuration(let duration) in messagesConfigurations {
+                aDuration = duration
             }
             vc.recordMaxDuration = aDuration
         }

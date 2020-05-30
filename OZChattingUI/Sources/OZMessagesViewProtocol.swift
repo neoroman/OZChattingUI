@@ -21,8 +21,8 @@ public protocol OZMessagesViewControllerDelegate {
     func messageTextViewDidChanged(textView: UITextView)
     func messageTextViewEndEditing(textView: UITextView)
     
-    /// TODO: not implemented yet 
-    func messageConfiguration(configuration: Any)
+    /// TODO: This configurations will override previous configurations
+    func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations
     
     /// Mic button tapped, should return boolean for processing or not
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
@@ -40,7 +40,9 @@ public extension OZMessagesViewControllerDelegate {
     func messageTextViewBeginEditing(textView: UITextView) { }
     func messageTextViewDidChanged(textView: UITextView) { }
     func messageTextViewEndEditing(textView: UITextView) { }
-    func messageConfiguration(configuration: Any) { }
+    func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
+        return []
+    }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
 }
