@@ -78,6 +78,8 @@ class ChattingViewController: OZMessagesViewController {
     // MARK: - Function
     /// 최초 UI 설정
     fileprivate func setUI() {
+        self.view.backgroundColor = UIColor(red: 228/255, green: 232/255, blue: 232/255, alpha: 1.0)
+        
         inputTextView.textContainerInset = UIEdgeInsets(top: 11, left: 14, bottom: 8, right: 40)
         inputTextView.layer.cornerRadius = 12
         inputTextView.layer.borderColor = UIColor(red: 222/255, green: 222/255, blue: 222/255, alpha: 1).cgColor
@@ -210,14 +212,16 @@ class ChattingViewController: OZMessagesViewController {
 // MARK: - OZMessagesViewControllerDelegate
 extension ChattingViewController: OZMessagesViewControllerDelegate {
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
-        let shadowColor = UIColor.black
         if cell.message.type == .text {
             
+            /* TODO: need more survey by Henry on 2020.05.31
+            let shadowColor = UIColor.black
             cell.layer.shadowOffset = CGSize(width: 0, height: 2)
             cell.layer.shadowOpacity = 0.2
             cell.layer.shadowRadius = 8
             cell.layer.shadowColor = shadowColor.cgColor
             cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 12).cgPath
+             */
             
             if let incomingCell = cell as? IncomingTextMessageCell {
                 

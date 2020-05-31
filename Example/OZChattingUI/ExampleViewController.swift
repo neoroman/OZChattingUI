@@ -183,6 +183,7 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.red.withAlphaComponent(0.7), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.blue.withAlphaComponent(0.6), .fromOther),
+            OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Bold", OZMessageType.allTypes()),
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
