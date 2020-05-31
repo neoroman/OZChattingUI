@@ -78,7 +78,6 @@ open class OZEmoticonViewController: CollectionViewController {
         collectionView.alwaysBounceVertical = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.delegate = self
-        collectionView.backgroundColor = UIColor.magenta.withAlphaComponent(0.2)
         
         // Emoticon arrangement
         if UIDevice.current.isIphoneX {
