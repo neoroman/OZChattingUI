@@ -28,7 +28,10 @@ public enum OZMessagesConfigurationItem {
 
     /// Time font size in OZMessageCell
     case timeFontSize(CGFloat)
-    
+
+    /// Time font format in OZMessageCell
+    case timeFontFormat(String)
+
     /// Time font size in OZMessageCell
     case timeFontColor(UIColor)
 
@@ -101,6 +104,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.fontColor(.black, [.deviceStatus, .mp3, .voice, .text], .fromOther),
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromCurrent),
             OZMessagesConfigurationItem.timeFontSize(12),
+            OZMessagesConfigurationItem.timeFontFormat("h:mm a"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1)),
             OZMessagesConfigurationItem.profileIconSize(32, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.profileIconSize(20, [.deviceStatus]),

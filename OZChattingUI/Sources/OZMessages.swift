@@ -293,6 +293,7 @@ public class OZMessage: Equatable {
     public var showShadow: Bool = false
     public var textColor: UIColor = .black
     public var timeFontColor: UIColor = .gray
+    public var timeFontFormat: String = "a hh:mm"
     public var timeFontSize: CGFloat = 0
 
     public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
