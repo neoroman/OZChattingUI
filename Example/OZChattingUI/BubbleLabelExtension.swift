@@ -132,15 +132,15 @@ extension OZBubbleLabel {
                 
                 //outgoingColor.setFill()
                 UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000).setFill()
-                
-                bezierPath.close()
-                bezierPath.fill()
-                
+                            
             }
+            
+            bezierPath.close()
+            bezierPath.fill()
         }
         else if type == .basic {
-            let width = rect.width
-            let height = rect.height * heightRatio
+            let width = bounds.width
+            let height = bounds.height * heightRatio
             
             let notchInsetX: CGFloat = 10.0
             let cornerRatio: CGFloat = 6.27 / 14.0

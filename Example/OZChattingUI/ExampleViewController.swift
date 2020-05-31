@@ -92,7 +92,9 @@ class ExampleViewController: UIViewController {
             if chatViewController == nil {
                 chatViewController = vc
             }
-            vc.delegate = self
+            if !(vc is ChattingViewController) {
+                vc.delegate = self
+            }
             vc.fileChoosePopupDelegate = self
             vc.messagesConfigurations = addMessageConfiguration()
 
@@ -127,7 +129,9 @@ class ExampleViewController: UIViewController {
             if chatViewController == nil {
                 chatViewController = vc
             }
-            vc.delegate = self
+            if !(vc is ChattingViewController) {
+                vc.delegate = self
+            }
             vc.fileChoosePopupDelegate = self
             vc.messagesConfigurations = addMessageConfiguration()
             if #available(iOS 11.0, *) {
@@ -182,7 +186,7 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
-            OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
+            OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
         ]
@@ -201,14 +205,14 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                 outgoingCell.textLabel.type = .basic
             }
         }
-        cell.setNeedsLayout()
-        if cell.message.type == .text || cell.message.type == .image {
-            cell.layer.shadowOffset = CGSize(width: 5, height: 5)
-            cell.layer.shadowOpacity = 0.05
-            cell.layer.shadowRadius = 5
-            cell.layer.shadowColor = cell.message.shadowColor.cgColor
-            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
-        }
+//        cell.setNeedsLayout()
+//        if cell.message.type == .text || cell.message.type == .image {
+//            cell.layer.shadowOffset = CGSize(width: 5, height: 5)
+//            cell.layer.shadowOpacity = 0.05
+//            cell.layer.shadowRadius = 5
+//            cell.layer.shadowColor = cell.message.shadowColor.cgColor
+//            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
+//        }
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
@@ -224,7 +228,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                 incomingCell.iconImage.isHidden = true
                 let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
-            case .voice:
+            case .voice, .mp3:
                 guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
                 incomingCell.iconImage.isHidden = true
                 let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -286,41 +290,17 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     func messageTextViewBeginEditing(textView: UITextView) {
     }
     func messageTextViewDidChanged(textView: UITextView) {
-        if let cvc = self.chatViewController {
-            cvc.micButton.setImage(UIImage(named: "send"), for: .normal)
-            cvc.micButton.tag = kSendButtonTag
-        }
     }
     func messageTextViewEndEditing(textView: UITextView) {
-        if let cvc = self.chatViewController {
-            cvc.micButton.setImage(UIImage(named: "mic"), for: .normal)
-            cvc.micButton.tag = kMicButtonTag
-        }
     }
     
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
-        if let button = sender as? UIButton, button.tag == kSendButtonTag,
-            let fullText = viewController.inputTextView.text {
-            
-            let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
-            if trimmed.count > 0 {
-                viewController.send(msg: trimmed)
-            }
-            
-            viewController.inputTextView.text = ""
-            viewController.adjustTextViewHeight(viewController.inputTextView)
-            
-            viewController.micButton.setImage(UIImage(named: "mic"), for: .normal)
-            viewController.micButton.tag = kMicButtonTag
-            return false
-        }
         return true
     }
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         return true
     }
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
-        
         return addMessageConfiguration()
     }
 }
