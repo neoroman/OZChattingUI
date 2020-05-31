@@ -149,6 +149,8 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.red.withAlphaComponent(0.7), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.blue.withAlphaComponent(0.6), .fromOther),
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
+            OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
+            OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
             // OZVoiceRecordViewController

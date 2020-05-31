@@ -91,6 +91,12 @@ public enum OZMessagesConfigurationItem {
 
     /// Max duration of voice record in OZVoiceRecordViewController
     case voiceRecordMaxDuration(TimeInterval)
+    
+    /// Page control tint color in OZEmoticonViewController
+    case emoticonPageIndicatorTintColor(UIColor)
+
+    /// Current page control tint color in OZEmoticonViewController
+    case emoticonCurrentPageIndicatorTintColor(UIColor)
 }
 
 public class OZChattingDefaultConfiguration: NSObject {
@@ -136,6 +142,9 @@ public class OZChattingDefaultConfiguration: NSObject {
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
+            // OZEmoticonViewController
+            OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.magenta.withAlphaComponent(0.3)),
+            OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.magenta),
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(10.0),
         ]
