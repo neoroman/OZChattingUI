@@ -21,12 +21,15 @@ class ChattingViewController: OZMessagesViewController {
     // MARK: - Property
     var isSuccessToSend: Bool = true
     
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Important !!!
         self.delegate = self
+        self.messagesConfigurations = addMessageConfiguration()
+
         setUI()
         setDefaultState()
     }
@@ -92,7 +95,6 @@ class ChattingViewController: OZMessagesViewController {
         micButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         keyboardButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         
-        self.messagesConfigurations = addMessageConfiguration()
     }
     
     /// View, Button의 default 상태 설정
@@ -128,6 +130,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.sepratorColor(.clear),
             OZMessagesConfigurationItem.timeFontSize(12.0), //? time포맷바꿔야됨
+            OZMessagesConfigurationItem.timeFontFormat("hh:mm"), // 요러케 Date Formatter 형식으로 넣으면 댐, 근데 아직 안되네... 음냐 ㅡ.ㅡ; by Henry on 2020.05.31
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
@@ -305,6 +308,9 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         return true
+    }
+    func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
+        return addMessageConfiguration()
     }
 }
 
