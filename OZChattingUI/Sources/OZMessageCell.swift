@@ -51,7 +51,7 @@ open class IncomingTextMessageCell: OZMessageCell {
             timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
             timeLabel.frame.size = CGSize(width: 50, height: 12)
             if message.timestamp > 0 {
-                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
             }
             else {
                 #if DEBUG
@@ -115,7 +115,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
             timeLabel.frame.size = CGSize(width: 50, height: 12)
             timeLabel.textAlignment = .right
             if message.timestamp > 0 {
-                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
             }
             else {
                 #if DEBUG
@@ -253,7 +253,7 @@ open class IncomingStatusMessageCell: OZMessageCell {
             timeLabel.textColor = message.timeFontColor
             timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
             if message.timestamp > 0 {
-                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
             }
             else {
                 #if DEBUG
@@ -366,7 +366,7 @@ open class ImageMessageCell: OZMessageCell {
                 timeLabel.frame.size = CGSize(width: 50, height: 12)
                 timeLabel.textAlignment = .right
                 if message.timestamp > 0 {
-                    timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+                    timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
                 }
                 else {
                     #if DEBUG
@@ -559,7 +559,7 @@ open class AudioMessageCell: OZMessageCell {
             eTimeLabel.textColor = message.timeFontColor
             eTimeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
             if message.timestamp > 0 {
-                eTimeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
+                eTimeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
             }
             else {
                 #if DEBUG
