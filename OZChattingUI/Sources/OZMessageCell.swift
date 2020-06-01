@@ -679,14 +679,14 @@ open class AudioMessageCell: OZMessageCell {
 }
 
 
-public protocol OZMessageCellDelegate {
+protocol OZMessageCellDelegate {
     func messageCellDidSetMessage(cell: OZMessageCell)
     func messageCellLayoutSubviews(cell: OZMessageCell)
 }
 
 open class OZMessageCell: DynamicView {
     
-    public var delegate: OZMessageCellDelegate?
+    var delegate: OZMessageCellDelegate?
     
     public var message: OZMessage! {
         didSet {
@@ -775,7 +775,7 @@ open class OZMessageCell: DynamicView {
                 imageSize = anImg.size
             }
             
-            let maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 120)
+            let maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: message.cellHeight)
             if imageSize.width > maxImageSize.width {
                 imageSize.height /= imageSize.width/maxImageSize.width
                 imageSize.width = maxImageSize.width
