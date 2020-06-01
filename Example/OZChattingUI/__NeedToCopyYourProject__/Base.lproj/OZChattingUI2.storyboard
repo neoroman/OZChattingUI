@@ -32,7 +32,7 @@
                                         <rect key="frame" x="-103.5" y="0.0" width="621" height="560"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dp5-Po-Aov">
-                                                <rect key="frame" x="477.5" y="12" width="30" height="30"/>
+                                                <rect key="frame" x="477.5" y="13" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="dp5-Po-Aov" secondAttribute="height" multiplier="1:1" id="EMi-JW-MsE"/>
                                                     <constraint firstAttribute="width" constant="30" id="VGa-ve-tih"/>
@@ -42,19 +42,8 @@
                                                     <action selector="pressedMicButton:" destination="nbk-sV-ngS" eventType="touchUpInside" id="nu2-oS-sgd"/>
                                                 </connections>
                                             </button>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y4d-x5-l7x">
-                                                <rect key="frame" x="477.5" y="12" width="30" height="30"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="Y4d-x5-l7x" secondAttribute="height" multiplier="1:1" id="5dK-Us-uaz"/>
-                                                    <constraint firstAttribute="width" constant="30" id="IdY-do-GZa"/>
-                                                </constraints>
-                                                <state key="normal" image="btnKeyboardG"/>
-                                                <connections>
-                                                    <action selector="pressedKeyboardButton:" destination="nbk-sV-ngS" eventType="touchUpInside" id="6Yf-4t-zed"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iC9-vD-vUY">
-                                                <rect key="frame" x="113.5" y="12" width="30" height="30"/>
+                                                <rect key="frame" x="113.5" y="13" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="iC9-vD-vUY" secondAttribute="height" multiplier="1:1" id="LUM-lJ-4oG"/>
                                                     <constraint firstAttribute="width" constant="30" id="iVh-2O-YrD"/>
@@ -64,6 +53,17 @@
                                                     <action selector="addFileButtonPressed:" destination="nbk-sV-ngS" eventType="touchUpInside" id="RXo-ja-81m"/>
                                                 </connections>
                                             </button>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y4d-x5-l7x">
+                                                <rect key="frame" x="477.5" y="13" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Y4d-x5-l7x" secondAttribute="height" multiplier="1:1" id="5dK-Us-uaz"/>
+                                                    <constraint firstAttribute="width" constant="30" id="IdY-do-GZa"/>
+                                                </constraints>
+                                                <state key="normal" image="btnKeyboardG"/>
+                                                <connections>
+                                                    <action selector="pressedKeyboardButton:" destination="nbk-sV-ngS" eventType="touchUpInside" id="6Yf-4t-zed"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -71,7 +71,7 @@
                                         </constraints>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Roh-yS-SmP" customClass="OZTextView" customModule="OZChattingUI_Example" customModuleProvider="target">
-                                        <rect key="frame" x="50" y="5" width="314" height="46"/>
+                                        <rect key="frame" x="50" y="9" width="314" height="38"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" red="0.46666666670000001" green="0.46666666670000001" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -88,7 +88,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x3n-NN-6mn">
-                                        <rect key="frame" x="327" y="12" width="30" height="30"/>
+                                        <rect key="frame" x="327" y="13" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="4cZ-tD-c9a"/>
                                             <constraint firstAttribute="height" constant="30" id="IYm-Ix-pbZ"/>
@@ -100,14 +100,14 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wvj-AO-oFM">
-                                        <rect key="frame" x="292" y="12" width="30" height="30"/>
+                                        <rect key="frame" x="292" y="13" width="30" height="30"/>
                                         <state key="normal" image="btnCallDelete"/>
                                         <connections>
                                             <action selector="pressedClearButton:" destination="nbk-sV-ngS" eventType="touchUpInside" id="Q7I-hJ-cyK"/>
                                         </connections>
                                     </button>
                                     <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eiA-Ix-Nmx">
-                                        <rect key="frame" x="327" y="12" width="30" height="30"/>
+                                        <rect key="frame" x="327" y="13" width="30" height="30"/>
                                         <color key="backgroundColor" red="0.17254901960784313" green="0.73333333333333328" blue="0.71372549019607845" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="ehE-MG-srl"/>
@@ -115,35 +115,44 @@
                                         </constraints>
                                     </view>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1l-w7-P9T">
-                                        <rect key="frame" x="331" y="16" width="22" height="22"/>
+                                        <rect key="frame" x="331" y="17" width="22" height="22"/>
                                         <state key="normal" image="btnMicMotion"/>
                                         <state key="disabled" image="btnMicMotionOff"/>
                                         <connections>
                                             <action selector="pressedMicMotionButton:" destination="nbk-sV-ngS" eventType="touchUpInside" id="8XJ-bq-JYn"/>
                                         </connections>
                                     </button>
+                                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconCallChange" translatesAutoresizingMaskIntoConstraints="NO" id="Gxt-Pb-rg9">
+                                        <rect key="frame" x="332" y="18" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="s3g-n8-L1U"/>
+                                            <constraint firstAttribute="width" constant="20" id="yqe-tM-fOd"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="iC9-vD-vUY" firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="-9" id="0pa-gG-el4"/>
+                                    <constraint firstItem="iC9-vD-vUY" firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="-4" id="0pa-gG-el4"/>
                                     <constraint firstItem="dp5-Po-Aov" firstAttribute="leading" secondItem="Roh-yS-SmP" secondAttribute="trailing" constant="10" id="4xh-E1-O0y"/>
                                     <constraint firstItem="Wxa-HQ-h3L" firstAttribute="centerX" secondItem="4xJ-al-qQ7" secondAttribute="centerX" id="7NV-Du-Ktu"/>
+                                    <constraint firstItem="Gxt-Pb-rg9" firstAttribute="centerX" secondItem="x3n-NN-6mn" secondAttribute="centerX" id="7xe-hC-NNJ"/>
                                     <constraint firstAttribute="height" priority="750" constant="56" id="FEB-dI-KuV"/>
                                     <constraint firstItem="Wxa-HQ-h3L" firstAttribute="height" secondItem="4xJ-al-qQ7" secondAttribute="height" multiplier="10" id="ICr-aR-qf2"/>
                                     <constraint firstItem="i1l-w7-P9T" firstAttribute="centerY" secondItem="x3n-NN-6mn" secondAttribute="centerY" id="IMO-FU-dj2"/>
                                     <constraint firstItem="x3n-NN-6mn" firstAttribute="leading" secondItem="Wvj-AO-oFM" secondAttribute="trailing" constant="5" id="NbI-13-eya"/>
                                     <constraint firstItem="eiA-Ix-Nmx" firstAttribute="centerY" secondItem="i1l-w7-P9T" secondAttribute="centerY" id="QMt-el-NmN"/>
                                     <constraint firstItem="eiA-Ix-Nmx" firstAttribute="centerX" secondItem="i1l-w7-P9T" secondAttribute="centerX" id="Rdg-4B-Dv7"/>
-                                    <constraint firstItem="dp5-Po-Aov" firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="-9" id="SC7-d5-XvF"/>
-                                    <constraint firstItem="Y4d-x5-l7x" firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="-9" id="Tzs-XI-m9m"/>
+                                    <constraint firstItem="dp5-Po-Aov" firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="-4" id="SC7-d5-XvF"/>
+                                    <constraint firstItem="Y4d-x5-l7x" firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="-4" id="Tzs-XI-m9m"/>
                                     <constraint firstItem="i1l-w7-P9T" firstAttribute="centerX" secondItem="x3n-NN-6mn" secondAttribute="centerX" id="UsS-GU-NQH"/>
                                     <constraint firstItem="Wxa-HQ-h3L" firstAttribute="top" secondItem="4xJ-al-qQ7" secondAttribute="top" id="W4K-EP-DpH"/>
-                                    <constraint firstItem="x3n-NN-6mn" firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="-9" id="ZHa-I2-cYW"/>
+                                    <constraint firstItem="x3n-NN-6mn" firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="-4" id="ZHa-I2-cYW"/>
                                     <constraint firstItem="Wxa-HQ-h3L" firstAttribute="width" secondItem="4xJ-al-qQ7" secondAttribute="width" multiplier="1.5" id="ZvN-3b-aRN"/>
+                                    <constraint firstItem="Gxt-Pb-rg9" firstAttribute="centerY" secondItem="x3n-NN-6mn" secondAttribute="centerY" id="a1H-vb-2Xf"/>
                                     <constraint firstItem="Wvj-AO-oFM" firstAttribute="centerY" secondItem="x3n-NN-6mn" secondAttribute="centerY" id="a2k-lV-FPl"/>
                                     <constraint firstItem="Y4d-x5-l7x" firstAttribute="leading" secondItem="Roh-yS-SmP" secondAttribute="trailing" constant="10" id="bk8-Sn-9BN"/>
-                                    <constraint firstItem="Roh-yS-SmP" firstAttribute="top" secondItem="4xJ-al-qQ7" secondAttribute="top" constant="5" id="dsU-oO-7oz"/>
-                                    <constraint firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="5" id="gTn-gk-Ttq"/>
+                                    <constraint firstItem="Roh-yS-SmP" firstAttribute="top" secondItem="4xJ-al-qQ7" secondAttribute="top" constant="9" id="dsU-oO-7oz"/>
+                                    <constraint firstAttribute="bottom" secondItem="Roh-yS-SmP" secondAttribute="bottom" constant="9" id="gTn-gk-Ttq"/>
                                     <constraint firstItem="x3n-NN-6mn" firstAttribute="trailing" secondItem="Roh-yS-SmP" secondAttribute="trailing" constant="-7" id="jYi-RR-1CC"/>
                                     <constraint firstItem="Roh-yS-SmP" firstAttribute="leading" secondItem="iC9-vD-vUY" secondAttribute="trailing" constant="10" id="tBN-rI-SGd"/>
                                 </constraints>
@@ -190,6 +199,7 @@
                         <outlet property="inputContainer" destination="4xJ-al-qQ7" id="eXk-bd-uRQ"/>
                         <outlet property="inputTextView" destination="Roh-yS-SmP" id="4Jf-kX-XsH"/>
                         <outlet property="keyboardButton" destination="Y4d-x5-l7x" id="IFZ-BD-E7E"/>
+                        <outlet property="loadingImageView" destination="Gxt-Pb-rg9" id="Y2f-c8-NZQ"/>
                         <outlet property="micButton" destination="dp5-Po-Aov" id="oje-1u-zUj"/>
                         <outlet property="micCircleView" destination="eiA-Ix-Nmx" id="hs0-L1-FUY"/>
                         <outlet property="micMotionButton" destination="i1l-w7-P9T" id="azZ-GC-llq"/>
@@ -200,7 +210,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wCV-T1-Mi4" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="840.79999999999995" y="1135.7142857142858"/>
+            <point key="canvasLocation" x="840.57971014492762" y="1135.0446428571429"/>
         </scene>
         <!--Emoticon View Controller-->
         <scene sceneID="q8n-bH-omJ">
@@ -361,7 +371,8 @@
         <image name="btnMicMotion" width="22" height="22"/>
         <image name="btnMicMotionOff" width="22" height="22"/>
         <image name="chatClose.png" width="24" height="24"/>
-        <image name="emo.png" width="20" height="20"/>
+        <image name="emo.png" width="25" height="25"/>
+        <image name="iconCallChange" width="20" height="20"/>
         <image name="play.png" width="21" height="20"/>
     </resources>
 </document>

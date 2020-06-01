@@ -17,9 +17,12 @@ class ChattingViewController: OZMessagesViewController {
     @IBOutlet weak var clearButton: UIButton!
     @IBOutlet weak var micMotionButton: UIButton!
     @IBOutlet weak var micCircleView: UIView?
+    @IBOutlet weak var loadingImageView: UIImageView!
     
     // MARK: - Property
-    var isSuccessToSend: Bool = true
+    var successToSend: Bool = true
+    var needsToMic: Bool = false
+    var stopLoading: Bool = false
     
     
     // MARK: - Life Cycle
@@ -29,9 +32,15 @@ class ChattingViewController: OZMessagesViewController {
         // Important !!!
         self.delegate = self
         self.messagesConfigurations = addMessageConfiguration()
-
+        
         setUI()
         setDefaultState()
+//        if !needsToMic {
+//            micButton.isHidden = true
+//            keyboardButton.isHidden = true
+//            micMotionButton.isHidden = true
+//            expandInputView()
+//        }
     }
     
     // MARK: - Targets and Actions
@@ -41,20 +50,20 @@ class ChattingViewController: OZMessagesViewController {
         if let fullText = inputTextView.text {
             let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
             if trimmed.count > 0 {
+                stopLoading = false
+                rotateLoadingImage()
                 send(msg: trimmed)
             }
             inputTextView.text.removeAll()
             adjustTextViewHeight(inputTextView)
-            sendButton.isEnabled = false
         }
-        //        setFailToSending()
+//                        setFailToSending()
     }
     
     /// 텍스트 입력 상태로 전환
     @IBAction func pressedKeyboardButton(_ sender: UIButton) {
         setDefaultState()
         inputTextView.becomeFirstResponder()
-        //        expandInputView()
     }
     
     /// 음성 인식 상태로 전환
@@ -63,9 +72,9 @@ class ChattingViewController: OZMessagesViewController {
         keyboardButton.isHidden = false
         micButton.isHidden = true
         sendButton.isHidden = true
-        setSuccessToMic()
         
-        //        setFailToMic()
+        setSuccessToMic()
+//                        setFailToMic()
     }
     
     /// 입력한 텍스트 삭제
@@ -90,11 +99,9 @@ class ChattingViewController: OZMessagesViewController {
         
         inputTextView.backgroundColor = .white
         messageTextViewBeginEditing(textView: inputTextView)
-        //        timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp))"
         fileButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1) // tint 안하고 이미지로 되도록
         micButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         keyboardButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
-        
     }
     
     /// View, Button의 default 상태 설정
@@ -113,23 +120,23 @@ class ChattingViewController: OZMessagesViewController {
         clearButton.isHidden = true
         micMotionButton.isHidden = true
         micCircleView?.isHidden = true
+        loadingImageView.isHidden = true
         
         micButton.isHidden = false
         keyboardButton.isHidden = true
         
-        isSuccessToSend = true
-        //        sendButton.isEnabled = true // 임시
+        successToSend = true // 임시
     }
     
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
         return [
             // OZMessageCell
-            OZMessagesConfigurationItem.fontSize(18.0, [.text, .deviceStatus]),
+            OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.cellBackgroundColor(UIColor(red:  204/255, green: 204/255, blue: 204/255, alpha: 1), [.announcement]),
-            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.sepratorColor(.clear),
-            OZMessagesConfigurationItem.timeFontSize(12.0), //? time포맷바꿔야됨
+            OZMessagesConfigurationItem.timeFontSize(12.0),
             OZMessagesConfigurationItem.timeFontFormat("hh:mm"), // 요러케 Date Formatter 형식으로 넣으면 댐, 근데 아직 안되네... 음냐 ㅡ.ㅡ; by Henry on 2020.05.31
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
             // OZTextView
@@ -140,7 +147,7 @@ class ChattingViewController: OZMessagesViewController {
         ]
     }
     
-    /// 긴 inputView에 대한 설정
+    /// mic 기능 없는 inputView에 대한 설정
     fileprivate func expandInputView() {
         micButton.isHidden = true
         inputTextView.trailingAnchor.constraint(equalTo: self.micButton.trailingAnchor).isActive = true
@@ -149,7 +156,7 @@ class ChattingViewController: OZMessagesViewController {
     
     /// 메시지 전송 실패 뷰 설정
     fileprivate func setFailToSending() {
-        if isSuccessToSend {
+        if successToSend {
             inputTextView.text += "\n전달실패"
             let attr = NSMutableAttributedString(string: inputTextView.text)
             attr.addAttribute(NSAttributedString.Key.foregroundColor,
@@ -166,7 +173,7 @@ class ChattingViewController: OZMessagesViewController {
                               range: (inputTextView.text as NSString).range(of: "전달실패"))
             
             inputTextView.attributedText = attr
-            isSuccessToSend = false
+            successToSend = false
         }
         
         sendButton.setImage(UIImage(named: "btnCallCancel"), for: .normal)
@@ -208,6 +215,32 @@ class ChattingViewController: OZMessagesViewController {
         inputTextView.font = UIFont(name:"AppleSDGothicNeo-Medium", size: 12)
         inputTextView.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         inputTextView.centerVerticalText()
+    }
+    
+    /// 메세지 전송시 로딩 표시
+    private func rotateLoadingImage() {
+        sendButton.isEnabled = false
+        sendButton.isHidden = true
+        loadingImageView.isHidden = false
+        
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveLinear, animations: { () -> Void in
+            self.loadingImageView.transform = self.loadingImageView.transform.rotated(by: .pi / 2)
+        }) { [weak self] (finished) -> Void in
+            guard let self = self else { return }
+            if self.stopLoading {
+                return
+            }
+            if finished {
+                self.rotateLoadingImage()
+            }
+        }
+    }
+    
+    /// 로딩 완료 후 삭제
+    private func stopRotating() {
+        self.sendButton.isHidden = false
+        self.loadingImageView.isHidden = true
+        stopLoading = true
     }
     
 }
@@ -300,7 +333,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageTextViewEndEditing(textView: UITextView) {
-        
+        stopRotating() // 임시
     }
     
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
