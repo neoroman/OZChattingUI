@@ -12,6 +12,8 @@ public protocol OZMessagesViewControllerDelegate {
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage)
     func messageAppend(complete: @escaping OZChatFetchCompleteBlock)
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock)
+    
+    // Optional from here
     func messageViewLoaded(isLoaded: Bool)
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage)
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage)
@@ -29,6 +31,10 @@ public protocol OZMessagesViewControllerDelegate {
 
     /// Emotocon button tapped, should return boolean for processing or not
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
+    
+    /// File button tapped, should return boolean for processing or not
+    func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
+
 }
 // MARK: - Optional OZMessagesViewControllerDelegate
 public extension OZMessagesViewControllerDelegate {
@@ -45,4 +51,5 @@ public extension OZMessagesViewControllerDelegate {
     }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
+    func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
 }
