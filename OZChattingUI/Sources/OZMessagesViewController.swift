@@ -40,7 +40,7 @@ open class OZMessagesViewController: CollectionViewController {
     @IBOutlet public weak var micButton: UIButton!
     @IBOutlet public weak var fileButton: UIButton!
     
-    @IBOutlet public weak var inputTextView: UITextView!
+    @IBOutlet public weak var inputTextView: OZTextView!
     @IBOutlet public weak var textHeightConstraint: NSLayoutConstraint!
     fileprivate var keyboardHeight: CGFloat = 0.0
     fileprivate var isKeyboardShow: Bool = false
@@ -388,6 +388,8 @@ extension OZMessagesViewController {
             self.collectionView.reloadData() //send
             self.collectionView.scrollTo(edge: .bottom, animated:true)
             //self.animator.sendingMessage = false
+            
+            self.resetButtons()
 
             if let cb = callback {
                 cb(sendingMsg.identifier, sendingMsg.content)
@@ -541,7 +543,9 @@ extension OZMessagesViewController {
         inputTextView.layer.cornerRadius = 18
         inputTextView.layer.masksToBounds = true
         inputTextView.clipsToBounds = true
-
+        for case .inputTextVerticalAlignment(let alignment) in messagesConfigurations {
+            inputTextView.verticalAlignment = alignment
+        }
         
         // Drop shadow
         inputContainer.layer.shadowColor = UIColor.black.cgColor
@@ -812,41 +816,52 @@ extension OZMessagesViewController {
         
         if isForceRed {
             fileButton.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
-            fileButton.tintColor = UIColor.red
             UIView.animate(withDuration: 0.25) {
                 self.fileButton.layer.transform = CATransform3DMakeRotation(.pi / 4, 0, 0, 1)
             }
         }
         else {
             fileButton.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
-            fileButton.tintColor = UIColor.black
             UIView.animate(withDuration: 0.25) {
                 self.fileButton.layer.transform = CATransform3DIdentity
+            }
+        }
+        
+        for case .inputBoxFileButtonTintColor(let color, let selected) in messagesConfigurations {
+            if isForceRed {
+                fileButton.tintColor = selected
+            }
+            else {
+                fileButton.tintColor = color
             }
         }
     }
     fileprivate func micButtonToggle() {
         guard let micImg = micButton.imageView?.image else { return }
         
-        if chatState == .voice {
-            micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
-            micButton.tintColor = UIColor.red
-        }
-        else {
-            micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
-            micButton.tintColor = UIColor.black
+        for case .inputBoxMicButtonTintColor(let color, let selected) in messagesConfigurations {
+            if chatState == .voice {
+                micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
+                micButton.tintColor = selected
+            }
+            else {
+                micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
+                micButton.tintColor = color
+            }
         }
     }
     fileprivate func emoticonButtonToggle() {
         guard let emotImg = emoticonButton.imageView?.image else { return }
         
-        if chatState == .emoticon {
-            emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
-            emoticonButton.tintColor = UIColor.red
-        }
-        else {
-            emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
-            emoticonButton.tintColor = UIColor.black
+        for case .inputBoxEmoticonButtonTintColor(let color, let selected) in messagesConfigurations {
+            if chatState == .emoticon {
+                emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
+                emoticonButton.tintColor = selected
+            }
+            else {
+                emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
+                emoticonButton.tintColor = color
+            }
         }
     }
 }
@@ -893,12 +908,8 @@ extension OZMessagesViewController: UITextViewDelegate {
         print("textViewDidBeginEditing")
         chatState = .chat
         
-        if let tv = textView as? OZTextView {
-            var aFontColor: UIColor = tv.inputTextViewFontColor
-            for case .inputTextViewFontColor(let color) in messagesConfigurations {
-                aFontColor = color
-            }
-            tv.textColor = aFontColor
+        for case .inputTextViewFontColor(let color) in messagesConfigurations {
+            textView.textColor = color
         }
 
         if let dele = delegate {
@@ -909,14 +920,10 @@ extension OZMessagesViewController: UITextViewDelegate {
     public func textViewDidEndEditing(_ textView: UITextView) {
         print("textViewDidEndEditing")
         
-        if let tv = textView as? OZTextView {
-            var aFontColor: UIColor = tv.inputTextViewFontColor
-            for case .inputTextViewFontColor(let color) in messagesConfigurations {
-                aFontColor = color
-            }
-            tv.textColor = aFontColor
+        for case .inputTextViewFontColor(let color) in messagesConfigurations {
+            textView.textColor = color
         }
-        
+
         if let dele = delegate {
             dele.messageTextViewEndEditing(textView: textView)
         }
@@ -975,25 +982,38 @@ extension OZMessagesViewController: UINavigationControllerDelegate, UIImagePicke
         guard let imageData = chosenImage.jpegData(compressionQuality: 1) else { return }
         
         if let anImg = UIImage(data: imageData) {
-            fileUpload(anImg)
+            var imgSize = CGSize(width: 400, height: 400)
+            for case .chatImageSize(let size) in messagesConfigurations {
+                imgSize = size
+            }
+            let resizedImage = anImg.resize(width: imgSize.width, height: imgSize.height)
+            var maxBytes: Int = 16384
+            for case .chatImageMaxNumberOfBytes(let bytes) in messagesConfigurations {
+                maxBytes = bytes
+            }
+            guard let imageData = resizedImage.jpegData(maxNumberOfBytes: maxBytes) else { return }
+            saveFile(imageData)
         }
     }
-    
-    func fileUpload(_ image: UIImage) {
+
+    fileprivate func saveFile(_ image: UIImage) {
         if let data = image.jpegData(compressionQuality: 0.5) {
-            let path = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-            let filename = path.appendingPathComponent("ozimg-\(String.randomFileName(length: 10)).jpg")
-            
-            try? data.write(to: filename)
-            
-            while !FileManager.default.isReadableFile(atPath: filename.relativePath) {
-                // wait here
-            }
-            
-            if FileManager.default.isReadableFile(atPath: filename.relativePath) {
-                print("filename.relativePath=\(filename.relativePath)")
-                send(msg: filename.relativePath, type: .image)
-            }
+            saveFile(data)
+        }
+    }
+    fileprivate func saveFile(_ data: Data) {
+        let path = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let filename = path.appendingPathComponent("ozimg-\(String.randomFileName(length: 10)).jpg")
+        
+        try? data.write(to: filename)
+        
+        while !FileManager.default.isReadableFile(atPath: filename.relativePath) {
+            // wait here
+        }
+        
+        if FileManager.default.isReadableFile(atPath: filename.relativePath) {
+            print("filename.relativePath=\(filename.relativePath)")
+            send(msg: filename.relativePath, type: .image)
         }
     }
     
@@ -1023,7 +1043,7 @@ extension OZMessagesViewController: UIGestureRecognizerDelegate {
 
 
 extension OZMessagesViewController: OZMessageCellDelegate {
-    public func messageCellDidSetMessage(cell: OZMessageCell) {
+    func messageCellDidSetMessage(cell: OZMessageCell) {
         if let dele = delegate {
             if let currentMessageIndex = dataSource.data.firstIndex(of: cell.message),
                 currentMessageIndex - 1 >= 0 {
@@ -1035,7 +1055,7 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             }
         }
     }
-    public func messageCellLayoutSubviews(cell: OZMessageCell) {
+    func messageCellLayoutSubviews(cell: OZMessageCell) {
         if let dele = delegate {
             if let currentMessageIndex = dataSource.data.firstIndex(of: cell.message),
                 currentMessageIndex - 1 >= 0 {

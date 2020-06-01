@@ -283,7 +283,7 @@ open class OZVoiceRecordViewController: UIViewController {
 // MARK: - Audio Route Change
 extension OZVoiceRecordViewController {
     @objc func routeChanged(_ noti: Notification) {
-        print("OZ >>>> noti = %@", noti)
+        print("OZ >>>> noti = \(noti)")
     }
 }
 

@@ -151,7 +151,12 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
             OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
+            // OZMessagesViewController
+            OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
+            OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.systemGray, .systemPink),
+            OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGray, .systemTeal),
             // OZTextView
+            OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
@@ -199,7 +204,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock) {
-        print("messageCellTapped => index(%d), cell(%@)", index, cell)
+        print("messageCellTapped => index(\(index)), cell(\(cell))")
         
         // Do someting here and callback to OZChattingUI
         if let aCell = cell as? AudioMessageCell {
@@ -222,7 +227,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage) {
-        print("messageSending(id:\(identifier)):::::Sending(Type: \(type)) ==> contentPath: %@", data.content)
+        print("messageSending(id:\(identifier)):::::Sending(Type: \(type)) ==> contentPath: \(data.content)")
         
         guard let chatVC = chatViewController else { return }
         
@@ -270,7 +275,6 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
         return true
     }
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
-        
         return addMessageConfiguration()
     }
 }

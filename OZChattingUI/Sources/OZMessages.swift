@@ -171,6 +171,7 @@ public class OZMessage: Equatable {
     private func setupConfigurations(config: [OZMessagesConfigurationItem]?) {
         var configItems = OZChattingDefaultConfiguration.messageConfiguration()
         if let items = config {
+            // TODO: too many duplicated case items in array... by Henry on 2020.06.01
             configItems.append(contentsOf: items)
         }
         for item in configItems {
