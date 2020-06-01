@@ -99,8 +99,6 @@ class ChattingViewController: OZMessagesViewController {
         
         inputTextView.backgroundColor = .white
         messageTextViewBeginEditing(textView: inputTextView)
-        fileButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1) // tint 안하고 이미지로 되도록
-        micButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         keyboardButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
     }
     
@@ -134,13 +132,13 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.cellBackgroundColor(UIColor(red:  204/255, green: 204/255, blue: 204/255, alpha: 1), [.announcement]),
-            OZMessagesConfigurationItem.fontColor(UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1), [.announcement], .none),
+            OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.sepratorColor(.clear),
             OZMessagesConfigurationItem.timeFontSize(12.0),
-            OZMessagesConfigurationItem.timeFontFormat("hh:mm"), // 요러케 Date Formatter 형식으로 넣으면 댐, 근데 아직 안되네... 음냐 ㅡ.ㅡ; by Henry on 2020.05.31
+            OZMessagesConfigurationItem.timeFontFormat("hh:mm"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
             // OZTextView
-            OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
+            OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0)

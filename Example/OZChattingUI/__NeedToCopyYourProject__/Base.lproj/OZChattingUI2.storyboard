@@ -157,7 +157,7 @@
                                     <constraint firstItem="Roh-yS-SmP" firstAttribute="leading" secondItem="iC9-vD-vUY" secondAttribute="trailing" constant="10" id="tBN-rI-SGd"/>
                                 </constraints>
                             </view>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bkp-J1-7RG">
+                            <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bkp-J1-7RG">
                                 <rect key="frame" x="0.0" y="862" width="414" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="height" id="ZPL-Hu-YPf"/>
