@@ -29,7 +29,7 @@ open class OZEmoticonList: NSObject {
                 return plist
             }
             catch {
-                print("%@", error.localizedDescription)
+                print("\(error.localizedDescription)")
             }
             return nil
         }

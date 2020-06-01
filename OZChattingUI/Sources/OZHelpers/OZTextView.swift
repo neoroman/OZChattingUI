@@ -12,11 +12,11 @@ open class OZTextView: UITextView {
 
     public var inputTextViewFontColor = UIColor.black
     
-    enum VerticalAlignment: Int {
+    public enum VerticalAlignment: Int {
         case Top = 0, Middle, Bottom
     }
 
-    var verticalAlignment: VerticalAlignment = .Middle
+    public var verticalAlignment: VerticalAlignment = .Middle
 
     //override contentSize property and observe using didSet
     override open var contentSize: CGSize {

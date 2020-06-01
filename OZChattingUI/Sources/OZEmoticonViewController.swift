@@ -19,6 +19,7 @@ open class OZEmoticonLayout: SimpleLayout {
     override open func simpleLayout(context: LayoutContext) -> [CGRect] {
         var frames: [CGRect] = []
         var lastFrame: CGRect?
+        let maxWidth: CGFloat = UIScreen.main.bounds.width
         let maxHeight: CGFloat = context.collectionSize.height
         
         for _ in 0..<context.numberOfItems {
@@ -30,7 +31,13 @@ open class OZEmoticonLayout: SimpleLayout {
                     xWidth = lastFrame.minX
                     yOffset = lastFrame.maxY + kEmoticonGridSize.height
                 } else {
-                    xWidth = lastFrame.maxX + kEmoticonGridSize.width
+                    if lastFrame.maxX - kEmoticonCellSize.width/2 < maxWidth,
+                        lastFrame.maxX + kEmoticonCellSize.width > maxWidth { // WTF...
+                        xWidth = lastFrame.maxX + kEmoticonGridSize.width * 2 + kEmoticonCellPaddingX
+                    }
+                    else {
+                        xWidth = lastFrame.maxX + kEmoticonGridSize.width
+                    }
                 }
             }
             cellFrame.origin.x = xWidth
@@ -141,8 +148,14 @@ open class OZEmoticonViewController: CollectionViewController {
     fileprivate func setupPageControl() {
         if pageControl == nil {
             pageControl = UIPageControl(frame: CGRect.zero)
-            pageControl?.pageIndicatorTintColor = UIColor.magenta.withAlphaComponent(0.3)
-            pageControl?.currentPageIndicatorTintColor = UIColor.magenta
+            if let dele = delegate as? OZMessagesViewController {
+                for case .emoticonCurrentPageIndicatorTintColor(let color) in dele.messagesConfigurations {
+                    pageControl?.currentPageIndicatorTintColor = color
+                }
+                for case .emoticonPageIndicatorTintColor(let color) in dele.messagesConfigurations {
+                    pageControl?.pageIndicatorTintColor = color
+                }
+            }
             pageControl?.backgroundColor = .clear
             pageControl?.isUserInteractionEnabled = false
             pageControl?.currentPage = 0
@@ -167,6 +180,12 @@ extension OZEmoticonViewController: UIScrollViewDelegate {
         if scrollView.contentOffset.x < insetWidth {
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
                 scrollView.contentOffset.x = -self.collectionView.contentInset.left
+            }, completion: nil)
+        }
+        else if scrollView.contentOffset.x > maxWidth,
+            scrollView.contentOffset.x < maxWidth + insetWidth {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
+                scrollView.contentOffset.x = +self.collectionView.contentInset.left
             }, completion: nil)
         }
     }

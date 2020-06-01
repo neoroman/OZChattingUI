@@ -17,6 +17,7 @@ public typealias OZMessagesConfigurations = [OZMessagesConfigurationItem]
 
 public enum OZMessagesConfigurationItem {
     
+    // ============ OZMessageCell ==================
     ///  Bubble font name in OZMessageCell
     case fontName(String, [OZMessageType])
     
@@ -83,14 +84,43 @@ public enum OZMessagesConfigurationItem {
     /// TODO: Vertical padding between messages in OZMessageCell
     //case verticalPaddingBetweenMessage(_ currentMessage: OZMessage, _ previousMessage: OZMessage)
     
+    // ============ OZMessagesViewController ==================
     /// Input text view font color in OZTextView
     case inputTextViewFontColor(UIColor)
 
     /// Input text view using `Enter` for sending in OZTextView
     case inputTextUsingEnterToSend(Bool)
+    
+    /// Input text vertical alignemnt in OZTextView
+    case inputTextVerticalAlignment(OZTextView.VerticalAlignment)
+    
+    /// Input box `file` button tint color in OZMessagesViewController
+    case inputBoxFileButtonTintColor(UIColor, _ selectedColor: UIColor)
 
+    /// Input box `mic` button tint color in OZMessagesViewController
+    case inputBoxMicButtonTintColor(UIColor, _ selectedColor: UIColor)
+
+    /// Input box `emoticon` button tint color in OZMessagesViewController
+    case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
+    
+    /// Default image size of messages in OZMessagesViewController
+    case chatImageSize(CGSize)
+
+    /// Default image max bytes in OZMessagesViewController
+    case chatImageMaxNumberOfBytes(Int)
+
+    
+    // ============ OZVoiceRecordViewController ==================
     /// Max duration of voice record in OZVoiceRecordViewController
     case voiceRecordMaxDuration(TimeInterval)
+    
+
+    // ============ OZEmoticonViewController ==================
+    /// Page control tint color in OZEmoticonViewController
+    case emoticonPageIndicatorTintColor(UIColor)
+
+    /// Current page control tint color in OZEmoticonViewController
+    case emoticonCurrentPageIndicatorTintColor(UIColor)
 }
 
 public class OZChattingDefaultConfiguration: NSObject {
@@ -116,6 +146,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.cellRightPadding(0, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellHeight(60, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellHeight(40, [.mp3, .voice]),
+            OZMessagesConfigurationItem.cellHeight(120, [.image]),
             OZMessagesConfigurationItem.maxWidthRatio(0.9),
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), .fromOther),
@@ -133,9 +164,19 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.right, OZMessageType.allTypes(), .fromCurrent),
             OZMessagesConfigurationItem.alignment(.left, OZMessageType.allTypes(), .fromOther),
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
+            // OZMessagesViewController
+            OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
+            OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
+            OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225)),
+            OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
+            OZMessagesConfigurationItem.inputTextVerticalAlignment(.Middle),
+            // OZEmoticonViewController
+            OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.magenta.withAlphaComponent(0.3)),
+            OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.magenta),
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(10.0),
         ]
@@ -148,6 +189,4 @@ public class OZChattingDefaultConfiguration: NSObject {
         
         return items
     }
-    
-    // TODO: Implement item(case) exist?!?
 }

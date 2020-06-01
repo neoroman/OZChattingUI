@@ -185,7 +185,14 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.blue.withAlphaComponent(0.6), .fromOther),
             OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Bold", OZMessageType.allTypes()),
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
+            OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
+            OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
+            // OZMessagesViewController
+            OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
+            OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.systemGray, .systemPink),
+            OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGray, .systemTeal),
             // OZTextView
+            OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
             // OZVoiceRecordViewController
@@ -245,7 +252,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock) {
-        print("messageCellTapped => index(%d), cell(%@)", index, cell)
+        print("messageCellTapped => index(\(index)), cell(\(cell))")
         
         // Do someting here and callback to OZChattingUI
         if let aCell = cell as? AudioMessageCell {
