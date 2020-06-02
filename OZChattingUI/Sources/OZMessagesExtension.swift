@@ -56,7 +56,8 @@ open class OZMessageLayout: SimpleLayout {
             var xOffset: CGFloat = 0
             var cellFrame = OZMessageCell.frameForMessage(message, containerWidth: maxWidth)
             if let lastMessage = lastMessage, let lastFrame = lastFrame {
-                if message.type == .image &&
+                if message.usingPackedImages &&
+                    message.type == .image &&
                     lastMessage.type == .image && message.alignment == lastMessage.alignment {
                     if message.alignment == .left && lastFrame.maxX + cellFrame.width + 2 < maxWidth {
                         yHeight = lastFrame.minY

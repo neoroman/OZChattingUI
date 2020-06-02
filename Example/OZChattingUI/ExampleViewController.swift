@@ -187,10 +187,15 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
             OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
+            OZMessagesConfigurationItem.usingPackedImages(true),
+            OZMessagesConfigurationItem.showTimeLabelForImage(true),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
+
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.systemGray, .systemPink),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGray, .systemTeal),
+            OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
             // OZTextView
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
@@ -301,7 +306,9 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     func messageTextViewEndEditing(textView: UITextView) {
     }
-    
+    func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) {
+        // Do something here just before record permission granted
+    }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         return true
     }
@@ -574,7 +581,7 @@ extension ExampleViewController: GalleryItemsDelegate {
 
 // MARK: - OZChattingUI choosing image, camera, file here
 extension ExampleViewController: OZChoosePopupDelegate {
-    func chooseButtonClick(_ sender: Any, type: OZChooseContentType) {
+    func messageFileChooseButtonTapped(_ sender: Any, type: OZChooseContentType) {
         guard let cvc = chatViewController else { return }
         switch type {
         case .album:

@@ -360,7 +360,7 @@ open class ImageMessageCell: OZMessageCell {
             let leftInset = message.isSenderIconHide ? 0 : message.cellLeftPadding
             imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
                         
-            if message.type == .emoticon {
+            if message.type == .emoticon || message.showTimeLabelForImage {
                 timeLabel.textColor = message.timeFontColor
                 timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
                 timeLabel.frame.size = CGSize(width: 50, height: 12)
@@ -439,7 +439,7 @@ open class ImageMessageCell: OZMessageCell {
         imageView.layer.cornerRadius = kCornerRadius
         imageView.layer.masksToBounds = true
                 
-        if message.type == .emoticon {
+        if message.type == .emoticon || message.showTimeLabelForImage {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
             if message.alignment == .right {
                 timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
@@ -775,14 +775,20 @@ open class OZMessageCell: DynamicView {
                 imageSize = anImg.size
             }
             
-            let maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: message.cellHeight)
+            var maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: message.cellHeight)
+            if message.cellHeight != message.chatImageSize.height {
+                maxImageSize = message.chatImageSize
+            }
             if imageSize.width > maxImageSize.width {
                 imageSize.height /= imageSize.width/maxImageSize.width
                 imageSize.width = maxImageSize.width
             }
-            if imageSize.height > maxImageSize.height {
+            else if imageSize.height > maxImageSize.height {
                 imageSize.width /= imageSize.height/maxImageSize.height
                 imageSize.height = maxImageSize.height
+            }
+            if message.cellHeight < imageSize.height {
+                imageSize.height = message.cellHeight
             }
             if message.alignment == .left {
                 if !message.isSenderIconHide { imageSize.width += message.cellLeftPadding }
