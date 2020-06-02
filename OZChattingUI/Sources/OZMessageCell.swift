@@ -721,6 +721,9 @@ open class OZMessageCell: DynamicView {
                 imageSize.width /= imageSize.height/maxImageSize.height
                 imageSize.height = maxImageSize.height
             }
+            if message.cellHeight < imageSize.height {
+                imageSize.height = message.cellHeight
+            }
             if message.alignment == .left {
                 imageSize.width += message.cellLeftPadding
                 return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: imageSize)
