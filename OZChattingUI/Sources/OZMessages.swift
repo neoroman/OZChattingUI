@@ -217,6 +217,9 @@ public class OZMessage: Equatable {
                     cellRightPadding = padding
                 }
                 break
+            case .chatImageSize(let size):
+                chatImageSize = size
+                break
             case .fontColor(let color, let types, let userType):
                 if types.contains(type), checkUserType(userType) {
                     textColor = color
@@ -293,6 +296,7 @@ public class OZMessage: Equatable {
     public var cellLeftPadding: CGFloat = 0
     public var cellPadding: CGFloat = 0
     public var cellRightPadding: CGFloat = 0
+    public var chatImageSize: CGSize = CGSize(width: 120, height: 120)
     public var fontName: String = "AppleSDGothicNeo-Medium"
     public var fontSize: CGFloat = 0
     public var iconPadding: CGFloat = 0
