@@ -775,12 +775,15 @@ open class OZMessageCell: DynamicView {
                 imageSize = anImg.size
             }
             
-            let maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: message.cellHeight)
+            var maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: message.cellHeight)
+            if message.cellHeight != message.chatImageSize.height {
+                maxImageSize = message.chatImageSize
+            }
             if imageSize.width > maxImageSize.width {
                 imageSize.height /= imageSize.width/maxImageSize.width
                 imageSize.width = maxImageSize.width
             }
-            if imageSize.height > maxImageSize.height {
+            else if imageSize.height > maxImageSize.height {
                 imageSize.width /= imageSize.height/maxImageSize.height
                 imageSize.height = maxImageSize.height
             }

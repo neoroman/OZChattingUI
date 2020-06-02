@@ -618,7 +618,8 @@ extension OZMessagesViewController {
                 }
             }
         }
-        else if state == .file {
+        else if state == .file,
+            fileChoosePopup?.superview == nil {
             addFileButtonToggle(true)
             resetButtons()
             keyboardHideLayout()
@@ -649,12 +650,14 @@ extension OZMessagesViewController {
     }
     
     fileprivate func resetButtons() {
-        voiceContainer.isHidden = true
-        micButtonToggle()
-        
-        emoticonContainer.isHidden = true
-        emoticonButtonToggle()
-        
+        if voiceContainer != nil {
+            voiceContainer.isHidden = true
+            micButtonToggle()
+        }
+        if emoticonContainer != nil {
+            emoticonContainer.isHidden = true
+            emoticonButtonToggle()
+        }
         addFileButtonToggle(false)
     }
     
@@ -818,7 +821,8 @@ extension OZMessagesViewController {
     }
 
     public func addFileButtonToggle(_ isForceRed: Bool) {
-        guard let fileImg = fileButton.imageView?.image else { return }
+        guard let fb = fileButton, let fbi = fb.imageView,
+            let fileImg = fbi.image else { return }
         
         for case .inputBoxFileButtonTintColor(let color, let selected) in messagesConfigurations {
             fileButton.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
@@ -975,8 +979,8 @@ extension OZMessagesViewController: UINavigationControllerDelegate, UIImagePicke
         
         if let anImg = UIImage(data: imageData) {
             var imgSize = CGSize(width: 400, height: 400)
-            for case .chatImageSize(let size) in messagesConfigurations {
-                imgSize = size
+            for case .chatImageSize(_, let realSize) in messagesConfigurations {
+                imgSize = realSize
             }
             let resizedImage = anImg.resize(width: imgSize.width, height: imgSize.height)
             var maxBytes: Int = 16384

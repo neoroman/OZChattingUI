@@ -189,6 +189,8 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
+
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.systemGray, .systemPink),
