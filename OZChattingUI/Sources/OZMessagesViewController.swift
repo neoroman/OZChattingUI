@@ -979,8 +979,8 @@ extension OZMessagesViewController: UINavigationControllerDelegate, UIImagePicke
         
         if let anImg = UIImage(data: imageData) {
             var imgSize = CGSize(width: 400, height: 400)
-            for case .chatImageSize(let size) in messagesConfigurations {
-                imgSize = size
+            for case .chatImageSize(_, let realSize) in messagesConfigurations {
+                imgSize = realSize
             }
             let resizedImage = anImg.resize(width: imgSize.width, height: imgSize.height)
             var maxBytes: Int = 16384

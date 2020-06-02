@@ -110,7 +110,7 @@ public enum OZMessagesConfigurationItem {
     case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
     
     /// Default image size of messages in OZMessagesViewController
-    case chatImageSize(CGSize)
+    case chatImageSize(CGSize, _ forSeding: CGSize)
 
     /// Default image max bytes in OZMessagesViewController
     case chatImageMaxNumberOfBytes(Int)
@@ -179,7 +179,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225), CGSize(width: 400, height: 400)),
             OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
             OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
             // OZTextView

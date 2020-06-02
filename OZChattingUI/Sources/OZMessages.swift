@@ -217,8 +217,8 @@ public class OZMessage: Equatable {
                     cellRightPadding = padding
                 }
                 break
-            case .chatImageSize(let size):
-                chatImageSize = size
+            case .chatImageSize(let displaySize, _):
+                chatImageSize = displaySize
                 break
             case .fontColor(let color, let types, let userType):
                 if types.contains(type), checkUserType(userType) {
