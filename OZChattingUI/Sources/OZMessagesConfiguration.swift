@@ -118,6 +118,9 @@ public enum OZMessagesConfigurationItem {
     
     /// Add file action sheet items, `cancel` is always show in OZMessagesViewController
     case addFileButtonItems([OZChooseContentType])
+    
+    /// Using long message folding option, default `NO` in OZMessageCell
+    case usingLongMessageFolding(Bool, _ maxHeight: CGFloat, _ foldButton: UIButton, _ unfoldButon: UIButton)
 
     
     // ============ OZVoiceRecordViewController ==================
@@ -176,6 +179,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(false),
+            OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, UIButton(type: .infoLight), UIButton(type: .detailDisclosure)),
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),

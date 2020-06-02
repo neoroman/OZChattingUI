@@ -8,6 +8,10 @@
 
 import UIKit
 
+public enum OZMessageFoldState {
+    case fold, unfold, none
+}
+
 public enum OZMessageType: Int {
     case text
     case announcement
@@ -281,6 +285,10 @@ public class OZMessage: Equatable {
             case .usingPackedImages(let yesOrNo):
                 usingPackedImages = yesOrNo
                 break
+            case .usingLongMessageFolding(let yesOrNo, let maxHeight, _, _):
+                usingFoldingOption = yesOrNo
+                foldingMessageMaxHeight = maxHeight
+                break
             default:
                 break
             }
@@ -297,6 +305,8 @@ public class OZMessage: Equatable {
     public var cellPadding: CGFloat = 0
     public var cellRightPadding: CGFloat = 0
     public var chatImageSize: CGSize = CGSize(width: 120, height: 120)
+    public var isFolded: Bool = false
+    public var foldingMessageMaxHeight: CGFloat = 160
     public var fontName: String = "AppleSDGothicNeo-Medium"
     public var fontSize: CGFloat = 0
     public var iconPadding: CGFloat = 0
@@ -312,6 +322,7 @@ public class OZMessage: Equatable {
     public var timeFontFormat: String = "h:mm a"
     public var timeFontSize: CGFloat = 0
     public var usingPackedImages: Bool = true
+    public var usingFoldingOption: Bool = false
 
     public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
         if type == .image && previousMessage.type == .image {

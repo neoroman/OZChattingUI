@@ -142,6 +142,11 @@ class ExampleViewController: UIViewController {
     }
     
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        let foldButton = UIButton(type: .custom)
+        foldButton.setTitle("Fold Messages", for: .normal)
+        let unfoldButton = UIButton(type: .custom)
+        unfoldButton.setTitle("Unfold Message", for: .normal)
+        
         return [
             // OZMessageCell
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
@@ -154,6 +159,7 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 150, foldButton, unfoldButton),
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),

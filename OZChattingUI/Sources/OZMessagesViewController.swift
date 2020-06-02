@@ -1063,4 +1063,16 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             }
         }
     }
+    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] {
+        for case .usingLongMessageFolding(let yesOrNo, _, let foldButton, let unfoldButton) in messagesConfigurations {
+            if yesOrNo {
+                return [
+                    (foldButton, .fold),
+                    (unfoldButton, .unfold)
+                ]
+            }
+            break
+        }
+        return [(UIButton(), .none)]
+    }
 }
