@@ -110,6 +110,7 @@ public enum OZMessagesConfigurationItem {
     case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
     
     /// Default image size of messages in OZMessagesViewController
+    /// Display image height won't be greater than cellHeight
     case chatImageSize(CGSize, _ forSeding: CGSize)
 
     /// Default image max bytes in OZMessagesViewController
