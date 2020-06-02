@@ -217,6 +217,9 @@ public class OZMessage: Equatable {
                     cellRightPadding = padding
                 }
                 break
+            case .chatImageSize(let displaySize, _):
+                chatImageSize = displaySize
+                break
             case .fontColor(let color, let types, let userType):
                 if types.contains(type), checkUserType(userType) {
                     textColor = color
@@ -263,6 +266,9 @@ public class OZMessage: Equatable {
                     showShadow = yesOrNo
                 }
                 break
+            case .showTimeLabelForImage(let yesOrNo):
+                showTimeLabelForImage = yesOrNo
+                break
             case .timeFontColor(let color):
                 timeFontColor = color
                 break
@@ -272,11 +278,15 @@ public class OZMessage: Equatable {
             case .timeFontSize(let fontPoint):
                 timeFontSize = fontPoint
                 break
+            case .usingPackedImages(let yesOrNo):
+                usingPackedImages = yesOrNo
+                break
             default:
                 break
             }
         }
     }
+    
     public var alignment: OZMessageAlignment = .center
     public var audioProgressColor: UIColor = UIColor.green.withAlphaComponent(0.9)
     public var backgroundColor: UIColor = .clear
@@ -286,6 +296,7 @@ public class OZMessage: Equatable {
     public var cellLeftPadding: CGFloat = 0
     public var cellPadding: CGFloat = 0
     public var cellRightPadding: CGFloat = 0
+    public var chatImageSize: CGSize = CGSize(width: 120, height: 120)
     public var fontName: String = "AppleSDGothicNeo-Medium"
     public var fontSize: CGFloat = 0
     public var iconPadding: CGFloat = 0
@@ -295,10 +306,12 @@ public class OZMessage: Equatable {
     public var seperatorColor: UIColor = UIColor(white: 238.0 / 255.0, alpha: 1.0)
     public var shadowColor: UIColor = .black
     public var showShadow: Bool = false
+    public var showTimeLabelForImage: Bool = false
     public var textColor: UIColor = .black
     public var timeFontColor: UIColor = .gray
     public var timeFontFormat: String = "h:mm a"
     public var timeFontSize: CGFloat = 0
+    public var usingPackedImages: Bool = true
 
     public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
         if type == .image && previousMessage.type == .image {

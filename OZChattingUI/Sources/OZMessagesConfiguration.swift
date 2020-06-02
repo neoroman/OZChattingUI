@@ -81,6 +81,12 @@ public enum OZMessagesConfigurationItem {
     /// Alignment of content in OZMessageCell
     case alignment(OZMessageAlignment, [OZMessageType], _ userType: OZMessagesUserSideConfigType)
     
+    /// Using packed images, default `YES` in OZMessageCell
+    case usingPackedImages(Bool)
+    
+    /// Show time label for image, default `NO` in OZMessageCell
+    case showTimeLabelForImage(Bool)
+    
     /// TODO: Vertical padding between messages in OZMessageCell
     //case verticalPaddingBetweenMessage(_ currentMessage: OZMessage, _ previousMessage: OZMessage)
     
@@ -104,10 +110,14 @@ public enum OZMessagesConfigurationItem {
     case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
     
     /// Default image size of messages in OZMessagesViewController
-    case chatImageSize(CGSize)
+    /// Display image height won't be greater than cellHeight
+    case chatImageSize(CGSize, _ forSeding: CGSize)
 
     /// Default image max bytes in OZMessagesViewController
     case chatImageMaxNumberOfBytes(Int)
+    
+    /// Add file action sheet items, `cancel` is always show in OZMessagesViewController
+    case addFileButtonItems([OZChooseContentType])
 
     
     // ============ OZVoiceRecordViewController ==================
@@ -164,12 +174,15 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.right, OZMessageType.allTypes(), .fromCurrent),
             OZMessagesConfigurationItem.alignment(.left, OZMessageType.allTypes(), .fromOther),
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
+            OZMessagesConfigurationItem.usingPackedImages(true),
+            OZMessagesConfigurationItem.showTimeLabelForImage(false),
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225), CGSize(width: 400, height: 400)),
             OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
+            OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
