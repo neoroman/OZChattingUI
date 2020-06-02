@@ -23,16 +23,16 @@ public protocol OZMessagesViewControllerDelegate {
     func messageTextViewDidChanged(textView: UITextView)
     func messageTextViewEndEditing(textView: UITextView)
     
-    /// TODO: This configurations will override previous configurations
+    /// This configurations will override previous configurations
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations
     
-    /// Mic button tapped, should return boolean for processing or not
+    /// Mic button tapped, should return boolean for `internal` processing or not
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
 
-    /// Emotocon button tapped, should return boolean for processing or not
+    /// Emotocon button tapped, should return boolean for `internal` processing or not
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
     
-    /// File button tapped, should return boolean for processing or not
+    /// File button tapped, should return boolean for `internal` processing or not
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
 
 }

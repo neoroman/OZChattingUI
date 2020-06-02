@@ -33,6 +33,7 @@ open class OZChoosePopup: UIView {
     
     @IBOutlet weak var popupContainerView: UIView!
     
+    // TODO: on 2020.06.02 by Henry
 //    required public init?(coder aDecoder: NSCoder) {
 //        fatalError("init(coder:) has not been implemented")
 //    }
@@ -79,6 +80,10 @@ open class OZChoosePopup: UIView {
     // display 할 버튼을 보여줘야 한다.
     public func setButtons(contents: [OZChooseContentType]) {
 
+        cameraView.isHidden = true
+        galleryView.isHidden = true
+        fileView.isHidden = true
+
         for content in contents {
             switch content {
             case .camera:
@@ -101,14 +106,18 @@ open class OZChoosePopup: UIView {
     */
     
     public func show() {
-        let window = UIApplication.shared.keyWindow!
-        
-        window.addSubview(self)
-        
-        UIView.animate(withDuration: 0.35, animations: {
+        if let window = UIApplication.shared.keyWindow {
             
-            self.popupContainerView.frame = CGRect(x:self.popupContainerView.frame.origin.x, y:-self.popupContainerView.frame.origin.y, width:self.popupContainerView.frame.width, height:self.popupContainerView.frame.height)
-        })
+            window.addSubview(self)
+            
+            UIView.animate(withDuration: 0.35, animations: {
+                
+                self.popupContainerView.frame = CGRect(x:self.popupContainerView.frame.origin.x, y:-self.popupContainerView.frame.origin.y, width:self.popupContainerView.frame.width, height:self.popupContainerView.frame.height)
+            })
+        }
+        else {
+            self.removeFromSuperview()
+        }
     }
     
     
@@ -149,7 +158,6 @@ open class OZChoosePopup: UIView {
 }
 extension OZChoosePopup: UIGestureRecognizerDelegate {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return !self.popupContainerView.frame.contains(touch.location(in: self)) // 터치 영역이 해당 View의 Frame 안에 포함되는지를 파악해 리턴
+        return !self.popupContainerView.frame.contains(touch.location(in: self))
     }
-    
 }

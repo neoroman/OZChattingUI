@@ -628,8 +628,11 @@ extension OZMessagesViewController {
             if let aPopup = fileChoosePopup {
                 if let dele = fileChoosePopupDelegate { aPopup.delegate = dele }
                 else { aPopup.delegate = self }
-                    
+                
                 aPopup.setButtons(contents: [.album, .camera, .file])
+                for case .addFileButtonItems(let items) in messagesConfigurations {
+                    aPopup.setButtons(contents: items)
+                }
                 aPopup.show()
             }
         }

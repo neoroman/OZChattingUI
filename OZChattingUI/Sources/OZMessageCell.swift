@@ -309,7 +309,7 @@ open class ImageMessageCell: OZMessageCell {
             }
             imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
                         
-            if message.type == .emoticon {
+            if message.type == .emoticon || message.showTimeLabelForImage {
                 timeLabel.textColor = message.timeFontColor
                 timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
                 timeLabel.frame.size = CGSize(width: 50, height: 12)
@@ -382,7 +382,7 @@ open class ImageMessageCell: OZMessageCell {
         imageView.layer.cornerRadius = kCornerRadius
         imageView.layer.masksToBounds = true
                 
-        if message.type == .emoticon {
+        if message.type == .emoticon || message.showTimeLabelForImage {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
             if message.alignment == .right {
                 timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
