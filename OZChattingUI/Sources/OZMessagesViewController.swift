@@ -949,7 +949,7 @@ extension OZMessagesViewController: UITextViewDelegate {
 
 // MARK: - OZChoosePopupDelegate
 extension OZMessagesViewController: OZChoosePopupDelegate {
-    public func chooseButtonClick(_ sender: Any, type: OZChooseContentType) {
+    public func messageFileChooseButtonTapped(_ sender: Any, type: OZChooseContentType) {
         switch type {
         case .album:
             self.showImagePicker(source: .photoLibrary)

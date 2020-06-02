@@ -306,7 +306,9 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     func messageTextViewEndEditing(textView: UITextView) {
     }
-    
+    func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) {
+        // Do something here just before record permission granted
+    }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         return true
     }
@@ -579,7 +581,7 @@ extension ExampleViewController: GalleryItemsDelegate {
 
 // MARK: - OZChattingUI choosing image, camera, file here
 extension ExampleViewController: OZChoosePopupDelegate {
-    func chooseButtonClick(_ sender: Any, type: OZChooseContentType) {
+    func messageFileChooseButtonTapped(_ sender: Any, type: OZChooseContentType) {
         guard let cvc = chatViewController else { return }
         switch type {
         case .album:
