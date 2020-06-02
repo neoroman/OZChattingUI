@@ -628,8 +628,11 @@ extension OZMessagesViewController {
             if let aPopup = fileChoosePopup {
                 if let dele = fileChoosePopupDelegate { aPopup.delegate = dele }
                 else { aPopup.delegate = self }
-                    
+                
                 aPopup.setButtons(contents: [.album, .camera, .file])
+                for case .addFileButtonItems(let items) in messagesConfigurations {
+                    aPopup.setButtons(contents: items)
+                }
                 aPopup.show()
             }
         }
@@ -796,7 +799,10 @@ extension OZMessagesViewController {
     
     // MARK: - Actions
     @IBAction func addFileButtonPressed(_ sender: Any) {
-        chatState = .file
+        if let dele = delegate,
+            dele.messageFileButtonTapped(viewController: self, sender: sender) {
+            chatState = .file
+        }
     }
     @IBAction func emoticonButtonViewPressed(_ sender: Any) {
         if let dele = delegate,
@@ -814,20 +820,8 @@ extension OZMessagesViewController {
     public func addFileButtonToggle(_ isForceRed: Bool) {
         guard let fileImg = fileButton.imageView?.image else { return }
         
-        if isForceRed {
-            fileButton.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
-            UIView.animate(withDuration: 0.25) {
-                self.fileButton.layer.transform = CATransform3DMakeRotation(.pi / 4, 0, 0, 1)
-            }
-        }
-        else {
-            fileButton.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
-            UIView.animate(withDuration: 0.25) {
-                self.fileButton.layer.transform = CATransform3DIdentity
-            }
-        }
-        
         for case .inputBoxFileButtonTintColor(let color, let selected) in messagesConfigurations {
+            fileButton.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if isForceRed {
                 fileButton.tintColor = selected
             }
@@ -840,12 +834,11 @@ extension OZMessagesViewController {
         guard let micImg = micButton.imageView?.image else { return }
         
         for case .inputBoxMicButtonTintColor(let color, let selected) in messagesConfigurations {
+            micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if chatState == .voice {
-                micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
                 micButton.tintColor = selected
             }
             else {
-                micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
                 micButton.tintColor = color
             }
         }
@@ -854,12 +847,11 @@ extension OZMessagesViewController {
         guard let emotImg = emoticonButton.imageView?.image else { return }
         
         for case .inputBoxEmoticonButtonTintColor(let color, let selected) in messagesConfigurations {
+            emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if chatState == .emoticon {
-                emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
                 emoticonButton.tintColor = selected
             }
             else {
-                emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
                 emoticonButton.tintColor = color
             }
         }

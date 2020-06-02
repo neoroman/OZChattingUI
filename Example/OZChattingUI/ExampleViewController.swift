@@ -187,10 +187,13 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
             OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
+            OZMessagesConfigurationItem.usingPackedImages(true),
+            OZMessagesConfigurationItem.showTimeLabelForImage(true),
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.systemGray, .systemPink),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGray, .systemTeal),
+            OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
             // OZTextView
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             OZMessagesConfigurationItem.inputTextViewFontColor(.blue),

@@ -12,6 +12,8 @@ public protocol OZMessagesViewControllerDelegate {
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage)
     func messageAppend(complete: @escaping OZChatFetchCompleteBlock)
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock)
+    
+    // Optional from here
     func messageViewLoaded(isLoaded: Bool)
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage)
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage)
@@ -21,14 +23,18 @@ public protocol OZMessagesViewControllerDelegate {
     func messageTextViewDidChanged(textView: UITextView)
     func messageTextViewEndEditing(textView: UITextView)
     
-    /// TODO: This configurations will override previous configurations
+    /// This configurations will override previous configurations
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations
     
-    /// Mic button tapped, should return boolean for processing or not
+    /// Mic button tapped, should return boolean for `internal` processing or not
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
 
-    /// Emotocon button tapped, should return boolean for processing or not
+    /// Emotocon button tapped, should return boolean for `internal` processing or not
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
+    
+    /// File button tapped, should return boolean for `internal` processing or not
+    func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
+
 }
 // MARK: - Optional OZMessagesViewControllerDelegate
 public extension OZMessagesViewControllerDelegate {
@@ -45,4 +51,5 @@ public extension OZMessagesViewControllerDelegate {
     }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
+    func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
 }
