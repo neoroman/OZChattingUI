@@ -66,17 +66,6 @@ class ChattingViewController: OZMessagesViewController {
         inputTextView.becomeFirstResponder()
     }
     
-    /// 음성 인식 상태로 전환
-    @IBAction func pressedMicButton(_ sender: UIButton) {
-        setDefaultState()
-        keyboardButton.isHidden = false
-        micButton.isHidden = true
-        sendButton.isHidden = true
-        
-        setSuccessToMic()
-//                        setFailToMic()
-    }
-    
     /// 입력한 텍스트 삭제
     @IBAction func pressedClearButton(_ sender: UIButton) {
         setDefaultState()
@@ -212,35 +201,19 @@ class ChattingViewController: OZMessagesViewController {
         inputTextView.text = text
         inputTextView.font = UIFont(name:"AppleSDGothicNeo-Medium", size: 12)
         inputTextView.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
-        inputTextView.centerVerticalText()
     }
     
     /// 메세지 전송시 로딩 표시
-    private func rotateLoadingImage() {
+    @objc private func rotateLoadingImage() {
         sendButton.isEnabled = false
         sendButton.isHidden = true
         loadingImageView.isHidden = false
-        
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveLinear, animations: { () -> Void in
-            self.loadingImageView.transform = self.loadingImageView.transform.rotated(by: .pi / 2)
-        }) { [weak self] (finished) -> Void in
-            guard let self = self else { return }
-            if self.stopLoading {
-                return
-            }
-            if finished {
-                self.rotateLoadingImage()
-            }
+        Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveLinear, animations: { () -> Void in
+                self.loadingImageView.transform = self.loadingImageView.transform.rotated(by: .pi / 2)
+            })
         }
     }
-    
-    /// 로딩 완료 후 삭제
-    private func stopRotating() {
-        self.sendButton.isHidden = false
-        self.loadingImageView.isHidden = true
-        stopLoading = true
-    }
-    
 }
 
 // MARK: - OZMessagesViewControllerDelegate
@@ -331,28 +304,32 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageTextViewEndEditing(textView: UITextView) {
-        stopRotating() // 임시
     }
     
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
-        return true
+        /// 음성 인식 상태로 전환
+        setDefaultState()
+        keyboardButton.isHidden = false
+        micButton.isHidden = true
+        sendButton.isHidden = true
+        
+        setSuccessToMic()
+        //                        setFailToMic()
+        return false
     }
+    
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
-        return true
+        return false
     }
+    
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
         return addMessageConfiguration()
     }
-}
-
-// MARK: - UITextView extension
-extension UITextView {
-    /// 텍스트뷰의 텍스트를 세로 가운데에 위치 설정
-    func centerVerticalText() {
-        let fitSize = CGSize(width: bounds.width, height: CGFloat.greatestFiniteMagnitude)
-        let size = sizeThatFits(fitSize)
-        let calculate = (bounds.size.height - size.height * zoomScale) / 2
-        let offset = max(1, calculate)
-        contentOffset.y = -offset
+    
+    func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SelectPhotoViewController") as? SelectPhotoViewController {
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        return false
     }
 }
