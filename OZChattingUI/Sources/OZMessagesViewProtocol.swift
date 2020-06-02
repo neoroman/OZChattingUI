@@ -28,6 +28,7 @@ public protocol OZMessagesViewControllerDelegate {
     
     /// Mic button tapped, should return boolean for `internal` processing or not
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
+    func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController)
 
     /// Emotocon button tapped, should return boolean for `internal` processing or not
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
@@ -50,6 +51,8 @@ public extension OZMessagesViewControllerDelegate {
         return []
     }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
+    func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) { }
+
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
 }

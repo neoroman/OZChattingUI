@@ -257,7 +257,9 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
             cvc.micButton.tag = kMicButtonTag
         }
     }
-    
+    func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) {
+        // Do something here just before record permission granted
+    }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         if let button = sender as? UIButton, button.tag == kSendButtonTag,
             let fullText = viewController.inputTextView.text {
@@ -329,7 +331,7 @@ extension ExampleViewController: UIDocumentBrowserViewControllerDelegate {
 
 // MARK: - OZChattingUI choosing image, camera, file here
 extension ExampleViewController: OZChoosePopupDelegate {
-    func chooseButtonClick(_ sender: Any, type: OZChooseContentType) {
+    func messageFileChooseButtonTapped(_ sender: Any, type: OZChooseContentType) {
         guard let cvc = chatViewController else { return }
         switch type {
         case .album:

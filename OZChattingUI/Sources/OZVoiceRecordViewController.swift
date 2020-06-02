@@ -551,6 +551,11 @@ extension OZVoiceRecordViewController {
 // MARK: - Audio & Mic usage permissions
 extension OZVoiceRecordViewController {
     func checkPermissionMic() {
+        if let parent = delegate as? OZMessagesViewController,
+            let dele = parent.delegate {
+            dele.messageMicWillRequestRecordPermission(viewController: self)
+        }
+        
         switch AVAudioSession.sharedInstance().recordPermission {
         case AVAudioSession.RecordPermission.granted:
             self.setMic(permissionCheck: true, firstCheck: false)

@@ -14,7 +14,7 @@ public enum OZChooseContentType: Int {
 }
 
 public protocol OZChoosePopupDelegate {
-    func chooseButtonClick(_ sender: Any, type: OZChooseContentType)
+    func messageFileChooseButtonTapped(_ sender: Any, type: OZChooseContentType)
 }
 
 open class OZChoosePopup: UIView {
@@ -126,7 +126,7 @@ open class OZChoosePopup: UIView {
         self.removeFromSuperview()
         
         if let aDele = delegate {
-            aDele.chooseButtonClick(sender, type: .camera)
+            aDele.messageFileChooseButtonTapped(sender, type: .camera)
         }
     }
     
@@ -135,7 +135,7 @@ open class OZChoosePopup: UIView {
         self.removeFromSuperview()
         
         if let aDele = delegate {
-            aDele.chooseButtonClick(sender, type: .album)
+            aDele.messageFileChooseButtonTapped(sender, type: .album)
         }
     }
     
@@ -143,7 +143,7 @@ open class OZChoosePopup: UIView {
         self.removeFromSuperview()
         
         if let aDele = delegate {
-            aDele.chooseButtonClick(sender, type: .file)
+            aDele.messageFileChooseButtonTapped(sender, type: .file)
         }
     }
     
@@ -151,7 +151,7 @@ open class OZChoosePopup: UIView {
         self.removeFromSuperview()
 
         if let aDele = delegate {
-            aDele.chooseButtonClick(sender, type: .cancel)
+            aDele.messageFileChooseButtonTapped(sender, type: .cancel)
         }
     }
     
