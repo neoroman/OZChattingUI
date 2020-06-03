@@ -219,6 +219,9 @@ public class OZMessage: Equatable {
                     bubbleColor = color
                 }
                 break
+            case .canMessageSelectableByLongPressGesture(let yesOrNo):
+                canMessageSelectable = yesOrNo
+                break
             case .cellBackgroundColor(let color, let types):
                 if types.contains(type) {
                     backgroundColor = color
@@ -308,9 +311,10 @@ public class OZMessage: Equatable {
             case .usingPackedImages(let yesOrNo):
                 usingPackedImages = yesOrNo
                 break
-            case .usingLongMessageFolding(let yesOrNo, let maxHeight, _, _):
+            case .usingLongMessageFolding(let yesOrNo, let maxHeight, _, _, let buttonHeight):
                 usingFoldingOption = yesOrNo
                 foldingMessageMaxHeight = maxHeight
+                foldingButtonHeight = buttonHeight
                 if yesOrNo {
                     isFolded = true
                 }
@@ -326,6 +330,7 @@ public class OZMessage: Equatable {
     public var backgroundColor: UIColor = .clear
     public var bubbleColor: UIColor = UIColor.green.withAlphaComponent(0.9)
     public var bubbleWidthRatio: CGFloat = 1
+    public var canMessageSelectable: Bool = false
     public var cellHeight: CGFloat = 0
     public var cellLeftPadding: CGFloat = 0
     public var cellPadding: CGFloat = 0
@@ -333,6 +338,7 @@ public class OZMessage: Equatable {
     public var chatImageSize: CGSize = CGSize(width: 120, height: 120)
     public var isFolded: Bool = false
     public var foldingMessageMaxHeight: CGFloat = 160
+    public var foldingButtonHeight: CGFloat = 25
     public var fontName: String = "AppleSDGothicNeo-Medium"
     public var fontSize: CGFloat = 0
     public var iconPadding: CGFloat = 0

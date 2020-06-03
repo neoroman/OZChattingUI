@@ -123,7 +123,10 @@ public enum OZMessagesConfigurationItem {
     case addFileButtonItems([OZChooseContentType])
     
     /// Using long message folding option, default `NO` in OZMessageCell
-    case usingLongMessageFolding(Bool, _ maxHeight: CGFloat, _ foldButton: UIButton, _ unfoldButon: UIButton)
+    case usingLongMessageFolding(Bool, _ maxHeight: CGFloat, _ foldButton: UIButton, _ unfoldButon: UIButton, _ buttonHeight: CGFloat)
+    
+    /// Can message selectable by long press gesture, default `NO` in OZMessageCell
+    case canMessageSelectableByLongPressGesture(Bool)
 
     
     // ============ OZVoiceRecordViewController ==================
@@ -182,7 +185,8 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(false),
-            OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, UIButton(type: .infoLight), UIButton(type: .detailDisclosure)),
+            OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, UIButton(type: .infoLight), UIButton(type: .detailDisclosure), 25),
+            OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(false),
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
