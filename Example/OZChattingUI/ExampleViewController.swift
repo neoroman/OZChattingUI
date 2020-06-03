@@ -89,9 +89,7 @@ class ExampleViewController: UIViewController {
         }
         let storyboard = UIStoryboard(name: storyName, bundle: Bundle.main)
         if let vc = storyboard.instantiateViewController(withIdentifier: storyName) as? OZMessagesViewController {
-            if chatViewController == nil {
-                chatViewController = vc
-            }
+            chatViewController = vc
             if !(vc is ChattingViewController) {
                 vc.delegate = self
             }
@@ -126,9 +124,7 @@ class ExampleViewController: UIViewController {
         }
         let storyboard = UIStoryboard(name: storyName, bundle: Bundle.main)
         if let vc = storyboard.instantiateViewController(withIdentifier: storyName) as? OZMessagesViewController {
-            if chatViewController == nil {
-                chatViewController = vc
-            }
+            chatViewController = vc
             if !(vc is ChattingViewController) {
                 vc.delegate = self
             }
@@ -312,18 +308,56 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageTextViewBeginEditing(textView: UITextView) {
+        if let cvc = self.chatViewController,
+            let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+            cvc.micButton.setImage(UIImage(named: "send"), for: .normal)
+            cvc.micButton.tag = kSendButtonTag
+        }
     }
     func messageTextViewDidChanged(textView: UITextView) {
+        if let cvc = self.chatViewController {
+            if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+                cvc.micButton.setImage(UIImage(named: "send"), for: .normal)
+                cvc.micButton.tag = kSendButtonTag
+            }
+            else {
+                cvc.micButton.setImage(UIImage(named: "mic"), for: .normal)
+                cvc.micButton.tag = kMicButtonTag
+            }
+        }
     }
     func messageTextViewEndEditing(textView: UITextView) {
+        if let cvc = self.chatViewController,
+            let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count <= 0 {
+            cvc.micButton.setImage(UIImage(named: "mic"), for: .normal)
+            cvc.micButton.tag = kMicButtonTag
+        }
     }
     func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) {
         // Do something here just before record permission granted
     }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+        if let button = sender as? UIButton, button.tag == kSendButtonTag,
+            let fullText = viewController.inputTextView.text {
+            
+            let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.count > 0 {
+                viewController.send(msg: trimmed)
+            }
+            
+            viewController.inputTextView.text = ""
+            viewController.adjustTextViewHeight(viewController.inputTextView)
+            
+            viewController.micButton.setImage(UIImage(named: "mic"), for: .normal)
+            viewController.micButton.tag = kMicButtonTag
+            return false
+        }
         return true
     }
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+        return true
+    }
+    func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         return true
     }
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
