@@ -440,6 +440,7 @@ open class ImagePlusIconMessageCell: ImageMessageCell {
     override open func layoutSubviews() {
         super.layoutSubviews()
         // TODO: do something here by Henry on 2020.05.09
+        /*
         if message.usingPackedImages,
             let aSuper = self.superview {
             let p = self.convert(self.frame.origin, to: aSuper)
@@ -448,6 +449,7 @@ open class ImagePlusIconMessageCell: ImageMessageCell {
                 layoutIfNeeded()
             }
         }
+         */
     }
 }
 
