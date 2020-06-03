@@ -65,9 +65,7 @@ class ExampleViewController: UIViewController {
     @IBAction func buttonPressed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
         if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI") as? OZMessagesViewController {
-            if chatViewController == nil {
-                chatViewController = vc
-            }
+            chatViewController = vc
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
             vc.messagesConfigurations = addMessageConfiguration()
@@ -95,15 +93,9 @@ class ExampleViewController: UIViewController {
     @IBAction func testButtonPressed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
         if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI") as? OZMessagesViewController {
-            if chatViewController == nil {
-                chatViewController = vc
-            }
+            chatViewController = vc
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
-            if #available(iOS 11.0, *) {
-            } else {
-//                vc.fileChoosePopup.setButton
-            }
 
             #if USING_AS_MODAL
             self.present(nc, animated: true) {
@@ -129,7 +121,6 @@ class ExampleViewController: UIViewController {
                 vc.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
                 vc.collectionView.reloadData()
                 vc.collectionView.scrollTo(edge: .bottom, animated:true)
-                // This won't be executed
                 vc.messagesConfigurations = addMessageConfiguration()
             }
             #endif
@@ -143,8 +134,12 @@ class ExampleViewController: UIViewController {
     
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
         let foldButton = UIButton(type: .custom)
+        foldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        foldButton.setImage(UIImage(named: "btnCallClose"), for: .normal)
         foldButton.setTitle("Fold Messages", for: .normal)
         let unfoldButton = UIButton(type: .custom)
+        unfoldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        unfoldButton.setImage(UIImage(named: "iconViewAll"), for: .normal)
         unfoldButton.setTitle("Unfold Message", for: .normal)
         
         return [
@@ -159,7 +154,7 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
-            OZMessagesConfigurationItem.usingLongMessageFolding(true, 150, foldButton, unfoldButton),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton),
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
@@ -167,8 +162,9 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGray, .systemTeal),
             OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
             // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
-            OZMessagesConfigurationItem.inputTextViewFontColor(.blue),
+            OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
         ]

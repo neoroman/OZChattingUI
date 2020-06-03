@@ -92,6 +92,9 @@ public enum OZMessagesConfigurationItem {
     
     // ============ OZMessagesViewController ==================
     /// Input text view font color in OZTextView
+    case inputTextViewFont(UIFont)
+
+    /// Input text view font color in OZTextView
     case inputTextViewFontColor(UIColor)
 
     /// Input text view using `Enter` for sending in OZTextView
@@ -188,6 +191,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
             OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
             // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
             OZMessagesConfigurationItem.inputTextVerticalAlignment(.Middle),

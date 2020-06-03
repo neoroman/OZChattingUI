@@ -10,6 +10,29 @@ import UIKit
 
 public enum OZMessageFoldState {
     case fold, unfold, none
+    
+    func tag() -> Int {
+        switch self {
+        case .fold:
+            return 1004111
+        case .unfold:
+            return 1004222
+        default:
+            return 0
+        }
+    }
+    
+    static func typeFromTag(_ tag: Int) -> OZMessageFoldState {
+        if tag == OZMessageFoldState.fold.tag() {
+            return .fold
+        }
+        else if tag == OZMessageFoldState.unfold.tag() {
+            return .unfold
+        }
+        else {
+            return .none
+        }
+    }
 }
 
 public enum OZMessageType: Int {

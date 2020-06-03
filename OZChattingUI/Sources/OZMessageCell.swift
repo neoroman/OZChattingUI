@@ -19,8 +19,7 @@ open class IncomingTextMessageCell: OZMessageCell {
     public var iconImage = UIImageView()
     public var timeLabel = UILabel()
     
-    public var foldButton = UIButton()
-    public var unfoldButton = UIButton()
+    public var buttonContainer = UIView()
     var textSize: CGSize = .zero
 
     override public var message: OZMessage! {
@@ -70,17 +69,14 @@ open class IncomingTextMessageCell: OZMessageCell {
                                                  paddingY: message.cellPadding)
             if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
                 let dele = delegate {
+                for x in buttonContainer.subviews { x.removeFromSuperview() }
                 for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
-                    if type == .fold {
-                        foldButton = button
-                    }
-                    else if type == .unfold {
-                        unfoldButton = button
-                    }
+                    button.tag = type.tag()
+                    buttonContainer.addSubview(button)
+                    buttonContainer.frame.size = button.frame.size
                 }
                 message.isFolded = true
             }
-            
             setNeedsLayout()
         }
     }
@@ -94,10 +90,8 @@ open class IncomingTextMessageCell: OZMessageCell {
         addSubview(iconImage)
         timeLabel.frame = frame
         addSubview(timeLabel)
-        foldButton.frame = CGRect.zero
-        unfoldButton.frame = CGRect.zero
-        addSubview(foldButton)
-        addSubview(unfoldButton)
+        buttonContainer.frame = frame
+        addSubview(buttonContainer)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -114,19 +108,20 @@ open class IncomingTextMessageCell: OZMessageCell {
         textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
         
         if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight {
-            var height = foldButton.frame.height
+            buttonContainer.isHidden = false
+            var height = buttonContainer.frame.height
             if height <= 5 { height = kDefaultFoldingButtonHeight }
-            foldButton.frame = CGRect(x: 0, y: textLabel.frame.maxY - height, width: textLabel.frame.width, height: height)
-            unfoldButton.frame = foldButton.frame
+            buttonContainer.frame = CGRect(x: textLabel.frame.minX, y: textLabel.frame.maxY - height, width: textLabel.frame.width, height: height)
+            for x in buttonContainer.subviews { x.isHidden = true }
             if !message.isFolded {
-                foldButton.isHidden = false
-                unfoldButton.isHidden = true
+                buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
             }
             else {
-                foldButton.isHidden = true
-                unfoldButton.isHidden = false
+                buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
             }
-            textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: height, right: 0))
+        }
+        else {
+            buttonContainer.isHidden = true
         }
     }
 }
@@ -135,8 +130,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
     public var textLabel = OZBubbleLabel()
     public var timeLabel = UILabel()
  
-    public var foldButton = UIButton()
-    public var unfoldButton = UIButton()
+    public var buttonContainer = UIView()
     var textSize: CGSize = .zero
 
     override public var message: OZMessage! {
@@ -165,13 +159,11 @@ open class OutgoingTextMessageCell: OZMessageCell {
                                                  paddingY: message.cellPadding)
             if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
                 let dele = delegate {
+                for x in buttonContainer.subviews { x.removeFromSuperview() }
                 for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
-                    if type == .fold {
-                        foldButton = button
-                    }
-                    else if type == .unfold {
-                        unfoldButton = button
-                    }
+                    button.tag = type.tag()
+                    buttonContainer.addSubview(button)
+                    buttonContainer.frame.size = button.frame.size
                 }
                 message.isFolded = true
             }
@@ -187,10 +179,8 @@ open class OutgoingTextMessageCell: OZMessageCell {
         addSubview(textLabel)
         timeLabel.frame = frame
         addSubview(timeLabel)
-        foldButton.frame = CGRect.zero
-        unfoldButton.frame = CGRect.zero
-        addSubview(foldButton)
-        addSubview(unfoldButton)
+        buttonContainer.frame = frame
+        addSubview(buttonContainer)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -206,19 +196,20 @@ open class OutgoingTextMessageCell: OZMessageCell {
         textLabel.frame = bounds
         
         if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight {
-            var height = foldButton.frame.height
-            if height <= 5 { height = 25 }
-            foldButton.frame = CGRect(x: 0, y: textLabel.frame.maxY - height, width: textLabel.frame.width, height: height)
-            unfoldButton.frame = foldButton.frame
+            buttonContainer.isHidden = false
+            var height = buttonContainer.frame.height
+            if height <= 5 { height = kDefaultFoldingButtonHeight }
+            buttonContainer.frame = CGRect(x: textLabel.frame.minX, y: textLabel.frame.maxY - height, width: textLabel.frame.width, height: height)
+            for x in buttonContainer.subviews { x.isHidden = true }
             if !message.isFolded {
-                foldButton.isHidden = false
-                unfoldButton.isHidden = true
+                buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
             }
             else {
-                foldButton.isHidden = true
-                unfoldButton.isHidden = false
+                buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
             }
-            textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0))
+        }
+        else {
+            buttonContainer.isHidden = true
         }
     }
 }
