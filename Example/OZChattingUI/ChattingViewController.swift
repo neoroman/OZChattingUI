@@ -116,6 +116,17 @@ class ChattingViewController: OZMessagesViewController {
     }
     
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        let foldButton = UIButton(type: .custom)
+        foldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        foldButton.setImage(UIImage(named: "btnCallClose"), for: .normal)
+        foldButton.setTitle("닫기", for: .normal)
+        foldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
+        let unfoldButton = UIButton(type: .custom)
+        unfoldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        unfoldButton.setImage(UIImage(named: "iconViewAll"), for: .normal)
+        unfoldButton.setTitle("전체보기", for: .normal)
+        unfoldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
+
         return [
             // OZMessageCell
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
@@ -126,6 +137,8 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.timeFontSize(12.0),
             OZMessagesConfigurationItem.timeFontFormat("hh:mm"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton),
+
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
