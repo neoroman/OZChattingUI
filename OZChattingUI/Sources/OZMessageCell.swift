@@ -87,6 +87,11 @@ open class IncomingTextMessageCell: OZMessageCell {
                     buttonContainer.frame.size = copiedButton.frame.size
                 }
             }
+            
+            // Callback to delegate
+            if let dele = delegate {
+                dele.messageCellDidSetMessage(cell: self)
+            }
             setNeedsLayout()
         }
     }
@@ -133,6 +138,11 @@ open class IncomingTextMessageCell: OZMessageCell {
         }
         else {
             buttonContainer.isHidden = true
+        }
+        
+        /// Call back to delegate
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: self)
         }
     }
 }
@@ -188,6 +198,11 @@ open class OutgoingTextMessageCell: OZMessageCell {
                     buttonContainer.frame.size = copiedButton.frame.size
                 }
             }
+            
+            // Callback to delegate
+            if let dele = delegate {
+                dele.messageCellDidSetMessage(cell: self)
+            }
             setNeedsLayout()
         }
     }
@@ -234,6 +249,11 @@ open class OutgoingTextMessageCell: OZMessageCell {
         else {
             buttonContainer.isHidden = true
         }
+        
+        /// Call back to delegate
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: self)
+        }
     }
 }
 
@@ -255,6 +275,11 @@ open class TextMessageCell: OZMessageCell {
             }
             else {
                 seperator.isHidden = true
+            }
+            
+            // Callback to delegate
+            if let dele = delegate {
+                dele.messageCellDidSetMessage(cell: self)
             }
         }
     }
@@ -280,6 +305,11 @@ open class TextMessageCell: OZMessageCell {
             seperator.frame.size.width = UIScreen.main.bounds.width * message.bubbleWidthRatio
             seperator.frame.size.height = 1.0
             seperator.center = bounds.center
+        }
+        
+        /// Call back to delegate
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: self)
         }
     }
 }
@@ -327,6 +357,11 @@ open class IncomingStatusMessageCell: OZMessageCell {
                 #endif
             }
             timeLabel.sizeToFit()
+            
+            // Callback to delegate
+            if let dele = delegate {
+                dele.messageCellDidSetMessage(cell: self)
+            }
         }
     }
     
@@ -352,6 +387,11 @@ open class IncomingStatusMessageCell: OZMessageCell {
         iconImage.layer.cornerRadius = iconImage.frame.height / 2
         iconImage.layer.masksToBounds = true
         timeLabel.frame.origin = CGPoint(x: message.cellLeftPadding, y: textLabel.frame.maxY - 12)
+        
+        /// Call back to delegate
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: self)
+        }
     }
 }
 
@@ -450,6 +490,11 @@ open class ImageMessageCell: OZMessageCell {
             }
             iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
             iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+
+            // Callback to delegate
+            if let dele = delegate {
+                dele.messageCellDidSetMessage(cell: self)
+            }
             setNeedsLayout()
         }
     }
@@ -494,6 +539,11 @@ open class ImageMessageCell: OZMessageCell {
         iconImage.isHidden = isIconHidden
         iconImage.layer.cornerRadius = iconImage.frame.height / 2
         iconImage.layer.masksToBounds = true
+
+        /// Call back to delegate
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: self)
+        }
     }
 }
 
@@ -604,6 +654,11 @@ open class AudioMessageCell: OZMessageCell {
                 #endif
             }
             eTimeLabel.sizeToFit()
+
+            // Callback to delegate
+            if let dele = delegate {
+                dele.messageCellDidSetMessage(cell: self)
+            }
             setNeedsLayout()
         }
     }
@@ -654,6 +709,11 @@ open class AudioMessageCell: OZMessageCell {
             eTimeLabel.frame.origin = CGPoint(x: bounds.maxX + 5, y: bounds.maxY-12)
         }
         activityIndicator.center = CGPoint(x: eTimeLabel.frame.midX, y: eTimeLabel.frame.midY - 20)
+
+        /// Call back to delegate
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: self)
+        }
     }
     
     open func preparePlay(file: String) {
@@ -723,10 +783,6 @@ open class OZMessageCell: DynamicView {
             }
             
             backgroundColor = message.backgroundColor
-            
-            if let dele = delegate {
-                dele.messageCellDidSetMessage(cell: self)
-            }
         }
     }
     
@@ -747,10 +803,6 @@ open class OZMessageCell: DynamicView {
             // TODO: 여기서 subview들에 shadow를 먹이는 것이 좋겠다. HOW ?!? by Henry on 2020.05.04
             // TOOD: 근데 여기는 superclass 이닷...ㅜ.ㅜ  by Henry on 2020.05.04
             layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
-        }
-        
-        if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: self)
         }
     }
 
