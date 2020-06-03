@@ -145,7 +145,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.timeFontSize(12.0),
             OZMessagesConfigurationItem.timeFontFormat("hh:mm"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
-            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, 30),
 
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
