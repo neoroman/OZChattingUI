@@ -23,6 +23,7 @@ class ChattingViewController: OZMessagesViewController {
     var successToSend: Bool = true
     var needsToMic: Bool = false
     var stopLoading: Bool = false
+    var sendingTimerCount: TimeInterval = 0
     
     
     // MARK: - Life Cycle
@@ -51,8 +52,15 @@ class ChattingViewController: OZMessagesViewController {
             let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
             if trimmed.count > 0 {
                 stopLoading = false
-                rotateLoadingImage()
+                rotateLoadingImage(3)
                 send(msg: trimmed)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                    self.dataSource.data.removeAll(where: { $0.content == "Delivered" })
+                    self.send(msg: "Delivered", type: .status, isDeliveredMsg: true) { (id, path) in
+                        // code
+                    }
+                }
             }
             inputTextView.text.removeAll()
             adjustTextViewHeight(inputTextView)
@@ -116,6 +124,17 @@ class ChattingViewController: OZMessagesViewController {
     }
     
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        let foldButton = UIButton(type: .custom)
+        foldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        foldButton.setImage(UIImage(named: "btnCallClose"), for: .normal)
+        foldButton.setTitle("닫기", for: .normal)
+        foldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
+        let unfoldButton = UIButton(type: .custom)
+        unfoldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        unfoldButton.setImage(UIImage(named: "iconViewAll"), for: .normal)
+        unfoldButton.setTitle("전체보기", for: .normal)
+        unfoldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
+
         return [
             // OZMessageCell
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
@@ -126,6 +145,8 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.timeFontSize(12.0),
             OZMessagesConfigurationItem.timeFontFormat("hh:mm"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, 30),
+
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
@@ -150,13 +171,13 @@ class ChattingViewController: OZMessagesViewController {
                               value: UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1),
                               range: NSMakeRange(0, inputTextView.text.count - 4))
             attr.addAttribute(NSAttributedString.Key.init(kCTFontAttributeName as String),
-                              value: UIFont(name:"AppleSDGothicNeo-Regular", size: 16),
+                              value: UIFont(name:"AppleSDGothicNeo-Regular", size: 16) as Any,
                               range: NSMakeRange(0, inputTextView.text.count - 4))
             attr.addAttribute(NSAttributedString.Key.foregroundColor,
                               value: UIColor(red: 248/255, green: 72/255, blue: 94/255, alpha: 1),
                               range: (inputTextView.text as NSString).range(of: "전달실패"))
             attr.addAttribute(NSAttributedString.Key.init(kCTFontAttributeName as String),
-                              value: UIFont(name:"AppleSDGothicNeo-Regular", size: 12),
+                              value: UIFont(name:"AppleSDGothicNeo-Regular", size: 12) as Any,
                               range: (inputTextView.text as NSString).range(of: "전달실패"))
             
             inputTextView.attributedText = attr
@@ -204,14 +225,25 @@ class ChattingViewController: OZMessagesViewController {
     }
     
     /// 메세지 전송시 로딩 표시
-    @objc private func rotateLoadingImage() {
+    @objc private func rotateLoadingImage(_ timeout: TimeInterval = 5) {
         sendButton.isEnabled = false
         sendButton.isHidden = true
         loadingImageView.isHidden = false
-        Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { (timer) in
+            self.sendingTimerCount += 1
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveLinear, animations: { () -> Void in
                 self.loadingImageView.transform = self.loadingImageView.transform.rotated(by: .pi / 2)
             })
+            
+            if self.sendingTimerCount >= timeout {
+                timer.invalidate()
+                self.sendingTimerCount = 0
+                self.sendButton.isHidden = false
+                self.loadingImageView.isHidden = true
+                if let aText = self.inputTextView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+                    self.sendButton.isEnabled = true
+                }
+            }
         }
     }
 }
@@ -297,13 +329,24 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageTextViewBeginEditing(textView: UITextView) {
+        if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+            sendButton.isEnabled = true
+        }
     }
     
     func messageTextViewDidChanged(textView: UITextView) {
-        sendButton.isEnabled = true
+        if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+            sendButton.isEnabled = true
+        }
+        else {
+            sendButton.isEnabled = false
+        }
     }
     
     func messageTextViewEndEditing(textView: UITextView) {
+        if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count <= 0 {
+            sendButton.isEnabled = false
+        }
     }
     
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {

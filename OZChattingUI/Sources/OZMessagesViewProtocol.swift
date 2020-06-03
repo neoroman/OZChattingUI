@@ -7,6 +7,25 @@
 
 import UIKit
 
+
+// MARK: - OZMessageCellDelegate
+protocol OZMessageCellDelegate {
+    func messageCellDidSetMessage(cell: OZMessageCell)
+    func messageCellLayoutSubviews(cell: OZMessageCell)
+    
+    /// Long message folding option need buttons to display, so they have own tag {Int}
+    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)]
+    
+    /// Long message folding and unfolding button action
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton)
+}
+
+extension OZMessageCellDelegate {
+    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] { return [(UIButton(), .none)] }
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton) { }
+}
+
+
 // MARK: - OZMessagesViewControllerDelegate
 public protocol OZMessagesViewControllerDelegate {
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage)
@@ -36,6 +55,8 @@ public protocol OZMessagesViewControllerDelegate {
     /// File button tapped, should return boolean for `internal` processing or not
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
 
+    /// Long message folding and unfolding button action
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton) -> Bool
 }
 // MARK: - Optional OZMessagesViewControllerDelegate
 public extension OZMessagesViewControllerDelegate {
@@ -55,4 +76,6 @@ public extension OZMessagesViewControllerDelegate {
 
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
+    
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton) -> Bool { return true }
 }

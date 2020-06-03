@@ -92,6 +92,9 @@ public enum OZMessagesConfigurationItem {
     
     // ============ OZMessagesViewController ==================
     /// Input text view font color in OZTextView
+    case inputTextViewFont(UIFont)
+
+    /// Input text view font color in OZTextView
     case inputTextViewFontColor(UIColor)
 
     /// Input text view using `Enter` for sending in OZTextView
@@ -118,6 +121,12 @@ public enum OZMessagesConfigurationItem {
     
     /// Add file action sheet items, `cancel` is always show in OZMessagesViewController
     case addFileButtonItems([OZChooseContentType])
+    
+    /// Using long message folding option, default `NO` in OZMessageCell
+    case usingLongMessageFolding(Bool, _ maxHeight: CGFloat, _ foldButton: UIButton, _ unfoldButon: UIButton, _ buttonHeight: CGFloat)
+    
+    /// Can message selectable by long press gesture, default `NO` in OZMessageCell
+    case canMessageSelectableByLongPressGesture(Bool)
 
     
     // ============ OZVoiceRecordViewController ==================
@@ -176,6 +185,8 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(false),
+            OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, UIButton(type: .infoLight), UIButton(type: .detailDisclosure), 25),
+            OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(false),
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
@@ -184,6 +195,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
             OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
             // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
             OZMessagesConfigurationItem.inputTextVerticalAlignment(.Middle),
