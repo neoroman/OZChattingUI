@@ -12,7 +12,6 @@ import NVActivityIndicatorView
 
 public var kCornerRadius: CGFloat = 7
 public var kTextFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
-public var kDefaultFoldingButtonHeight: CGFloat = 25
 
 open class IncomingTextMessageCell: OZMessageCell {
     public var textLabel = OZBubbleLabel()
@@ -28,6 +27,11 @@ open class IncomingTextMessageCell: OZMessageCell {
             textLabel.textColor = message.textColor
             textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
             textLabel.incomingColor = message.bubbleColor
+            if message.canMessageSelectable {
+                textLabel.isUserInteractionEnabled = true
+                textLabel.addGestureRecognizer(UILongPressGestureRecognizer(target: textLabel, action: #selector(textLabel.handleLongPress(_:))))
+            }
+            
             if message.iconImage.lowercased().hasPrefix("file"),
                 let anUrl = URL(string: message.iconImage),
                 let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
@@ -83,6 +87,7 @@ open class IncomingTextMessageCell: OZMessageCell {
                     if let tlf = button.titleLabel {
                         copiedButton.titleLabel?.font = tlf.font
                     }
+                    copiedButton.addTarget(self, action: #selector(longMessageFoldingButtonTapped(_:)), for: .touchUpInside)
                     copiedButton.tag = type.tag()
                     buttonContainer.addSubview(copiedButton)
                     buttonContainer.frame.size = copiedButton.frame.size
@@ -126,10 +131,15 @@ open class IncomingTextMessageCell: OZMessageCell {
                 
         if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight {
             buttonContainer.isHidden = false
-            var height = buttonContainer.frame.height
-            if height <= 5 { height = kDefaultFoldingButtonHeight }
-            buttonContainer.frame = CGRect(x: textLabel.frame.minX, y: textLabel.frame.maxY - height, width: textLabel.frame.width, height: height)
-            for x in buttonContainer.subviews { x.isHidden = true }
+            let height = message.foldingButtonHeight
+            buttonContainer.frame = CGRect(x: textLabel.frame.minX,
+                                           y: textLabel.frame.maxY - height - message.cellPadding,
+                                           width: textLabel.frame.width,
+                                           height: height + message.cellPadding)
+            for x in buttonContainer.subviews {
+                x.isHidden = true
+                x.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
+            }
             if message.isFolded {
                 buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
                 textLabel.bottomInset = height
@@ -147,6 +157,12 @@ open class IncomingTextMessageCell: OZMessageCell {
             dele.messageCellLayoutSubviews(cell: self)
         }
     }
+    
+    @objc private func longMessageFoldingButtonTapped(_ sender: UIButton) {
+        if let dele = delegate {
+            dele.messageCellLongMessageButtonTapped(cell: self, button: sender)
+        }
+    }
 }
 
 open class OutgoingTextMessageCell: OZMessageCell {
@@ -162,7 +178,11 @@ open class OutgoingTextMessageCell: OZMessageCell {
             textLabel.textColor = message.textColor
             textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
             textLabel.outgoingColor = message.bubbleColor
-            
+            if message.canMessageSelectable {
+                textLabel.isUserInteractionEnabled = true
+                textLabel.addGestureRecognizer(UILongPressGestureRecognizer(target: textLabel, action: #selector(textLabel.handleLongPress(_:))))
+            }
+
             timeLabel.textColor = message.timeFontColor
             timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
             timeLabel.frame.size = CGSize(width: 50, height: 12)
@@ -195,6 +215,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
                     if let tlf = button.titleLabel {
                         copiedButton.titleLabel?.font = tlf.font
                     }
+                    copiedButton.addTarget(self, action: #selector(longMessageFoldingButtonTapped(_:)), for: .touchUpInside)
                     copiedButton.tag = type.tag()
                     buttonContainer.addSubview(copiedButton)
                     buttonContainer.frame.size = copiedButton.frame.size
@@ -235,10 +256,15 @@ open class OutgoingTextMessageCell: OZMessageCell {
         
         if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight {
             buttonContainer.isHidden = false
-            var height = buttonContainer.frame.height
-            if height <= 5 { height = kDefaultFoldingButtonHeight }
-            buttonContainer.frame = CGRect(x: textLabel.frame.minX, y: textLabel.frame.maxY - height, width: textLabel.frame.width, height: height)
-            for x in buttonContainer.subviews { x.isHidden = true }
+            let height = message.foldingButtonHeight
+            buttonContainer.frame = CGRect(x: textLabel.frame.minX,
+                                           y: textLabel.frame.maxY - height - message.cellPadding,
+                                           width: textLabel.frame.width,
+                                           height: height + message.cellPadding)
+            for x in buttonContainer.subviews {
+                x.isHidden = true
+                x.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
+            }
             if message.isFolded {
                 buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
                 textLabel.bottomInset = height
@@ -255,6 +281,12 @@ open class OutgoingTextMessageCell: OZMessageCell {
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
+        }
+    }
+
+    @objc private func longMessageFoldingButtonTapped(_ sender: UIButton) {
+        if let dele = delegate {
+            dele.messageCellLongMessageButtonTapped(cell: self, button: sender)
         }
     }
 }
@@ -929,10 +961,10 @@ open class OZMessageCell: DynamicView {
                                    paddingY: message.cellPadding)
             if message.usingFoldingOption, size.height > message.foldingMessageMaxHeight {
                 if message.isFolded {
-                    size.height = message.foldingMessageMaxHeight + kDefaultFoldingButtonHeight
+                    size.height = message.foldingMessageMaxHeight + message.cellPadding + message.foldingButtonHeight
                 }
                 else {
-                    size.height += kDefaultFoldingButtonHeight
+                    size.height += message.cellPadding + message.foldingButtonHeight
                 }
             }
             let origin: CGPoint = (message.alignment == .left) ? .zero : CGPoint(x: containerWidth - size.width, y: 0)

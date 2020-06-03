@@ -231,14 +231,6 @@ open class OZMessagesViewController: CollectionViewController {
                         }
                     }
                 }
-                
-                /// Long Message Folding Options
-                if aMessage.usingFoldingOption, aMessage.type == .text,
-                    let index = self?.dataSource.data.firstIndex(of: context.data) {
-                    aMessage.isFolded.toggle()
-                    self?.dataSource.data[index] = aMessage
-                    self?.collectionView.setNeedsLayout()
-                }
             }
         )
     }
@@ -1078,11 +1070,24 @@ extension OZMessagesViewController: OZMessageCellDelegate {
         }
     }
     func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] {
-        for case .usingLongMessageFolding(let yesOrNo, _, let foldButton, let unfoldButton) in messagesConfigurations {
+        for case .usingLongMessageFolding(let yesOrNo, _, let foldButton, let unfoldButton, _) in messagesConfigurations {
             if yesOrNo {
                 return [ (foldButton, .fold), (unfoldButton, .unfold) ]
             }
         }
         return [(UIButton(), .none)]
+    }
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton) {
+        /// Long Message Folding Options
+        if let aMessage = cell.message,
+            aMessage.usingFoldingOption, aMessage.type == .text,
+            let index = dataSource.data.firstIndex(of: cell.message) {
+            
+            aMessage.isFolded.toggle()
+            
+            dataSource.data[index] = aMessage
+            collectionView.setNeedsLayout()
+        }
+
     }
 }

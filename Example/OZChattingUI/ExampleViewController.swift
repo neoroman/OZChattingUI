@@ -196,7 +196,8 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
-            OZMessagesConfigurationItem.usingLongMessageFolding(false, 108, foldButton, unfoldButton),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, 30),
+            OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
