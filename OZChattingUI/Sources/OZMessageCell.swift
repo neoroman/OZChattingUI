@@ -88,6 +88,7 @@ open class IncomingTextMessageCell: OZMessageCell {
                     buttonContainer.frame.size = copiedButton.frame.size
                 }
             }
+
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -140,6 +141,7 @@ open class IncomingTextMessageCell: OZMessageCell {
         else {
             buttonContainer.isHidden = true
         }
+
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
@@ -249,6 +251,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
         else {
             buttonContainer.isHidden = true
         }
+
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
@@ -498,7 +501,7 @@ open class ImageMessageCell: OZMessageCell {
             }
             iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
             iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
-            
+
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -548,7 +551,7 @@ open class ImageMessageCell: OZMessageCell {
         iconImage.isHidden = isIconHidden
         iconImage.layer.cornerRadius = iconImage.frame.height / 2
         iconImage.layer.masksToBounds = true
- 
+
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
@@ -663,7 +666,7 @@ open class AudioMessageCell: OZMessageCell {
                 #endif
             }
             eTimeLabel.sizeToFit()
-                        
+
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -720,7 +723,7 @@ open class AudioMessageCell: OZMessageCell {
             eTimeLabel.frame.origin = CGPoint(x: bounds.maxX + 5, y: bounds.maxY-12)
         }
         activityIndicator.center = CGPoint(x: eTimeLabel.frame.midX, y: eTimeLabel.frame.midY - 20)
-        
+
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
