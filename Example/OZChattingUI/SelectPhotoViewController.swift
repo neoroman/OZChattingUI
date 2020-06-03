@@ -20,7 +20,7 @@ class SelectPhotoViewController: UIViewController {
     let scale = UIScreen.main.scale
     var thumbnailSize = CGSize.zero
     var selectedImages = [UIImage]()
-    var selectedTags = [Int]()
+    var selectedIndexes = [Int]()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -31,12 +31,18 @@ class SelectPhotoViewController: UIViewController {
         
         sendButton.isEnabled = false
         
-        self.allPhotos = PHAsset.fetchAssets(with: .image, options: nil)
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: false)]
+        self.allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
         self.thumbnailSize = CGSize(width: 1024 * self.scale, height: 1024 * self.scale)
         
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
+        photoCollectionView.allowsMultipleSelection = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         photoCollectionView.reloadData()
     }
     
@@ -47,7 +53,7 @@ class SelectPhotoViewController: UIViewController {
     
     @IBAction func pressedSendButton(_ sender: UIBarButtonItem) {
         // 채팅뷰컨에 selectedImages 보냄
-        for i in 0..<selectedTags.count {
+        for i in 0..<selectedIndexes.count {
             let asset = allPhotos?[i]
             ImageManager.shared.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { image in
                 if let image = image {
@@ -56,7 +62,7 @@ class SelectPhotoViewController: UIViewController {
             }
         }
         print(selectedImages)
-//        self.navigationController?.popViewController(animated: true)
+        //        self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Function
@@ -79,6 +85,31 @@ class SelectPhotoViewController: UIViewController {
         })
     }
     
+    func confirmMax(_ isSelect: Bool) -> Bool {
+        if selectedIndexes.count >= 5 {
+            showToast(controller: self, message: "사진은 한번에 최대 5장까지 전송 가능합니다.", seconds: 3)
+            return true
+        }
+        return false
+    }
+    
+    func selectImage(_ isSelect: Bool, index: Int) {
+        if isSelect {
+            let isMax = self.confirmMax(isSelect)
+            if !isMax {
+                selectedIndexes.append(index)
+            }
+        } else {
+            if let sIndex = selectedIndexes.firstIndex(of: index) {
+                selectedIndexes.remove(at: sIndex)
+            }
+        }
+        if selectedIndexes.isEmpty {
+            sendButton.isEnabled = false
+        } else {
+            sendButton.isEnabled = true
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -89,17 +120,16 @@ extension SelectPhotoViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as? PhotoCollectionViewCell else { return UICollectionViewCell() }
+        
         let asset = self.allPhotos?[indexPath.item]
-        
         ImageManager.shared.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { image in
-            var n: Int?
-            if self.selectedTags.contains(indexPath.item) {
-                n = self.selectedTags.firstIndex(of: indexPath.item)! + 1
+            var index: Int?
+            if let n = self.selectedIndexes.firstIndex(of: indexPath.item) {
+                index = n + 1
+                collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             }
-            cell.configure(with: image, index: indexPath.item, selectedNum: n)
+            cell.configure(with: image, index: indexPath.item, selectedNum: index)
         }
-        cell.delegate = self
-        
         return cell
     }
     
@@ -112,42 +142,25 @@ extension SelectPhotoViewController: UICollectionViewDelegate, UICollectionViewD
         let size = CGSize(width: (self.view.frame.width - 64) / 3, height: 168)
         return size
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCollectionViewCell {
+            if selectedIndexes.count < 5 {
+                cell.setSelectedImage(cell.selectButton, num: selectedIndexes.count + 1)
+            }
+            selectImage(true, index: indexPath.item)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCollectionViewCell {
+            cell.setDeselectedImage(cell.selectButton)
+            selectImage(false, index: indexPath.item)
+            collectionView.reloadItems(at: collectionView.indexPathsForSelectedItems ?? [])
+        }
+    }
 }
 
-// MARK: - PhotoCellDelegate
-extension SelectPhotoViewController: PhotoCellDelegate {
-    func confirmMax(_ isSelect: Bool) -> Bool {
-        if selectedTags.count >= 5 {
-            print(selectedTags)
-            showToast(controller: self, message: "사진은 한번에 최대 5장까지 전송 가능합니다.", seconds: 3)
-            return true
-        }
-        return false
-    }
-    
-    func selectImage(_ isSelect: Bool, image: UIImage, tag: Int) {
-        if isSelect {
-            let isMax = self.confirmMax(isSelect)
-            if !isMax {
-                selectedTags.append(tag)
-            }
-        } else {
-            if selectedTags.contains(tag) {
-                let index2 = selectedTags.firstIndex(of: tag)!
-                selectedTags.remove(at: index2)
-            }
-        }
-        if selectedTags.isEmpty {
-            sendButton.isEnabled = false
-        } else {
-            sendButton.isEnabled = true
-        }
-    }
-    
-    func reloadCollectionView() {
-        self.photoCollectionView.reloadData()
-    }
-}
 
 final class ImageManager {
     static var shared = ImageManager()
