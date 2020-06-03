@@ -9,12 +9,6 @@
 import UIKit
 import Photos
 
-protocol PhotoCellDelegate: class {
-    func selectImage(_ isSelect: Bool, image: UIImage, tag: Int)
-    func confirmMax(_ isSelect: Bool) -> Bool
-    func reloadCollectionView()
-}
-
 class PhotoCollectionViewCell: UICollectionViewCell {
     // MARK: - IBOutlet
     @IBOutlet weak var photoImageView: UIImageView!
@@ -24,7 +18,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     // MARK: - Property
     fileprivate let imageManager = PHImageManager()
     var representedAssetIdentifier: String?
-    weak var delegate: PhotoCellDelegate?
     
     var thumbnailSize: CGSize {
         let scale = UIScreen.main.scale
@@ -39,6 +32,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         self.selectButton.layer.borderColor = UIColor.init(white: 1, alpha: 0.4).cgColor
         self.selectButton.layer.borderWidth = 2
         self.selectButton.isSelected = false
+        self.selectButton.isUserInteractionEnabled = false
         self.selectView?.layer.borderWidth = 4
         self.selectView?.layer.borderColor = UIColor(red: 44/255, green: 187/255, blue: 182/255, alpha: 1).cgColor
     }
@@ -47,21 +41,11 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
     }
     
-    // MARK: - Targets and Actions
-    @IBAction func pressedSelectButton(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        
-        delegate?.selectImage(sender.isSelected, image: self.photoImageView.image!, tag: photoImageView.tag)
-        delegate?.reloadCollectionView()
-    }
-    
     // MARK: - Function
     func configure(with image: UIImage?, index: Int, selectedNum: Int?) {
         self.photoImageView.image = image
-        self.selectButton.tag = index
-        self.photoImageView.tag = index
-        if selectedNum != nil {
-            setSelectedImage(self.selectButton, num: selectedNum!)
+        if let selectedNum = selectedNum {
+            setSelectedImage(self.selectButton, num: selectedNum)
         } else {
             setDeselectedImage(self.selectButton)
         }
@@ -82,5 +66,4 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         button.backgroundColor = UIColor.init(white: 0, alpha: 0.1)
         selectView?.isHidden = true
     }
-    
 }

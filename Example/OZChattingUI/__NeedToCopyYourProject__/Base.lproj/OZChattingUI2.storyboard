@@ -53,9 +53,6 @@
                                                     <state key="selected">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
-                                                    <connections>
-                                                        <action selector="pressedSelectButton:" destination="AbT-Sk-G7Y" eventType="touchUpInside" id="I6C-ax-r7c"/>
-                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
