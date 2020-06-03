@@ -311,6 +311,9 @@ public class OZMessage: Equatable {
             case .usingLongMessageFolding(let yesOrNo, let maxHeight, _, _):
                 usingFoldingOption = yesOrNo
                 foldingMessageMaxHeight = maxHeight
+                if yesOrNo {
+                    isFolded = true
+                }
                 break
             default:
                 break

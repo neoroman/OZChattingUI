@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OZChattingUI'
-  s.version          = '0.1.24'
+  s.version          = '0.1.23'
   s.summary          = 'OZChattingUI.framework is chatting UI with CollectionKit.'
 
 # This description is used to generate tags and improve search results.

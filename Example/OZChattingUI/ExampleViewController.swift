@@ -137,11 +137,13 @@ class ExampleViewController: UIViewController {
         foldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
         foldButton.setImage(UIImage(named: "btnCallClose"), for: .normal)
         foldButton.setTitle("Fold Messages", for: .normal)
+        foldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
         let unfoldButton = UIButton(type: .custom)
         unfoldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
         unfoldButton.setImage(UIImage(named: "iconViewAll"), for: .normal)
         unfoldButton.setTitle("Unfold Message", for: .normal)
-        
+        unfoldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
+
         return [
             // OZMessageCell
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),

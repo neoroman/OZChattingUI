@@ -233,7 +233,7 @@ open class OZMessagesViewController: CollectionViewController {
                 }
                 
                 /// Long Message Folding Options
-                if aMessage.type == .text, aMessage.usingFoldingOption,
+                if aMessage.usingFoldingOption, aMessage.type == .text,
                     let index = self?.dataSource.data.firstIndex(of: context.data) {
                     aMessage.isFolded.toggle()
                     self?.dataSource.data[index] = aMessage
