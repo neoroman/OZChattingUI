@@ -7,6 +7,21 @@
 
 import UIKit
 
+
+// MARK: - OZMessageCellDelegate
+protocol OZMessageCellDelegate {
+    func messageCellDidSetMessage(cell: OZMessageCell)
+    func messageCellLayoutSubviews(cell: OZMessageCell)
+    
+    /// Long message folding option need buttons to display, so they have own tag {Int}
+    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)]
+}
+
+extension OZMessageCellDelegate {
+    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] { return [(UIButton(), .none)] }
+}
+
+
 // MARK: - OZMessagesViewControllerDelegate
 public protocol OZMessagesViewControllerDelegate {
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage)

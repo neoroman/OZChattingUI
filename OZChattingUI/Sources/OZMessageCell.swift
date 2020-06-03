@@ -12,12 +12,16 @@ import NVActivityIndicatorView
 
 public var kCornerRadius: CGFloat = 7
 public var kTextFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
+public var kDefaultFoldingButtonHeight: CGFloat = 25
 
 open class IncomingTextMessageCell: OZMessageCell {
     public var textLabel = OZBubbleLabel()
     public var iconImage = UIImageView()
     public var timeLabel = UILabel()
     
+    public var buttonContainer = UIView()
+    var textSize: CGSize = .zero
+
     override public var message: OZMessage! {
         didSet {
             textLabel.attributedText = NSAttributedString(string: message.content, attributes: [ NSAttributedString.Key.font: kTextFont as Any ])
@@ -59,6 +63,31 @@ open class IncomingTextMessageCell: OZMessageCell {
                 #endif
             }
             
+            
+            textSize = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
+                                                 fontSize: message.fontSize, maxWidth: self.bounds.width,
+                                                 paddingX: message.cellLeftPadding,
+                                                 paddingY: message.cellPadding)
+            if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
+                let dele = delegate {
+                for x in buttonContainer.subviews { x.removeFromSuperview() }
+                for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
+                    let copiedButton = UIButton(frame: button.frame)
+                    for x in 0..<4 {
+                        let state = UIControl.State(rawValue: UInt(x))
+                        copiedButton.setImage(button.image(for: state), for: state)
+                        copiedButton.setTitle(button.title(for: state), for: state)
+                        copiedButton.setTitleColor(button.titleColor(for: state), for: state)
+                        copiedButton.setAttributedTitle(button.attributedTitle(for: state), for: state)
+                    }
+                    if let tlf = button.titleLabel {
+                        copiedButton.titleLabel?.font = tlf.font
+                    }
+                    copiedButton.tag = type.tag()
+                    buttonContainer.addSubview(copiedButton)
+                    buttonContainer.frame.size = copiedButton.frame.size
+                }
+            }
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -76,6 +105,8 @@ open class IncomingTextMessageCell: OZMessageCell {
         addSubview(iconImage)
         timeLabel.frame = frame
         addSubview(timeLabel)
+        buttonContainer.frame = frame
+        addSubview(buttonContainer)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -91,7 +122,24 @@ open class IncomingTextMessageCell: OZMessageCell {
         
         let leftInset = message.isSenderIconHide ? 0 : message.cellLeftPadding
         textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
-        
+                
+        if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight {
+            buttonContainer.isHidden = false
+            var height = buttonContainer.frame.height
+            if height <= 5 { height = kDefaultFoldingButtonHeight }
+            buttonContainer.frame = CGRect(x: textLabel.frame.minX, y: textLabel.frame.maxY - height, width: textLabel.frame.width, height: height)
+            for x in buttonContainer.subviews { x.isHidden = true }
+            if message.isFolded {
+                buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
+                textLabel.bottomInset = height
+            }
+            else {
+                buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
+            }
+        }
+        else {
+            buttonContainer.isHidden = true
+        }
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
@@ -102,7 +150,10 @@ open class IncomingTextMessageCell: OZMessageCell {
 open class OutgoingTextMessageCell: OZMessageCell {
     public var textLabel = OZBubbleLabel()
     public var timeLabel = UILabel()
-    
+ 
+    public var buttonContainer = UIView()
+    var textSize: CGSize = .zero
+
     override public var message: OZMessage! {
         didSet {
             textLabel.attributedText = NSAttributedString(string: message.content, attributes: [ NSAttributedString.Key.font: kTextFont as Any ])
@@ -123,6 +174,31 @@ open class OutgoingTextMessageCell: OZMessageCell {
                 #endif
             }
             
+            textSize = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
+                                                 fontSize: message.fontSize, maxWidth: self.bounds.width,
+                                                 paddingX: message.cellPadding,
+                                                 paddingY: message.cellPadding)
+            if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
+                let dele = delegate {
+                for x in buttonContainer.subviews { x.removeFromSuperview() }
+                for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
+                    let copiedButton = UIButton(frame: button.frame)
+                    for x in 0..<4 {
+                        let state = UIControl.State(rawValue: UInt(x))
+                        copiedButton.setImage(button.image(for: state), for: state)
+                        copiedButton.setTitle(button.title(for: state), for: state)
+                        copiedButton.setTitleColor(button.titleColor(for: state), for: state)
+                        copiedButton.setAttributedTitle(button.attributedTitle(for: state), for: state)
+                    }
+                    if let tlf = button.titleLabel {
+                        copiedButton.titleLabel?.font = tlf.font
+                    }
+                    copiedButton.tag = type.tag()
+                    buttonContainer.addSubview(copiedButton)
+                    buttonContainer.frame.size = copiedButton.frame.size
+                }
+            }
+            
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -139,6 +215,8 @@ open class OutgoingTextMessageCell: OZMessageCell {
         addSubview(textLabel)
         timeLabel.frame = frame
         addSubview(timeLabel)
+        buttonContainer.frame = frame
+        addSubview(buttonContainer)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -153,6 +231,24 @@ open class OutgoingTextMessageCell: OZMessageCell {
 
         textLabel.frame = bounds
         
+        if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight {
+            buttonContainer.isHidden = false
+            var height = buttonContainer.frame.height
+            if height <= 5 { height = kDefaultFoldingButtonHeight }
+            buttonContainer.frame = CGRect(x: textLabel.frame.minX, y: textLabel.frame.maxY - height, width: textLabel.frame.width, height: height)
+            for x in buttonContainer.subviews { x.isHidden = true }
+            if message.isFolded {
+                buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
+                textLabel.bottomInset = height
+            }
+            else {
+                buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
+            }
+            textLabel.bottomInset = height
+        }
+        else {
+            buttonContainer.isHidden = true
+        }
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
@@ -678,12 +774,6 @@ open class AudioMessageCell: OZMessageCell {
     }
 }
 
-
-protocol OZMessageCellDelegate {
-    func messageCellDidSetMessage(cell: OZMessageCell)
-    func messageCellLayoutSubviews(cell: OZMessageCell)
-}
-
 open class OZMessageCell: DynamicView {
     
     var delegate: OZMessageCellDelegate?
@@ -830,10 +920,18 @@ open class OZMessageCell: DynamicView {
                     leftPadding = message.cellPadding * 2
                 }
             }
-            let size = sizeForText(message.content, fontName: message.fontName,
+            var size = sizeForText(message.content, fontName: message.fontName,
                                    fontSize: message.fontSize, maxWidth: aMaxWidth - 50,
                                    paddingX: leftPadding,
                                    paddingY: message.cellPadding)
+            if message.usingFoldingOption, size.height > message.foldingMessageMaxHeight {
+                if message.isFolded {
+                    size.height = message.foldingMessageMaxHeight + kDefaultFoldingButtonHeight
+                }
+                else {
+                    size.height += kDefaultFoldingButtonHeight
+                }
+            }
             let origin: CGPoint = (message.alignment == .left) ? .zero : CGPoint(x: containerWidth - size.width, y: 0)
             return CGRect(origin: origin, size: size)
         }

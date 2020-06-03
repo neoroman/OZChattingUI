@@ -231,6 +231,14 @@ open class OZMessagesViewController: CollectionViewController {
                         }
                     }
                 }
+                
+                /// Long Message Folding Options
+                if aMessage.usingFoldingOption, aMessage.type == .text,
+                    let index = self?.dataSource.data.firstIndex(of: context.data) {
+                    aMessage.isFolded.toggle()
+                    self?.dataSource.data[index] = aMessage
+                    self?.collectionView.setNeedsLayout()
+                }
             }
         )
     }
@@ -907,6 +915,9 @@ extension OZMessagesViewController: UITextViewDelegate {
         for case .inputTextViewFontColor(let color) in messagesConfigurations {
             textView.textColor = color
         }
+        for case .inputTextViewFont(let font) in messagesConfigurations {
+            textView.font = font
+        }
 
         if let dele = delegate {
             dele.messageTextViewBeginEditing(textView: textView)
@@ -918,6 +929,9 @@ extension OZMessagesViewController: UITextViewDelegate {
         
         for case .inputTextViewFontColor(let color) in messagesConfigurations {
             textView.textColor = color
+        }
+        for case .inputTextViewFont(let font) in messagesConfigurations {
+            textView.font = font
         }
 
         if let dele = delegate {
@@ -1062,5 +1076,13 @@ extension OZMessagesViewController: OZMessageCellDelegate {
                 dele.messageCellLayoutSubviews(cell: cell, previousMessage: OZMessage())
             }
         }
+    }
+    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] {
+        for case .usingLongMessageFolding(let yesOrNo, _, let foldButton, let unfoldButton) in messagesConfigurations {
+            if yesOrNo {
+                return [ (foldButton, .fold), (unfoldButton, .unfold) ]
+            }
+        }
+        return [(UIButton(), .none)]
     }
 }
