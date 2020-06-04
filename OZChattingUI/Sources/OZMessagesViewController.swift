@@ -253,7 +253,7 @@ open class OZMessagesViewController: CollectionViewController {
                                                     y: collectionView.offsetFrame.maxY), animated: false)
         }
         
-        if isKeyboardShow || chatState == .emoticon{
+        if isKeyboardShow || chatState == .emoticon {
             keyboardShowLayout(differHeight: 0, isPadding: true, animated: false)
         }
         else {
@@ -389,7 +389,7 @@ extension OZMessagesViewController {
             self.collectionView.scrollTo(edge: .bottom, animated:true)
             //self.animator.sendingMessage = false
             
-            self.resetButtons()
+            self.resetButtons(false)
 
             if let cb = callback {
                 cb(sendingMsg.identifier, sendingMsg.content)
@@ -562,8 +562,7 @@ extension OZMessagesViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now()+0.35) {
             self.collectionView.reloadData() { // 1st call
-                return CGPoint(x: self.collectionView.contentOffset.x,
-                               y: self.collectionView.offsetFrame.maxY)
+                return CGPoint(x: 0, y: self.collectionView.offsetFrame.maxY)
             }
             // DO NOT USE BELOW!, UPPER IS BETTER
             //self.collectionView.scrollTo(edge: .bottom, animated:false)
@@ -649,12 +648,12 @@ extension OZMessagesViewController {
         }
     }
     
-    fileprivate func resetButtons() {
+    fileprivate func resetButtons(_ isIncludeEmoticon: Bool = true) {
         if voiceContainer != nil {
             voiceContainer.isHidden = true
             micButtonToggle()
         }
-        if emoticonContainer != nil {
+        if isIncludeEmoticon, emoticonContainer != nil {
             emoticonContainer.isHidden = true
             emoticonButtonToggle()
         }

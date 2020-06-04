@@ -17,9 +17,9 @@ let kNotchInsetX: CGFloat = 4.0 / 12.0 * kBubbleRadius
 extension OZBubbleLabel {
     
     override open func draw(_ rect: CGRect) {
-        
+        let radius: CGFloat = kBubbleRadius
+
         if type == .hasOwnDrawing {
-            let radius: CGFloat = kBubbleRadius
             
             let width = bounds.width
             let height = bounds.height
