@@ -505,7 +505,6 @@ open class ImageMessageCell: OZMessageCell {
                 timeLabel.textColor = message.timeFontColor
                 timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
                 timeLabel.frame.size = CGSize(width: 50, height: 12)
-                timeLabel.textAlignment = .right
                 if message.timestamp > 0 {
                     timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
                 }
@@ -584,9 +583,11 @@ open class ImageMessageCell: OZMessageCell {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
             if message.alignment == .right {
                 timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+                timeLabel.textAlignment = .right
             }
             else {
-                timeLabel.frame.origin = CGPoint(x: self.bounds.maxX+5, y: timeLabelOriginY)
+                timeLabel.frame.origin = CGPoint(x: self.imageView.frame.maxX+5, y: timeLabelOriginY)
+                timeLabel.textAlignment = .left
             }
         }
 

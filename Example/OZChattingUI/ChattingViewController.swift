@@ -44,9 +44,11 @@ class ChattingViewController: OZMessagesViewController {
 //            expandInputView()
 //        }
         
+        self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
+
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-            self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
-//            self.collectionView.scrollTo
+            self.collectionView.scrollTo(edge: .bottom, animated: false)
+            self.isEchoMode = true
         }
 
     }
@@ -135,12 +137,12 @@ class ChattingViewController: OZMessagesViewController {
         let foldButton = UIButton(type: .custom)
         foldButton.frame = CGRect(origin: .zero, size: foldingButtonSize)
         foldButton.setImage(UIImage(named: "btnCallClose"), for: .normal)
-        foldButton.setTitle("닫기", for: .normal)
+        foldButton.setTitle("Fold", for: .normal)
         foldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
         let unfoldButton = UIButton(type: .custom)
         unfoldButton.frame = CGRect(origin: .zero, size: foldingButtonSize)
         unfoldButton.setImage(UIImage(named: "iconViewAll"), for: .normal)
-        unfoldButton.setTitle("전체보기", for: .normal)
+        unfoldButton.setTitle("Unfold", for: .normal)
         unfoldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
 
         return [
@@ -156,6 +158,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, foldingButtonSize),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 224, height: 158), CGSize(width: 800, height: 1000)),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
+            OZMessagesConfigurationItem.usingPackedImages(true),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
@@ -174,7 +177,7 @@ class ChattingViewController: OZMessagesViewController {
     /// 메시지 전송 실패 뷰 설정
     fileprivate func setFailToSending() {
         if successToSend {
-            inputTextView.text += "\n전달실패"
+            inputTextView.text += "\nFail to send"
             let attr = NSMutableAttributedString(string: inputTextView.text)
             attr.addAttribute(NSAttributedString.Key.foregroundColor,
                               value: UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1),
@@ -184,10 +187,10 @@ class ChattingViewController: OZMessagesViewController {
                               range: NSMakeRange(0, inputTextView.text.count - 4))
             attr.addAttribute(NSAttributedString.Key.foregroundColor,
                               value: UIColor(red: 248/255, green: 72/255, blue: 94/255, alpha: 1),
-                              range: (inputTextView.text as NSString).range(of: "전달실패"))
+                              range: (inputTextView.text as NSString).range(of: "Fail to send"))
             attr.addAttribute(NSAttributedString.Key.init(kCTFontAttributeName as String),
                               value: UIFont(name:"AppleSDGothicNeo-Regular", size: 12) as Any,
-                              range: (inputTextView.text as NSString).range(of: "전달실패"))
+                              range: (inputTextView.text as NSString).range(of: "Fail to send"))
             
             inputTextView.attributedText = attr
             successToSend = false
@@ -202,7 +205,7 @@ class ChattingViewController: OZMessagesViewController {
     
     /// 음성 인식 가능한 상태 뷰 설정
     fileprivate func setSuccessToMic() {
-        setMicGuideText("말씀하세요. 마이크가 켜져있습니다.")
+        setMicGuideText("Speech recognizer not implemented.")
         micMotionButton.isHidden = false
         
         micCircleView?.isHidden = false
@@ -214,7 +217,7 @@ class ChattingViewController: OZMessagesViewController {
     
     /// 음성 인식 불가한 상태 뷰 설정
     fileprivate func setFailToMic() {
-        setMicGuideText("마이크를 사용할 수 없습니다.")
+        setMicGuideText("Cannot use microphone.")
         micMotionButton.isHidden = false
         micMotionButton.isEnabled = false
         sendButton.isHidden = true
@@ -381,7 +384,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
         sendButton.isHidden = true
         
         setSuccessToMic()
-        //                        setFailToMic()
+        //setFailToMic()
         return false
     }
     

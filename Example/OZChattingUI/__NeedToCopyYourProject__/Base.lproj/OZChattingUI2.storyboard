@@ -92,8 +92,8 @@
                         <viewLayoutGuide key="safeArea" id="chX-Ob-bu8"/>
                     </view>
                     <navigationItem key="navigationItem" id="aGd-4R-E8B">
-                        <barButtonItem key="rightBarButtonItem" title="전송" id="BOy-xW-1XA">
-                            <color key="tintColor" red="0.17254901960784313" green="0.73333333333333328" blue="0.71372549019607845" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <barButtonItem key="rightBarButtonItem" title="Send" id="BOy-xW-1XA">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="pressedSendButton:" destination="Ge7-CU-9JS" id="W48-oi-6Z1"/>
                             </connections>

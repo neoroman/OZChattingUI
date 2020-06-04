@@ -95,7 +95,7 @@ class SelectPhotoViewController: UIViewController {
     
     fileprivate func confirmMax(_ isSelect: Bool) -> Bool {
         if selectedIndexes.count >= 5 {
-            showToast(controller: self, message: "사진은 한번에 최대 5장까지 전송 가능합니다.", seconds: 3)
+            showToast(controller: self, message: "Can select 5 images max", seconds: 3)
             return true
         }
         return false
