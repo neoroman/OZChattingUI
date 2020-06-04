@@ -69,7 +69,7 @@ open class IncomingTextMessageCell: OZMessageCell {
             
             buttonContainer.isHidden = true
             textSize = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
-                                                 fontSize: message.fontSize, maxWidth: self.bounds.width,
+                                                 fontSize: message.fontSize, maxWidth: self.bounds.width * 0.8,
                                                  paddingX: message.cellLeftPadding,
                                                  paddingY: message.cellPadding)
             if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
@@ -201,7 +201,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
             
             buttonContainer.isHidden = true
             textSize = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
-                                                 fontSize: message.fontSize, maxWidth: self.bounds.width,
+                                                 fontSize: message.fontSize, maxWidth: self.bounds.width * 0.8,
                                                  paddingX: message.cellPadding,
                                                  paddingY: message.cellPadding)
             if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
