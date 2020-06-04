@@ -9,6 +9,10 @@
 import UIKit
 import Photos
 
+protocol SelectPhotoDelegate: class {
+    func sendImageData(_ paths: [URL])
+}
+
 class SelectPhotoViewController: UIViewController {
     
     // MARK: - IBOutlet
@@ -19,8 +23,9 @@ class SelectPhotoViewController: UIViewController {
     var allPhotos: PHFetchResult<PHAsset>?
     let scale = UIScreen.main.scale
     var thumbnailSize = CGSize.zero
-    var selectedImages = [UIImage]()
     var selectedIndexes = [Int]()
+    var selectedImagesPaths = [URL]()
+    weak var delegate: SelectPhotoDelegate?
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -52,17 +57,21 @@ class SelectPhotoViewController: UIViewController {
     }
     
     @IBAction func pressedSendButton(_ sender: UIBarButtonItem) {
-        // 채팅뷰컨에 selectedImages 보냄
         for i in 0..<selectedIndexes.count {
-            let asset = allPhotos?[i]
-            ImageManager.shared.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { image in
+            let asset = allPhotos?[selectedIndexes[i]]
+            ImageManager.shared.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { [weak self] image in
                 if let image = image {
-                    self.selectedImages.append(image)
+                    ImageManager.shared.storeToTemporaryDirectory(image, completion: { [weak self] (imagePath, error) in
+                        guard let imageURL = imagePath else {
+                            return
+                        }
+                        self?.selectedImagesPaths.append(imageURL)
+                    })
                 }
             }
         }
-        print(selectedImages)
-        //        self.navigationController?.popViewController(animated: true)
+        self.delegate?.sendImageData(selectedImagesPaths)
+        self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Function
@@ -74,7 +83,7 @@ class SelectPhotoViewController: UIViewController {
         toastLabel.textAlignment = .center
         toastLabel.text = message
         toastLabel.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
-        toastLabel.layer.cornerRadius = 24
+        toastLabel.layer.cornerRadius = 20
         toastLabel.clipsToBounds = true
         view.addSubview(toastLabel)
         
@@ -135,12 +144,20 @@ extension SelectPhotoViewController: UICollectionViewDataSource {
     
 }
 
-// MARK: - UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 extension SelectPhotoViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = CGSize(width: (self.view.frame.width - 64) / 3, height: 168)
+        let size = CGSize(width: (self.view.frame.width - 70) / 3, height: 168)
         return size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 12
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -161,7 +178,7 @@ extension SelectPhotoViewController: UICollectionViewDelegate, UICollectionViewD
     }
 }
 
-
+// MARK: - ImageManager
 final class ImageManager {
     static var shared = ImageManager()
     
@@ -180,5 +197,22 @@ final class ImageManager {
             }
         }
     }
+    
+    func storeToTemporaryDirectory(_ selectImage: UIImage, completion: @escaping (_ imagePath: URL?, _ error: Error?) -> Void) {
+        guard let data = selectImage.jpegData(compressionQuality: 1.0) else { return }
+        
+        let timestamp = Int(Date().timeIntervalSince1970 + Double(arc4random_uniform(500)))
+        let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+        let photoPath = tempDirectory.appendingPathComponent("\(timestamp)").appendingPathExtension("jpg")
+        
+        do {
+            try FileManager.default.createDirectory(at: tempDirectory, withIntermediateDirectories: true)
+            try data.write(to: photoPath, options: Data.WritingOptions.atomic)
+            
+            completion(photoPath, nil)
+        } catch {
+            print(error.localizedDescription)
+            completion(nil, error)
+        }
+    }
 }
-

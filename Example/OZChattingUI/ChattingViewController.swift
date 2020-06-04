@@ -24,6 +24,7 @@ class ChattingViewController: OZMessagesViewController {
     var needsToMic: Bool = false
     var stopLoading: Bool = false
     var sendingTimerCount: TimeInterval = 0
+    var imagePaths: [URL]?
     
     
     // MARK: - Life Cycle
@@ -146,6 +147,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.timeFontFormat("hh:mm"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
             OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, 30),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 224, height: 158), CGSize(width: 800, height: 1000)),
 
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
@@ -372,7 +374,24 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SelectPhotoViewController") as? SelectPhotoViewController {
             self.navigationController?.pushViewController(vc, animated: true)
+            vc.delegate = self
         }
         return false
+    }
+}
+
+extension ChattingViewController: SelectPhotoDelegate {
+    func sendImageData(_ paths: [URL]) {
+        self.imagePaths = paths
+        guard let imagePaths = imagePaths else { return }
+        
+        for i in 0..<imagePaths.count {
+            let imagePath = imagePaths[i].absoluteString
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.send(msg: imagePath, type: .image) { (id, content) in
+                    print("senddd: \(id), \(content)")
+                }
+            }
+        }
     }
 }
