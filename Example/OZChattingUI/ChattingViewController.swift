@@ -43,6 +43,12 @@ class ChattingViewController: OZMessagesViewController {
 //            micMotionButton.isHidden = true
 //            expandInputView()
 //        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+            self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
+//            self.collectionView.scrollTo
+        }
+
     }
     
     // MARK: - Targets and Actions

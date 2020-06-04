@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Messages View Controller-->
+        <!--Example View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="OZChattingUI" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="OZMessagesViewController" customModule="OZChattingUI" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OZChattingUI" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="ExampleViewController" customModule="OZChattingUI_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -33,7 +33,7 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ov4-aV-u9K" customClass="OZTextView" customModule="OZChattingUI_Example" customModuleProvider="target">
-                                        <rect key="frame" x="68" y="10" width="336" height="36"/>
+                                        <rect key="frame" x="45" y="10" width="359" height="36"/>
                                         <color key="backgroundColor" red="0.95624989270000005" green="0.95627218479999998" blue="0.95626014469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <edgeInsets key="layoutMargins" top="8" left="22" bottom="8" right="8"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -78,7 +78,7 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R58-PY-9Yw">
-                                        <rect key="frame" x="10" y="-8" width="48" height="48"/>
+                                        <rect key="frame" x="10" y="15" width="25" height="25"/>
                                         <state key="normal" image="addFile.png"/>
                                         <connections>
                                             <action selector="addFileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pEv-bF-sED"/>
@@ -293,10 +293,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="addFile.png" width="24" height="24"/>
+        <image name="addFile.png" width="25" height="25"/>
         <image name="chatClose.png" width="24" height="24"/>
-        <image name="emo.png" width="20" height="20"/>
-        <image name="mic.png" width="21" height="20"/>
+        <image name="emo.png" width="25" height="25"/>
+        <image name="mic.png" width="25" height="25"/>
         <image name="play.png" width="21" height="20"/>
     </resources>
 </document>

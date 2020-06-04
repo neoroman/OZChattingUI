@@ -69,7 +69,7 @@ open class IncomingTextMessageCell: OZMessageCell {
             
             buttonContainer.isHidden = true
             textSize = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
-                                                 fontSize: message.fontSize, maxWidth: self.bounds.width,
+                                                 fontSize: message.fontSize, maxWidth: self.bounds.width * 0.8,
                                                  paddingX: message.cellLeftPadding,
                                                  paddingY: message.cellPadding)
             if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
@@ -92,6 +92,7 @@ open class IncomingTextMessageCell: OZMessageCell {
                     buttonContainer.addSubview(copiedButton)
                     buttonContainer.frame.size = copiedButton.frame.size
                 }
+                print("FoldingOption(\(message.usingFoldingOption)), Content(\(message.content))")
             }
 
             // Callback to delegate
@@ -161,11 +162,11 @@ open class IncomingTextMessageCell: OZMessageCell {
             }
             if message.isFolded {
                 buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
-                textLabel.bottomInset = height
             }
             else {
                 buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
             }
+            textLabel.bottomInset = height
         }
     }
 }
@@ -203,7 +204,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
             
             buttonContainer.isHidden = true
             textSize = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
-                                                 fontSize: message.fontSize, maxWidth: self.bounds.width,
+                                                 fontSize: message.fontSize, maxWidth: self.bounds.width * 0.8,
                                                  paddingX: message.cellPadding,
                                                  paddingY: message.cellPadding)
             if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
@@ -226,6 +227,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
                     buttonContainer.addSubview(copiedButton)
                     buttonContainer.frame.size = copiedButton.frame.size
                 }
+                print("FoldingOption(\(message.usingFoldingOption)), Content(\(message.content))")
             }
             
             // Callback to delegate
@@ -292,11 +294,11 @@ open class OutgoingTextMessageCell: OZMessageCell {
             }
             if message.isFolded {
                 buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
-                textLabel.bottomInset = height
             }
             else {
                 buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
             }
+            textLabel.bottomInset = height
         }
     }
 }
@@ -960,7 +962,7 @@ open class OZMessageCell: DynamicView {
                     leftPadding = message.cellLeftPadding
                 }
                 else {
-                    leftPadding = message.cellPadding * 2
+                    leftPadding = message.cellPadding
                 }
             }
             var size = sizeForText(message.content, fontName: message.fontName,

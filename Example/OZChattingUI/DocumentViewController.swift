@@ -61,11 +61,10 @@ class Document: UIDocument {
     // #2.0 - Model for storing binary data when file type is "public.image".
     var fileData: Data? {
         didSet {
-            if let vc = delegate,
-                let ccvc = vc.chatViewController {
+            if let vc = delegate {
                 if let aData = fileData {
                     let aPath = String.audioFileSave(aData)
-                    ccvc.send(msg: aPath, type: .mp3, isDeliveredMsg: false, callback: { (identifier, path) in
+                    vc.send(msg: aPath, type: .mp3, isDeliveredMsg: false, callback: { (identifier, path) in
                         if let window = UIApplication.shared.keyWindow,
                             let rootVC = window.rootViewController,
                             let rvc = rootVC as? UINavigationController,
