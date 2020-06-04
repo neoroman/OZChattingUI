@@ -8,14 +8,19 @@
 
 import UIKit
 
+let kBubbleLabelTopInset: CGFloat = 5.0
+let kBubbleLabelBottomInset: CGFloat = 5.0
+let kBubbleLabelLeftInset: CGFloat = 13.0
+let kBubbleLabelRightInset: CGFloat = 10.0
+
 open class OZBubbleLabel: UILabel {
     
     let radius: CGFloat = 13.0  // chat bubble corner radius
 
-    @IBInspectable var topInset: CGFloat = 5.0
-    @IBInspectable var bottomInset: CGFloat = 5.0
-    @IBInspectable var leftInset: CGFloat = 13.0
-    @IBInspectable var rightInset: CGFloat = 10.0
+    @IBInspectable var topInset: CGFloat = kBubbleLabelTopInset
+    @IBInspectable var bottomInset: CGFloat = kBubbleLabelBottomInset
+    @IBInspectable var leftInset: CGFloat = kBubbleLabelLeftInset
+    @IBInspectable var rightInset: CGFloat = kBubbleLabelRightInset
     @IBInspectable var notchInsetXRatio: CGFloat = 0.67
 
     public var isIncoming = false
