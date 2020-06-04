@@ -267,7 +267,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
                 if previousMessage.type == .text,
                     previousMessage.alignment == cell.message.alignment {
                     incomingCell.textLabel.type = .noDraw
-                    incomingCell.textLabel.layer.cornerRadius = 12.0
+                    incomingCell.textLabel.layer.cornerRadius = kBubbleRadius
                     incomingCell.textLabel.layer.masksToBounds = true
                     incomingCell.textLabel.backgroundColor = .white
                 }
@@ -280,7 +280,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
                 if previousMessage.type == .text,
                     previousMessage.alignment == cell.message.alignment {
                     outgoingCell.textLabel.type = .noDraw
-                    outgoingCell.textLabel.layer.cornerRadius = 12.0
+                    outgoingCell.textLabel.layer.cornerRadius = kBubbleRadius
                     outgoingCell.textLabel.layer.masksToBounds = true
                     outgoingCell.textLabel.backgroundColor = UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000)
                 }
@@ -293,12 +293,27 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
-        if cell.message.alignment == .left {
+        if cell.message.alignment == .right {
+            if cell.message.type == .text,
+                let outgoingCell = cell as? OutgoingTextMessageCell {
+                var inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                if previousMessage.type == .text,
+                    previousMessage.alignment == cell.message.alignment {
+                    inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: kNotchInsetX)
+                }
+                outgoingCell.textLabel.frame = outgoingCell.bounds.inset(by: inset)
+            }
+        }
+        else if cell.message.alignment == .left {
             switch cell.message.type {
             case .text:
                 guard let incomingCell = cell as? IncomingTextMessageCell else { return }
                 incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                var inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                if previousMessage.type == .text,
+                    previousMessage.alignment == cell.message.alignment {
+                    inset = UIEdgeInsets(top: 0, left: kNotchInsetX, bottom: 0, right: 0)
+                }
                 incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
             case .image, .emoticon:
                 guard let incomingCell = cell as? ImageMessageCell else { return }
