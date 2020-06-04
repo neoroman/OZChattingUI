@@ -92,12 +92,6 @@
                         <viewLayoutGuide key="safeArea" id="chX-Ob-bu8"/>
                     </view>
                     <navigationItem key="navigationItem" id="aGd-4R-E8B">
-                        <barButtonItem key="leftBarButtonItem" image="btnLnbBackW" id="IOz-qw-dey">
-                            <color key="tintColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <connections>
-                                <action selector="pressedBackButton:" destination="Ge7-CU-9JS" id="QCP-FH-3Mb"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="전송" id="BOy-xW-1XA">
                             <color key="tintColor" red="0.17254901960784313" green="0.73333333333333328" blue="0.71372549019607845" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
@@ -474,7 +468,6 @@
         <image name="btnCallEnterOn" width="30" height="30"/>
         <image name="btnCallPhoto" width="30" height="30"/>
         <image name="btnKeyboardG" width="30" height="30"/>
-        <image name="btnLnbBackW" width="40" height="40"/>
         <image name="btnMicG" width="30" height="30"/>
         <image name="btnMicMotion" width="22" height="22"/>
         <image name="btnMicMotionOff" width="22" height="22"/>

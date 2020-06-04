@@ -20,7 +20,8 @@ class SelectPhotoViewController: UIViewController {
     @IBOutlet weak var sendButton: UIBarButtonItem!
     
     // MARK: - Property
-    var allPhotos: PHFetchResult<PHAsset>?
+    var photoAssets: PHFetchResult<PHAsset>?
+
     let scale = UIScreen.main.scale
     var thumbnailSize = CGSize.zero
     var selectedIndexes = [Int]()
@@ -33,18 +34,11 @@ class SelectPhotoViewController: UIViewController {
         
         self.photoCollectionView.delegate = self
         self.photoCollectionView.dataSource = self
+        self.photoCollectionView.allowsMultipleSelection = true
         
         sendButton.isEnabled = false
         
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: false)]
-        self.allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        self.thumbnailSize = CGSize(width: 1024 * self.scale, height: 1024 * self.scale)
-        
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        
-        photoCollectionView.allowsMultipleSelection = true
+        fetchPhotos()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,13 +46,10 @@ class SelectPhotoViewController: UIViewController {
     }
     
     // MARK: - Targets and Actions
-    @IBAction func pressedBackButton(_ sender: UIBarButtonItem) {
-        self.navigationController?.popViewController(animated: true)
-    }
     
     @IBAction func pressedSendButton(_ sender: UIBarButtonItem) {
         for i in 0..<selectedIndexes.count {
-            let asset = allPhotos?[selectedIndexes[i]]
+            let asset = photoAssets?[selectedIndexes[i]]
             ImageManager.shared.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { [weak self] image in
                 if let image = image {
                     ImageManager.shared.storeToTemporaryDirectory(image, completion: { [weak self] (imagePath, error) in
@@ -75,6 +66,14 @@ class SelectPhotoViewController: UIViewController {
     }
     
     // MARK: - Function
+    
+    fileprivate func fetchPhotos() {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: false)]
+        self.photoAssets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        self.thumbnailSize = CGSize(width: 1024 * self.scale, height: 1024 * self.scale)
+    }
+    
     fileprivate func showToast(controller: UIViewController, message: String, seconds: Double) {
         let toastLabel = UILabel(frame: CGRect(x: 16, y: view.frame.size.height - 52, width: view.frame.size.width * 0.915, height: 40))
         toastLabel.backgroundColor = .black
@@ -94,7 +93,7 @@ class SelectPhotoViewController: UIViewController {
         })
     }
     
-    func confirmMax(_ isSelect: Bool) -> Bool {
+    fileprivate func confirmMax(_ isSelect: Bool) -> Bool {
         if selectedIndexes.count >= 5 {
             showToast(controller: self, message: "사진은 한번에 최대 5장까지 전송 가능합니다.", seconds: 3)
             return true
@@ -102,7 +101,7 @@ class SelectPhotoViewController: UIViewController {
         return false
     }
     
-    func selectImage(_ isSelect: Bool, index: Int) {
+    fileprivate func selectImage(_ isSelect: Bool, index: Int) {
         if isSelect {
             let isMax = self.confirmMax(isSelect)
             if !isMax {
@@ -124,13 +123,13 @@ class SelectPhotoViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension SelectPhotoViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.allPhotos?.count ?? 0
+        return self.photoAssets?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as? PhotoCollectionViewCell else { return UICollectionViewCell() }
         
-        let asset = self.allPhotos?[indexPath.item]
+        let asset = self.photoAssets?[indexPath.item]
         ImageManager.shared.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { image in
             var index: Int?
             if let n = self.selectedIndexes.firstIndex(of: indexPath.item) {
@@ -190,8 +189,12 @@ final class ImageManager {
             completion(nil)
             return
         }
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.deliveryMode = .highQualityFormat
+        requestOptions.isSynchronous = true
+        requestOptions.resizeMode = .fast
         self.representedAssetIdentifier = asset.localIdentifier
-        self.imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: nil) { (image, info) in
+        self.imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions) { (image, info) in
             if self.representedAssetIdentifier == asset.localIdentifier {
                 completion(image)
             }

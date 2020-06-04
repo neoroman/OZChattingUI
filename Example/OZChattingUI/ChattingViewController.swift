@@ -155,6 +155,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
             OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, foldingButtonSize),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 224, height: 158), CGSize(width: 800, height: 1000)),
+            OZMessagesConfigurationItem.showTimeLabelForImage(true),
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
