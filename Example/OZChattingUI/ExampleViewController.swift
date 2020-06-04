@@ -14,16 +14,22 @@ import ImageViewer
 fileprivate let kMicButtonTag = 17172008
 fileprivate let kSendButtonTag = kMicButtonTag + 1004
 
-class ExampleViewController: UIViewController {
+class ExampleViewController: OZMessagesViewController {
     
-    var chatViewController: OZMessagesViewController?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        self.delegate = self
+        self.fileChoosePopupDelegate = self
+        self.messagesConfigurations = addMessageConfiguration()
+
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+            self.testChats(vc: self)
+        }
     }
-    
+
     fileprivate func testChats(vc: OZMessagesViewController) {
         // Debug
         vc.isEchoMode = true
@@ -65,7 +71,6 @@ class ExampleViewController: UIViewController {
     @IBAction func buttonPressed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
         if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI") as? OZMessagesViewController {
-            chatViewController = vc
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
             vc.messagesConfigurations = addMessageConfiguration()
@@ -93,7 +98,6 @@ class ExampleViewController: UIViewController {
     @IBAction func testButtonPressed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
         if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI") as? OZMessagesViewController {
-            chatViewController = vc
             vc.delegate = self
             vc.fileChoosePopupDelegate = self
 
@@ -239,29 +243,23 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage) {
         print("messageSending(id:\(identifier)):::::Sending(Type: \(type)) ==> contentPath: \(data.content)")
-        
-        guard let chatVC = chatViewController else { return }
-        
+            
         // Delivered message here
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
-            chatVC.dataSource.data.removeAll(where: { $0.content == "Delivered" })
-            chatVC.send(msg: "Delivered", type: .status)
+            self.dataSource.data.removeAll(where: { $0.content == "Delivered" })
+            self.send(msg: "Delivered", type: .status)
         }
     }
     
     func messageTextViewBeginEditing(textView: UITextView) {
     }
     func messageTextViewDidChanged(textView: UITextView) {
-        if let cvc = self.chatViewController {
-            cvc.micButton.setImage(UIImage(named: "send"), for: .normal)
-            cvc.micButton.tag = kSendButtonTag
-        }
+        self.micButton.setImage(UIImage(named: "send"), for: .normal)
+        self.micButton.tag = kSendButtonTag
     }
     func messageTextViewEndEditing(textView: UITextView) {
-        if let cvc = self.chatViewController {
-            cvc.micButton.setImage(UIImage(named: "mic"), for: .normal)
-            cvc.micButton.tag = kMicButtonTag
-        }
+        self.micButton.setImage(UIImage(named: "mic"), for: .normal)
+        self.micButton.tag = kMicButtonTag
     }
     func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) {
         // Do something here just before record permission granted
@@ -285,6 +283,9 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
         return true
     }
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+        return true
+    }
+    func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         return true
     }
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
@@ -330,71 +331,5 @@ extension ExampleViewController: UIDocumentBrowserViewControllerDelegate {
 
     @objc func closeDocumentViewController() {
         self.dismiss(animated: true, completion: nil)
-    }
-}
-
-
-
-// MARK: - OZChattingUI choosing image, camera, file here
-extension ExampleViewController: OZChoosePopupDelegate {
-    func messageFileChooseButtonTapped(_ sender: Any, type: OZChooseContentType) {
-        guard let cvc = chatViewController else { return }
-        switch type {
-        case .album:
-            cvc.showImagePicker(source: .photoLibrary)
-        case .camera:
-            self.handleCameraPermission()
-        case .file:
-            if #available(iOS 11.0, *) {
-                let aDocVC = UIDocumentBrowserViewController(forOpeningFilesWithContentTypes: ["public.mp3"])
-                aDocVC.delegate = self
-                aDocVC.allowsPickingMultipleItems = false
-                if #available(iOS 13.0, *) {
-                    self.present(aDocVC, animated: true)
-                }
-                else {
-                    let nc = UINavigationController(rootViewController: aDocVC)
-                    nc.navigationBar.isHidden = false
-                    nc.isNavigationBarHidden = false
-                    self.present(nc, animated: true) {
-                        let aBarButton = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.closeDocumentViewController))
-                        aBarButton.tintColor = .black
-                        aDocVC.navigationItem.setRightBarButton(aBarButton, animated: true)
-                    }
-                }
-            } else {
-                // Fallback on earlier versions
-            }
-        default:
-            print("OZChoosePopupDelegate: default choosed")
-        }
-
-        cvc.addFileButtonToggle(false)
-    }
-    
-    func handleCameraPermission() {
-        guard let cvc = chatViewController else { return }
-        func handleRequestCompletion(_ granted: Bool) { if granted { DispatchQueue.main.async { cvc.showCamera() } } }
-        
-        switch cvc.checkCameraPermission(requestCompletion: handleRequestCompletion) {
-        case .denied, .restricted:  showNeedCameraPermissionAlert()
-        case .authorized:           cvc.showCamera()
-        case .notDetermined:        ()
-        @unknown default:           ()
-        }
-    }
-    
-    func showNeedCameraPermissionAlert() {
-        let alert = UIAlertController(title: nil, message: "Camera(video) access denied", preferredStyle: .alert)
-        if let settings = URL(string: UIApplication.openSettingsURLString),
-            UIApplication.shared.canOpenURL(settings) {
-            alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { action in
-                
-                UIApplication.shared.open(settings)
-            })
-        }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
-        })
-        present(alert, animated: true)
     }
 }

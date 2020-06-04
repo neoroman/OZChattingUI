@@ -92,6 +92,7 @@ open class IncomingTextMessageCell: OZMessageCell {
                     buttonContainer.addSubview(copiedButton)
                     buttonContainer.frame.size = copiedButton.frame.size
                 }
+                print("FoldingOption(\(message.usingFoldingOption)), Content(\(message.content))")
             }
             
             // Callback to delegate
@@ -224,6 +225,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
                     buttonContainer.addSubview(copiedButton)
                     buttonContainer.frame.size = copiedButton.frame.size
                 }
+                print("FoldingOption(\(message.usingFoldingOption)), Content(\(message.content))")
             }
             
             // Callback to delegate
