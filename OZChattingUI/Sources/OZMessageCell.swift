@@ -159,11 +159,11 @@ open class IncomingTextMessageCell: OZMessageCell {
             }
             if message.isFolded {
                 buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
-                textLabel.bottomInset = height
             }
             else {
                 buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
             }
+            textLabel.bottomInset = height
         }
     }
 }
@@ -290,11 +290,11 @@ open class OutgoingTextMessageCell: OZMessageCell {
             }
             if message.isFolded {
                 buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
-                textLabel.bottomInset = height
             }
             else {
                 buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
             }
+            textLabel.bottomInset = height
         }
     }
 }
