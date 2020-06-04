@@ -172,13 +172,14 @@ class ExampleViewController: UIViewController {
     
     
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        let foldingButtonSize: CGSize = CGSize(width: 200, height: 30)
         let foldButton = UIButton(type: .custom)
-        foldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        foldButton.frame = CGRect(origin: .zero, size: foldingButtonSize)
         foldButton.setImage(UIImage(named: "btnCallClose"), for: .normal)
         foldButton.setTitle("Fold Messages", for: .normal)
         foldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
         let unfoldButton = UIButton(type: .custom)
-        unfoldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        unfoldButton.frame = CGRect(origin: .zero, size: foldingButtonSize)
         unfoldButton.setImage(UIImage(named: "iconViewAll"), for: .normal)
         unfoldButton.setTitle("Unfold Message", for: .normal)
         unfoldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
@@ -196,7 +197,7 @@ class ExampleViewController: UIViewController {
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
-            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, 30),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, foldingButtonSize),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
 
             // OZMessagesViewController

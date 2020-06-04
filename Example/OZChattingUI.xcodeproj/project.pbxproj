@@ -365,6 +365,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = N6EG7RK539;
 						LastSwiftMigration = 1130;
 					};
 				};
@@ -678,11 +679,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = N6EG7RK539;
 				INFOPLIST_FILE = OZChattingUI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.OZChattingUI-Example2";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.OZChattingUI-Example";
 				PRODUCT_NAME = OZChattingUI_Example;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -697,11 +698,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = N6EG7RK539;
 				INFOPLIST_FILE = OZChattingUI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.OZChattingUI-Example2";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.OZChattingUI-Example";
 				PRODUCT_NAME = OZChattingUI_Example;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;

@@ -311,10 +311,10 @@ public class OZMessage: Equatable {
             case .usingPackedImages(let yesOrNo):
                 usingPackedImages = yesOrNo
                 break
-            case .usingLongMessageFolding(let yesOrNo, let maxHeight, _, _, let buttonHeight):
+            case .usingLongMessageFolding(let yesOrNo, let maxHeight, _, _, let size):
                 usingFoldingOption = yesOrNo
                 foldingMessageMaxHeight = maxHeight
-                foldingButtonHeight = buttonHeight
+                foldingButtonSize = size
                 if yesOrNo {
                     isFolded = true
                 }
@@ -338,7 +338,7 @@ public class OZMessage: Equatable {
     public var chatImageSize: CGSize = CGSize(width: 120, height: 120)
     public var isFolded: Bool = false
     public var foldingMessageMaxHeight: CGFloat = 160
-    public var foldingButtonHeight: CGFloat = 25
+    public var foldingButtonSize: CGSize = .zero
     public var fontName: String = "AppleSDGothicNeo-Medium"
     public var fontSize: CGFloat = 0
     public var iconPadding: CGFloat = 0

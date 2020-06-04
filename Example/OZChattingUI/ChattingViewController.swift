@@ -125,13 +125,14 @@ class ChattingViewController: OZMessagesViewController {
     }
     
     fileprivate func addMessageConfiguration() -> OZMessagesConfigurations {
+        let foldingButtonSize = CGSize(width: 200, height: 30)
         let foldButton = UIButton(type: .custom)
-        foldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        foldButton.frame = CGRect(origin: .zero, size: foldingButtonSize)
         foldButton.setImage(UIImage(named: "btnCallClose"), for: .normal)
         foldButton.setTitle("닫기", for: .normal)
         foldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
         let unfoldButton = UIButton(type: .custom)
-        unfoldButton.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 25))
+        unfoldButton.frame = CGRect(origin: .zero, size: foldingButtonSize)
         unfoldButton.setImage(UIImage(named: "iconViewAll"), for: .normal)
         unfoldButton.setTitle("전체보기", for: .normal)
         unfoldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
@@ -146,9 +147,8 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.timeFontSize(12.0),
             OZMessagesConfigurationItem.timeFontFormat("hh:mm"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
-            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, 30),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, foldingButtonSize),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 224, height: 158), CGSize(width: 800, height: 1000)),
-
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
@@ -269,7 +269,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
                 if previousMessage.type == .text,
                     previousMessage.alignment == cell.message.alignment {
                     incomingCell.textLabel.type = .noDraw
-                    incomingCell.textLabel.layer.cornerRadius = 12.0
+                    incomingCell.textLabel.layer.cornerRadius = kBubbleRadius
                     incomingCell.textLabel.layer.masksToBounds = true
                     incomingCell.textLabel.backgroundColor = .white
                 }
@@ -282,7 +282,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
                 if previousMessage.type == .text,
                     previousMessage.alignment == cell.message.alignment {
                     outgoingCell.textLabel.type = .noDraw
-                    outgoingCell.textLabel.layer.cornerRadius = 12.0
+                    outgoingCell.textLabel.layer.cornerRadius = kBubbleRadius
                     outgoingCell.textLabel.layer.masksToBounds = true
                     outgoingCell.textLabel.backgroundColor = UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000)
                 }
@@ -295,12 +295,27 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
-        if cell.message.alignment == .left {
+        if cell.message.alignment == .right {
+            if cell.message.type == .text,
+                let outgoingCell = cell as? OutgoingTextMessageCell {
+                var inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                if previousMessage.type == .text,
+                    previousMessage.alignment == cell.message.alignment {
+                    inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: kNotchInsetX)
+                }
+                outgoingCell.textLabel.frame = outgoingCell.bounds.inset(by: inset)
+            }
+        }
+        else if cell.message.alignment == .left {
             switch cell.message.type {
             case .text:
                 guard let incomingCell = cell as? IncomingTextMessageCell else { return }
                 incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                var inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                if previousMessage.type == .text,
+                    previousMessage.alignment == cell.message.alignment {
+                    inset = UIEdgeInsets(top: 0, left: kNotchInsetX, bottom: 0, right: 0)
+                }
                 incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
             case .image, .emoticon:
                 guard let incomingCell = cell as? ImageMessageCell else { return }

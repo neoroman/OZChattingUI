@@ -10,12 +10,16 @@ import UIKit
 import OZChattingUI
 
 
+let kBubbleRadius: CGFloat = 12.0
+let kNotchInsetX: CGFloat = 4.0 / 12.0 * kBubbleRadius
+
+
 extension OZBubbleLabel {
     
     override open func draw(_ rect: CGRect) {
-        
+        let radius: CGFloat = kBubbleRadius
+
         if type == .hasOwnDrawing {
-            let radius: CGFloat = 12.0
             
             let width = bounds.width
             let height = bounds.height
@@ -25,7 +29,7 @@ extension OZBubbleLabel {
             
             let startX: CGFloat = radius
             
-            let notchInsetX: CGFloat = 4.0 / 12.0 * radius
+            let notchInsetX: CGFloat = kNotchInsetX
             let notchHeight: CGFloat = 8.0 / 12.0 * radius
             let notchRadius: CGFloat = 3.0 / 12.0 * radius
             let notchCircleStartPoint = CGPoint(x: width-notchInsetX + (3.6/12.0*radius),
