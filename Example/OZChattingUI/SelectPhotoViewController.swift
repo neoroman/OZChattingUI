@@ -41,9 +41,6 @@ class SelectPhotoViewController: UIViewController {
         self.allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
         self.thumbnailSize = CGSize(width: 1024 * self.scale, height: 1024 * self.scale)
         
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        
         photoCollectionView.allowsMultipleSelection = true
     }
     
@@ -52,9 +49,6 @@ class SelectPhotoViewController: UIViewController {
     }
     
     // MARK: - Targets and Actions
-    @IBAction func pressedBackButton(_ sender: UIBarButtonItem) {
-        self.navigationController?.popViewController(animated: true)
-    }
     
     @IBAction func pressedSendButton(_ sender: UIBarButtonItem) {
         for i in 0..<selectedIndexes.count {
