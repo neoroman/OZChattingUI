@@ -985,16 +985,28 @@ open class OZMessageCell: DynamicView {
             if message.cellHeight != message.chatImageSize.height {
                 maxImageSize = message.chatImageSize
             }
-            if imageSize.width > maxImageSize.width {
-                imageSize.height /= imageSize.width/maxImageSize.width
-                imageSize.width = maxImageSize.width
+            if !message.usingPackedImages {
+                if imageSize.width > maxImageSize.width {
+                    imageSize.height /= imageSize.width/maxImageSize.width
+                    imageSize.width = maxImageSize.width
+                }
+                else if imageSize.height > maxImageSize.height {
+                    imageSize.width /= imageSize.height/maxImageSize.height
+                    imageSize.height = maxImageSize.height
+                }
+                if message.cellHeight < imageSize.height {
+                    imageSize.height = message.cellHeight
+                }
             }
-            else if imageSize.height > maxImageSize.height {
-                imageSize.width /= imageSize.height/maxImageSize.height
-                imageSize.height = maxImageSize.height
-            }
-            if message.cellHeight < imageSize.height {
-                imageSize.height = message.cellHeight
+            else {
+                if imageSize.width > maxImageSize.width {
+                    imageSize.height /= imageSize.width/maxImageSize.width
+                    imageSize.width = maxImageSize.width
+                }
+                if imageSize.height > maxImageSize.height {
+                    imageSize.width /= imageSize.height/maxImageSize.height
+                    imageSize.height = maxImageSize.height
+                }
             }
             if message.alignment == .left {
                 if !message.isSenderIconHide { imageSize.width += message.cellLeftPadding }
