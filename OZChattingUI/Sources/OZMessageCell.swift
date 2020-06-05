@@ -718,10 +718,12 @@ open class AudioMessageCell: OZMessageCell {
                 let aPlayer = OZAudioPlayer.getAudioPlayer(fileURL: anUrl) {
                 if message.type == .voice {
                     let aDur = OZAudioPlayer.getAmrDuration(fileURL: anUrl)
-                    textLabel.text = String(format: "%02d:%02d", Int(aDur) / 60, Int(aDur) % 60)
+                    let seconds = Int(aDur) % 60
+                    let microSeconds = ceil(aDur - Double(seconds))
+                    textLabel.text = String(format: "%02d:%02d", Int(aDur)/60, Int(Double(seconds) + microSeconds))
                 }
                 else {
-                    textLabel.text = String(format: "%02d:%02d", Int(aPlayer.duration) / 60, Int(aPlayer.duration) % 60)
+                    textLabel.text = String(format: "%02d:%02d", Int(aPlayer.duration)/60, Int(aPlayer.duration)%60)
                 }
             }
             else {

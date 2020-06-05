@@ -95,6 +95,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.red.withAlphaComponent(0.7), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.blue.withAlphaComponent(0.6), .fromOther),
             OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Bold", OZMessageType.allTypes()),
+            OZMessagesConfigurationItem.fontColor(.black, [.voice, .mp3], .none),
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
             OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
