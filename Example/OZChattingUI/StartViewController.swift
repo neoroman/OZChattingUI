@@ -75,11 +75,14 @@ class StartViewController: UITableViewController {
         let cell = cells[indexPath.row]
         switch cell {
         case "Basic Example":
-            let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
-            if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI") as? ExampleViewController {
-                navigationController?.pushViewController(vc, animated: true)
-                vc.title = cell
-            }
+//            let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
+//            if let vc = storyboard.instantiateViewController(withIdentifier: "ExampleViewController") as? ExampleViewController {
+//                navigationController?.pushViewController(vc, animated: true)
+//                vc.title = cell
+//            }
+            let vc = ExampleViewController()
+            vc.title = cell
+            navigationController?.pushViewController(vc, animated: true)
         case "Advanced Example":
             let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
             if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {

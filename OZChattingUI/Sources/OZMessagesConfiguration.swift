@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 public enum OZMessagesUserSideConfigType {
@@ -42,6 +43,16 @@ public enum OZMessagesConfigurationItem {
     /// Profile icon padding in OZMessageCell
     case profileIconPadding(CGFloat, [OZMessageType])
 
+    /// Default image size of messages in OZMessagesCell
+    /// Display image height won't be greater than cellHeight
+    case chatImageSize(CGSize, _ forSeding: CGSize)
+
+    /// Default image max bytes in OZMessagesCell
+    case chatImageMaxNumberOfBytes(Int)
+    
+    /// Default emoticon size of messages in OZMessageCell
+    case chatEmoticonSize(CGSize)
+    
     /// Common cell padding(inset for bubble) in OZMessageCell
     case cellPadding(CGFloat, [OZMessageType])
 
@@ -69,6 +80,9 @@ public enum OZMessagesConfigurationItem {
     
     /// Audio background color in OZMessageCell
     case audioProgressColor(UIColor, _ userType: OZMessagesUserSideConfigType)
+    
+    /// Audio play, pause button image name in OZMessageCell
+    case audioButtonsName(_ playButton: String, _ pauseButton: String)
 
     /// Rounded corner for content in OZMessageCell
     case roundedCorner(Bool, [OZMessageType])
@@ -91,10 +105,22 @@ public enum OZMessagesConfigurationItem {
     /// Show time label for image, default `NO` in OZMessageCell
     case showTimeLabelForImage(Bool)
     
+    /// Using long message folding option, default `NO` in OZMessageCell,
+    /// eg) .usingLongMessageFolding(false, 200, CGSize(width: 100, height: 25), .center, .center)
+    case usingLongMessageFolding(Bool, _ maxHeight: CGFloat, _ buttonSize: CGSize, _ foldButtonAlignment: OZMessageAlignment, _ unfoldButonAlignment: OZMessageAlignment)
+    /// eg) .usingLongMessageFoldingButtons(UIButton(type: .infoLight), UIButton(type: .detailDisclosure))
+    case usingLongMessageFoldingButtons(_ foldButton: UIButton, _ unfoldButon: UIButton)
+    
+    /// Can message selectable by long press gesture, default `NO` in OZMessageCell
+    case canMessageSelectableByLongPressGesture(Bool)
+
     /// TODO: Vertical padding between messages in OZMessageCell
     //case verticalPaddingBetweenMessage(_ currentMessage: OZMessage, _ previousMessage: OZMessage)
     
     // ============ OZMessagesViewController ==================
+    /// CollectionView contentInset in OZMessageViewController
+    case collectionViewEdgeInsets(UIEdgeInsets)
+    
     /// Input text view font color in OZTextView
     case inputTextViewFont(UIFont)
 
@@ -115,27 +141,7 @@ public enum OZMessagesConfigurationItem {
 
     /// Input box `emoticon` button tint color in OZMessagesViewController
     case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
-    
-    /// Default image size of messages in OZMessagesViewController
-    /// Display image height won't be greater than cellHeight
-    case chatImageSize(CGSize, _ forSeding: CGSize)
-
-    /// Default image max bytes in OZMessagesViewController
-    case chatImageMaxNumberOfBytes(Int)
-    
-    /// Add file action sheet items, `cancel` is always show in OZMessagesViewController
-    case addFileButtonItems([OZChooseContentType])
-    
-    /// Using long message folding option, default `NO` in OZMessageCell,
-    /// eg) .usingLongMessageFolding(false, 200, CGSize(width: 100, height: 25), .center, .center)
-    case usingLongMessageFolding(Bool, _ maxHeight: CGFloat, _ buttonSize: CGSize, _ foldButtonAlignment: OZMessageAlignment, _ unfoldButonAlignment: OZMessageAlignment)
-    /// eg) .usingLongMessageFoldingButtons(UIButton(type: .infoLight), UIButton(type: .detailDisclosure))
-    case usingLongMessageFoldingButtons(_ foldButton: UIButton, _ unfoldButon: UIButton)
-    
-    /// Can message selectable by long press gesture, default `NO` in OZMessageCell
-    case canMessageSelectableByLongPressGesture(Bool)
-
-    
+        
     // ============ OZVoiceRecordViewController ==================
     /// Max duration of voice record in OZVoiceRecordViewController
     case voiceRecordMaxDuration(TimeInterval)
@@ -177,6 +183,9 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.maxWidthRatio(0.9),
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), .fromOther),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225), CGSize(width: 400, height: 400)),
+            OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
+            OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 50, height: 50)),
             OZMessagesConfigurationItem.cellBackgroundColor(.clear, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellBackgroundColor(.white, [.announcement]),
             OZMessagesConfigurationItem.audioProgressColor(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), .none),
@@ -196,21 +205,24 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, CGSize(width: 100, height: 25), .center, .center),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(UIButton(type: .infoLight), UIButton(type: .detailDisclosure)),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(false),
+            OZMessagesConfigurationItem.audioButtonsName("play.fill", "pause.fill"),
+
             // OZMessagesViewController
+            OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 10, bottom: 10 + minTextViewHeight, right: 10)),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225), CGSize(width: 400, height: 400)),
-            OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
-            OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
+
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
             OZMessagesConfigurationItem.inputTextVerticalAlignment(.Middle),
+
             // OZEmoticonViewController
             OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.magenta.withAlphaComponent(0.3)),
             OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.magenta),
+
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(10.0),
         ]

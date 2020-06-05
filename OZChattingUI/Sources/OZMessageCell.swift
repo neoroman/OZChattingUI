@@ -31,26 +31,7 @@ open class IncomingTextMessageCell: OZMessageCell {
                 textLabel.addGestureRecognizer(UILongPressGestureRecognizer(target: textLabel, action: #selector(textLabel.handleLongPress(_:))))
             }
             
-            if message.iconImage.lowercased().hasPrefix("file"),
-                let anUrl = URL(string: message.iconImage),
-                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
-                // Local file with fileURL
-                iconImage.image = anImage
-            }
-            else if message.iconImage.hasPrefix("/"),
-                let anImage = UIImage(contentsOfFile: message.iconImage) {
-                // Local file with relative path
-                iconImage.image = anImage
-            }
-            else {
-                // 내장 이미지명
-                if let anImage = UIImage(named: message.iconImage) {
-                    iconImage.image = anImage
-                }
-                else if Bundle.isFramework() {
-                    iconImage.image = UIImage.frameworkImage(named: "nopic@2x", ofType: "png")
-                }
-            }
+            iconImage.image = profileImage(path: message.iconImage)
             iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
             iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
             
@@ -67,29 +48,7 @@ open class IncomingTextMessageCell: OZMessageCell {
             }
             
             buttonContainer.isHidden = true
-            if message.usingFoldingOption,
-                OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight,
-                let dele = delegate {
-                for x in buttonContainer.subviews { x.removeFromSuperview() }
-                for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
-                    let copiedButton = UIButton(frame: button.frame)
-                    for x in 0..<4 {
-                        let state = UIControl.State(rawValue: UInt(x))
-                        copiedButton.setImage(button.image(for: state), for: state)
-                        copiedButton.setTitle(button.title(for: state), for: state)
-                        copiedButton.setTitleColor(button.titleColor(for: state), for: state)
-                        copiedButton.setAttributedTitle(button.attributedTitle(for: state), for: state)
-                    }
-                    if let tlf = button.titleLabel {
-                        copiedButton.titleLabel?.font = tlf.font
-                    }
-                    copiedButton.addTarget(self, action: #selector(longMessageFoldingButtonTapped(_:)), for: .touchUpInside)
-                    copiedButton.tag = type.tag()
-                    buttonContainer.addSubview(copiedButton)
-                    buttonContainer.frame.size = copiedButton.frame.size
-                }
-                print("FoldingOption(\(message.usingFoldingOption)), Content(\(message.content))")
-            }
+            buttonContainerHandler(message: message, buttonContainer: buttonContainer)
 
             if message.cellOpacity <= 1.0 {
                 for x in self.subviews {
@@ -132,66 +91,11 @@ open class IncomingTextMessageCell: OZMessageCell {
         let leftInset = message.isSenderIconHide ? 0 : message.cellLeftPadding
         textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
 
-        layoutButtonContainer()
-        
+        layoutButtonContainer(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
+
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
-        }
-    }
-    
-    @objc private func longMessageFoldingButtonTapped(_ sender: UIButton) {
-        if let dele = delegate {
-            dele.messageCellLongMessageButtonTapped(cell: self, button: sender)
-        }
-    }
-    
-    private func layoutButtonContainer() {
-        buttonContainer.isHidden = true
-        textLabel.bottomInset = kBubbleLabelBottomInset
-        if message.usingFoldingOption,
-            OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight {
-            buttonContainer.isHidden = false
-            let height = message.foldingButtonSize.height
-            buttonContainer.frame = CGRect(x: textLabel.frame.minX,
-                                           y: textLabel.frame.maxY - height - message.cellPadding,
-                                           width: textLabel.frame.width,
-                                           height: height + message.cellPadding)
-            for x in buttonContainer.subviews {
-                if let button = x as? UIButton {
-                    button.isHidden = true
-                    button.sizeToFit()
-                    button.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
-                    
-                    var bAlign: OZMessageAlignment = message.foldingButtonAlignment
-                    if button.tag == OZMessageFoldState.unfold.tag() {
-                        bAlign = message.unfoldingButtonAlignment
-                    }
-                    switch bAlign {
-                    case .left:
-                        button.frame.origin.x = buttonContainer.bounds.minX + message.cellPadding
-                        break
-                    case .right:
-                        if let aText = button.title(for: .normal),
-                            let anImage = button.imageView,
-                            OZMessageCell.sizeForText(aText).width + anImage.frame.width > button.frame.width {
-                            button.frame.origin.x = buttonContainer.bounds.maxX - OZMessageCell.sizeForText(aText).width - anImage.frame.width
-                        }
-                        else {
-                            button.frame.origin.x = buttonContainer.bounds.maxX - button.frame.width
-                        }
-                        break
-                    default: break
-                    }
-                }
-            }
-            if message.isFolded {
-                buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
-            }
-            else {
-                buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
-            }
-            textLabel.bottomInset = height
         }
     }
 }
@@ -227,30 +131,8 @@ open class OutgoingTextMessageCell: OZMessageCell {
             }
             
             buttonContainer.isHidden = true
-            if message.usingFoldingOption,
-                OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight,
-                let dele = delegate {
-                for x in buttonContainer.subviews { x.removeFromSuperview() }
-                for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
-                    let copiedButton = UIButton(frame: button.frame)
-                    for x in 0..<4 {
-                        let state = UIControl.State(rawValue: UInt(x))
-                        copiedButton.setImage(button.image(for: state), for: state)
-                        copiedButton.setTitle(button.title(for: state), for: state)
-                        copiedButton.setTitleColor(button.titleColor(for: state), for: state)
-                        copiedButton.setAttributedTitle(button.attributedTitle(for: state), for: state)
-                    }
-                    if let tlf = button.titleLabel {
-                        copiedButton.titleLabel?.font = tlf.font
-                    }
-                    copiedButton.addTarget(self, action: #selector(longMessageFoldingButtonTapped(_:)), for: .touchUpInside)
-                    copiedButton.tag = type.tag()
-                    buttonContainer.addSubview(copiedButton)
-                    buttonContainer.frame.size = copiedButton.frame.size
-                }
-                print("FoldingOption(\(message.usingFoldingOption)), Content(\(message.content))")
-            }
-            
+            buttonContainerHandler(message: message, buttonContainer: buttonContainer)
+
             if message.cellOpacity <= 1.0 {
                 for x in self.subviews {
                     x.alpha = message.cellOpacity
@@ -289,66 +171,11 @@ open class OutgoingTextMessageCell: OZMessageCell {
 
         textLabel.frame = bounds
         
-        layoutButtonContainer()
+        layoutButtonContainer(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
         
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
-        }
-    }
-
-    @objc private func longMessageFoldingButtonTapped(_ sender: UIButton) {
-        if let dele = delegate {
-            dele.messageCellLongMessageButtonTapped(cell: self, button: sender)
-        }
-    }
-    
-    private func layoutButtonContainer() {
-        buttonContainer.isHidden = true
-        textLabel.bottomInset = kBubbleLabelBottomInset
-        if message.usingFoldingOption,
-            OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight {
-            buttonContainer.isHidden = false
-            let height = message.foldingButtonSize.height
-            buttonContainer.frame = CGRect(x: textLabel.frame.minX,
-                                           y: textLabel.frame.maxY - height - message.cellPadding,
-                                           width: textLabel.frame.width,
-                                           height: height + message.cellPadding)
-            for x in buttonContainer.subviews {
-                if let button = x as? UIButton {
-                    button.isHidden = true
-                    button.sizeToFit()
-                    button.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
-                    
-                    var bAlign: OZMessageAlignment = message.foldingButtonAlignment
-                    if button.tag == OZMessageFoldState.unfold.tag() {
-                        bAlign = message.unfoldingButtonAlignment
-                    }
-                    switch bAlign {
-                    case .left:
-                        button.frame.origin.x = buttonContainer.bounds.minX + message.cellPadding
-                        break
-                    case .right:
-                        if let aText = button.title(for: .normal),
-                            let anImage = button.imageView,
-                            OZMessageCell.sizeForText(aText).width + anImage.frame.width > button.frame.width {
-                            button.frame.origin.x = buttonContainer.bounds.maxX - OZMessageCell.sizeForText(aText).width - anImage.frame.width
-                        }
-                        else {
-                            button.frame.origin.x = buttonContainer.bounds.maxX - button.frame.width
-                        }
-                        break
-                    default: break
-                    }
-                }
-            }
-            if message.isFolded {
-                buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
-            }
-            else {
-                buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
-            }
-            textLabel.bottomInset = height
         }
     }
 }
@@ -580,26 +407,7 @@ open class ImageMessageCell: OZMessageCell {
             }
 
             iconImage.isHidden = isIconHidden
-            if message.iconImage.lowercased().hasPrefix("file"),
-                let anUrl = URL(string: message.iconImage),
-                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
-                // Local file with fileURL
-                iconImage.image = anImage
-            }
-            else if message.iconImage.hasPrefix("/"),
-                let anImage = UIImage(contentsOfFile: message.iconImage) {
-                // Local file with relative path
-                iconImage.image = anImage
-            }
-            else {
-                // 내장 이미지명
-                if let anImage = UIImage(named: message.iconImage) {
-                    iconImage.image = anImage
-                }
-                else if Bundle.isFramework() {
-                    iconImage.image = UIImage.frameworkImage(named: "nopic@2x", ofType: "png")
-                }
-            }
+            iconImage.image = profileImage(path: message.iconImage)
             iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
             iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
 
@@ -679,8 +487,8 @@ open class AudioPlusIconMessageCell: AudioMessageCell {
 }
 
 open class AudioMessageCell: OZMessageCell {
-    open var pauseImg = UIImage(named: "pause")
-    open var playImg = UIImage(named: "play")
+    open var pauseImg = UIImage()
+    open var playImg = UIImage()
     open var audioPlayer = OZAudioPlayer()
     open var activityIndicator = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 25, height: 25), type: .circleStrokeSpin, color: UIColor.gray.withAlphaComponent(0.5), padding: 0)
     public var textLabel = UILabel()
@@ -705,11 +513,19 @@ open class AudioMessageCell: OZMessageCell {
     
     override public var message: OZMessage! {
         didSet {
-            if playImg == nil, Bundle.isFramework() {
-                playImg = UIImage.frameworkImage(named: "play@2x", ofType: "png")
+            if message.audioPlayButtonName.count > 0,
+                let anImg = UIImage(named: message.audioPlayButtonName) {
+                playImg = anImg
             }
-            if pauseImg == nil, Bundle.isFramework() {
-                pauseImg = UIImage.frameworkImage(named: "pause@2x", ofType: "png")
+            else if #available(iOS 13.0, *) {
+                playImg = UIImage(systemName: "play.fill") ?? UIImage()
+            }
+            if message.audioPauseButtonName.count > 0,
+                let anImg = UIImage(named: message.audioPlayButtonName)  {
+                pauseImg = anImg
+            }
+            else if #available(iOS 13.0, *) {
+                pauseImg = UIImage(systemName: "pause.fill") ?? UIImage()
             }
             if let aDur = message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.05.22
                 textLabel.text = String(format: "%02d:%02d", aDur / 60, aDur % 60)
@@ -719,7 +535,7 @@ open class AudioMessageCell: OZMessageCell {
                 if message.type == .voice {
                     let aDur = OZAudioPlayer.getAmrDuration(fileURL: anUrl)
                     let seconds = Int(aDur) % 60
-                    let microSeconds = ceil(aDur - Double(seconds))
+                    let microSeconds = round(aDur - Double(seconds))
                     textLabel.text = String(format: "%02d:%02d", Int(aDur)/60, Int(Double(seconds) + microSeconds))
                 }
                 else {
@@ -734,26 +550,7 @@ open class AudioMessageCell: OZMessageCell {
             textLabel.backgroundColor = .clear
             textLabel.textAlignment = .right
             
-            if message.iconImage.lowercased().hasPrefix("file"),
-                let anUrl = URL(string: message.iconImage),
-                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
-                // Local file with fileURL
-                iconImage.image = anImage
-            }
-            else if message.iconImage.hasPrefix("/"),
-                let anImage = UIImage(contentsOfFile: message.iconImage) {
-                // Local file with relative path
-                iconImage.image = anImage
-            }
-            else {
-                // 내장 이미지명
-                if let anImage = UIImage(named: message.iconImage) {
-                    iconImage.image = anImage
-                }
-                else if Bundle.isFramework() {
-                    iconImage.image = UIImage.frameworkImage(named: "nopic@2x", ofType: "png")
-                }
-            }
+            iconImage.image = profileImage(path: message.iconImage)
             iconImage.frame.origin = CGPoint(x: 0, y: 0)
             iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
             
@@ -934,6 +731,116 @@ open class OZMessageCell: DynamicView {
             layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
         }
     }
+    
+    // MARK: - Private methods
+    fileprivate func profileImage(path: String) -> UIImage {
+        if path.lowercased().hasPrefix("file"),
+            let anUrl = URL(string: path),
+            let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
+            // Local file with fileURL
+            return anImage
+        }
+        else if path.hasPrefix("/"),
+            let anImage = UIImage(contentsOfFile: path) {
+            // Local file with relative path
+            return anImage
+        }
+        else {
+            if let anImage = UIImage(named: path) {
+                return anImage
+            }
+            else if Bundle.isFramework(),
+                let anImg = UIImage.frameworkImage(named: "nopic@2x", ofType: "png") {
+                return anImg
+            }
+            if #available(iOS 13.0, *) {
+                return UIImage(systemName: "person.circle.fill") ?? UIImage()
+            } else {
+                return UIImage()
+            }
+        }
+    }
+    fileprivate func buttonContainerHandler(message: OZMessage, buttonContainer: UIView) {
+        if message.usingFoldingOption,
+            OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight,
+            let dele = delegate {
+            for x in buttonContainer.subviews { x.removeFromSuperview() }
+            for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
+                let copiedButton = UIButton(frame: button.frame)
+                for x in 0..<4 {
+                    let state = UIControl.State(rawValue: UInt(x))
+                    copiedButton.setImage(button.image(for: state), for: state)
+                    copiedButton.setTitle(button.title(for: state), for: state)
+                    copiedButton.setTitleColor(button.titleColor(for: state), for: state)
+                    copiedButton.setAttributedTitle(button.attributedTitle(for: state), for: state)
+                }
+                if let tlf = button.titleLabel {
+                    copiedButton.titleLabel?.font = tlf.font
+                }
+                copiedButton.addTarget(self, action: #selector(longMessageFoldingButtonTapped(_:)), for: .touchUpInside)
+                copiedButton.tag = type.tag()
+                buttonContainer.addSubview(copiedButton)
+                buttonContainer.frame.size = copiedButton.frame.size
+            }
+        }
+    }
+    @objc fileprivate func longMessageFoldingButtonTapped(_ sender: UIButton) {
+        if let dele = delegate {
+            dele.messageCellLongMessageButtonTapped(cell: self, button: sender)
+        }
+    }
+    fileprivate func layoutButtonContainer(message: OZMessage, textLabel: OZBubbleLabel, buttonContainer: UIView) {
+        buttonContainer.isHidden = true
+        textLabel.bottomInset = kBubbleLabelBottomInset
+        if message.usingFoldingOption,
+            OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight {
+            buttonContainer.isHidden = false
+            let height = message.foldingButtonSize.height
+            buttonContainer.frame = CGRect(x: textLabel.frame.minX,
+                                           y: textLabel.frame.maxY - height - message.cellPadding,
+                                           width: textLabel.frame.width - message.cellPadding *  2,
+                                           height: height + message.cellPadding)
+            for x in buttonContainer.subviews {
+                if let button = x as? UIButton {
+                    button.isHidden = true
+                    button.sizeToFit()
+                    button.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
+                    
+                    var bAlign: OZMessageAlignment = message.foldingButtonAlignment
+                    if button.tag == OZMessageFoldState.unfold.tag() {
+                        bAlign = message.unfoldingButtonAlignment
+                    }
+                    switch bAlign {
+                    case .left:
+                        button.frame.origin.x = buttonContainer.bounds.minX + message.cellPadding
+                        break
+                    case .right:
+                        if let aText = button.title(for: .normal),
+                            let anImage = button.imageView,
+                            OZMessageCell.sizeForText(aText).width + anImage.frame.width > button.frame.width {
+                            button.frame.origin.x = buttonContainer.bounds.maxX - OZMessageCell.sizeForText(aText).width - anImage.frame.width
+                        }
+                        else if let anImage = button.imageView {
+                            button.frame.origin.x = buttonContainer.bounds.maxX - button.frame.width - anImage.frame.width
+                        }
+                        else {
+                            button.frame.origin.x = buttonContainer.bounds.maxX - button.frame.width
+                        }
+                        break
+                    default: break
+                    }
+                }
+            }
+            if message.isFolded {
+                buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
+            }
+            else {
+                buttonContainer.viewWithTag(OZMessageFoldState.fold.tag())?.isHidden = false
+            }
+            textLabel.bottomInset = height
+        }
+    }
+
 
     // MARK: - Helpers from MessageKit
     public static func labelRect(for text: String, font: UIFont, considering maxSize: CGSize) -> CGRect {
@@ -960,7 +867,16 @@ open class OZMessageCell: DynamicView {
             xOrigin = containerWidth - (containerWidth * message.bubbleWidthRatio)
         }
         
-        if message.type == .image || message.type == .emoticon {
+        if message.chatEmoticonSize != .zero, message.type == .emoticon {
+            if message.alignment == .left {
+                if !message.isSenderIconHide { message.chatEmoticonSize.width += message.cellLeftPadding }
+                return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: message.chatEmoticonSize)
+            }
+            else {
+                return CGRect(origin: CGPoint(x: containerWidth - message.chatEmoticonSize.width, y: 0), size: message.chatEmoticonSize)
+            }
+        }
+        else if message.type == .image || message.type == .emoticon {
             var imageSize = CGSize.zero
             if message.content.lowercased().hasPrefix("file"),
                 let anUrl = URL(string: message.content),
@@ -984,7 +900,8 @@ open class OZMessageCell: DynamicView {
             }
             
             var maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: message.cellHeight)
-            if message.cellHeight != message.chatImageSize.height {
+            if message.chatImageSize != .zero,
+                message.cellHeight != message.chatImageSize.height {
                 maxImageSize = message.chatImageSize
             }
             if !message.usingPackedImages {

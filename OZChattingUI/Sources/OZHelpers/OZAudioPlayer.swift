@@ -152,9 +152,6 @@ open class OZAudioPlayer {
         do {
             amrData = try Data(contentsOf: fileURL)
             mimeType = OZSwime.mimeType(data: amrData)
-            #if DEBUG
-            print("OZVoiceVC:isAMRFile(fileURL:)::::mimeType : \(String(describing: mimeType))")
-            #endif
         } catch {
             #if DEBUG
             print("OZVoiceVC:isAMRFile(fileURL:)::::cannot parse mime-type of \(fileURL.relativePath)")
@@ -169,9 +166,6 @@ open class OZAudioPlayer {
         do {
             amrData = try Data(contentsOf: fileURL)
             mimeType = OZSwime.mimeType(data: amrData)
-            #if DEBUG
-            print("OZVoiceVC:getWaveDataFromAMR(fileURL:)::::mimeType : \(String(describing: mimeType))")
-            #endif
         } catch {
             #if DEBUG
             print("OZVoiceVC:getWaveDataFromAMR(fileURL:)::::cannot parse mime-type of \(fileURL.relativePath)")
@@ -187,9 +181,6 @@ open class OZAudioPlayer {
         do {
             amrData = try Data(contentsOf: fileURL)
             mimeType = OZSwime.mimeType(data: amrData)
-            #if DEBUG
-            print("OZVoiceVC:getAmrDuration(fileURL:)::::mimeType : \(String(describing: mimeType))")
-            #endif
         } catch {
             #if DEBUG
             print("OZVoiceVC:getAmrDuration(fileURL:)::::cannot parse mime-type of \(fileURL.relativePath)")
@@ -202,9 +193,6 @@ open class OZAudioPlayer {
     }
     public static func getAmrDuration(data: Data) -> TimeInterval {
         let mimeType = OZSwime.mimeType(data: data)
-        #if DEBUG
-        print("OZVoiceVC:getAmrDuration(data:)::::mimeType : \(String(describing: mimeType))")
-        #endif
         guard let aMime = mimeType, aMime.type == .amr else { return 0 }
         guard let aPlayer = OZAudioPlayer.getAudioPlayer(data: data) else { return 0 }
         return aPlayer.duration

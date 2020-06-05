@@ -11,9 +11,6 @@ import CollectionKit
 
 open class CollectionViewController: UIViewController {
     public let collectionView = CollectionView()
-    public let insetMarginX: CGFloat = 10
-    public let insetMarginTop: CGFloat = 0
-    public let insetMarginBottom: CGFloat = 0
 
     var provider: Provider? {
         get { return collectionView.provider }

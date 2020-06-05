@@ -39,11 +39,6 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="18"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                     </textView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="PUY-XP-Fe3">
                                         <rect key="frame" x="334" y="8" width="60" height="40"/>
@@ -54,6 +49,7 @@
                                                     <constraint firstAttribute="width" constant="30" id="WAI-Rf-kX3"/>
                                                     <constraint firstAttribute="height" constant="40" id="sBL-np-pDz"/>
                                                 </constraints>
+                                                <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <inset key="imageEdgeInsets" minX="5" minY="10" maxX="5" maxY="10"/>
                                                 <state key="normal" image="emo.png"/>
                                                 <connections>
@@ -66,6 +62,7 @@
                                                     <constraint firstAttribute="height" constant="40" id="Myj-qi-7wc"/>
                                                     <constraint firstAttribute="width" constant="30" id="woV-wa-GWM"/>
                                                 </constraints>
+                                                <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <inset key="imageEdgeInsets" minX="5" minY="10" maxX="5" maxY="10"/>
                                                 <state key="normal" image="mic.png"/>
                                                 <connections>
@@ -79,6 +76,7 @@
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R58-PY-9Yw">
                                         <rect key="frame" x="10" y="15" width="25" height="25"/>
+                                        <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" image="addFile.png"/>
                                         <connections>
                                             <action selector="addFileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pEv-bF-sED"/>
@@ -191,8 +189,9 @@
                                             <constraint firstAttribute="height" constant="44" id="fX8-tT-IfL"/>
                                             <constraint firstAttribute="width" constant="44" id="wPw-qz-BxC"/>
                                         </constraints>
+                                        <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
-                                        <state key="normal" image="chatClose.png"/>
+                                        <state key="normal" image="clear.fill" catalog="system"/>
                                         <connections>
                                             <action selector="micContainerCloseButtonPressed:" destination="UAy-nX-xEV" eventType="touchUpInside" id="Vz4-lE-4SA"/>
                                         </connections>
@@ -213,7 +212,8 @@
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C5W-rQ-Q6x">
                                         <rect key="frame" x="168" y="68" width="78" height="78"/>
-                                        <state key="normal" image="play.png"/>
+                                        <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="play.fill" catalog="system"/>
                                         <connections>
                                             <action selector="voiceRecordButtonPressed:" destination="UAy-nX-xEV" eventType="touchUpInside" id="GTx-6X-j0p"/>
                                         </connections>
@@ -291,12 +291,27 @@
             </objects>
             <point key="canvasLocation" x="38" y="572"/>
         </scene>
+        <!--Document View Controller-->
+        <scene sceneID="rbf-fy-OUG">
+            <objects>
+                <viewController storyboardIdentifier="DocumentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Wn2-LH-IZk" customClass="DocumentViewController" customModule="OZChattingUI_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FsX-cL-DAs">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="mb3-h0-Cx2"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WpB-Vu-byr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1781" y="124"/>
+        </scene>
     </scenes>
     <resources>
         <image name="addFile.png" width="25" height="25"/>
-        <image name="chatClose.png" width="24" height="24"/>
+        <image name="clear.fill" catalog="system" width="128" height="114"/>
         <image name="emo.png" width="25" height="25"/>
         <image name="mic.png" width="25" height="25"/>
-        <image name="play.png" width="21" height="20"/>
+        <image name="play.fill" catalog="system" width="116" height="128"/>
     </resources>
 </document>

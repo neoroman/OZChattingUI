@@ -43,6 +43,7 @@
 		BAA31F822488B7D600DE982B /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA31F812488B7D600DE982B /* StartViewController.swift */; };
 		BAA31F852489BEF700DE982B /* CommonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA31F842489BEF700DE982B /* CommonData.swift */; };
 		BAA5DB512480B24800495149 /* send@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAA5DB502480B24800495149 /* send@2x.png */; };
+		BAD6EAFB248A8E4A000312B9 /* OZChattingUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAD6EAFA248A8E4A000312B9 /* OZChattingUI.storyboard */; };
 		BAFC0C2724872E5300CA466C /* btnCallClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFC0C2624872E5200CA466C /* btnCallClose@2x.png */; };
 		BAFC0C2924872E5C00CA466C /* iconViewAll@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFC0C2824872E5C00CA466C /* iconViewAll@2x.png */; };
 		BAFE5DC9247CEE5E002B0A4B /* AudioExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */; };
@@ -50,15 +51,12 @@
 		BAFE5DCB247CEE5E002B0A4B /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */; };
 		BAFE5DCC247CEE5E002B0A4B /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D8B247CEE5D002B0A4B /* test.mp3 */; };
 		BAFE5DCF247CEE5E002B0A4B /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D91247CEE5D002B0A4B /* CounterView.swift */; };
-		BAFE5DD0247CEE5E002B0A4B /* OZChoosePopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D93247CEE5E002B0A4B /* OZChoosePopup.xib */; };
 		BAFE5DD1247CEE5E002B0A4B /* pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D95247CEE5E002B0A4B /* pause@2x.png */; };
-		BAFE5DD2247CEE5E002B0A4B /* chatClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D96247CEE5E002B0A4B /* chatClose@2x.png */; };
 		BAFE5DD3247CEE5E002B0A4B /* emo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D97247CEE5E002B0A4B /* emo@2x.png */; };
 		BAFE5DD4247CEE5E002B0A4B /* album@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D98247CEE5E002B0A4B /* album@2x.png */; };
 		BAFE5DD5247CEE5E002B0A4B /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D99247CEE5E002B0A4B /* camera@2x.png */; };
 		BAFE5DD6247CEE5E002B0A4B /* call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9A247CEE5E002B0A4B /* call@2x.png */; };
 		BAFE5DD7247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9B247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png */; };
-		BAFE5DD8247CEE5E002B0A4B /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9C247CEE5E002B0A4B /* play@2x.png */; };
 		BAFE5DD9247CEE5E002B0A4B /* voicemsBtnRecord@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9D247CEE5E002B0A4B /* voicemsBtnRecord@2x.png */; };
 		BAFE5DDA247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9E247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png */; };
 		BAFE5DDB247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D9F247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png */; };
@@ -71,7 +69,6 @@
 		BAFE5DE2247CEE5E002B0A4B /* campaignWatchOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA6247CEE5E002B0A4B /* campaignWatchOff@2x.png */; };
 		BAFE5DE3247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA7247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png */; };
 		BAFE5DE4247CEE5E002B0A4B /* nopic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA8247CEE5E002B0A4B /* nopic@2x.png */; };
-		BAFE5DE5247CEE5E002B0A4B /* OZChattingUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DA9247CEE5E002B0A4B /* OZChattingUI.storyboard */; };
 		BAFE5DE6247CEE5E002B0A4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DAC247CEE5E002B0A4B /* Localizable.strings */; };
 		BAFE5DE7247CEE5E002B0A4B /* OZEmoticonList.plist in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DAE247CEE5E002B0A4B /* OZEmoticonList.plist */; };
 		BAFE5E00247CEE5E002B0A4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5DC8247CEE5E002B0A4B /* AppDelegate.swift */; };
@@ -120,6 +117,7 @@
 		BAA31F812488B7D600DE982B /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		BAA31F842489BEF700DE982B /* CommonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonData.swift; sourceTree = "<group>"; };
 		BAA5DB502480B24800495149 /* send@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send@2x.png"; sourceTree = "<group>"; };
+		BAD6EAFA248A8E4A000312B9 /* OZChattingUI.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OZChattingUI.storyboard; sourceTree = "<group>"; };
 		BAFC0C2624872E5200CA466C /* btnCallClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btnCallClose@2x.png"; sourceTree = "<group>"; };
 		BAFC0C2824872E5C00CA466C /* iconViewAll@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconViewAll@2x.png"; sourceTree = "<group>"; };
 		BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioExtension.swift; sourceTree = "<group>"; };
@@ -127,15 +125,12 @@
 		BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
 		BAFE5D8B247CEE5D002B0A4B /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
 		BAFE5D91247CEE5D002B0A4B /* CounterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
-		BAFE5D93247CEE5E002B0A4B /* OZChoosePopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OZChoosePopup.xib; sourceTree = "<group>"; };
 		BAFE5D95247CEE5E002B0A4B /* pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause@2x.png"; sourceTree = "<group>"; };
-		BAFE5D96247CEE5E002B0A4B /* chatClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chatClose@2x.png"; sourceTree = "<group>"; };
 		BAFE5D97247CEE5E002B0A4B /* emo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emo@2x.png"; sourceTree = "<group>"; };
 		BAFE5D98247CEE5E002B0A4B /* album@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "album@2x.png"; sourceTree = "<group>"; };
 		BAFE5D99247CEE5E002B0A4B /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
 		BAFE5D9A247CEE5E002B0A4B /* call@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "call@2x.png"; sourceTree = "<group>"; };
 		BAFE5D9B247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordStopPress@2x.png"; sourceTree = "<group>"; };
-		BAFE5D9C247CEE5E002B0A4B /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		BAFE5D9D247CEE5E002B0A4B /* voicemsBtnRecord@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecord@2x.png"; sourceTree = "<group>"; };
 		BAFE5D9E247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordPress@2x.png"; sourceTree = "<group>"; };
 		BAFE5D9F247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordStop@2x.png"; sourceTree = "<group>"; };
@@ -148,7 +143,7 @@
 		BAFE5DA6247CEE5E002B0A4B /* campaignWatchOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "campaignWatchOff@2x.png"; sourceTree = "<group>"; };
 		BAFE5DA7247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voicemsBtnRecordPlay@2x.png"; sourceTree = "<group>"; };
 		BAFE5DA8247CEE5E002B0A4B /* nopic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nopic@2x.png"; sourceTree = "<group>"; };
-		BAFE5DAA247CEE5E002B0A4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/OZChattingUI.storyboard; sourceTree = "<group>"; };
+		BAFE5DAA247CEE5E002B0A4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Base.lproj/trash-to-be.storyboard"; sourceTree = "<group>"; };
 		BAFE5DAD247CEE5E002B0A4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BAFE5DAE247CEE5E002B0A4B /* OZEmoticonList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = OZEmoticonList.plist; sourceTree = "<group>"; };
 		BAFE5DC8247CEE5E002B0A4B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -288,10 +283,10 @@
 		BAFE5D92247CEE5E002B0A4B /* __NeedToCopyYourProject__ */ = {
 			isa = PBXGroup;
 			children = (
-				BAFE5D93247CEE5E002B0A4B /* OZChoosePopup.xib */,
 				BAFE5D94247CEE5E002B0A4B /* Images */,
 				BA5F328B2482A48B00FF8E62 /* Emoticons */,
-				BAFE5DA9247CEE5E002B0A4B /* OZChattingUI.storyboard */,
+				BAFE5DA9247CEE5E002B0A4B /* trash-to-be.storyboard */,
+				BAD6EAFA248A8E4A000312B9 /* OZChattingUI.storyboard */,
 				BA5F32BE2482D7A800FF8E62 /* OZChattingUI2.storyboard */,
 				BAFE5DAB247CEE5E002B0A4B /* Supporting Files */,
 			);
@@ -305,13 +300,11 @@
 				BAFC0C2824872E5C00CA466C /* iconViewAll@2x.png */,
 				BAA5DB502480B24800495149 /* send@2x.png */,
 				BAFE5D95247CEE5E002B0A4B /* pause@2x.png */,
-				BAFE5D96247CEE5E002B0A4B /* chatClose@2x.png */,
 				BAFE5D97247CEE5E002B0A4B /* emo@2x.png */,
 				BAFE5D98247CEE5E002B0A4B /* album@2x.png */,
 				BAFE5D99247CEE5E002B0A4B /* camera@2x.png */,
 				BAFE5D9A247CEE5E002B0A4B /* call@2x.png */,
 				BAFE5D9B247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png */,
-				BAFE5D9C247CEE5E002B0A4B /* play@2x.png */,
 				BAFE5D9D247CEE5E002B0A4B /* voicemsBtnRecord@2x.png */,
 				BAFE5D9E247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png */,
 				BAFE5D9F247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png */,
@@ -379,6 +372,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = N6EG7RK539;
 						LastSwiftMigration = 1130;
 					};
 				};
@@ -407,7 +401,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAFE5DDB247CEE5E002B0A4B /* voicemsBtnRecordStop@2x.png in Resources */,
-				BAFE5DD8247CEE5E002B0A4B /* play@2x.png in Resources */,
 				BAFE5DD7247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png in Resources */,
 				BAFE5DD5247CEE5E002B0A4B /* camera@2x.png in Resources */,
 				BA5F32B02482A48B00FF8E62 /* oz1013@2x.png in Resources */,
@@ -420,14 +413,12 @@
 				BAFE5DD4247CEE5E002B0A4B /* album@2x.png in Resources */,
 				BAFE5DE0247CEE5E002B0A4B /* step@2x.png in Resources */,
 				BA5F32B42482A48B00FF8E62 /* oz1023@2x.png in Resources */,
-				BAFE5DD0247CEE5E002B0A4B /* OZChoosePopup.xib in Resources */,
 				BAFE5DDF247CEE5E002B0A4B /* file@2x.png in Resources */,
 				BA5F32A72482A48B00FF8E62 /* oz1010@2x.png in Resources */,
 				BAFE5DD3247CEE5E002B0A4B /* emo@2x.png in Resources */,
 				BA5F32B82482A48B00FF8E62 /* oz1021@2x.png in Resources */,
 				BA5F32A92482A48B00FF8E62 /* oz1018@2x.png in Resources */,
 				BAA5DB512480B24800495149 /* send@2x.png in Resources */,
-				BAFE5DD2247CEE5E002B0A4B /* chatClose@2x.png in Resources */,
 				BAFE5DE7247CEE5E002B0A4B /* OZEmoticonList.plist in Resources */,
 				BA5F32AD2482A48B00FF8E62 /* oz1016@2x.png in Resources */,
 				BA5F32A82482A48B00FF8E62 /* oz1014@2x.png in Resources */,
@@ -447,6 +438,7 @@
 				BAFE5DDD247CEE5E002B0A4B /* campaign@2x.png in Resources */,
 				BAFE5DE3247CEE5E002B0A4B /* voicemsBtnRecordPlay@2x.png in Resources */,
 				BAFE5DDE247CEE5E002B0A4B /* mic@2x.png in Resources */,
+				BAD6EAFB248A8E4A000312B9 /* OZChattingUI.storyboard in Resources */,
 				BAFE5DE4247CEE5E002B0A4B /* nopic@2x.png in Resources */,
 				BA5F32AC2482A48B00FF8E62 /* oz1004@2x.png in Resources */,
 				BA5F32BB2482A48B00FF8E62 /* oz1017@2x.png in Resources */,
@@ -456,7 +448,6 @@
 				BA5F32A42482A48B00FF8E62 /* oz1024@2x.png in Resources */,
 				BA5F32BA2482A48B00FF8E62 /* oz1009@2x.png in Resources */,
 				BAFC0C2924872E5C00CA466C /* iconViewAll@2x.png in Resources */,
-				BAFE5DE5247CEE5E002B0A4B /* OZChattingUI.storyboard in Resources */,
 				BA5F32B62482A48B00FF8E62 /* oz1007@2x.png in Resources */,
 				BAFE5DD9247CEE5E002B0A4B /* voicemsBtnRecord@2x.png in Resources */,
 				BA5F32AA2482A48B00FF8E62 /* oz1006@2x.png in Resources */,
@@ -564,12 +555,12 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		BAFE5DA9247CEE5E002B0A4B /* OZChattingUI.storyboard */ = {
+		BAFE5DA9247CEE5E002B0A4B /* trash-to-be.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				BAFE5DAA247CEE5E002B0A4B /* Base */,
 			);
-			name = OZChattingUI.storyboard;
+			name = "trash-to-be.storyboard";
 			sourceTree = "<group>";
 		};
 		BAFE5DAC247CEE5E002B0A4B /* Localizable.strings */ = {
@@ -694,7 +685,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = N6EG7RK539;
 				INFOPLIST_FILE = OZChattingUI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -713,7 +704,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = N6EG7RK539;
 				INFOPLIST_FILE = OZChattingUI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;

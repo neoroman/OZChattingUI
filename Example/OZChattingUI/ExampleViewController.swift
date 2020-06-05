@@ -26,7 +26,6 @@ class ExampleViewController: OZMessagesViewController {
         // Do any additional setup after loading the view.
         
         self.delegate = self
-        self.fileChoosePopupDelegate = self
         self.messagesConfigurations = addMessageConfiguration()
 
         
@@ -34,6 +33,18 @@ class ExampleViewController: OZMessagesViewController {
             self.testChats(vc: self)
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.35) {
+            if self.isViewLoaded, !self.collectionView.hasReloaded  {
+                self.collectionView.contentInset = UIEdgeInsets(top: 10, left: 12, bottom: 60, right: 12)
+                self.collectionView.reloadData()
+            }
+        }
+    }
+
 
     fileprivate func testChats(vc: OZMessagesViewController) {
         // Debug
@@ -90,33 +101,42 @@ class ExampleViewController: OZMessagesViewController {
 
         return [
             // OZMessageCell
-            OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
-            OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
+            OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.red.withAlphaComponent(0.7), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.blue.withAlphaComponent(0.6), .fromOther),
-            OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Bold", OZMessageType.allTypes()),
-            OZMessagesConfigurationItem.fontColor(.black, [.voice, .mp3], .none),
-            OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
-            OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
-            OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
-            OZMessagesConfigurationItem.usingPackedImages(false),
-            OZMessagesConfigurationItem.showTimeLabelForImage(true),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
-            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .right, .center),
-            OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
+            OZMessagesConfigurationItem.cellBackgroundColor(.systemPink, [.voice, .mp3]),
             OZMessagesConfigurationItem.cellPadding(15, [.text]),
             OZMessagesConfigurationItem.cellPadding(3, [.emoticon]),
+            OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 83, height: 83)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
+            OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
+            OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
+            OZMessagesConfigurationItem.fontColor(.black, [.voice, .mp3], .none),
+            OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
+            OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
+            OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Bold", OZMessageType.allTypes()),
+            OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
+            OZMessagesConfigurationItem.showTimeLabelForImage(true),
+            OZMessagesConfigurationItem.usingPackedImages(false),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .right, .center),
+            OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
 
             // OZMessagesViewController
+            OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.systemGray, .systemPink),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGray, .systemTeal),
-            OZMessagesConfigurationItem.addFileButtonItems([.camera, .album]),
+
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
+
+            // OZEmoticonViewController
+            OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.magenta.withAlphaComponent(0.3)),
+            OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.magenta),
+
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
         ]
@@ -168,7 +188,10 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
         
         return true
     }
-    
+    func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
+        return addMessageConfiguration()
+    }
+
     // View Related
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
         if cell.message.type == .text {
@@ -220,24 +243,24 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     
     func messageTextViewBeginEditing(textView: UITextView) {
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
-            self.micButton.setImage(UIImage(named: "send"), for: .normal)
-            self.micButton.tag = kSendButtonTag
+            ozMicButton.setImage(UIImage(named: "send"), for: .normal)
+            ozMicButton.tag = kSendButtonTag
         }
     }
     func messageTextViewDidChanged(textView: UITextView) {
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
-            self.micButton.setImage(UIImage(named: "send"), for: .normal)
-            self.micButton.tag = kSendButtonTag
+            ozMicButton.setImage(UIImage(named: "send"), for: .normal)
+            ozMicButton.tag = kSendButtonTag
         }
         else {
-            self.micButton.setImage(UIImage(named: "mic"), for: .normal)
-            self.micButton.tag = kMicButtonTag
+            ozMicButton.setImage(UIImage(named: "mic"), for: .normal)
+            ozMicButton.tag = kMicButtonTag
         }
     }
     func messageTextViewEndEditing(textView: UITextView) {
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count <= 0 {
-            self.micButton.setImage(UIImage(named: "mic"), for: .normal)
-            self.micButton.tag = kMicButtonTag
+            ozMicButton.setImage(UIImage(named: "mic"), for: .normal)
+            ozMicButton.tag = kMicButtonTag
         }
     }
     func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) {
@@ -245,18 +268,18 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
         if let button = sender as? UIButton, button.tag == kSendButtonTag,
-            let fullText = viewController.inputTextView.text {
+            let fullText = viewController.ozInputTextView.text {
             
             let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
             if trimmed.count > 0 {
                 viewController.send(msg: trimmed)
             }
             
-            viewController.inputTextView.text = ""
-            viewController.adjustTextViewHeight(viewController.inputTextView)
+            viewController.ozInputTextView.text = ""
+            viewController.adjustTextViewHeight(viewController.ozInputTextView)
             
-            viewController.micButton.setImage(UIImage(named: "mic"), for: .normal)
-            viewController.micButton.tag = kMicButtonTag
+            viewController.ozMicButton.setImage(UIImage(named: "mic"), for: .normal)
+            viewController.ozMicButton.tag = kMicButtonTag
             return false
         }
         return true
@@ -265,51 +288,66 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
         return true
     }
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
-        return true
-    }
-    func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
-        return addMessageConfiguration()
+        let alert: UIAlertController = UIAlertController(title: "Choose file", message: "", preferredStyle: .actionSheet)
+        
+        var actions: [UIAlertAction] = []
+        actions.append(UIAlertAction(title: "Camera", style: .default, handler: { (action) in
+            self.handleCameraPermission()
+        }))
+        actions.append(UIAlertAction(title: "Album", style: .default, handler: { (action) in
+            self.showImagePicker(source: .photoLibrary)
+        }))
+        actions.append(UIAlertAction(title: "MP3 File", style: .default, handler: { (action) in
+            let aDocVC = UIDocumentPickerViewController(documentTypes: ["public.mp3"], in: .import)
+            aDocVC.delegate = self
+            self.present(aDocVC, animated: true) {
+            }
+        }))
+
+        for anAct in actions {
+            alert.addAction(anAct)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in
+            print("Cancel has been choosed...!")
+        }
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true) {
+            // code
+        }
+
+        return false
     }
 }
 
-// MARK: - UIDocumentBrowserViewControllerDelegate
-// Thanks to https://www.appcoda.com/files-app-integration/
-@available(iOS 11.0, *)
-extension ExampleViewController: UIDocumentBrowserViewControllerDelegate {
-    func documentBrowser(_ controller: UIDocumentBrowserViewController, didRequestDocumentCreationWithHandler importHandler: @escaping (URL?, UIDocumentBrowserViewController.ImportMode) -> Void) {
-        let newDocumentURL: URL? = nil
-        
-        if newDocumentURL != nil {
-            importHandler(newDocumentURL, .copy)
-        } else {
-            importHandler(nil, .none)
-        }
+// MARK: - UIDocumentPickerDelegate
+extension ExampleViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        saveFile(url: url)
     }
-    func documentBrowser(_ controller: UIDocumentBrowserViewController, didPickDocumentsAt documentURLs: [URL]) {
-        guard let sourceURL = documentURLs.first else { return }
-        
-        presentDocument(at: sourceURL)
-    }
-    func documentBrowser(_ controller: UIDocumentBrowserViewController, didImportDocumentAt sourceURL: URL, toDestinationURL destinationURL: URL) {
-        presentDocument(at: destinationURL)
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let sourceURL = urls.first else { return }
+        saveFile(url: sourceURL)
     }
     
-    func presentDocument(at documentURL: URL) {
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let documentViewController = storyBoard.instantiateViewController(withIdentifier: "DocumentViewController") as! DocumentViewController
-        
-        documentViewController.document = Document(fileURL: documentURL)
-        
-        if let nc = self.navigationController {
-            nc.pushViewController(documentViewController, animated: true)
+    func saveFile(url: URL) {
+        if let aData = FileManager.default.contents(atPath: url.relativePath) {
+            let aPath = String.audioFileSave(aData)
+            self.send(msg: aPath, type: .mp3, isDeliveredMsg: false, callback: { (identifier, path) in
+                if let window = UIApplication.shared.keyWindow,
+                    let rootVC = window.rootViewController,
+                    let rvc = rootVC as? UINavigationController,
+                    let chatVC = (rvc.viewControllers.filter{$0 is ExampleViewController}).first {
+                    if let lastVC = chatVC.presentingViewController {
+                        lastVC.dismiss(animated: true, completion: nil)
+                    }
+                    else if let lastVC = chatVC.presentedViewController {
+                        lastVC.dismiss(animated: true, completion: nil)
+                    }
+                }
+            })
         }
-        else {
-            present(documentViewController, animated: true, completion: nil)
-        }
-    }
-
-    @objc func closeDocumentViewController() {
-        self.dismiss(animated: true, completion: nil)
     }
 }
 

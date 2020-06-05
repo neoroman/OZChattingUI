@@ -261,3 +261,15 @@ extension String {
         return false
     }
 }
+
+extension UIView {
+    var saferAreaLayoutGuide: UILayoutGuide {
+        get {
+            if #available(iOS 11.0, *) {
+                return self.safeAreaLayoutGuide
+            } else {
+                return self.layoutMarginsGuide
+            }
+        }
+    }
+}

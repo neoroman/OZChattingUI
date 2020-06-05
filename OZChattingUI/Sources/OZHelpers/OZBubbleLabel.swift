@@ -28,7 +28,7 @@ open class OZBubbleLabel: UILabel {
     @IBInspectable public var rightInset: CGFloat = kBubbleLabelRightInset
     @IBInspectable public var notchInsetXRatio: CGFloat = 0.67
     @IBInspectable public var heightRatio: CGFloat = 1
-    fileprivate let notchInsetX: CGFloat = 10.0
+    let notchInsetX: CGFloat = 10.0
 
     public var isIncoming = false
     public var incomingColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)

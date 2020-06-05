@@ -209,6 +209,10 @@ public class OZMessage: Equatable {
                     alignment = anAlignment
                 }
                 break
+            case .audioButtonsName(let play, let pause):
+                audioPlayButtonName = play
+                audioPauseButtonName = pause
+                break
             case .audioProgressColor(let color, let userType):
                 if checkUserType(userType) {
                     audioProgressColor = color
@@ -251,6 +255,9 @@ public class OZMessage: Equatable {
                 if types.contains(type) {
                     cellOpacity = alpha
                 }
+                break
+            case .chatEmoticonSize(let emoticonSize):
+                chatEmoticonSize = emoticonSize
                 break
             case .chatImageSize(let displaySize, _):
                 chatImageSize = displaySize
@@ -334,6 +341,8 @@ public class OZMessage: Equatable {
     
     public var alignment: OZMessageAlignment = .center
     public var audioProgressColor: UIColor = UIColor.green.withAlphaComponent(0.9)
+    public var audioPlayButtonName: String = ""
+    public var audioPauseButtonName: String = ""
     public var backgroundColor: UIColor = .clear
     public var bubbleColor: UIColor = UIColor.green.withAlphaComponent(0.9)
     public var bubbleWidthRatio: CGFloat = 1
@@ -343,7 +352,8 @@ public class OZMessage: Equatable {
     public var cellPadding: CGFloat = 0
     public var cellRightPadding: CGFloat = 0
     public var cellOpacity: CGFloat = 1.0
-    public var chatImageSize: CGSize = CGSize(width: 120, height: 120)
+    public var chatEmoticonSize: CGSize = .zero
+    public var chatImageSize: CGSize = .zero
     public var isFolded: Bool = false
     public var foldingMessageMaxHeight: CGFloat = 160
     public var foldingButtonSize: CGSize = .zero
