@@ -261,4 +261,14 @@ extension OZBubbleLabel {
         super.draw(rect)
     }
     
+    override open func drawText(in rect: CGRect) {
+        if isIncoming {
+            let insets = UIEdgeInsets.init(top: topInset, left: leftInset + kNotchInsetX, bottom: bottomInset, right: rightInset - kNotchInsetX)
+            super.drawText(in: rect.inset(by: insets))
+        }
+        else {
+            let insets = UIEdgeInsets.init(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+            super.drawText(in: rect.inset(by: insets))
+        }
+    }
 }

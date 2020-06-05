@@ -247,6 +247,11 @@ public class OZMessage: Equatable {
                     cellRightPadding = padding
                 }
                 break
+            case .cellOpacity(let alpha, let types):
+                if types.contains(type) {
+                    cellOpacity = alpha
+                }
+                break
             case .chatImageSize(let displaySize, _):
                 chatImageSize = displaySize
                 break
@@ -311,10 +316,12 @@ public class OZMessage: Equatable {
             case .usingPackedImages(let yesOrNo):
                 usingPackedImages = yesOrNo
                 break
-            case .usingLongMessageFolding(let yesOrNo, let maxHeight, _, _, let size):
+            case .usingLongMessageFolding(let yesOrNo, let maxHeight, let size, let foldAlignment, let unfoldAlignment):
                 usingFoldingOption = yesOrNo
                 foldingMessageMaxHeight = maxHeight
                 foldingButtonSize = size
+                foldingButtonAlignment = foldAlignment
+                unfoldingButtonAlignment = unfoldAlignment
                 if yesOrNo {
                     isFolded = true
                 }
@@ -335,10 +342,13 @@ public class OZMessage: Equatable {
     public var cellLeftPadding: CGFloat = 0
     public var cellPadding: CGFloat = 0
     public var cellRightPadding: CGFloat = 0
+    public var cellOpacity: CGFloat = 1.0
     public var chatImageSize: CGSize = CGSize(width: 120, height: 120)
     public var isFolded: Bool = false
     public var foldingMessageMaxHeight: CGFloat = 160
     public var foldingButtonSize: CGSize = .zero
+    public var foldingButtonAlignment: OZMessageAlignment = .center
+    public var unfoldingButtonAlignment: OZMessageAlignment = .center
     public var fontName: String = "AppleSDGothicNeo-Medium"
     public var fontSize: CGFloat = 0
     public var iconPadding: CGFloat = 0

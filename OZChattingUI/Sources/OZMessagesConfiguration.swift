@@ -54,7 +54,11 @@ public enum OZMessagesConfigurationItem {
     /// Cell height in OZMessageCell
     case cellHeight(CGFloat, [OZMessageType])
     
-    /// Row max width ratio in OZMessageCell, ex) 0.9
+    /// Cell content opacity in OZMessageCell, eg. 0.5 means 50%,
+    /// Default is 1.0 means 100%
+    case cellOpacity(CGFloat, [OZMessageType])
+    
+    /// Row max width ratio in OZMessageCell, eg. 0.9 means 90% of screen width
     case maxWidthRatio(CGFloat)
     
     /// Bubble background color in OZMessageCell
@@ -122,8 +126,11 @@ public enum OZMessagesConfigurationItem {
     /// Add file action sheet items, `cancel` is always show in OZMessagesViewController
     case addFileButtonItems([OZChooseContentType])
     
-    /// Using long message folding option, default `NO` in OZMessageCell
-    case usingLongMessageFolding(Bool, _ maxHeight: CGFloat, _ foldButton: UIButton, _ unfoldButon: UIButton, _ buttonSize: CGSize)
+    /// Using long message folding option, default `NO` in OZMessageCell,
+    /// eg) .usingLongMessageFolding(false, 200, CGSize(width: 100, height: 25), .center, .center)
+    case usingLongMessageFolding(Bool, _ maxHeight: CGFloat, _ buttonSize: CGSize, _ foldButtonAlignment: OZMessageAlignment, _ unfoldButonAlignment: OZMessageAlignment)
+    /// eg) .usingLongMessageFoldingButtons(UIButton(type: .infoLight), UIButton(type: .detailDisclosure))
+    case usingLongMessageFoldingButtons(_ foldButton: UIButton, _ unfoldButon: UIButton)
     
     /// Can message selectable by long press gesture, default `NO` in OZMessageCell
     case canMessageSelectableByLongPressGesture(Bool)
@@ -166,6 +173,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.cellHeight(60, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellHeight(40, [.mp3, .voice]),
             OZMessagesConfigurationItem.cellHeight(120, [.image]),
+            OZMessagesConfigurationItem.cellOpacity(1.0, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.maxWidthRatio(0.9),
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), .fromOther),
@@ -185,7 +193,8 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
             OZMessagesConfigurationItem.usingPackedImages(true),
             OZMessagesConfigurationItem.showTimeLabelForImage(false),
-            OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, UIButton(type: .infoLight), UIButton(type: .detailDisclosure), CGSize(width: 100, height: 25)),
+            OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, CGSize(width: 100, height: 25), .center, .center),
+            OZMessagesConfigurationItem.usingLongMessageFoldingButtons(UIButton(type: .infoLight), UIButton(type: .detailDisclosure)),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(false),
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),

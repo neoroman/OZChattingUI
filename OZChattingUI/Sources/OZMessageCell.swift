@@ -19,7 +19,6 @@ open class IncomingTextMessageCell: OZMessageCell {
     public var timeLabel = UILabel()
     
     public var buttonContainer = UIView()
-    var textSize: CGSize = .zero
 
     override public var message: OZMessage! {
         didSet {
@@ -68,11 +67,8 @@ open class IncomingTextMessageCell: OZMessageCell {
             }
             
             buttonContainer.isHidden = true
-            textSize = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
-                                                 fontSize: message.fontSize, maxWidth: self.bounds.width * 0.8,
-                                                 paddingX: message.cellLeftPadding,
-                                                 paddingY: message.cellPadding)
-            if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
+            if message.usingFoldingOption,
+                OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight,
                 let dele = delegate {
                 for x in buttonContainer.subviews { x.removeFromSuperview() }
                 for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
@@ -95,6 +91,11 @@ open class IncomingTextMessageCell: OZMessageCell {
                 print("FoldingOption(\(message.usingFoldingOption)), Content(\(message.content))")
             }
 
+            if message.cellOpacity <= 1.0 {
+                for x in self.subviews {
+                    x.alpha = message.cellOpacity
+                }
+            }
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -148,7 +149,8 @@ open class IncomingTextMessageCell: OZMessageCell {
     private func layoutButtonContainer() {
         buttonContainer.isHidden = true
         textLabel.bottomInset = kBubbleLabelBottomInset
-        if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight {
+        if message.usingFoldingOption,
+            OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight {
             buttonContainer.isHidden = false
             let height = message.foldingButtonSize.height
             buttonContainer.frame = CGRect(x: textLabel.frame.minX,
@@ -156,9 +158,32 @@ open class IncomingTextMessageCell: OZMessageCell {
                                            width: textLabel.frame.width,
                                            height: height + message.cellPadding)
             for x in buttonContainer.subviews {
-                x.isHidden = true
-                x.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
-                x.frame.origin.x = buttonContainer.bounds.minX
+                if let button = x as? UIButton {
+                    button.isHidden = true
+                    button.sizeToFit()
+                    button.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
+                    
+                    var bAlign: OZMessageAlignment = message.foldingButtonAlignment
+                    if button.tag == OZMessageFoldState.unfold.tag() {
+                        bAlign = message.unfoldingButtonAlignment
+                    }
+                    switch bAlign {
+                    case .left:
+                        button.frame.origin.x = buttonContainer.bounds.minX + message.cellPadding
+                        break
+                    case .right:
+                        if let aText = button.title(for: .normal),
+                            let anImage = button.imageView,
+                            OZMessageCell.sizeForText(aText).width + anImage.frame.width > button.frame.width {
+                            button.frame.origin.x = buttonContainer.bounds.maxX - OZMessageCell.sizeForText(aText).width - anImage.frame.width
+                        }
+                        else {
+                            button.frame.origin.x = buttonContainer.bounds.maxX - button.frame.width
+                        }
+                        break
+                    default: break
+                    }
+                }
             }
             if message.isFolded {
                 buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
@@ -176,7 +201,6 @@ open class OutgoingTextMessageCell: OZMessageCell {
     public var timeLabel = UILabel()
  
     public var buttonContainer = UIView()
-    var textSize: CGSize = .zero
 
     override public var message: OZMessage! {
         didSet {
@@ -203,11 +227,8 @@ open class OutgoingTextMessageCell: OZMessageCell {
             }
             
             buttonContainer.isHidden = true
-            textSize = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
-                                                 fontSize: message.fontSize, maxWidth: self.bounds.width * 0.8,
-                                                 paddingX: message.cellPadding,
-                                                 paddingY: message.cellPadding)
-            if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight,
+            if message.usingFoldingOption,
+                OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight,
                 let dele = delegate {
                 for x in buttonContainer.subviews { x.removeFromSuperview() }
                 for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
@@ -230,6 +251,11 @@ open class OutgoingTextMessageCell: OZMessageCell {
                 print("FoldingOption(\(message.usingFoldingOption)), Content(\(message.content))")
             }
             
+            if message.cellOpacity <= 1.0 {
+                for x in self.subviews {
+                    x.alpha = message.cellOpacity
+                }
+            }
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -280,7 +306,8 @@ open class OutgoingTextMessageCell: OZMessageCell {
     private func layoutButtonContainer() {
         buttonContainer.isHidden = true
         textLabel.bottomInset = kBubbleLabelBottomInset
-        if message.usingFoldingOption, textSize.height > message.foldingMessageMaxHeight {
+        if message.usingFoldingOption,
+            OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight {
             buttonContainer.isHidden = false
             let height = message.foldingButtonSize.height
             buttonContainer.frame = CGRect(x: textLabel.frame.minX,
@@ -288,9 +315,32 @@ open class OutgoingTextMessageCell: OZMessageCell {
                                            width: textLabel.frame.width,
                                            height: height + message.cellPadding)
             for x in buttonContainer.subviews {
-                x.isHidden = true
-                x.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
-                x.frame.origin.x = buttonContainer.bounds.minX
+                if let button = x as? UIButton {
+                    button.isHidden = true
+                    button.sizeToFit()
+                    button.center = CGPoint(x: buttonContainer.bounds.midX, y: buttonContainer.bounds.midY)
+                    
+                    var bAlign: OZMessageAlignment = message.foldingButtonAlignment
+                    if button.tag == OZMessageFoldState.unfold.tag() {
+                        bAlign = message.unfoldingButtonAlignment
+                    }
+                    switch bAlign {
+                    case .left:
+                        button.frame.origin.x = buttonContainer.bounds.minX + message.cellPadding
+                        break
+                    case .right:
+                        if let aText = button.title(for: .normal),
+                            let anImage = button.imageView,
+                            OZMessageCell.sizeForText(aText).width + anImage.frame.width > button.frame.width {
+                            button.frame.origin.x = buttonContainer.bounds.maxX - OZMessageCell.sizeForText(aText).width - anImage.frame.width
+                        }
+                        else {
+                            button.frame.origin.x = buttonContainer.bounds.maxX - button.frame.width
+                        }
+                        break
+                    default: break
+                    }
+                }
             }
             if message.isFolded {
                 buttonContainer.viewWithTag(OZMessageFoldState.unfold.tag())?.isHidden = false
@@ -323,6 +373,11 @@ open class TextMessageCell: OZMessageCell {
                 seperator.isHidden = true
             }
             
+            if message.cellOpacity <= 1.0 {
+                for x in self.subviews {
+                    x.alpha = message.cellOpacity
+                }
+            }
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -405,6 +460,11 @@ open class IncomingStatusMessageCell: OZMessageCell {
             }
             timeLabel.sizeToFit()
             
+            if message.cellOpacity <= 1.0 {
+                for x in self.subviews {
+                    x.alpha = message.cellOpacity
+                }
+            }
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -455,7 +515,6 @@ open class ImagePlusIconMessageCell: ImageMessageCell {
     }
     
     override open func layoutSubviews() {
-        super.layoutSubviews()
         // TODO: do something here by Henry on 2020.05.09
         /*
         if message.usingPackedImages,
@@ -467,6 +526,7 @@ open class ImagePlusIconMessageCell: ImageMessageCell {
             }
         }
          */
+        super.layoutSubviews()
     }
 }
 
@@ -543,6 +603,11 @@ open class ImageMessageCell: OZMessageCell {
             iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
             iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
 
+            if message.cellOpacity <= 1.0 {
+                for x in self.subviews {
+                    x.alpha = message.cellOpacity
+                }
+            }
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -710,6 +775,11 @@ open class AudioMessageCell: OZMessageCell {
             }
             eTimeLabel.sizeToFit()
 
+            if message.cellOpacity <= 1.0 {
+                for x in self.subviews {
+                    x.alpha = message.cellOpacity
+                }
+            }
             // Callback to delegate
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
@@ -869,11 +939,11 @@ open class OZMessageCell: DynamicView {
         let rect = attributedText.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
         return rect
     }
-
+    
     fileprivate static let magifyWidthRatio: CGFloat = 2
     public static func sizeForText(_ text: String, fontName: String = "AppleSDGothicNeo-Medium",
-                            fontSize: CGFloat = 16, maxWidth: CGFloat,
-                            paddingX: CGFloat, paddingY: CGFloat) -> CGSize {
+                                   fontSize: CGFloat = 16, maxWidth: CGFloat = UIScreen.main.bounds.width * 0.8,
+                            paddingX: CGFloat = 10, paddingY: CGFloat = 2) -> CGSize {
         let maxSize = CGSize(width: maxWidth - paddingX * magifyWidthRatio, height: 0)
         let font = UIFont(name: fontName, size: fontSize) ?? kTextFont ?? UIFont.systemFont(ofSize: 16)
         var rect = OZMessageCell.labelRect(for: text, font: font, considering: maxSize)

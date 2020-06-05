@@ -10,19 +10,6 @@ import UIKit
 import OZChattingUI
 import ImageViewer
 
-extension UIImageView: DisplaceableView {}
-
-struct DataItem: Equatable {
-    static func == (lhs: DataItem, rhs: DataItem) -> Bool {
-        return lhs.identifier == rhs.identifier
-    }
-    let identifier: String  // custom
-    let timestamp: Int      // custom
-    
-    let imageView: UIImageView
-    let galleryItem: GalleryItem
-}
-
 fileprivate let kMicButtonTag = 17172008
 fileprivate let kSendButtonTag = kMicButtonTag + 1004
 
@@ -114,7 +101,8 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.usingPackedImages(false),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
-            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldButton, unfoldButton, foldingButtonSize),
+            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .right, .center),
+            OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
 
             // OZMessagesViewController
@@ -134,53 +122,6 @@ class ExampleViewController: OZMessagesViewController {
 
 
 extension ExampleViewController: OZMessagesViewControllerDelegate {
-    func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
-        if cell.message.type == .text {
-            if let incomingCell = cell as? IncomingTextMessageCell {
-                incomingCell.textLabel.type = .basic
-            }
-            else if let outgoingCell = cell as? OutgoingTextMessageCell {
-                outgoingCell.textLabel.type = .basic
-            }
-        }
-//        cell.setNeedsLayout()
-//        if cell.message.type == .text || cell.message.type == .image {
-//            cell.layer.shadowOffset = CGSize(width: 5, height: 5)
-//            cell.layer.shadowOpacity = 0.05
-//            cell.layer.shadowRadius = 5
-//            cell.layer.shadowColor = cell.message.shadowColor.cgColor
-//            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
-//        }
-    }
-    
-    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
-        if cell.message.alignment == .left {
-            switch cell.message.type {
-            case .text:
-                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
-            case .image, .emoticon:
-                guard let incomingCell = cell as? ImageMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
-            case .voice, .mp3:
-                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
-            default:
-                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
-            }
-        }
-    }
-    
-    func messageViewLoaded(isLoaded: Bool) {
-        print("messageViewLoaded...!")
-    }
-    
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock) {
         print("messageCellTapped => index(\(index)), cell(\(cell))")
         
@@ -213,7 +154,7 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
         print("messageAppend...!")
     }
     
-    func messageSending(identifier: String, type: OZMessageType, data: OZMessage) {
+    func messageSending(identifier: String, type: OZMessageType, data: OZMessage) -> Bool {
         print("messageSending(id:\(identifier)):::::Sending(Type: \(type)) ==> contentPath: \(data.content)")
             
         // Delivered message here
@@ -221,7 +162,58 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
             self.dataSource.data.removeAll(where: { $0.content == "Delivered" })
             self.send(msg: "Delivered", type: .status)
         }
+        
+        return true
     }
+    
+    // View Related
+    func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
+        if cell.message.type == .text {
+            if let incomingCell = cell as? IncomingTextMessageCell {
+                incomingCell.textLabel.type = .basic
+            }
+            else if let outgoingCell = cell as? OutgoingTextMessageCell {
+                outgoingCell.textLabel.type = .basic
+            }
+        }
+        //        cell.setNeedsLayout()
+        //        if cell.message.type == .text || cell.message.type == .image {
+        //            cell.layer.shadowOffset = CGSize(width: 5, height: 5)
+        //            cell.layer.shadowOpacity = 0.05
+        //            cell.layer.shadowRadius = 5
+        //            cell.layer.shadowColor = cell.message.shadowColor.cgColor
+        //            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
+        //        }
+    }
+    
+    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
+        if cell.message.alignment == .left {
+            switch cell.message.type {
+            case .text:
+                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
+                incomingCell.iconImage.isHidden = true
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
+            case .image, .emoticon:
+                guard let incomingCell = cell as? ImageMessageCell else { return }
+                incomingCell.iconImage.isHidden = true
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
+            case .voice, .mp3:
+                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
+                incomingCell.iconImage.isHidden = true
+                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
+            default:
+                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
+            }
+        }
+    }
+    
+    func messageViewLoaded(isLoaded: Bool) {
+        print("messageViewLoaded...!")
+    }
+    
     
     func messageTextViewBeginEditing(textView: UITextView) {
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {

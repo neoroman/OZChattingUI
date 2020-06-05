@@ -399,8 +399,11 @@ extension OZMessagesViewController {
                 funcName == "messageSending" {
                 return
             }
-            if let dele = self.delegate {
-                dele.messageSending(identifier: sendingMsg.identifier, type: type, data: sendingMsg)
+            if let dele = self.delegate,
+                !dele.messageSending(identifier: sendingMsg.identifier, type: type, data: sendingMsg) {
+                if let index = self.dataSource.data.firstIndex(of: sendingMsg) {
+                    self.dataSource.data.remove(at: index)
+                }
             }
             
             if self.isEchoMode, type.isEchoEnable() {
@@ -1069,9 +1072,13 @@ extension OZMessagesViewController: OZMessageCellDelegate {
         }
     }
     func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] {
-        for case .usingLongMessageFolding(let yesOrNo, _, let foldButton, let unfoldButton, _) in messagesConfigurations {
-            if yesOrNo {
-                return [ (foldButton, .fold), (unfoldButton, .unfold) ]
+        var isUsingFold = false
+        for case .usingLongMessageFolding(let yesOrNo, _, _, _, _) in messagesConfigurations {
+            isUsingFold = yesOrNo
+        }
+        if isUsingFold {
+            for case .usingLongMessageFoldingButtons(let foldButton, let unfoldButton) in messagesConfigurations {
+                return [ (foldButton, .fold), (unfoldButton, .unfold)]
             }
         }
         return [(UIButton(), .none)]

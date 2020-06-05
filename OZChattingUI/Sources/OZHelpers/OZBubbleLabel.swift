@@ -10,7 +10,7 @@ import UIKit
 
 let kBubbleLabelTopInset: CGFloat = 5.0
 let kBubbleLabelBottomInset: CGFloat = 5.0
-let kBubbleLabelLeftInset: CGFloat = 13.0
+let kBubbleLabelLeftInset: CGFloat = 10.0
 let kBubbleLabelRightInset: CGFloat = 10.0
 
 public enum OZBubbleLabelType {
@@ -21,14 +21,15 @@ open class OZBubbleLabel: UILabel {
     
     public var type: OZBubbleLabelType = .basic
     let radius: CGFloat = 13.0  // chat bubble corner radius
-    
+
     @IBInspectable public var topInset: CGFloat = kBubbleLabelTopInset
     @IBInspectable public var bottomInset: CGFloat = kBubbleLabelBottomInset
     @IBInspectable public var leftInset: CGFloat = kBubbleLabelLeftInset
     @IBInspectable public var rightInset: CGFloat = kBubbleLabelRightInset
     @IBInspectable public var notchInsetXRatio: CGFloat = 0.67
     @IBInspectable public var heightRatio: CGFloat = 1
-    
+    fileprivate let notchInsetX: CGFloat = 10.0
+
     public var isIncoming = false
     public var incomingColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)
     public var outgoingColor = UIColor(red: 229.0 / 255.0, green: 21.0 / 255.0, blue: 0.0, alpha: 1.0)
@@ -36,15 +37,14 @@ open class OZBubbleLabel: UILabel {
     override open func draw(_ rect: CGRect) {
         
         if type == .basic {
-            let width = rect.width
-            let height = rect.height * heightRatio
+            let width = bounds.width
+            let height = bounds.height * heightRatio
             
-            let notchInsetX: CGFloat = 10.0
             let cornerRatio: CGFloat = 6.27 / 14.0
             let cntlRadius: CGFloat = radius * cornerRatio
             
             let startX: CGFloat = 1 / 14 * radius
-            
+
             let notchMaxY: CGFloat = (17.8 / 14) * radius
             let notchEndPoint = CGPoint(x: 6.49 / 14.0 * radius, y: 7.9 / 14.0 * radius)
             let notchControl1 = CGPoint(x: 10.59 / 14.0 * radius, y: 14.09 / 14.0 * radius)
@@ -154,11 +154,11 @@ open class OZBubbleLabel: UILabel {
     
     override open func drawText(in rect: CGRect) {
         if isIncoming {
-            let insets = UIEdgeInsets.init(top: topInset, left: leftInset / notchInsetXRatio, bottom: bottomInset, right: rightInset * notchInsetXRatio)
+            let insets = UIEdgeInsets.init(top: topInset, left: leftInset + notchInsetX, bottom: bottomInset, right: rightInset - notchInsetX)
             super.drawText(in: rect.inset(by: insets))
         }
         else {
-            let insets = UIEdgeInsets.init(top: topInset, left: leftInset * notchInsetXRatio, bottom: bottomInset, right: rightInset / notchInsetXRatio)
+            let insets = UIEdgeInsets.init(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
             super.drawText(in: rect.inset(by: insets))
         }
     }

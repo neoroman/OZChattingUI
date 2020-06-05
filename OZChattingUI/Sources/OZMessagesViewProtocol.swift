@@ -28,9 +28,13 @@ extension OZMessageCellDelegate {
 
 // MARK: - OZMessagesViewControllerDelegate
 public protocol OZMessagesViewControllerDelegate {
-    func messageSending(identifier: String, type: OZMessageType, data: OZMessage)
+    func messageSending(identifier: String, type: OZMessageType, data: OZMessage) -> Bool
     func messageAppend(complete: @escaping OZChatFetchCompleteBlock)
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock)
+
+    /// This configurations will override previous configurations
+    func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations
+
     
     // Optional from here
     func messageViewLoaded(isLoaded: Bool)
@@ -42,8 +46,6 @@ public protocol OZMessagesViewControllerDelegate {
     func messageTextViewDidChanged(textView: UITextView)
     func messageTextViewEndEditing(textView: UITextView)
     
-    /// This configurations will override previous configurations
-    func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations
     
     /// Mic button tapped, should return boolean for `internal` processing or not
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
@@ -68,9 +70,6 @@ public extension OZMessagesViewControllerDelegate {
     func messageTextViewBeginEditing(textView: UITextView) { }
     func messageTextViewDidChanged(textView: UITextView) { }
     func messageTextViewEndEditing(textView: UITextView) { }
-    func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
-        return []
-    }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) { }
 
