@@ -389,7 +389,7 @@ open class OZMessagesViewController: CollectionViewController {
         self.ozMicButton.translatesAutoresizingMaskIntoConstraints = false
         
         // Trailing
-        let micButtonTrail = NSLayoutConstraint(item: self.ozMicButton as Any, attribute: .trailing, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .trailing, multiplier: 1, constant: -10)
+        let micButtonTrail = NSLayoutConstraint(item: self.ozMicButton as Any, attribute: .trailing, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .trailing, multiplier: 1, constant: -15)
         micButtonTrail.identifier = micButtonContstraintIDs[0]
         
         // Width
@@ -821,8 +821,9 @@ extension OZMessagesViewController {
         }
         
         /// AutoLayout Constraints
-        if let thc = textHeightConstraint {
+        if let thc = textHeightConstraint, let ehc = emoticonContainerViewHeight {
             ozTextHeightConstraint = thc
+            ozEmoticonContainerViewHeight = ehc
         }
         else {
             setupInputTextContainerViewFrame(height: minTextViewHeight)
@@ -991,7 +992,10 @@ extension OZMessagesViewController {
 
         if animated, chatState == .chat {
             UIView.animate(withDuration: 0.35, animations: {
-                self.ozEmoticonContainerViewHeight.constant = -normalHeight
+                if self.ozEmoticonContainerViewHeight.identifier == "inputTextContainerBottom" {
+                    normalHeight = -normalHeight
+                }
+                self.ozEmoticonContainerViewHeight.constant = normalHeight
                 self.view.setNeedsUpdateConstraints()
                 self.view.layoutIfNeeded()
             }) { (comp) in
@@ -1007,7 +1011,10 @@ extension OZMessagesViewController {
             }
         }
         else {
-            self.ozEmoticonContainerViewHeight.constant = -normalHeight
+            if self.ozEmoticonContainerViewHeight.identifier == "inputTextContainerBottom" {
+                normalHeight = -normalHeight
+            }
+            self.ozEmoticonContainerViewHeight.constant = normalHeight
             self.view.setNeedsUpdateConstraints()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.05) {
                 self.collectionView.frame = self.view.bounds.inset(by: margin)
