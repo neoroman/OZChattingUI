@@ -68,6 +68,8 @@ class SelectPhotoViewController: UIViewController {
     // MARK: - Function
     
     fileprivate func fetchPhotos() {
+        // TODO: Wait for granting access photo library
+        
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: false)]
         self.photoAssets = PHAsset.fetchAssets(with: .image, options: fetchOptions)

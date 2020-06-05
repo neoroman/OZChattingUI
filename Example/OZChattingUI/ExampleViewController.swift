@@ -104,6 +104,8 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .right, .center),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
+            OZMessagesConfigurationItem.cellPadding(15, [.text]),
+            OZMessagesConfigurationItem.cellPadding(3, [.emoticon]),
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),

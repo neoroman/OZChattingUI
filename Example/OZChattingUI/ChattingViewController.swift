@@ -55,7 +55,7 @@ class ChattingViewController: OZMessagesViewController {
         self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
 
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-            self.collectionView.scrollTo(edge: .bottom, animated: false)
+            //self.collectionView.scrollTo(edge: .bottom, animated: false)
             self.isEchoMode = true
         }
 
@@ -175,7 +175,7 @@ class ChattingViewController: OZMessagesViewController {
             // OZMessageCell
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
-            OZMessagesConfigurationItem.cellBackgroundColor(UIColor(red:  204/255, green: 204/255, blue: 204/255, alpha: 1), [.announcement]),
+            OZMessagesConfigurationItem.cellBackgroundColor(UIColor(white: 204/255, alpha: 1), [.announcement]),
             OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.sepratorColor(.clear),
             OZMessagesConfigurationItem.timeFontSize(12.0),
@@ -186,9 +186,13 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 224, height: 158), CGSize(width: 800, height: 1000)),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.usingPackedImages(true),
+            OZMessagesConfigurationItem.inputBoxMicButtonTintColor(kMainColor, kMainColor),
+            OZMessagesConfigurationItem.inputBoxFileButtonTintColor(kMainColor, kMainColor),
+
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
+            
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0)
         ]

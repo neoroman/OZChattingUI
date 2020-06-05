@@ -91,6 +91,7 @@ open class OZMessagesViewController: CollectionViewController {
         let inset = UIEdgeInsets(top: 30, left: 0, bottom: 54, right: -5) // Right(-5px) is max
         collectionView.scrollIndicatorInsets = inset
         collectionView.indicatorStyle = .black
+        collectionView.showsHorizontalScrollIndicator = false
         
         setupDataProvider()
         
@@ -107,6 +108,7 @@ open class OZMessagesViewController: CollectionViewController {
         let inset = UIEdgeInsets(top: 30, left: 0, bottom: 54, right: -5) // Right(-5px) is max
         collectionView.scrollIndicatorInsets = inset
         collectionView.indicatorStyle = .black
+        collectionView.contentInset = UIEdgeInsets(top: 30, left: 5, bottom: 54, right: 5)
         collectionView.reloadData()
     }
     
@@ -123,7 +125,7 @@ open class OZMessagesViewController: CollectionViewController {
             print("Portrait")
             collectionView.frame.size = CGSize(width: super.view.bounds.width, height: super.view.bounds.height)
         }
-        collectionView.contentInset = UIEdgeInsets(top: 30, left: 10, bottom: 54, right: 10)
+        collectionView.contentInset = UIEdgeInsets(top: 30, left: 5, bottom: 54, right: 5)
     }
     
     
@@ -840,7 +842,7 @@ extension OZMessagesViewController {
         guard let micImg = micButton.imageView?.image else { return }
         
         for case .inputBoxMicButtonTintColor(let color, let selected) in messagesConfigurations {
-            micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
+            //micButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if chatState == .voice {
                 micButton.tintColor = selected
             }
@@ -853,7 +855,7 @@ extension OZMessagesViewController {
         guard let emotImg = emoticonButton.imageView?.image else { return }
         
         for case .inputBoxEmoticonButtonTintColor(let color, let selected) in messagesConfigurations {
-            emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
+            //emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if chatState == .emoticon {
                 emoticonButton.tintColor = selected
             }

@@ -10,7 +10,7 @@ import UIKit
 import OZChattingUI
 import SafariServices
 
-fileprivate let kMainColor = UIColor(red: 44/255, green: 187/255, blue: 182/255, alpha: 1)
+let kMainColor = UIColor(red: 44/255, green: 187/255, blue: 182/255, alpha: 1)
 
 class StartViewController: UITableViewController {
     
