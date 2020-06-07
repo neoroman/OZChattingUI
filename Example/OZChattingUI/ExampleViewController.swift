@@ -119,7 +119,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.usingPackedImages(false),
-            OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .right, .center),
+            OZMessagesConfigurationItem.usingLongMessageFolding(false, 108, foldingButtonSize, .right, .center),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
 
             // OZMessagesViewController
