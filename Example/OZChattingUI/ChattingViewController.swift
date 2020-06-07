@@ -277,6 +277,7 @@ class ChattingViewController: OZMessagesViewController {
 
         return [
             // OZMessageCell
+            OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 224, height: 158), CGSize(width: 800, height: 1000)),
             OZMessagesConfigurationItem.cellBackgroundColor(UIColor(white: 204/255, alpha: 1), [.announcement]),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),

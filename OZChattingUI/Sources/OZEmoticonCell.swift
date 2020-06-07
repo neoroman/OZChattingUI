@@ -25,15 +25,10 @@ open class OZEmoticonCell: DynamicView {
                 // Local file with relative path
                 imageView.image = anImage
             }
-            else {
-                // 내장 이미지명
-                if let anImage = UIImage(named: emoticon.name) {
-                    imageView.image = anImage
-                }
-                else if Bundle.isFramework() {
-                    imageView.image = UIImage.frameworkImage(named: "\(emoticon.name)@2x", ofType: "png")
-                }
+            else if emoticon.name.count > 0, let anImage = UIImage(named: emoticon.name) {
+                imageView.image = anImage
             }
+            
             imageView.frame = bounds
             imageView.contentMode = .scaleAspectFit
             

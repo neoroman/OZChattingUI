@@ -253,8 +253,8 @@ open class IncomingStatusMessageCell: OZMessageCell {
             textLabel.text = message.content
             textLabel.textColor = message.textColor
             textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
-            if let aType = message.deviceStatus {
-                if message.iconImage.count > 0, let anImg = UIImage(named: message.iconImage) {
+            if let aType = message.deviceStatus, message.iconImage.count > 0 {
+                if let anImg = UIImage(named: message.iconImage) {
                     iconImage.image = anImg
                 }
                 else if !aType.imageName().hasSuffix("@2x"), let anImg = UIImage(named: "\(aType.imageName())@2x") {
@@ -265,9 +265,6 @@ open class IncomingStatusMessageCell: OZMessageCell {
                 }
                 else if let anImg = UIImage(named: aType.imageName()) {
                     iconImage.image = anImg
-                }
-                else if Bundle.isFramework() {
-                    iconImage.image = UIImage.frameworkImage(named: "\(aType.imageName())@2x", ofType: "png")
                 }
                 
                 iconImage.frame.origin = CGPoint(x: 0, y: 0)
@@ -376,15 +373,10 @@ open class ImageMessageCell: OZMessageCell {
                 // Local file with relative path
                 imageView.image = anImage
             }
-            else {
-                // 내장 이미지명
-                if let anImage = UIImage(named: message.content) {
-                    imageView.image = anImage
-                }
-                else if Bundle.isFramework() {
-                    imageView.image = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png")
-                }
+            else if message.content.count > 0 ,let anImage = UIImage(named: message.content) {
+                imageView.image = anImage
             }
+            
             let leftInset = message.isSenderIconHide ? 0 : message.cellLeftPadding
             imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
                         
@@ -745,24 +737,23 @@ open class OZMessageCell: DynamicView {
             // Local file with relative path
             return anImage
         }
+        else if path.count > 0,
+            let anImage = UIImage(named: path) {
+            return anImage
+        }
+        else if #available(iOS 13.0, *) {
+            return UIImage(systemName: "person.circle.fill") ?? UIImage()
+        }
         else {
-            if let anImage = UIImage(named: path) {
-                return anImage
-            }
-            else if Bundle.isFramework(),
-                let anImg = UIImage.frameworkImage(named: "nopic@2x", ofType: "png") {
-                return anImg
-            }
-            if #available(iOS 13.0, *) {
-                return UIImage(systemName: "person.circle.fill") ?? UIImage()
-            } else {
-                return UIImage()
-            }
+            return UIImage()
         }
     }
     fileprivate func buttonContainerHandler(message: OZMessage, buttonContainer: UIView) {
-        if message.usingFoldingOption,
-            OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight,
+        let size = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
+                                             fontSize: message.fontSize, maxWidth: self.bounds.width - 50,
+                                             paddingX: (message.alignment == left) ? message.cellLeftPadding : message.cellPadding,
+                                             paddingY: message.cellPadding)
+        if message.usingFoldingOption, size.height > message.foldingMessageMaxHeight,
             let dele = delegate {
             for x in buttonContainer.subviews { x.removeFromSuperview() }
             for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
@@ -792,8 +783,12 @@ open class OZMessageCell: DynamicView {
     fileprivate func layoutButtonContainer(message: OZMessage, textLabel: OZBubbleLabel, buttonContainer: UIView) {
         buttonContainer.isHidden = true
         textLabel.bottomInset = kBubbleLabelBottomInset
-        if message.usingFoldingOption,
-            OZMessageCell.sizeForText(message.content).height > message.foldingMessageMaxHeight {
+        let size = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
+                                             fontSize: message.fontSize, maxWidth: self.bounds.width - 50,
+                                             paddingX: (message.alignment == left) ? message.cellLeftPadding : message.cellPadding,
+                                             paddingY: message.cellPadding)
+
+        if message.usingFoldingOption, size.height > message.foldingMessageMaxHeight {
             buttonContainer.isHidden = false
             let height = message.foldingButtonSize.height
             buttonContainer.frame = CGRect(x: textLabel.frame.minX,
@@ -815,9 +810,8 @@ open class OZMessageCell: DynamicView {
                         button.frame.origin.x = buttonContainer.bounds.minX + message.cellPadding
                         break
                     case .right:
-                        if let aText = button.title(for: .normal),
-                            let anImage = button.imageView,
-                            OZMessageCell.sizeForText(aText).width + anImage.frame.width > button.frame.width {
+                        if let aText = button.title(for: .normal), let anImage = button.imageView,
+                            size.width + anImage.frame.width > button.frame.width {
                             button.frame.origin.x = buttonContainer.bounds.maxX - OZMessageCell.sizeForText(aText).width - anImage.frame.width
                         }
                         else if let anImage = button.imageView {
@@ -876,7 +870,8 @@ open class OZMessageCell: DynamicView {
                 return CGRect(origin: CGPoint(x: containerWidth - message.chatEmoticonSize.width, y: 0), size: message.chatEmoticonSize)
             }
         }
-        else if message.type == .image || message.type == .emoticon {
+        else if (message.type == .image || message.type == .emoticon),
+            message.content.count > 0 {
             var imageSize = CGSize.zero
             if message.content.lowercased().hasPrefix("file"),
                 let anUrl = URL(string: message.content),
@@ -893,8 +888,7 @@ open class OZMessageCell: DynamicView {
                 // 내장 이미지명
                 imageSize = anImg.size
             }
-            else if Bundle.isFramework(),
-                let anImg = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png") {
+            else if let anImg = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png") {
                 // 내장 이미지명
                 imageSize = anImg.size
             }

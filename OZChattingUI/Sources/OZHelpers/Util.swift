@@ -1,7 +1,5 @@
 import UIKit
 
-let kOZChattingUIBuddleIdentifier = "kr.alterant.OZChattingUI"
-
 extension UIColor {
   static var lightBlue: UIColor {
     return UIColor(red: 0, green: 184/255, blue: 1.0, alpha: 1.0)
@@ -94,10 +92,6 @@ extension UIImage {
         if let imagePath = Bundle.main.path(forResource: named, ofType: ofType ?? "") {
             return UIImage(contentsOfFile: imagePath)!
         }
-        else if let fBundle = Bundle(identifier: kOZChattingUIBuddleIdentifier),
-            let imagePath = fBundle.path(forResource: named, ofType: ofType ?? "") {
-            return UIImage(contentsOfFile: imagePath)!
-        }
         return nil
     }
     
@@ -136,15 +130,6 @@ extension UIImage {
         return nil
     }
 
-}
-
-extension Bundle {
-    class func isFramework() -> Bool {
-        guard let _ = Bundle(identifier: kOZChattingUIBuddleIdentifier) else {
-            return false
-        }
-        return true
-    }
 }
 
 extension FileManager {
@@ -192,10 +177,6 @@ extension String {
     
     var localized: String {
         var localizedString = NSLocalizedString(self, comment: "")
-        if self == localizedString, Bundle.isFramework(),
-            let bundle = Bundle(identifier: kOZChattingUIBuddleIdentifier) {
-            localizedString = NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
-        }
         return localizedString
     }
     

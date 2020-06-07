@@ -35,11 +35,6 @@ open class OZEmoticonList: NSObject {
         }
         
         guard let path = Bundle.main.path(forResource: "OZEmoticonList", ofType: "plist") else {
-            if Bundle.isFramework(),
-                let fBundle = Bundle(identifier: kOZChattingUIBuddleIdentifier),
-                let path = fBundle.path(forResource: "OZEmoticonList", ofType: "plist") {
-                return getPlist(path: path)
-            }
             return nil
         }
                 

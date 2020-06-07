@@ -83,27 +83,7 @@ open class OZVoiceRecordViewController: UIViewController {
         }
         voiceLevelView.type = .audioEqualizer
         voiceLevelView.color = UIColor(red: 251.0 / 255.0, green: 139.0 / 255.0, blue: 125.0 / 255.0, alpha: 1.0)
-        
-        
-        if vpBtnRecordStop == nil, Bundle.isFramework() {
-            vpBtnRecordStop = UIImage.frameworkImage(named: "voicemsBtnRecordStop@2x", ofType: "png")
-        }
-        if vpBtnRecordStopPressed == nil, Bundle.isFramework() {
-            vpBtnRecordStopPressed = UIImage.frameworkImage(named: "voicemsBtnRecordStopPress@2x", ofType: "png")
-        }
-        if vpBtnRecordPlay == nil, Bundle.isFramework() {
-            vpBtnRecordPlay = UIImage.frameworkImage(named: "voicemsBtnRecordPlay@2x", ofType: "png")
-        }
-        if vpBtnRecordPlayPressed == nil, Bundle.isFramework() {
-            vpBtnRecordPlayPressed = UIImage.frameworkImage(named: "voicemsBtnRecordPlayPress@2x", ofType: "png")
-        }
-        if vpBtnRecord == nil, Bundle.isFramework() {
-            vpBtnRecord = UIImage.frameworkImage(named: "voicemsBtnRecord@2x", ofType: "png")
-        }
-        if vpBtnRecordPressed == nil, Bundle.isFramework() {
-            vpBtnRecordPressed = UIImage.frameworkImage(named: "voicemsBtnRecordPress@2x", ofType: "png")
-        }
-        
+                
         self.display(byState: voiceState)
     }
     
