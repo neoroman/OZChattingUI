@@ -59,7 +59,7 @@ open class IncomingTextMessageCell: OZMessageCell {
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
             }
-            layoutIfNeeded()
+            setNeedsLayout()
         }
     }
     
@@ -142,7 +142,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
             }
-            layoutIfNeeded()
+            setNeedsLayout()
         }
     }
     
@@ -209,7 +209,7 @@ open class TextMessageCell: OZMessageCell {
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
             }
-            layoutIfNeeded()
+            setNeedsLayout()
         }
     }
     
@@ -294,7 +294,7 @@ open class IncomingStatusMessageCell: OZMessageCell {
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
             }
-            layoutIfNeeded()
+            setNeedsLayout()
         }
     }
     
@@ -413,7 +413,7 @@ open class ImageMessageCell: OZMessageCell {
             if let dele = delegate {
                 dele.messageCellDidSetMessage(cell: self)
             }
-            layoutIfNeeded()
+            setNeedsLayout()
         }
     }
     
@@ -774,7 +774,7 @@ open class OZMessageCell: DynamicView {
                 buttonContainer.addSubview(copiedButton)
                 buttonContainer.frame.size = copiedButton.frame.size
             }
-            buttonContainer.layoutIfNeeded()
+            buttonContainer.setNeedsLayout()
         }
     }
     @objc fileprivate func longMessageFoldingButtonTapped(_ sender: UIButton) {

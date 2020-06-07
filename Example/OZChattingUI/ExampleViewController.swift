@@ -127,6 +127,8 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.systemGray, .systemPink),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGray, .systemTeal),
+            OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGreen, .systemRed),
+            OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGreen, .systemRed),
 
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
