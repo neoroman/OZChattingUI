@@ -514,7 +514,7 @@ open class AudioMessageCell: OZMessageCell {
                 playImg = UIImage(systemName: "play.fill") ?? UIImage()
             }
             if message.audioPauseButtonName.count > 0,
-                let anImg = UIImage(named: message.audioPlayButtonName)  {
+                let anImg = UIImage(named: message.audioPauseButtonName)  {
                 pauseImg = anImg
             }
             else if #available(iOS 13.0, *) {
