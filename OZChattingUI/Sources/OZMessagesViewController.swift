@@ -70,14 +70,14 @@ open class OZMessagesViewController: CollectionViewController {
     public var dataSource = OZMessageDataProvider(data: [])
     public let animator = OZMessageAnimator()
     
-    private var _messagesConfigurations: [OZMessagesConfigurationItem] = []
+    private var _messagesConfig: [OZMessagesConfigurationItem] = []
     public var messagesConfigurations: [OZMessagesConfigurationItem] {
-        set { _messagesConfigurations = newValue }
+        set { _messagesConfig = newValue }
         get {
-            if let dele = delegate {
-                _messagesConfigurations.append(contentsOf: dele.messageConfiguration(viewController: self))
+            if _messagesConfig.count == 0, let dele = delegate {
+                _messagesConfig = dele.messageConfiguration(viewController: self)
             }
-            return _messagesConfigurations
+            return _messagesConfig
         }
     }
     

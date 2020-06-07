@@ -156,7 +156,7 @@ public enum OZMessagesConfigurationItem {
 }
 
 public class OZChattingDefaultConfiguration: NSObject {
-    static func messageConfiguration() -> OZMessagesConfigurations {
+    static func defaulMessageConfiguration() -> OZMessagesConfigurations {
         var items = [
             // OZMessageCell
             OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Medium", OZMessageType.allTypes()),
