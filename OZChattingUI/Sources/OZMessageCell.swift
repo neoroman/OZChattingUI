@@ -977,8 +977,9 @@ open class OZMessageCell: DynamicView {
                     leftPadding = message.cellPadding
                 }
             }
+            let marginForScreen = (50/375) * UIScreen.main.bounds.width
             var size = sizeForText(message.content, fontName: message.fontName,
-                                   fontSize: message.fontSize, maxWidth: aMaxWidth - 50,
+                                   fontSize: message.fontSize, maxWidth: aMaxWidth - marginForScreen,
                                    paddingX: leftPadding,
                                    paddingY: message.cellPadding)
             if message.usingFoldingOption, size.height > message.foldingMessageMaxHeight {
@@ -988,8 +989,8 @@ open class OZMessageCell: DynamicView {
                 else {
                     size.height += message.foldingButtonSize.height
                 }
-                if size.width > aMaxWidth - 50 {
-                    size.width = aMaxWidth - 50
+                if size.width > aMaxWidth - marginForScreen {
+                    size.width = aMaxWidth - marginForScreen
                 }
                 else if size.width < message.foldingButtonSize.width + leftPadding {
                     size.width = message.foldingButtonSize.width + leftPadding

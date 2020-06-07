@@ -94,7 +94,9 @@ class ChattingViewController: OZMessagesViewController {
     
     /// 메시지 전송
     @IBAction func pressedSendButton(_ sender: UIButton) {
-        if let fullText = ozInputTextView.text {
+        guard let ozitv = ozInputTextView else { return }
+        
+        if let fullText = ozitv.text {
             let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
             if trimmed.count > 0 {
                 stopLoading = false
@@ -108,16 +110,18 @@ class ChattingViewController: OZMessagesViewController {
                     }
                 }
             }
-            ozInputTextView.text.removeAll()
-            adjustTextViewHeight(ozInputTextView)
+            ozitv.text.removeAll()
+            adjustTextViewHeight(ozitv)
         }
 //                        setFailToSending()
     }
     
     /// 텍스트 입력 상태로 전환
     @IBAction func pressedKeyboardButton(_ sender: UIButton) {
+        guard let ozitv = ozInputTextView else { return }
+
         setDefaultState()
-        ozInputTextView.becomeFirstResponder()
+        ozitv.becomeFirstResponder()
     }
     
     /// 입력한 텍스트 삭제
@@ -135,24 +139,27 @@ class ChattingViewController: OZMessagesViewController {
     fileprivate func setUI() {
         self.view.backgroundColor = UIColor(red: 228/255, green: 232/255, blue: 232/255, alpha: 1.0)
         
-        ozInputTextView.textContainerInset = UIEdgeInsets(top: 11, left: 14, bottom: 8, right: 40)
-        ozInputTextView.layer.cornerRadius = 12
-        ozInputTextView.layer.borderColor = UIColor(red: 222/255, green: 222/255, blue: 222/255, alpha: 1).cgColor
-        ozInputTextView.layer.borderWidth = 1
-        
-        ozInputTextView.backgroundColor = .white
-        messageTextViewBeginEditing(textView: ozInputTextView)
+        if let ozitv = ozInputTextView {
+            ozitv.textContainerInset = UIEdgeInsets(top: 11, left: 14, bottom: 8, right: 40)
+            ozitv.layer.cornerRadius = 12
+            ozitv.layer.borderColor = UIColor(red: 222/255, green: 222/255, blue: 222/255, alpha: 1).cgColor
+            ozitv.layer.borderWidth = 1
+            ozitv.backgroundColor = .white
+            messageTextViewBeginEditing(textView: ozitv)
+        }
         keyboardButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
     }
     
     /// View, Button의 default 상태 설정
     fileprivate func setDefaultState() {
-        ozInputTextView.textColor = UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)
-        ozInputTextView.tintColor = UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1)
-        ozInputTextView.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
-        ozInputTextView.isEditable = true
-        ozInputTextView.text.removeAll()
-        adjustTextViewHeight(ozInputTextView)
+        if let ozitv = ozInputTextView {
+            ozitv.textColor = UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)
+            ozitv.tintColor = UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1)
+            ozitv.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
+            ozitv.isEditable = true
+            ozitv.text.removeAll()
+            adjustTextViewHeight(ozitv)
+        }
         
         sendButton.setImage(UIImage(named: "btnCallEnterOn"), for: .normal)
         sendButton.isHidden = false
@@ -163,7 +170,9 @@ class ChattingViewController: OZMessagesViewController {
         micCircleView?.isHidden = true
         loadingImageView.isHidden = true
         
-        ozMicButton.isHidden = false
+        if let ozmb = ozMicButton {
+            ozmb.isHidden = false
+        }
         keyboardButton.isHidden = true
         
         successToSend = true // 임시
@@ -171,38 +180,42 @@ class ChattingViewController: OZMessagesViewController {
     
     /// mic 기능 없는 inputView에 대한 설정
     fileprivate func expandInputView() {
-        ozMicButton.isHidden = true
-        ozInputTextView.trailingAnchor.constraint(equalTo: ozMicButton.trailingAnchor).isActive = true
-        sendButton.trailingAnchor.constraint(equalTo: ozMicButton.trailingAnchor).isActive = true
+        guard let ozitv = ozInputTextView, let ozmb = ozMicButton else { return }
+
+        ozmb.isHidden = true
+        ozitv.trailingAnchor.constraint(equalTo: ozmb.trailingAnchor).isActive = true
+        sendButton.trailingAnchor.constraint(equalTo: ozmb.trailingAnchor).isActive = true
     }
     
     /// 메시지 전송 실패 뷰 설정
     fileprivate func setFailToSending() {
+        guard let ozitv = ozInputTextView else { return }
+
         if successToSend {
-            ozInputTextView.text += "\nFail to send"
-            let attr = NSMutableAttributedString(string: ozInputTextView.text)
+            ozitv.text += "\nFail to send"
+            let attr = NSMutableAttributedString(string: ozitv.text)
             attr.addAttribute(NSAttributedString.Key.foregroundColor,
                               value: UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1),
-                              range: NSMakeRange(0, ozInputTextView.text.count - 4))
+                              range: NSMakeRange(0, ozitv.text.count - 4))
             attr.addAttribute(NSAttributedString.Key.init(kCTFontAttributeName as String),
                               value: UIFont(name:"AppleSDGothicNeo-Regular", size: 16) as Any,
-                              range: NSMakeRange(0, ozInputTextView.text.count - 4))
+                              range: NSMakeRange(0, ozitv.text.count - 4))
             attr.addAttribute(NSAttributedString.Key.foregroundColor,
                               value: UIColor(red: 248/255, green: 72/255, blue: 94/255, alpha: 1),
-                              range: (ozInputTextView.text as NSString).range(of: "Fail to send"))
+                              range: (ozitv.text as NSString).range(of: "Fail to send"))
             attr.addAttribute(NSAttributedString.Key.init(kCTFontAttributeName as String),
                               value: UIFont(name:"AppleSDGothicNeo-Regular", size: 12) as Any,
-                              range: (ozInputTextView.text as NSString).range(of: "Fail to send"))
+                              range: (ozitv.text as NSString).range(of: "Fail to send"))
             
-            ozInputTextView.attributedText = attr
+            ozitv.attributedText = attr
             successToSend = false
         }
         
         sendButton.setImage(UIImage(named: "btnCallCancel"), for: .normal)
         clearButton.isHidden = false
-        ozInputTextView.isEditable = false
-        ozInputTextView.tintColor = .clear
-        adjustTextViewHeight(ozInputTextView)
+        ozitv.isEditable = false
+        ozitv.tintColor = .clear
+        adjustTextViewHeight(ozitv)
     }
     
     /// 음성 인식 가능한 상태 뷰 설정
@@ -214,7 +227,9 @@ class ChattingViewController: OZMessagesViewController {
         micCircleView?.layer.cornerRadius = 15
         micCircleView?.clipsToBounds = true
         
-        ozInputTextView.isEditable = false
+        if let ozitv = ozInputTextView {
+            ozitv.isEditable = false
+        }
     }
     
     /// 음성 인식 불가한 상태 뷰 설정
@@ -224,18 +239,22 @@ class ChattingViewController: OZMessagesViewController {
         micMotionButton.isEnabled = false
         sendButton.isHidden = true
         
-        ozInputTextView.resignFirstResponder()
-        ozInputTextView.isEditable = false
+        if let ozitv = ozInputTextView {
+            ozitv.resignFirstResponder()
+            ozitv.isEditable = false
+        }
     }
     
     /// 마이크 상태에 대한 안내 문구 설정
     /// - Parameter text: 안내 문구 텍스트
     fileprivate func setMicGuideText(_ text: String) {
-        ozInputTextView.text.removeAll()
-        adjustTextViewHeight(ozInputTextView)
-        ozInputTextView.text = text
-        ozInputTextView.font = UIFont(name:"AppleSDGothicNeo-Medium", size: 12)
-        ozInputTextView.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
+        if let ozitv = ozInputTextView {
+            ozitv.text.removeAll()
+            adjustTextViewHeight(ozitv)
+            ozitv.text = text
+            ozitv.font = UIFont(name:"AppleSDGothicNeo-Medium", size: 12)
+            ozitv.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
+        }
     }
     
     /// 메세지 전송시 로딩 표시
@@ -254,7 +273,8 @@ class ChattingViewController: OZMessagesViewController {
                 self.sendingTimerCount = 0
                 self.sendButton.isHidden = false
                 self.loadingImageView.isHidden = true
-                if let aText = self.ozInputTextView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+                if let ozitv = self.ozInputTextView,
+                    let aText = ozitv.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
                     self.sendButton.isEnabled = true
                 }
             }
@@ -460,7 +480,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
         /// 음성 인식 상태로 전환
         setDefaultState()
         keyboardButton.isHidden = false
-        ozMicButton.isHidden = true
+        if let ozmb = ozMicButton { ozmb.isHidden = true }
         sendButton.isHidden = true
         
         setSuccessToMic()

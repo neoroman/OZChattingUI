@@ -35,25 +35,25 @@ open class OZMessagesViewController: CollectionViewController {
         }
     }
     
-    @IBOutlet weak var inputContainer: UIView!
-    @IBOutlet weak var emoticonButton: UIButton!
-    @IBOutlet weak var micButton: UIButton!
-    @IBOutlet weak var fileButton: UIButton!
-    @IBOutlet weak var inputTextView: OZTextView!
-    @IBOutlet weak var textHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var emoticonContainer: UIView!
-    @IBOutlet weak var emoticonContainerViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var voiceContainer: UIView!
+    @IBOutlet private weak var inputContainer: UIView!
+    @IBOutlet private weak var emoticonButton: UIButton!
+    @IBOutlet private weak var micButton: UIButton!
+    @IBOutlet private weak var fileButton: UIButton!
+    @IBOutlet private weak var inputTextView: OZTextView!
+    @IBOutlet private weak var textHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var emoticonContainer: UIView!
+    @IBOutlet private weak var emoticonContainerViewHeight: NSLayoutConstraint!
+    @IBOutlet private weak var voiceContainer: UIView!
 
-    public var ozInputContainer = UIView()
-    public var ozEmoticonButton = UIButton()
-    public var ozMicButton = UIButton()
-    public var ozFileButton = UIButton()
-    public var ozInputTextView = OZTextView()
-    public var ozTextHeightConstraint = NSLayoutConstraint()
-    public var ozEmoticonContainer = UIView()
-    public var ozEmoticonContainerViewHeight = NSLayoutConstraint()
-    public var ozVoiceContainer = UIView()
+    public var ozInputContainer: UIView?
+    public var ozEmoticonButton: UIButton?
+    public var ozMicButton: UIButton?
+    public var ozFileButton: UIButton?
+    public var ozInputTextView: OZTextView?
+    public var ozTextHeightConstraint: NSLayoutConstraint?
+    public var ozEmoticonContainer: UIView?
+    public var ozEmoticonContainerViewHeight: NSLayoutConstraint?
+    public var ozVoiceContainer: UIView?
     
     fileprivate var keyboardHeight: CGFloat = 0.0
     fileprivate var isKeyboardShow: Bool = false
@@ -290,32 +290,38 @@ open class OZMessagesViewController: CollectionViewController {
                                                "inputTextContainerHeight"]
     
     fileprivate func setupInputTextContainerViewFrame(height: CGFloat = minTextViewHeight) {
+        guard let ic = ozInputContainer else {return}
+        
         self.removeContraint(fromList: inputTextContstraintIDs)
-        self.ozInputContainer.translatesAutoresizingMaskIntoConstraints = false
+        ic.translatesAutoresizingMaskIntoConstraints = false
         
         // centerX
-        let containerXCenter: NSLayoutConstraint = NSLayoutConstraint(item: self.ozInputContainer as Any, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0)
+        let containerXCenter: NSLayoutConstraint = NSLayoutConstraint(item: ic as Any, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0)
         containerXCenter.identifier = inputTextContstraintIDs[0]
         
         // Width
-        let containerWidth: NSLayoutConstraint = NSLayoutConstraint(item: self.ozInputContainer as Any, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1, constant: 0)
+        let containerWidth: NSLayoutConstraint = NSLayoutConstraint(item: ic as Any, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1, constant: 0)
         containerWidth.identifier = inputTextContstraintIDs[1]
         
         // Bottom
         if #available(iOS 11.0, *) {
-            ozEmoticonContainerViewHeight = NSLayoutConstraint(item: self.ozInputContainer, attribute: .bottom, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0)
+            ozEmoticonContainerViewHeight = NSLayoutConstraint(item: ic, attribute: .bottom, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0)
         } else {
-            ozEmoticonContainerViewHeight = NSLayoutConstraint(item: self.ozInputContainer, attribute: .bottom, relatedBy: .equal, toItem: bottomLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0)
+            ozEmoticonContainerViewHeight = NSLayoutConstraint(item: ic, attribute: .bottom, relatedBy: .equal, toItem: bottomLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0)
         }
-        ozEmoticonContainerViewHeight.identifier = inputTextContstraintIDs[2]
+        ozEmoticonContainerViewHeight?.identifier = inputTextContstraintIDs[2]
         
         // Vertical Spacing
-        ozTextHeightConstraint = self.ozInputContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: height)
-        ozTextHeightConstraint.identifier = inputTextContstraintIDs[3]
+        ozTextHeightConstraint = ic.heightAnchor.constraint(greaterThanOrEqualToConstant: height)
+        ozTextHeightConstraint?.identifier = inputTextContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
+        
+        guard let ecvh = ozEmoticonContainerViewHeight else {return}
+        guard let thc = ozTextHeightConstraint else {return}
+        
         UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.4, options: .curveEaseInOut, animations: {
-            self.view.addConstraints([self.ozEmoticonContainerViewHeight, containerWidth, containerXCenter, self.ozTextHeightConstraint])
+            self.view.addConstraints([ecvh, containerWidth, containerXCenter, thc])
             self.view.layoutIfNeeded()
         }) { (complete) in
             //code
@@ -324,23 +330,25 @@ open class OZMessagesViewController: CollectionViewController {
     fileprivate let textViewContstraintIDs = ["textViewLeading", "textViewTrail",
                                                "textViewTop", "textViewBottom"]
     fileprivate func setupTextViewFrame() {
+        guard let ic = ozInputContainer, let itv = ozInputTextView, let fb = ozFileButton else {return}
+
         self.removeContraint(fromList: textViewContstraintIDs)
-        self.ozInputTextView.translatesAutoresizingMaskIntoConstraints = false
+        itv.translatesAutoresizingMaskIntoConstraints = false
         
         // Leading
-        let textViewLeading = NSLayoutConstraint(item: self.ozInputTextView as Any, attribute: .leading, relatedBy: .equal, toItem: self.ozFileButton as Any, attribute: .trailing, multiplier: 1, constant: 10)
+        let textViewLeading = NSLayoutConstraint(item: itv as Any, attribute: .leading, relatedBy: .equal, toItem: fb as Any, attribute: .trailing, multiplier: 1, constant: 10)
         textViewLeading.identifier = textViewContstraintIDs[0]
         
         // Trailing
-        let textViewTrailing = NSLayoutConstraint(item: self.ozInputTextView as Any, attribute: .trailing, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .trailing, multiplier: 1, constant: -10)
+        let textViewTrailing = NSLayoutConstraint(item: itv as Any, attribute: .trailing, relatedBy: .equal, toItem: ic as Any, attribute: .trailing, multiplier: 1, constant: -10)
         textViewTrailing.identifier = textViewContstraintIDs[1]
         
         // Top
-        let textViewTop = NSLayoutConstraint(item: self.ozInputTextView, attribute: .top, relatedBy: .equal, toItem: self.ozInputContainer, attribute: .top, multiplier: 1, constant: 10)
+        let textViewTop = NSLayoutConstraint(item: itv, attribute: .top, relatedBy: .equal, toItem: ic, attribute: .top, multiplier: 1, constant: 10)
         textViewTop.identifier = textViewContstraintIDs[2]
         
         // Bottom
-        let textViewBottom = NSLayoutConstraint(item: self.ozInputTextView as Any, attribute: .bottom, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .bottom, multiplier: 1, constant: -10)
+        let textViewBottom = NSLayoutConstraint(item: itv as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -10)
         textViewBottom.identifier = textViewContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -354,23 +362,25 @@ open class OZMessagesViewController: CollectionViewController {
     fileprivate let fileButtonContstraintIDs = ["fileButtonLeading", "fileButtonWidth",
                                                "fileButtonHeight", "fileButtonBottom"]
     fileprivate func setupFileButtonFrame() {
+        guard let ic = ozInputContainer, let fb = ozFileButton else {return}
+
         self.removeContraint(fromList: fileButtonContstraintIDs)
-        self.ozFileButton.translatesAutoresizingMaskIntoConstraints = false
+        fb.translatesAutoresizingMaskIntoConstraints = false
         
         // Leading
-        let fileButtonLeading = NSLayoutConstraint(item: self.ozFileButton as Any, attribute: .leading, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .leading, multiplier: 1, constant: 10)
+        let fileButtonLeading = NSLayoutConstraint(item: fb as Any, attribute: .leading, relatedBy: .equal, toItem: ic as Any, attribute: .leading, multiplier: 1, constant: 10)
         fileButtonLeading.identifier = textViewContstraintIDs[0]
         
         // Width
-        let fileButtonWidth = self.ozFileButton.widthAnchor.constraint(equalToConstant: 30)
+        let fileButtonWidth = fb.widthAnchor.constraint(equalToConstant: 30)
         fileButtonWidth.identifier = textViewContstraintIDs[1]
         
         // Height
-        let fileButtonHeight = self.ozFileButton.heightAnchor.constraint(equalToConstant: 30)
+        let fileButtonHeight = fb.heightAnchor.constraint(equalToConstant: 30)
         fileButtonHeight.identifier = textViewContstraintIDs[2]
         
         // Bottom
-        let fileButtonBottom = NSLayoutConstraint(item: self.ozFileButton as Any, attribute: .bottom, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
+        let fileButtonBottom = NSLayoutConstraint(item: fb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
         fileButtonBottom.identifier = textViewContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -384,23 +394,25 @@ open class OZMessagesViewController: CollectionViewController {
     fileprivate let micButtonContstraintIDs = ["micButtonTrail", "micButtonWidth",
                                                "micButtonHeight", "micButtonBottom"]
     fileprivate func setupMicButtonFrame() {
+        guard let ic = ozInputContainer, let mb = ozMicButton else {return}
+
         self.removeContraint(fromList: micButtonContstraintIDs)
-        self.ozMicButton.translatesAutoresizingMaskIntoConstraints = false
+        mb.translatesAutoresizingMaskIntoConstraints = false
         
         // Trailing
-        let micButtonTrail = NSLayoutConstraint(item: self.ozMicButton as Any, attribute: .trailing, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .trailing, multiplier: 1, constant: -15)
+        let micButtonTrail = NSLayoutConstraint(item: mb as Any, attribute: .trailing, relatedBy: .equal, toItem: ic as Any, attribute: .trailing, multiplier: 1, constant: -15)
         micButtonTrail.identifier = micButtonContstraintIDs[0]
         
         // Width
-        let micButtonWidth = self.ozMicButton.widthAnchor.constraint(equalToConstant: 30)
+        let micButtonWidth = mb.widthAnchor.constraint(equalToConstant: 30)
         micButtonWidth.identifier = micButtonContstraintIDs[1]
         
         // Height
-        let micButtonHeight = self.ozMicButton.heightAnchor.constraint(equalToConstant: 30)
+        let micButtonHeight = mb.heightAnchor.constraint(equalToConstant: 30)
         micButtonHeight.identifier = micButtonContstraintIDs[2]
         
         // Bottom
-        let micButtonBottom = NSLayoutConstraint(item: self.ozMicButton as Any, attribute: .bottom, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
+        let micButtonBottom = NSLayoutConstraint(item: mb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
         micButtonBottom.identifier = micButtonContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -414,23 +426,25 @@ open class OZMessagesViewController: CollectionViewController {
     fileprivate let emoticonButtonContstraintIDs = ["emoticonButtonTrail", "emoticonButtonWidth",
                                                "emoticonButtonHeight", "emoticonButtonBottom"]
     fileprivate func setupEmoticonButtonFrame() {
+        guard let ic = ozInputContainer, let eb = ozEmoticonButton, let mb = ozMicButton else {return}
+
         self.removeContraint(fromList: emoticonButtonContstraintIDs)
-        self.ozEmoticonButton.translatesAutoresizingMaskIntoConstraints = false
+        eb.translatesAutoresizingMaskIntoConstraints = false
         
         // Trailing
-        let emoticonButtonTrail = NSLayoutConstraint(item: self.ozEmoticonButton as Any, attribute: .trailing, relatedBy: .equal, toItem: self.ozMicButton as Any, attribute: .leading, multiplier: 1, constant: -10)
+        let emoticonButtonTrail = NSLayoutConstraint(item: eb as Any, attribute: .trailing, relatedBy: .equal, toItem: mb as Any, attribute: .leading, multiplier: 1, constant: -10)
         emoticonButtonTrail.identifier = emoticonButtonContstraintIDs[0]
         
         // Width
-        let emoticonButtonWidth = self.ozEmoticonButton.widthAnchor.constraint(equalToConstant: 30)
+        let emoticonButtonWidth = eb.widthAnchor.constraint(equalToConstant: 30)
         emoticonButtonWidth.identifier = emoticonButtonContstraintIDs[1]
         
         // Height
-        let emoticonButtonHeight = self.ozEmoticonButton.heightAnchor.constraint(equalToConstant: 30)
+        let emoticonButtonHeight = eb.heightAnchor.constraint(equalToConstant: 30)
         emoticonButtonHeight.identifier = emoticonButtonContstraintIDs[2]
         
         // Bottom
-        let emoticonButtonBottom = NSLayoutConstraint(item: self.ozEmoticonButton as Any, attribute: .bottom, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
+        let emoticonButtonBottom = NSLayoutConstraint(item: eb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
         emoticonButtonBottom.identifier = emoticonButtonContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -466,13 +480,17 @@ open class OZMessagesViewController: CollectionViewController {
             let vc = segue.destination as? OZEmoticonViewController {
             vc.delegate = self
             emoticonViewController = vc
-            vc.view.frame = ozEmoticonContainer.bounds
+            if let evc = ozEmoticonContainer {
+                vc.view.frame = evc.bounds
+            }
         }
         else if segue.identifier == "record_view_segue",
             let vc = segue.destination as? OZVoiceRecordViewController {
             vc.delegate = self
             voiceViewController = vc
-            vc.view.frame = ozVoiceContainer.bounds
+            if let aVoiceContainer = ozVoiceContainer {
+                vc.view.frame = aVoiceContainer.bounds
+            }
             
             var aDuration: TimeInterval = 12
             for case .voiceRecordMaxDuration(let duration) in messagesConfigurations {
@@ -733,25 +751,29 @@ extension OZMessagesViewController {
                 let origin = CGPoint(x: 0, y: self.view.bounds.height - minTextViewHeight - bottomInset)
                 let size = CGSize(width: self.view.bounds.width, height: minTextViewHeight)
                 ozInputContainer = UIView(frame: CGRect(origin: origin, size: size))
-                ozInputContainer.backgroundColor = .white
-                view.addSubview(ozInputContainer)
+                guard let ic = ozInputContainer else {return}
+                
+                ic.backgroundColor = .white
+                view.addSubview(ic)
                 
                 let guide = view.safeAreaLayoutGuide
                 NSLayoutConstraint.activate([
-                    ozInputContainer.heightAnchor.constraint(equalToConstant: minTextViewHeight),
-                    guide.bottomAnchor.constraint(equalToSystemSpacingBelow: ozInputContainer.bottomAnchor, multiplier: 1.0)
+                    ic.heightAnchor.constraint(equalToConstant: minTextViewHeight),
+                    guide.bottomAnchor.constraint(equalToSystemSpacingBelow: ic.bottomAnchor, multiplier: 1.0)
                 ])
             } else {
                 let origin = CGPoint(x: 0, y: self.view.bounds.height - minTextViewHeight)
                 let size = CGSize(width: self.view.bounds.width, height: minTextViewHeight)
                 ozInputContainer = UIView(frame: CGRect(origin: origin, size: size))
-                ozInputContainer.backgroundColor = .white
-                view.addSubview(ozInputContainer)
+                guard let ic = ozInputContainer else {return}
+
+                ic.backgroundColor = .white
+                view.addSubview(ic)
                 
                 let standardSpacing: CGFloat = minTextViewHeight
                 NSLayoutConstraint.activate([
-                    ozInputContainer.heightAnchor.constraint(equalToConstant: standardSpacing),
-                    bottomLayoutGuide.topAnchor.constraint(equalTo: ozInputContainer.bottomAnchor, constant: standardSpacing)
+                    ic.heightAnchor.constraint(equalToConstant: standardSpacing),
+                    bottomLayoutGuide.topAnchor.constraint(equalTo: ic.bottomAnchor, constant: standardSpacing)
                 ])
             }
         }
@@ -764,9 +786,12 @@ extension OZMessagesViewController {
             let origin = CGPoint(x: 10, y: 10)
             let size = CGSize(width: 25, height: 25)
             ozFileButton = UIButton(frame: CGRect(origin: origin, size: size))
-            ozFileButton.center = CGPoint(x: ozFileButton.center.x, y: ozInputContainer.bounds.midY)
-            ozFileButton.setImage(UIImage(named: "addFile"), for: .normal)
-            ozInputContainer.addSubview(ozFileButton)
+            guard let fb = ozFileButton else {return}
+            guard let ic = ozInputContainer else {return}
+
+            fb.center = CGPoint(x: fb.center.x, y: ic.bounds.midY)
+            fb.setImage(UIImage(named: "addFile"), for: .normal)
+            ic.addSubview(fb)
         }
         
         /// Input TextView
@@ -774,12 +799,17 @@ extension OZMessagesViewController {
             ozInputTextView = itv
         }
         else {
-            let origin = CGPoint(x: ozFileButton.frame.maxX + 10, y: 10)
+            guard let fb = ozFileButton else {return}
+
+            let origin = CGPoint(x: fb.frame.maxX + 10, y: 10)
             let size = CGSize(width: self.view.bounds.width - 10 - origin.x, height: minTextViewHeight * 0.65)
             ozInputTextView = OZTextView(frame: CGRect(origin: origin, size: size))
-            ozInputTextView.delegate = self
-            ozInputTextView.backgroundColor = UIColor(white: 244/255, alpha: 1.0)
-            ozInputContainer.addSubview(ozInputTextView)
+            guard let itv = ozInputTextView else {return}
+            guard let ic = ozInputContainer else {return}
+
+            itv.delegate = self
+            itv.backgroundColor = UIColor(white: 244/255, alpha: 1.0)
+            ic.addSubview(itv)
         }
 
         /// Emoticon button
@@ -787,12 +817,17 @@ extension OZMessagesViewController {
             ozEmoticonButton = eb
         }
         else {
-            let origin = CGPoint(x: ozInputTextView.frame.maxX - 30*2 - 10*2, y: 10)
+            guard let itv = ozInputTextView else {return}
+
+            let origin = CGPoint(x: itv.frame.maxX - 30*2 - 10*2, y: 10)
             let size = CGSize(width: 30, height: 30)
             ozEmoticonButton = UIButton(frame: CGRect(origin: origin, size: size))
-            ozEmoticonButton.center = CGPoint(x: ozEmoticonButton.center.x, y: ozInputContainer.bounds.midY)
-            ozEmoticonButton.setImage(UIImage(named: "emo"), for: .normal)
-            ozInputContainer.addSubview(ozEmoticonButton)
+            guard let eb = ozEmoticonButton else {return}
+            guard let ic = ozInputContainer else {return}
+
+            eb.center = CGPoint(x: eb.center.x, y: ic.bounds.midY)
+            eb.setImage(UIImage(named: "emo"), for: .normal)
+            ic.addSubview(eb)
         }
 
         /// Mic button
@@ -800,12 +835,17 @@ extension OZMessagesViewController {
             ozMicButton = mb
         }
         else {
-            let origin = CGPoint(x: ozInputTextView.frame.maxX - 30 - 10, y: 10)
+            guard let itv = ozInputTextView else {return}
+
+            let origin = CGPoint(x: itv.frame.maxX - 30 - 10, y: 10)
             let size = CGSize(width: 30, height: 30)
             ozMicButton = UIButton(frame: CGRect(origin: origin, size: size))
-            ozMicButton.center = CGPoint(x: ozMicButton.center.x, y: ozInputContainer.bounds.midY)
-            ozMicButton.setImage(UIImage(named: "mic"), for: .normal)
-            ozInputContainer.addSubview(ozMicButton)
+            guard let mb = ozMicButton else {return}
+            guard let ic = ozInputContainer else {return}
+
+            mb.center = CGPoint(x: mb.center.x, y: ic.bounds.midY)
+            mb.setImage(UIImage(named: "mic"), for: .normal)
+            ic.addSubview(mb)
         }
         
         /// Emoticon Container View
@@ -847,75 +887,99 @@ extension OZMessagesViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         /// Input TextView
-        ozInputTextView.delegate = self
-        ozInputTextView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 70)
-        ozInputTextView.layer.cornerRadius = 18
-        ozInputTextView.layer.masksToBounds = true
-        ozInputTextView.clipsToBounds = true
-        for case .inputTextVerticalAlignment(let alignment) in messagesConfigurations {
-            ozInputTextView.verticalAlignment = alignment
+        if let itv = ozInputTextView {
+            itv.delegate = self
+            itv.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 70)
+            itv.layer.cornerRadius = 18
+            itv.layer.masksToBounds = true
+            itv.clipsToBounds = true
+            for case .inputTextVerticalAlignment(let alignment) in messagesConfigurations {
+                itv.verticalAlignment = alignment
+            }
         }
         
         // Chatting view related
-        ozEmoticonContainer.isHidden = true
-        ozVoiceContainer.isHidden = true
+        if let ec = ozEmoticonContainer {
+            ec.isHidden = true
+        }
+        if let vc = ozVoiceContainer {
+            vc.isHidden = true
+        }
         
         // Connect Target
-        ozFileButton.addTarget(self, action: #selector(addFileButtonPressed(_:)), for: .touchUpInside)
-        ozMicButton.addTarget(self, action: #selector(micContainerButtonPressed(_:)), for: .touchUpInside)
-        ozEmoticonButton.addTarget(self, action: #selector(emoticonButtonViewPressed(_:)), for: .touchUpInside)
+        if let fb = ozFileButton {
+            fb.addTarget(self, action: #selector(addFileButtonPressed(_:)), for: .touchUpInside)
+        }
+        if let mb = ozMicButton {
+            mb.addTarget(self, action: #selector(micContainerButtonPressed(_:)), for: .touchUpInside)
+        }
+        if let eb = ozEmoticonButton {
+            eb.addTarget(self, action: #selector(emoticonButtonViewPressed(_:)), for: .touchUpInside)
+        }
         
         resetButtons()
         
         // Drop shadow
-        ozInputContainer.layer.shadowColor = UIColor.black.cgColor
-        ozInputContainer.layer.shadowOffset = CGSize(width: 0, height: -5.0)
-        ozInputContainer.layer.shadowRadius = 4.0
-        ozInputContainer.layer.shadowOpacity = 0.01
-        ozInputContainer.layer.masksToBounds = false
-        view.bringSubviewToFront(ozInputContainer)
+        if let ic = ozInputContainer {
+            ic.layer.shadowColor = UIColor.black.cgColor
+            ic.layer.shadowOffset = CGSize(width: 0, height: -5.0)
+            ic.layer.shadowRadius = 4.0
+            ic.layer.shadowOpacity = 0.01
+            ic.layer.masksToBounds = false
+            view.bringSubviewToFront(ic)
+        }
     }
     
     func reloadAllView(_ state: OZMessagesViewState = .chat, oldState: OZMessagesViewState? = nil) {
         
         if state == .emoticon {
-            ozVoiceContainer.isHidden = true
-            micButtonToggle()
+            if let vc = ozVoiceContainer {
+                vc.isHidden = true
+                micButtonToggle()
+            }
+            
+            guard let ec = ozEmoticonContainer else {return}
             UIView.setAnimationsEnabled(false)
             if chatState == oldState {
-                ozEmoticonContainer.isHidden = true
+                ec.isHidden = true
                 emoticonButtonToggle()
-                ozInputTextView.becomeFirstResponder()
+                if let itv = ozInputTextView {
+                    itv.becomeFirstResponder()
+                }
                 chatState = .chat
             }
             else {
-                ozEmoticonContainer.isHidden = false
+                ec.isHidden = false
                 self.view.endEditing(true)
                 emoticonButtonToggle()
-                view.bringSubviewToFront(self.ozEmoticonContainer)
-                ozEmoticonContainer.layer.zPosition = CGFloat(MAXFLOAT)
+                view.bringSubviewToFront(ec)
+                ec.layer.zPosition = CGFloat(MAXFLOAT)
                 self.keyboardShowLayout(differHeight: 0, isPadding: true, animated: false)
             }
             UIView.setAnimationsEnabled(true)
         }
         else if state == .voice {
-            ozEmoticonContainer.isHidden = true
-            emoticonButtonToggle()
+            if let ec = ozEmoticonContainer {
+                ec.isHidden = true
+                emoticonButtonToggle()
+            }
+            
+            guard let vc = ozVoiceContainer else {return}
             if state == oldState {
                 UIView.animate(withDuration: 0.25, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
-                    self.ozVoiceContainer.alpha = 0.0
+                    vc.alpha = 0.0
                     self.keyboardHideLayout()
                 }) { (comp) in
-                    self.ozVoiceContainer.isHidden = true
+                    vc.isHidden = true
                     self.micButtonToggle()
                 }
             }
             else {
                 view.endEditing(true)
-                self.ozVoiceContainer.alpha = 1.0
-                self.ozVoiceContainer.isHidden = false
-                view.bringSubviewToFront(ozVoiceContainer)
-                ozVoiceContainer.layer.zPosition = CGFloat(MAXFLOAT)
+                vc.alpha = 1.0
+                vc.isHidden = false
+                view.bringSubviewToFront(vc)
+                vc.layer.zPosition = CGFloat(MAXFLOAT)
                 UIView.animate(withDuration: 0.25, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
                     self.keyboardHideLayout()
                 }) { (comp) in
@@ -944,19 +1008,21 @@ extension OZMessagesViewController {
             // Normal chat with text
             resetButtons()
             
-            if oldState == .emoticon {
+            if oldState == .emoticon, let itv = ozInputTextView {
                 UIView.setAnimationsEnabled(false)
-                ozInputTextView.becomeFirstResponder()
+                itv.becomeFirstResponder()
                 UIView.setAnimationsEnabled(true)
             }
         }
     }
     
     fileprivate func resetButtons(_ isIncludeEmoticon: Bool = true) {
-        ozVoiceContainer.isHidden = true
-        micButtonToggle()
-        if isIncludeEmoticon {
-            ozEmoticonContainer.isHidden = true
+        if let vc = ozVoiceContainer {
+            vc.isHidden = true
+            micButtonToggle()
+        }
+        if isIncludeEmoticon, let ec = ozEmoticonContainer {
+            ec.isHidden = true
             emoticonButtonToggle()
         }
         addFileButtonToggle(false)
@@ -994,12 +1060,13 @@ extension OZMessagesViewController {
         }
         let margin = UIEdgeInsets(top: 0,left: 0, bottom: normalHeight + minTextViewHeight, right: 0)
 
+        guard let ecvh = ozEmoticonContainerViewHeight else {return}
         if animated, chatState == .chat {
             UIView.animate(withDuration: 0.35, animations: {
-                if self.ozEmoticonContainerViewHeight.identifier == "inputTextContainerBottom" {
+                if ecvh.identifier == "inputTextContainerBottom" {
                     normalHeight = -normalHeight
                 }
-                self.ozEmoticonContainerViewHeight.constant = normalHeight
+                ecvh.constant = normalHeight
                 self.view.setNeedsUpdateConstraints()
                 self.view.layoutIfNeeded()
             }) { (comp) in
@@ -1015,10 +1082,10 @@ extension OZMessagesViewController {
             }
         }
         else {
-            if self.ozEmoticonContainerViewHeight.identifier == "inputTextContainerBottom" {
+            if ecvh.identifier == "inputTextContainerBottom" {
                 normalHeight = -normalHeight
             }
-            self.ozEmoticonContainerViewHeight.constant = normalHeight
+            ecvh.constant = normalHeight
             self.view.setNeedsUpdateConstraints()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.05) {
                 self.collectionView.frame = self.view.bounds.inset(by: margin)
@@ -1031,11 +1098,13 @@ extension OZMessagesViewController {
         }
     }
     fileprivate func keyboardHideLayout() {
+        guard let ecvh = ozEmoticonContainerViewHeight else {return}
+
         let bottomPadding:CGFloat = 0 //window.safeAreaInsets.bottom
         let margin = UIEdgeInsets(top: 0, left: 0, bottom: bottomPadding + minTextViewHeight, right: 0)
 
         UIView.animate(withDuration: 0.35, animations: {
-            self.ozEmoticonContainerViewHeight.constant = 0
+            ecvh.constant = 0
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }) { (comp) in
@@ -1137,44 +1206,44 @@ extension OZMessagesViewController {
     }
 
     public func addFileButtonToggle(_ isForceRed: Bool) {
-        guard let fbi = ozFileButton.imageView,
+        guard let fb = ozFileButton, let fbi = fb.imageView,
             let fileImg = fbi.image else { return }
         
         for case .inputBoxFileButtonTintColor(let color, let selected) in messagesConfigurations {
             //ozFileButton.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if isForceRed {
-                ozFileButton.tintColor = selected
+                fb.tintColor = selected
             }
             else {
-                ozFileButton.tintColor = color
+                fb.tintColor = color
             }
         }
     }
     fileprivate func micButtonToggle() {
-        guard let mbi = ozMicButton.imageView,
+        guard let mb = ozMicButton, let mbi = mb.imageView,
             let micImg = mbi.image else { return }
         
         for case .inputBoxMicButtonTintColor(let color, let selected) in messagesConfigurations {
             //ozMicButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if chatState == .voice {
-                ozMicButton.tintColor = selected
+                mb.tintColor = selected
             }
             else {
-                ozMicButton.tintColor = color
+                mb.tintColor = color
             }
         }
     }
     fileprivate func emoticonButtonToggle() {
-        guard let ebi = ozEmoticonButton.imageView,
+        guard let eb = ozEmoticonButton, let ebi = eb.imageView,
             let emotImg = ebi.image else { return }
         
         for case .inputBoxEmoticonButtonTintColor(let color, let selected) in messagesConfigurations {
             //emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if chatState == .emoticon {
-                ozEmoticonButton.tintColor = selected
+                eb.tintColor = selected
             }
             else {
-                ozEmoticonButton.tintColor = color
+                eb.tintColor = color
             }
         }
     }
@@ -1184,8 +1253,10 @@ extension OZMessagesViewController {
 // MARK: - UITextViewDelegate
 extension OZMessagesViewController: UITextViewDelegate {
     public func adjustTextViewHeight(_ textView: UITextView) {
+        guard let thc = ozTextHeightConstraint else {return}
+        
         if textView.text.count <= 0 {
-            self.ozTextHeightConstraint.constant = minTextViewHeight
+            thc.constant = minTextViewHeight
 //            self.ozTextHeightConstraint.isActive = true
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
@@ -1196,25 +1267,21 @@ extension OZMessagesViewController: UITextViewDelegate {
         let size = OZMessageCell.sizeForText(textView.text, maxWidth: width,
                                              paddingX: 20.0, paddingY: 20.0)
         
-        if self.ozTextHeightConstraint.constant >= maxTextViewHeight {
+        if thc.constant >= maxTextViewHeight {
             UIView.animate(withDuration: 0.35, delay: 0.1, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
-                self.ozTextHeightConstraint.constant = maxTextViewHeight
-//                self.ozTextHeightConstraint.isActive = true
+                thc.constant = maxTextViewHeight
                 self.view.setNeedsUpdateConstraints()
                 self.view.layoutIfNeeded()
             }) { (complete) in
             }
         }
-        else if self.ozTextHeightConstraint.constant < maxTextViewHeight,
-            self.ozTextHeightConstraint.constant < size.height {
-            self.ozTextHeightConstraint.constant = size.height
-//            self.ozTextHeightConstraint.isActive = true
+        else if thc.constant < maxTextViewHeight, thc.constant < size.height {
+            thc.constant = size.height
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }
-        else if self.ozTextHeightConstraint.constant < minTextViewHeight {
-            self.ozTextHeightConstraint.constant = minTextViewHeight
-//            self.ozTextHeightConstraint.isActive = true
+        else if thc.constant < minTextViewHeight {
+            thc.constant = minTextViewHeight
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }
@@ -1268,7 +1335,9 @@ extension OZMessagesViewController: UITextViewDelegate {
         if isUsingEnterForSending {
             if text == "\n", let fullText = textView.text {
                 self.send(msg: fullText)
-                self.ozInputTextView.text = ""
+                if let itv = ozInputTextView {
+                    itv.text = ""
+                }
                 self.adjustTextViewHeight(textView)
                 return false;
             }
@@ -1398,6 +1467,14 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             
             dataSource.data[index] = aMessage
             collectionView.setNeedsLayout()
+            
+            if !aMessage.isFolded, cell.frame.maxY > collectionView.contentOffset.y {
+                // Unfolding
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.15) {
+                    let rect = cell.frame.inset(by: UIEdgeInsets(top: cell.frame.height * 0.95, left: 10, bottom: 0, right: 10))
+                    self.collectionView.scrollRectToVisible(rect, animated: true)
+                }
+            }
         }
 
     }

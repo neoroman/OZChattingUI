@@ -242,44 +242,53 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     
     
     func messageTextViewBeginEditing(textView: UITextView) {
-        if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
-            ozMicButton.setImage(UIImage(named: "send"), for: .normal)
-            ozMicButton.tag = kSendButtonTag
+        if let ozmb = ozMicButton,
+            let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+            ozmb.setImage(UIImage(named: "send"), for: .normal)
+            ozmb.tag = kSendButtonTag
         }
     }
     func messageTextViewDidChanged(textView: UITextView) {
+        guard let ozmb = ozMicButton else { return }
+
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
-            ozMicButton.setImage(UIImage(named: "send"), for: .normal)
-            ozMicButton.tag = kSendButtonTag
+            ozmb.setImage(UIImage(named: "send"), for: .normal)
+            ozmb.tag = kSendButtonTag
         }
         else {
-            ozMicButton.setImage(UIImage(named: "mic"), for: .normal)
-            ozMicButton.tag = kMicButtonTag
+            ozmb.setImage(UIImage(named: "mic"), for: .normal)
+            ozmb.tag = kMicButtonTag
         }
     }
     func messageTextViewEndEditing(textView: UITextView) {
+        guard let ozmb = ozMicButton else { return }
+
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count <= 0 {
-            ozMicButton.setImage(UIImage(named: "mic"), for: .normal)
-            ozMicButton.tag = kMicButtonTag
+            ozmb.setImage(UIImage(named: "mic"), for: .normal)
+            ozmb.tag = kMicButtonTag
         }
     }
     func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) {
         // Do something here just before record permission granted
     }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
+
+        guard let ozitv = viewController.ozInputTextView else { return false }
         if let button = sender as? UIButton, button.tag == kSendButtonTag,
-            let fullText = viewController.ozInputTextView.text {
-            
+            let fullText = ozitv.text {
+
             let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
             if trimmed.count > 0 {
                 viewController.send(msg: trimmed)
             }
             
-            viewController.ozInputTextView.text = ""
-            viewController.adjustTextViewHeight(viewController.ozInputTextView)
+            ozitv.text = ""
+            viewController.adjustTextViewHeight(ozitv)
             
-            viewController.ozMicButton.setImage(UIImage(named: "mic"), for: .normal)
-            viewController.ozMicButton.tag = kMicButtonTag
+            if let ozmb = viewController.ozMicButton {
+                ozmb.setImage(UIImage(named: "mic"), for: .normal)
+                ozmb.tag = kMicButtonTag
+            }
             return false
         }
         return true
