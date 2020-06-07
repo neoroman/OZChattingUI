@@ -1466,7 +1466,8 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             aMessage.isFolded.toggle()
             
             dataSource.data[index] = aMessage
-            collectionView.setNeedsLayout()
+            collectionView.layoutIfNeeded()
+
             
             if !aMessage.isFolded, cell.frame.maxY > collectionView.contentOffset.y {
                 // Unfolding

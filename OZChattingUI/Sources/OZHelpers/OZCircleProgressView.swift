@@ -80,12 +80,9 @@ open class OZCircleProgressView: UIView {
         self.layer.removeAllAnimations()
         if forced {
             self.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-            self.setNeedsLayout()
         }
-        else {
-            self.layoutIfNeeded()
-        }
-        
+        self.layoutIfNeeded()
+
         duration = 0
         startAngle = 0
         endAngle = 0
