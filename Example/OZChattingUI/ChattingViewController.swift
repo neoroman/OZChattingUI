@@ -279,9 +279,9 @@ class ChattingViewController: OZMessagesViewController {
             // OZMessageCell
             OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 224, height: 158), CGSize(width: 800, height: 1000)),
-            OZMessagesConfigurationItem.cellBackgroundColor(UIColor(white: 204/255, alpha: 1), [.announcement]),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
+            OZMessagesConfigurationItem.cellBackgroundColor(UIColor(white: 204/255, alpha: 1), [.announcement]),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.sepratorColor(.clear),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
@@ -317,7 +317,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
         // Delivered message here
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
             self.dataSource.data.removeAll(where: { $0.content == "Delivered" })
-            self.send(msg: "Delivered", type: .status)
+            self.send(msg: "Delivered", type: .status, isDeliveredMsg: true)
         }
         return true
     }

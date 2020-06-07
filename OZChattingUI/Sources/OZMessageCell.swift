@@ -48,7 +48,7 @@ open class IncomingTextMessageCell: OZMessageCell {
             }
             
             buttonContainer.isHidden = true
-            buttonContainerHandler(message: message, buttonContainer: buttonContainer)
+            buttonContainerHandler(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
 
             if message.cellOpacity <= 1.0 {
                 for x in self.subviews {
@@ -131,7 +131,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
             }
             
             buttonContainer.isHidden = true
-            buttonContainerHandler(message: message, buttonContainer: buttonContainer)
+            buttonContainerHandler(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
 
             if message.cellOpacity <= 1.0 {
                 for x in self.subviews {
@@ -253,8 +253,9 @@ open class IncomingStatusMessageCell: OZMessageCell {
             textLabel.text = message.content
             textLabel.textColor = message.textColor
             textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
-            if let aType = message.deviceStatus, message.iconImage.count > 0 {
-                if let anImg = UIImage(named: message.iconImage) {
+            if let aType = message.deviceStatus {
+                if message.iconImage.count > 0,
+                    let anImg = UIImage(named: message.iconImage) {
                     iconImage.image = anImg
                 }
                 else if !aType.imageName().hasSuffix("@2x"), let anImg = UIImage(named: "\(aType.imageName())@2x") {
@@ -748,12 +749,13 @@ open class OZMessageCell: DynamicView {
             return UIImage()
         }
     }
-    fileprivate func buttonContainerHandler(message: OZMessage, buttonContainer: UIView) {
-        let size = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
-                                             fontSize: message.fontSize, maxWidth: self.bounds.width - 50,
-                                             paddingX: (message.alignment == left) ? message.cellLeftPadding : message.cellPadding,
-                                             paddingY: message.cellPadding)
-        if message.usingFoldingOption, size.height > message.foldingMessageMaxHeight,
+    fileprivate func buttonContainerHandler(message: OZMessage, textLabel: OZBubbleLabel, buttonContainer: UIView) {
+
+        if message.usingFoldingOption,
+            OZMessageCell.sizeForText(message.content, fontName: message.fontName,
+                                      fontSize: message.fontSize, maxWidth: textLabel.frame.width - 50,
+                                      paddingX: leftPadding(message: message),
+                                      paddingY: message.cellPadding).height > message.foldingMessageMaxHeight,
             let dele = delegate {
             for x in buttonContainer.subviews { x.removeFromSuperview() }
             for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
@@ -783,12 +785,12 @@ open class OZMessageCell: DynamicView {
     fileprivate func layoutButtonContainer(message: OZMessage, textLabel: OZBubbleLabel, buttonContainer: UIView) {
         buttonContainer.isHidden = true
         textLabel.bottomInset = kBubbleLabelBottomInset
-        let size = OZMessageCell.sizeForText(message.content, fontName: message.fontName,
-                                             fontSize: message.fontSize, maxWidth: self.bounds.width - 50,
-                                             paddingX: (message.alignment == left) ? message.cellLeftPadding : message.cellPadding,
-                                             paddingY: message.cellPadding)
 
-        if message.usingFoldingOption, size.height > message.foldingMessageMaxHeight {
+        if message.usingFoldingOption,
+            OZMessageCell.sizeForText(message.content, fontName: message.fontName,
+                                      fontSize: message.fontSize, maxWidth: textLabel.frame.width,
+                                      paddingX: leftPadding(message: message),
+                                      paddingY: message.cellPadding).height > message.foldingMessageMaxHeight {
             buttonContainer.isHidden = false
             let height = message.foldingButtonSize.height
             buttonContainer.frame = CGRect(x: textLabel.frame.minX,
@@ -811,7 +813,10 @@ open class OZMessageCell: DynamicView {
                         break
                     case .right:
                         if let aText = button.title(for: .normal), let anImage = button.imageView,
-                            size.width + anImage.frame.width > button.frame.width {
+                            OZMessageCell.sizeForText(message.content, fontName: message.fontName,
+                                                      fontSize: message.fontSize, maxWidth: textLabel.frame.width,
+                                                      paddingX: leftPadding(message: message),
+                                                      paddingY: message.cellPadding).width + anImage.frame.width > button.frame.width {
                             button.frame.origin.x = buttonContainer.bounds.maxX - OZMessageCell.sizeForText(aText).width - anImage.frame.width
                         }
                         else if let anImage = button.imageView {
@@ -834,7 +839,18 @@ open class OZMessageCell: DynamicView {
             textLabel.bottomInset = height
         }
     }
-
+    fileprivate func leftPadding(message: OZMessage) -> CGFloat {
+        var leftPadding = message.cellPadding
+        if message.alignment == .left {
+            if !message.isSenderIconHide {
+                leftPadding = message.cellLeftPadding
+            }
+            else {
+                leftPadding = message.cellPadding
+            }
+        }
+        return leftPadding
+    }
 
     // MARK: - Helpers from MessageKit
     public static func labelRect(for text: String, font: UIFont, considering maxSize: CGSize) -> CGRect {
@@ -972,11 +988,11 @@ open class OZMessageCell: DynamicView {
                 else {
                     size.height += message.foldingButtonSize.height
                 }
-                if size.width < message.foldingButtonSize.width + leftPadding {
+                if size.width > aMaxWidth - 50 {
+                    size.width = aMaxWidth - 50
+                }
+                else if size.width < message.foldingButtonSize.width + leftPadding {
                     size.width = message.foldingButtonSize.width + leftPadding
-                    if size.width > aMaxWidth - 50 {
-                        size.width = aMaxWidth - 50
-                    }
                 }
             }
             let origin: CGPoint = (message.alignment == .left) ? .zero : CGPoint(x: containerWidth - size.width, y: 0)

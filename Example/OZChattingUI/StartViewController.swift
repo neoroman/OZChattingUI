@@ -18,7 +18,7 @@ class StartViewController: UITableViewController {
         return .lightContent
     }
 
-    let cells = ["Basic Example", "Advanced Example", "Source Code", "CocoaPods"]
+    let cells = ["Basic Example", "Basic Example (storyboard)", "Advanced Example (storyboard)", "Source Code", "CocoaPods"]
     
     // MARK: - View Life Cycle
     
@@ -78,14 +78,13 @@ class StartViewController: UITableViewController {
             let vc = ExampleViewController()
             vc.title = cell
             navigationController?.pushViewController(vc, animated: true)
-            /*
+        case "Basic Example (storyboard)":
             let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
             if let vc = storyboard.instantiateViewController(withIdentifier: "ExampleViewController") as? ExampleViewController {
                 navigationController?.pushViewController(vc, animated: true)
                 vc.title = cell
             }
-             */
-        case "Advanced Example":
+        case "Advanced Example (storyboard)":
             let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
             if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
                 navigationController?.pushViewController(vc, animated: true)

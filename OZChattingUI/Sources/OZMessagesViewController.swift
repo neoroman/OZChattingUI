@@ -134,10 +134,10 @@ open class OZMessagesViewController: CollectionViewController {
 
         collectionView.frame.origin = CGPoint.zero
         if UIDevice.current.orientation.isLandscape {
-            print("Landscape")
+            //print("Landscape")
             collectionView.frame.size = CGSize(width: super.view.bounds.height, height: super.view.bounds.width - minTextViewHeight)
         } else {
-            print("Portrait")
+            //print("Portrait")
             collectionView.frame.size = CGSize(width: super.view.bounds.width, height: super.view.bounds.height - minTextViewHeight)
         }
         for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
@@ -310,8 +310,7 @@ open class OZMessagesViewController: CollectionViewController {
         ozEmoticonContainerViewHeight.identifier = inputTextContstraintIDs[2]
         
         // Vertical Spacing
-        ozTextHeightConstraint = self.ozInputContainer.heightAnchor.constraint(equalToConstant: height)
-            //NSLayoutConstraint(item: self.ozInputContainer as Any, attribute: .height, relatedBy: .equal, toItem: self.ozInputContainer as Any, attribute: .height, multiplier: 1, constant: height)
+        ozTextHeightConstraint = self.ozInputContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: height)
         ozTextHeightConstraint.identifier = inputTextContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -670,21 +669,10 @@ extension OZMessagesViewController {
                 self.dataSource.data.append(OZMessage(false, mp3: text, duration: duration, timestamp: aTimestamp, iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
             }
             else if type == .deviceStatus, let aType = activeType {
-                var anIconName = ""
-                switch aType {
-                case .call:
-                    anIconName = "icChatCall"
-                case .campaign:
-                    anIconName = "icChatCampaign"
-                case .step:
-                    anIconName = "icChatStep"
-                case .watchOff:
-                    anIconName = "icChatWatch"
-                }
-                self.dataSource.data.append(OZMessage(deviceStatus: text, statusType: activeType, iconNamed: anIconName, timestamp: aTimestamp, config: self.messagesConfigurations))
+                self.dataSource.data.append(OZMessage(deviceStatus: text, statusType: aType, iconNamed: nil, timestamp: aTimestamp, config: self.messagesConfigurations))
             }
             else {
-                self.dataSource.data.append(OZMessage(false, content: text, timestamp: aTimestamp, iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                self.dataSource.data.append(OZMessage(false, content: text, timestamp: aTimestamp, iconImage: nil, config: self.messagesConfigurations))
             }
             self.collectionView.reloadData() //receive
             self.collectionView.scrollTo(edge: .bottom, animated:true)
@@ -820,6 +808,22 @@ extension OZMessagesViewController {
             ozInputContainer.addSubview(ozMicButton)
         }
         
+        /// Emoticon Container View
+        if let ecv = emoticonContainer {
+            ozEmoticonContainer = ecv
+        }
+        else {
+            print("Need to implement emoticon container view")
+        }
+        
+        /// Mic Container View
+        if let mcv = voiceContainer {
+            ozVoiceContainer = mcv
+        }
+        else {
+            print("Need to implement mic container view")
+        }
+
         /// AutoLayout Constraints
         if let thc = textHeightConstraint, let ehc = emoticonContainerViewHeight {
             ozTextHeightConstraint = thc
