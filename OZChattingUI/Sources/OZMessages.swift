@@ -196,8 +196,10 @@ public class OZMessage: Equatable {
     }
     
     private func setupConfigurations(config: [OZMessagesConfigurationItem]?) {
-        guard var configItems = config else { return }
-        configItems.insert(contentsOf: OZChattingDefaultConfiguration.defaulMessageConfiguration(), at: 0)
+        var configItems: [OZMessagesConfigurationItem] = OZChattingDefaultConfiguration.defaulMessageConfiguration()
+        if let configList = config {
+            configItems.append(contentsOf: configList)
+        }
         for item in configItems {
             
             switch item {

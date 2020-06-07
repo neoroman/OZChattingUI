@@ -52,13 +52,14 @@ class ChattingViewController: OZMessagesViewController {
 //            expandInputView()
 //        }
         
-        self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
-
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.25) {
+            self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
+            self.collectionView.reloadData()
+        }
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
             //self.collectionView.scrollTo(edge: .bottom, animated: false)
             self.isEchoMode = true
         }
-
         if self.navigationController != nil {
             let item = UISwitch(frame: .zero)
             item.isOn = false
