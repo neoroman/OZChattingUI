@@ -1,6 +1,6 @@
 //
 //  OZVoiceRecordViewController.swift
-//  OZChat
+//  OZChattingUI
 //
 //  Created by Henry Kim on 2020/05/07.
 //  Copyright © 2020 ALTERANT. All rights reserved.

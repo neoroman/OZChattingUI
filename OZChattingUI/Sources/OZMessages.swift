@@ -217,6 +217,9 @@ public class OZMessage: Equatable {
                     audioProgressColor = color
                 }
                 break
+            case .autoScrollToBottomBeginTextInput(let yesOrNo, let isScrollToBottom):
+                autoScrollToBottom = yesOrNo
+                showScrollToBottomButton = isScrollToBottom
             case .bubbleBackgroundColor(let color, let userType):
                 if checkUserType(userType)  {
                     bubbleColor = color
@@ -294,6 +297,13 @@ public class OZMessage: Equatable {
                     roundedCornder = yesOrNo
                 }
                 break
+            case .scrollToBottomButton(let point, let size, let width, let stroke, let fill, let alpha):
+                scrollToBottomButtonAlpha = alpha
+                scrollToBottomButtonFillColor = fill
+                scrollToBottomButtonOrigin = point
+                scrollToBottomButtonSize = size
+                scrollToBottomButtonStrokeColor = stroke
+                scrollToBottomButtonStrokeWidth = width
             case .sepratorColor(let color):
                 seperatorColor = color
                 break
@@ -342,6 +352,7 @@ public class OZMessage: Equatable {
     public var audioProgressColor: UIColor = UIColor.green.withAlphaComponent(0.9)
     public var audioPlayButtonName: String = ""
     public var audioPauseButtonName: String = ""
+    public var autoScrollToBottom: Bool = true
     public var backgroundColor: UIColor = .clear
     public var bubbleColor: UIColor = UIColor.green.withAlphaComponent(0.9)
     public var bubbleWidthRatio: CGFloat = 1
@@ -364,8 +375,15 @@ public class OZMessage: Equatable {
     public var iconSize: CGFloat = 0
     public var inputTextFieldFontColor: UIColor = .black
     public var roundedCornder: Bool = true
+    public var scrollToBottomButtonAlpha: CGFloat = 0
+    public var scrollToBottomButtonOrigin: CGPoint = .zero
+    public var scrollToBottomButtonSize: CGSize = .zero
+    public var scrollToBottomButtonFillColor: UIColor = .clear
+    public var scrollToBottomButtonStrokeColor: UIColor = .clear
+    public var scrollToBottomButtonStrokeWidth: CGFloat = 0
     public var seperatorColor: UIColor = UIColor(white: 238.0 / 255.0, alpha: 1.0)
     public var shadowColor: UIColor = .black
+    public var showScrollToBottomButton: Bool = false
     public var showShadow: Bool = false
     public var showTimeLabelForImage: Bool = false
     public var textColor: UIColor = .black

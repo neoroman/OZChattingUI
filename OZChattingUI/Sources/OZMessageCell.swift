@@ -769,17 +769,20 @@ open class OZMessageCell: DynamicView {
                 if let tlf = button.titleLabel {
                     copiedButton.titleLabel?.font = tlf.font
                 }
-                copiedButton.addTarget(self, action: #selector(longMessageFoldingButtonTapped(_:)), for: .touchUpInside)
                 copiedButton.tag = type.tag()
+                copiedButton.isUserInteractionEnabled = false
                 buttonContainer.addSubview(copiedButton)
                 buttonContainer.frame.size = copiedButton.frame.size
             }
+            buttonContainer.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(longMessageFoldingButtonTapped(_:)))
+            buttonContainer.addGestureRecognizer(tap)
             buttonContainer.setNeedsLayout()
         }
     }
-    @objc fileprivate func longMessageFoldingButtonTapped(_ sender: UIButton) {
-        if let dele = delegate {
-            dele.messageCellLongMessageButtonTapped(cell: self, button: sender)
+    @objc fileprivate func longMessageFoldingButtonTapped(_ gesture: UITapGestureRecognizer) {
+        if gesture.state == .recognized, let dele = delegate, let aView = gesture.view {
+            dele.messageCellLongMessageButtonTapped(cell: self, view: aView)
         }
     }
     fileprivate func layoutButtonContainer(message: OZMessage, textLabel: OZBubbleLabel, buttonContainer: UIView) {

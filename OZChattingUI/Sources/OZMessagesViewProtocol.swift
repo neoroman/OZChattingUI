@@ -17,12 +17,12 @@ protocol OZMessageCellDelegate {
     func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)]
     
     /// Long message folding and unfolding button action
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton)
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView)
 }
 
 extension OZMessageCellDelegate {
     func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] { return [(UIButton(), .none)] }
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton) { }
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) { }
 }
 
 
@@ -58,7 +58,7 @@ public protocol OZMessagesViewControllerDelegate {
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
 
     /// Long message folding and unfolding button action
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton) -> Bool
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) -> Bool
 }
 // MARK: - Optional OZMessagesViewControllerDelegate
 public extension OZMessagesViewControllerDelegate {
@@ -76,5 +76,5 @@ public extension OZMessagesViewControllerDelegate {
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton) -> Bool { return true }
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) -> Bool { return true }
 }

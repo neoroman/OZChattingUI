@@ -118,7 +118,10 @@ public enum OZMessagesConfigurationItem {
     //case verticalPaddingBetweenMessage(_ currentMessage: OZMessage, _ previousMessage: OZMessage)
     
     // ============ OZMessagesViewController ==================
-    /// CollectionView contentInset in OZMessageViewController
+    /// Auto scroll to bottom after begin text editting in OZMessagesViewController
+    case autoScrollToBottomBeginTextInput(Bool, _ isShowScrollToBottomButton: Bool)
+        
+    /// CollectionView contentInset in OZMessagesViewController
     case collectionViewEdgeInsets(UIEdgeInsets)
     
     /// Input text view font color in OZTextView
@@ -141,6 +144,10 @@ public enum OZMessagesConfigurationItem {
 
     /// Input box `emoticon` button tint color in OZMessagesViewController
     case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
+    
+    /// Button for scroll to bottom in OZMessagesViewController,
+    /// Origin .zero, set default origin from 5 pixel from InputContainerView
+    case scrollToBottomButton(CGPoint, CGSize, _ strokeWidth: CGFloat, _ strokeColor: UIColor, _ fillColor: UIColor, _ buttonAlpha: CGFloat)
         
     // ============ OZVoiceRecordViewController ==================
     /// Max duration of voice record in OZVoiceRecordViewController
@@ -208,10 +215,12 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.audioButtonsName("play.fill", "pause.fill"),
 
             // OZMessagesViewController
+            OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(true, false),
             OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 10, bottom: 10 + minTextViewHeight, right: 10)),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
+            OZMessagesConfigurationItem.scrollToBottomButton(.zero, CGSize(width: 30, height: 30), 5, .clear, .gray, 0.4),
 
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),

@@ -314,9 +314,11 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.usingPackedImages(true),
 
             // OZMessagesViewController
+            OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),
             OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(kMainColor, kMainColor),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(kMainColor, kMainColor),
+            OZMessagesConfigurationItem.scrollToBottomButton(.zero, CGSize(width: 40, height: 40), 5, UIColor.white.withAlphaComponent(0.3), UIColor.gray.withAlphaComponent(0.3), 0.3),
 
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
@@ -374,6 +376,9 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     
     // View Related
+    func messageViewLoaded(isLoaded: Bool) {
+        collectionView.scrollTo(edge: .bottom, animated: false)
+    }
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
         if cell.message.type == .text {
             

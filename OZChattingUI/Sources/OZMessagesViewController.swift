@@ -57,9 +57,8 @@ open class OZMessagesViewController: CollectionViewController {
     
     fileprivate var keyboardHeight: CGFloat = 0.0
     fileprivate var isKeyboardShow: Bool = false
-
-        
     fileprivate var imagePicker = UIImagePickerController()
+    fileprivate var scrollToBottomButton = OZToBottomButton()
     
     public var userIdentifier: String?
     public var userProfilePath: String?
@@ -81,16 +80,16 @@ open class OZMessagesViewController: CollectionViewController {
         }
     }
     
+    fileprivate var isFirstLoaded = false
+    
     // MARK: - View did loaded
     override open func viewDidLoad() {
         super.viewDidLoad()
-        //view.backgroundColor = UIColor(displayP3Red: 228/255, green: 232/255, blue: 232/255, alpha: 1)
-        view.backgroundColor = UIColor.white
+
         view.clipsToBounds = true
         
         setupIBOutlets()
         setupUI()
-        
         
         collectionView.delegate = self
         
@@ -100,16 +99,23 @@ open class OZMessagesViewController: CollectionViewController {
         collectionView.showsHorizontalScrollIndicator = false
         
         setupDataProvider()
-        
-        if let dele = delegate {
-            dele.messageViewLoaded(isLoaded: true)
-        }
     }
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         reloadCollectionViewFrame()
+        
+        if !isFirstLoaded, let dele = delegate {
+            isFirstLoaded = true
+            dele.messageViewLoaded(isLoaded: isViewLoaded)
+            
+            if !isViewLoaded {
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+                    dele.messageViewLoaded(isLoaded: self.isViewLoaded)
+                }
+            }
+        }
     }
         
     // MARK: - Orientations
@@ -145,7 +151,11 @@ open class OZMessagesViewController: CollectionViewController {
             collectionView.contentInset = inset //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
         }
         collectionView.reloadData()
-        collectionView.scrollTo(edge: .bottom, animated: false)
+        for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
+            if autoScrollToBottom {
+                self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+            }
+        }
     }
     
     
@@ -471,6 +481,45 @@ open class OZMessagesViewController: CollectionViewController {
         }
     }
 
+    fileprivate func setupScrollToBottomButton() {
+        guard let ozic = self.ozInputContainer else { return }
+        
+        var myOrigin = CGPoint.zero
+        var mySize = CGSize.zero
+        for case .scrollToBottomButton(let origin, let size, let width, let stroke, let fill, let alpha) in messagesConfigurations {
+            var height: CGFloat = 36
+            
+            if size != .zero {
+                mySize = size
+                height = size.height
+            }
+            else {
+                mySize = CGSize(width: height, height: height)
+            }
+            if origin != .zero {
+                myOrigin = origin
+            }
+            else {
+                myOrigin = CGPoint(x: ozic.frame.maxX - height - 5, y: ozic.frame.minY - height - 5)
+            }
+            scrollToBottomButton.alpha = alpha
+            scrollToBottomButton.fillColor = fill
+            scrollToBottomButton.strokeWidth = width
+            scrollToBottomButton.strokeColor = stroke
+        }
+        scrollToBottomButton.frame = CGRect(origin: myOrigin, size: mySize)
+        scrollToBottomButton.layer.cornerRadius = scrollToBottomButton.frame.height / 2
+        scrollToBottomButton.layer.masksToBounds = true
+        
+        if scrollToBottomButton.superview == nil {
+            scrollToBottomButton.addTarget(self, action: #selector(self.scrollToBottomButtonTapped), for: .touchUpInside)
+            
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.addSubview(self.scrollToBottomButton)
+            }) { (success) in
+            }
+        }
+    }
     
 
     
@@ -729,6 +778,23 @@ extension OZMessagesViewController: UIScrollViewDelegate {
                             }
                         }
                         self.loading = false
+                    }
+                }
+            }
+            
+            let threshold = collectionView.contentOffset.y + collectionView.bounds.height + 100
+            if  threshold > collectionView.contentSize.height,
+                scrollToBottomButton.superview != nil {
+                UIView.animate(withDuration: 0.25, animations: {
+                    self.scrollToBottomButton.alpha = 0
+                }) { (success) in
+                    self.scrollToBottomButton.removeFromSuperview()
+                }
+            }
+            else if threshold <= collectionView.contentSize.height {
+                for case .autoScrollToBottomBeginTextInput(_, let isShow) in self.messagesConfigurations {
+                    if isShow {
+                        self.setupScrollToBottomButton()
                     }
                 }
             }
@@ -1077,7 +1143,20 @@ extension OZMessagesViewController {
                         self.collectionView.contentInset = inset
                         self.collectionView.reloadData()
                     }
-                    self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                    
+                    var isNotCase = true
+                    for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, let isShow) in self.messagesConfigurations {
+                        isNotCase = false
+                        if autoScrollToBottom {
+                            self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                        }
+                        else if isShow {
+                            self.setupScrollToBottomButton()
+                        }
+                    }
+                    if isNotCase {
+                        self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                    }
                 }
             }
         }
@@ -1089,7 +1168,18 @@ extension OZMessagesViewController {
             self.view.setNeedsUpdateConstraints()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.05) {
                 self.collectionView.frame = self.view.bounds.inset(by: margin)
-                self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                
+                var isNotCase = true
+                for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
+                    isNotCase = false
+
+                    if autoScrollToBottom {
+                        self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                    }
+                }
+                if isNotCase {
+                    self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                }
             }
         }
         
@@ -1247,6 +1337,9 @@ extension OZMessagesViewController {
             }
         }
     }
+    @objc fileprivate func scrollToBottomButtonTapped() {
+        collectionView.scrollTo(edge: .bottom, animated: true)
+    }
 }
 
 
@@ -1296,7 +1389,6 @@ extension OZMessagesViewController: UITextViewDelegate {
     }
     
     public func textViewDidBeginEditing(_ textView: UITextView) {
-        print("textViewDidBeginEditing")
         chatState = .chat
         
         for case .inputTextViewFontColor(let color) in messagesConfigurations {
@@ -1312,8 +1404,6 @@ extension OZMessagesViewController: UITextViewDelegate {
     }
     
     public func textViewDidEndEditing(_ textView: UITextView) {
-        print("textViewDidEndEditing")
-        
         for case .inputTextViewFontColor(let color) in messagesConfigurations {
             textView.textColor = color
         }
@@ -1457,23 +1547,28 @@ extension OZMessagesViewController: OZMessageCellDelegate {
         }
         return [(UIButton(), .none)]
     }
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, button: UIButton) {
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) {
         /// Long Message Folding Options
         if let aMessage = cell.message,
             aMessage.usingFoldingOption, aMessage.type == .text,
             let index = dataSource.data.firstIndex(of: cell.message) {
             
             aMessage.isFolded.toggle()
-            
             dataSource.data[index] = aMessage
             collectionView.layoutIfNeeded()
-
             
             if !aMessage.isFolded, cell.frame.maxY > collectionView.contentOffset.y {
-                // Unfolding
+                // Unfolded
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.15) {
                     let rect = cell.frame.inset(by: UIEdgeInsets(top: cell.frame.height * 0.95, left: 10, bottom: 0, right: 10))
-                    self.collectionView.scrollRectToVisible(rect, animated: true)
+                    self.collectionView.scrollRectToVisible(rect, animated: false)
+                }
+            }
+            else if aMessage.isFolded, cell.frame.minY < collectionView.contentOffset.y {
+                // folded
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.15) {
+                    let rect = cell.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+                    self.collectionView.scrollRectToVisible(rect, animated: false)
                 }
             }
         }
