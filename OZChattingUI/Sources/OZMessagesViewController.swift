@@ -80,7 +80,7 @@ open class OZMessagesViewController: CollectionViewController {
         }
     }
     
-    fileprivate var isFirstLoaded = false
+    fileprivate var isChatViewFirstLoaded = false
     
     // MARK: - View did loaded
     override open func viewDidLoad() {
@@ -106,8 +106,8 @@ open class OZMessagesViewController: CollectionViewController {
         
         reloadCollectionViewFrame()
         
-        if !isFirstLoaded, let dele = delegate {
-            isFirstLoaded = true
+        if !isChatViewFirstLoaded, let dele = delegate {
+            isChatViewFirstLoaded = true
             dele.messageViewLoaded(isLoaded: isViewLoaded)
             
             if !isViewLoaded {
