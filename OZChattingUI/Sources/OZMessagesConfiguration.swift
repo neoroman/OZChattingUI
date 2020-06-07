@@ -36,6 +36,9 @@ public enum OZMessagesConfigurationItem {
 
     /// Time font size in OZMessageCell
     case timeFontColor(UIColor)
+    
+    /// Profile icon name in OZMessageCell
+    case profileIconName(String, [OZMessageType])
 
     /// Profile icon size in OZMessageCell
     case profileIconSize(CGFloat, [OZMessageType])
@@ -175,6 +178,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.timeFontSize(12),
             OZMessagesConfigurationItem.timeFontFormat("h:mm a"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1)),
+            OZMessagesConfigurationItem.profileIconName("", OZMessageType.allTypes()),
             OZMessagesConfigurationItem.profileIconSize(32, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.profileIconSize(20, [.deviceStatus]),
             OZMessagesConfigurationItem.profileIconPadding(0, OZMessageType.allTypes()),

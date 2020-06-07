@@ -71,7 +71,7 @@ open class OZMessageLayout: SimpleLayout {
                     }
                 } else if message.alignment == .left {
                     var halfIconHeight: CGFloat = 0
-                    if !message.isSenderIconHide {
+                    if message.iconImage.count > 0 {
                         halfIconHeight = message.iconSize / 2
                     }
                     yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage) + halfIconHeight

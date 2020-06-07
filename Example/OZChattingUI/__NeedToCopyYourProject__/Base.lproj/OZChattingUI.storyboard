@@ -40,8 +40,8 @@
                                         <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="PUY-XP-Fe3">
-                                        <rect key="frame" x="334" y="8" width="60" height="40"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="PUY-XP-Fe3">
+                                        <rect key="frame" x="329" y="8" width="65" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RNs-jW-tUL">
                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="40"/>
@@ -57,7 +57,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N2l-Tt-cZG">
-                                                <rect key="frame" x="30" y="0.0" width="30" height="40"/>
+                                                <rect key="frame" x="35" y="0.0" width="30" height="40"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="Myj-qi-7wc"/>
                                                     <constraint firstAttribute="width" constant="30" id="woV-wa-GWM"/>

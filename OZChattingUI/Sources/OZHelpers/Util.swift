@@ -257,7 +257,7 @@ extension UIView {
 
 extension UIButton {
     open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let expandedBounds = self.bounds.insetBy(dx: -15, dy: -15)
+        let expandedBounds = self.bounds.insetBy(dx: -5, dy: -5)
         return expandedBounds.contains(point)
     }
 }

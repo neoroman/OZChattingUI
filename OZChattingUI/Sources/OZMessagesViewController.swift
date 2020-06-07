@@ -61,7 +61,6 @@ open class OZMessagesViewController: CollectionViewController {
     fileprivate var scrollToBottomButton = OZToBottomButton()
     
     public var userIdentifier: String?
-    public var userProfilePath: String?
     public var isEchoMode: Bool = false
     
     var loading = false
@@ -673,7 +672,10 @@ extension OZMessagesViewController {
             }
             
             if self.isEchoMode, type.isEchoEnable() {
-                var anImgName = self.userProfilePath ?? ""
+                var anImgName = ""
+                for case .profileIconName(let name, _) in self.messagesConfigurations {
+                    anImgName = name
+                }
                 let anUserImg = UIImage(named: "nopic")
                 if anImgName.count == 0, anUserImg == nil {
                     anImgName = "nopic@2x.png"

@@ -88,7 +88,7 @@ open class IncomingTextMessageCell: OZMessageCell {
         let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
         timeLabel.frame.origin = CGPoint(x: self.bounds.maxX+5, y: timeLabelOriginY)
 
-        let leftInset = message.isSenderIconHide ? 0 : message.cellLeftPadding
+        let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
         textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
 
         layoutButtonContainer(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
@@ -315,7 +315,7 @@ open class IncomingStatusMessageCell: OZMessageCell {
     
     override open func layoutSubviews() {
         super.layoutSubviews()
-        let leftInset = message.cellLeftPadding
+        let leftInset = message.cellLeftPadding + 5
         textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
         iconImage.center.y = textLabel.center.y
         iconImage.layer.cornerRadius = iconImage.frame.height / 2
@@ -378,7 +378,7 @@ open class ImageMessageCell: OZMessageCell {
                 imageView.image = anImage
             }
             
-            let leftInset = message.isSenderIconHide ? 0 : message.cellLeftPadding
+            let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
             imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
                         
             if message.type == .emoticon || message.showTimeLabelForImage {
@@ -439,7 +439,7 @@ open class ImageMessageCell: OZMessageCell {
             imageView.frame = bounds
         }
         else {
-            let leftInset = message.isSenderIconHide ? 0 : message.cellLeftPadding
+            let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
             imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
         }
         imageView.layer.cornerRadius = kCornerRadius
@@ -550,10 +550,12 @@ open class AudioMessageCell: OZMessageCell {
             playImage.image = isPlaying ? pauseImg : playImg
             
             backView.progressColor = message.audioProgressColor
-            backView.backgroundColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)
             backView.center.y = iconImage.center.y
             backView.tintColoredImageView = playImage
             backView.tintColoredImage = pauseImg
+            
+            backView.backgroundColor = message.backgroundColor
+            self.backgroundColor = .clear
             
             eTimeLabel.textColor = message.timeFontColor
             eTimeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
@@ -604,7 +606,7 @@ open class AudioMessageCell: OZMessageCell {
             backView.frame = bounds
         }
         else {
-            let leftInset = message.isSenderIconHide ? 0 : message.cellLeftPadding
+            let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
             backView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
         }
         textLabel.layer.cornerRadius = kCornerRadius
@@ -845,7 +847,7 @@ open class OZMessageCell: DynamicView {
     fileprivate func leftPadding(message: OZMessage) -> CGFloat {
         var leftPadding = message.cellPadding
         if message.alignment == .left {
-            if !message.isSenderIconHide {
+            if message.iconImage.count > 0 {
                 leftPadding = message.cellLeftPadding
             }
             else {
@@ -882,8 +884,9 @@ open class OZMessageCell: DynamicView {
         
         if message.chatEmoticonSize != .zero, message.type == .emoticon {
             if message.alignment == .left {
-                if !message.isSenderIconHide { message.chatEmoticonSize.width += message.cellLeftPadding }
-                return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: message.chatEmoticonSize)
+                var eSize = message.chatEmoticonSize
+                if message.iconImage.count > 0 { eSize.width += message.cellLeftPadding }
+                return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: eSize)
             }
             else {
                 return CGRect(origin: CGPoint(x: containerWidth - message.chatEmoticonSize.width, y: 0), size: message.chatEmoticonSize)
@@ -917,31 +920,19 @@ open class OZMessageCell: DynamicView {
                 message.cellHeight != message.chatImageSize.height {
                 maxImageSize = message.chatImageSize
             }
-            if !message.usingPackedImages {
-                if imageSize.width > maxImageSize.width {
-                    imageSize.height /= imageSize.width/maxImageSize.width
-                    imageSize.width = maxImageSize.width
-                }
-                else if imageSize.height > maxImageSize.height {
-                    imageSize.width /= imageSize.height/maxImageSize.height
-                    imageSize.height = maxImageSize.height
-                }
-                if message.cellHeight < imageSize.height {
-                    imageSize.height = message.cellHeight
-                }
+            if imageSize.width > maxImageSize.width {
+                imageSize.height /= imageSize.width/maxImageSize.width
+                imageSize.width = maxImageSize.width
             }
-            else {
-                if imageSize.width > maxImageSize.width {
-                    imageSize.height /= imageSize.width/maxImageSize.width
-                    imageSize.width = maxImageSize.width
-                }
-                if imageSize.height > maxImageSize.height {
-                    imageSize.width /= imageSize.height/maxImageSize.height
-                    imageSize.height = maxImageSize.height
-                }
+            if imageSize.height > maxImageSize.height {
+                imageSize.width /= imageSize.height/maxImageSize.height
+                imageSize.height = maxImageSize.height
+            }
+            if !message.usingPackedImages, message.cellHeight < imageSize.height {
+                imageSize.height = message.cellHeight
             }
             if message.alignment == .left {
-                if !message.isSenderIconHide { imageSize.width += message.cellLeftPadding }
+                if message.iconImage.count > 0 { imageSize.width += message.cellLeftPadding }
                 return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: imageSize)
             }
             else {
@@ -954,7 +945,7 @@ open class OZMessageCell: DynamicView {
         }
         else if message.type == .mp3 || message.type == .voice {
             if message.alignment == .left {
-                let leftPadding = message.isSenderIconHide ? message.cellPadding : message.cellLeftPadding
+                let leftPadding = message.iconImage.count > 0 ? message.cellLeftPadding : message.cellPadding
                 let size = CGSize(width: 120 + leftPadding, height: message.cellHeight)
                 return CGRect(origin: CGPoint(x: 0, y: 0), size: size)
             }
@@ -973,7 +964,7 @@ open class OZMessageCell: DynamicView {
         } else {
             var leftPadding = message.cellPadding
             if message.alignment == .left {
-                if !message.isSenderIconHide {
+                if message.iconImage.count > 0 {
                     leftPadding = message.cellLeftPadding
                 }
                 else {

@@ -49,7 +49,6 @@ class ExampleViewController: OZMessagesViewController {
     fileprivate func testChats(vc: OZMessagesViewController) {
         // Debug
         vc.isEchoMode = true
-        vc.userProfilePath = Bundle.main.path(forResource: "TaylorSwift", ofType: "jpg")
         
         // Message send and receive
         vc.send(msg: "\(Date())", type: .announcement)
@@ -105,17 +104,18 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.red.withAlphaComponent(0.7), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.blue.withAlphaComponent(0.6), .fromOther),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
-            OZMessagesConfigurationItem.cellBackgroundColor(.systemPink, [.voice, .mp3]),
+            OZMessagesConfigurationItem.cellBackgroundColor(.lightGray, [.voice, .mp3]),
             OZMessagesConfigurationItem.cellPadding(15, [.text]),
             OZMessagesConfigurationItem.cellPadding(3, [.emoticon]),
             OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 83, height: 83)),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
-            OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.cyan.withAlphaComponent(0.3)),
-            OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.cyan),
             OZMessagesConfigurationItem.fontColor(.black, [.voice, .mp3], .none),
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Bold", OZMessageType.allTypes()),
+            OZMessagesConfigurationItem.profileIconName("Elizaveta Dushechkina", [.text, .mp3, .voice, .image, .emoticon]),
+            OZMessagesConfigurationItem.profileIconSize(38, OZMessageType.allTypes()),
+            OZMessagesConfigurationItem.profileIconSize(30, [.deviceStatus]),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.usingPackedImages(false),
@@ -204,42 +204,34 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                 outgoingCell.textLabel.type = .basic
             }
         }
-        //        cell.setNeedsLayout()
-        //        if cell.message.type == .text || cell.message.type == .image {
-        //            cell.layer.shadowOffset = CGSize(width: 5, height: 5)
-        //            cell.layer.shadowOpacity = 0.05
-        //            cell.layer.shadowRadius = 5
-        //            cell.layer.shadowColor = cell.message.shadowColor.cgColor
-        //            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
-        //        }
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
-        if cell.message.alignment == .left {
-            switch cell.message.type {
-            case .text:
-                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
-            case .image, .emoticon:
-                guard let incomingCell = cell as? ImageMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
-            case .voice, .mp3:
-                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
-            default:
-                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
-            }
-        }
+//        if cell.message.alignment == .left {
+//            switch cell.message.type {
+//            case .text:
+//                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
+//                incomingCell.iconImage.isHidden = true
+//                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
+//            case .image, .emoticon:
+//                guard let incomingCell = cell as? ImageMessageCell else { return }
+//                incomingCell.iconImage.isHidden = true
+//                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
+//            case .voice, .mp3:
+//                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
+//                incomingCell.iconImage.isHidden = true
+//                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
+//            default:
+//                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
+//            }
+//        }
     }
     
     func messageViewLoaded(isLoaded: Bool) {
-        print("messageViewLoaded...!")
+        print("messageViewLoaded...!")        
     }
     
     

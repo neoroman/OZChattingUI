@@ -87,7 +87,6 @@ public class OZMessage: Equatable {
     public var fromCurrentUser = false
     public var timestamp: Int = 0
     public var extra: [String: Any] = [:] // JSON?
-    public var isSenderIconHide: Bool = true
     
     public init() {
         self.identifier = ""
@@ -166,12 +165,10 @@ public class OZMessage: Equatable {
     private func initWithUserProfileAndTimestamp(_ fromCurrentUser: Bool, tm: Int, img: String?) {
         if !fromCurrentUser {
             if let anImg = img {
-                self.isSenderIconHide = false
                 self.iconImage = anImg
             }
             else {
-                self.isSenderIconHide = true
-                self.iconImage = "nopic"
+                self.iconImage = ""
             }
             if tm == 0 { self.timestamp = Int(Date().timeIntervalSince1970) }
             else { self.timestamp = tm }
@@ -282,6 +279,10 @@ public class OZMessage: Equatable {
             case .maxWidthRatio(let ratio):
                 bubbleWidthRatio = ratio
                 break
+            case .profileIconName(let name, let types):
+                if types.contains(type) {
+                    iconImage = name
+                }
             case .profileIconPadding(let padding, let types):
                 if types.contains(type) {
                     iconPadding = padding
