@@ -9,7 +9,7 @@ import UIKit
 
 extension UIViewController {
     
-    func displayActionSheet(_ message: String, actions: [UIAlertAction], cancel: UIAlertAction? = nil, preferredStyle: UIAlertController.Style? = .actionSheet) {
+    open func displayActionSheet(_ message: String, actions: [UIAlertAction], cancel: UIAlertAction? = nil, preferredStyle: UIAlertController.Style? = .actionSheet) {
         let alert: UIAlertController = UIAlertController(title: "", message: message, preferredStyle: preferredStyle!)
         var cancelAction: UIAlertAction
         
@@ -47,7 +47,7 @@ extension UIViewController {
     
 
     // MARK: - display messages..
-    func displayMessage(_ message: String, confirm: UIAlertAction? = nil, cancel: UIAlertAction? = nil, preferredStyle: UIAlertController.Style? = .alert) {
+    open func displayMessage(_ message: String, confirm: UIAlertAction? = nil, cancel: UIAlertAction? = nil, preferredStyle: UIAlertController.Style? = .alert) {
 
         let alert: UIAlertController = UIAlertController(title: "", message: message, preferredStyle: preferredStyle!)
         var okAction: UIAlertAction
@@ -88,7 +88,7 @@ extension UIViewController {
         }
     }
     
-    func displayMessageSingle(_ message: String, title: String? = nil, confirm: UIAlertAction? = nil) {
+    open func displayMessageSingle(_ message: String, title: String? = nil, confirm: UIAlertAction? = nil) {
         var t = ""
         if let aTitle = title,
             aTitle.count > 0 {

@@ -47,7 +47,6 @@
 		BAFC0C2724872E5300CA466C /* btnCallClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFC0C2624872E5200CA466C /* btnCallClose@2x.png */; };
 		BAFC0C2924872E5C00CA466C /* iconViewAll@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFC0C2824872E5C00CA466C /* iconViewAll@2x.png */; };
 		BAFE5DC9247CEE5E002B0A4B /* AudioExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */; };
-		BAFE5DCA247CEE5E002B0A4B /* DocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */; };
 		BAFE5DCB247CEE5E002B0A4B /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */; };
 		BAFE5DCC247CEE5E002B0A4B /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5D8B247CEE5D002B0A4B /* test.mp3 */; };
 		BAFE5DCF247CEE5E002B0A4B /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5D91247CEE5D002B0A4B /* CounterView.swift */; };
@@ -120,7 +119,6 @@
 		BAFC0C2624872E5200CA466C /* btnCallClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btnCallClose@2x.png"; sourceTree = "<group>"; };
 		BAFC0C2824872E5C00CA466C /* iconViewAll@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconViewAll@2x.png"; sourceTree = "<group>"; };
 		BAFE5D87247CEE5D002B0A4B /* AudioExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioExtension.swift; sourceTree = "<group>"; };
-		BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentViewController.swift; sourceTree = "<group>"; };
 		BAFE5D89247CEE5D002B0A4B /* ExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
 		BAFE5D8B247CEE5D002B0A4B /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
 		BAFE5D91247CEE5D002B0A4B /* CounterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
@@ -191,7 +189,6 @@
 				40EF25E02484E08400E1E223 /* SelectPhotoViewController.swift */,
 				40EF25E224864E2000E1E223 /* PhotoCollectionViewCell.swift */,
 				BAFE5D91247CEE5D002B0A4B /* CounterView.swift */,
-				BAFE5D88247CEE5D002B0A4B /* DocumentViewController.swift */,
 				BAA31F842489BEF700DE982B /* CommonData.swift */,
 				BAA31F832488C48F00DE982B /* Extensions */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
@@ -519,7 +516,6 @@
 				40EF25E12484E08400E1E223 /* SelectPhotoViewController.swift in Sources */,
 				BAA31F852489BEF700DE982B /* CommonData.swift in Sources */,
 				40EF25E324864E2000E1E223 /* PhotoCollectionViewCell.swift in Sources */,
-				BAFE5DCA247CEE5E002B0A4B /* DocumentViewController.swift in Sources */,
 				BAFE5E00247CEE5E002B0A4B /* AppDelegate.swift in Sources */,
 				BAFE5DCF247CEE5E002B0A4B /* CounterView.swift in Sources */,
 				BAA31F822488B7D600DE982B /* StartViewController.swift in Sources */,

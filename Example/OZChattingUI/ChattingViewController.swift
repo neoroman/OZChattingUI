@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Photos
+
 import OZChattingUI
 import ImageViewer
 
@@ -503,12 +505,51 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool {
-        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SelectPhotoViewController") as? SelectPhotoViewController {
-            self.navigationController?.pushViewController(vc, animated: true)
-            vc.delegate = self
-        }
+        requestPhotoAuthorization()
         return false
     }
+    
+    fileprivate func requestPhotoAuthorization() {
+        requestPhotoLibraryAuthorization { (result) in
+            DispatchQueue.main.async {
+                if result {
+                    if let vc = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main).instantiateViewController(withIdentifier: "SelectPhotoViewController") as? SelectPhotoViewController {
+                        self.navigationController?.pushViewController(vc, animated: true)
+                        vc.delegate = self
+                    }
+                } else {
+                    let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+                        if let settingUrl = URL(string: UIApplication.openSettingsURLString),
+                            UIApplication.shared.canOpenURL(settingUrl) {
+                            UIApplication.shared.open(settingUrl, options: [:], completionHandler: nil)
+                        }
+                    }
+                    self.displayMessage("Need a grant to access gallery. Go to settings?", confirm: okAction, cancel: nil, preferredStyle: .alert)
+                }
+            }
+        }
+    }
+    fileprivate func requestPhotoLibraryAuthorization(completionHandler: @escaping (_ isSuccess: Bool) -> Void) {
+        switch PHPhotoLibrary.authorizationStatus() {
+        case .authorized:
+            completionHandler(true)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { (status) in
+                switch status {
+                case .authorized:
+                    completionHandler(true)
+                default:
+                    completionHandler(false)
+                }
+            }
+        case .denied, .restricted:
+            completionHandler(false)
+        default:
+            completionHandler(false)
+            break
+        }
+    }
+
 }
 
 extension ChattingViewController: SelectPhotoDelegate {
