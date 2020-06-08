@@ -54,10 +54,8 @@ class ChattingViewController: OZMessagesViewController {
 //            expandInputView()
 //        }
         
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.25) {
-            self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: testMessages))
-            self.collectionView.reloadData()
-        }
+        let configuredTestMessages = testMessages.map{ $0.copy(messagesConfigurations) }
+        self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: configuredTestMessages))
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
             //self.collectionView.scrollTo(edge: .bottom, animated: false)
             self.isEchoMode = true
@@ -74,7 +72,7 @@ class ChattingViewController: OZMessagesViewController {
         super.viewDidAppear(animated)
         
         DispatchQueue.main.asyncAfter(deadline: .now()+0.35) {
-            if self.isViewLoaded, !self.collectionView.hasReloaded  {
+            if self.isViewLoaded, !self.collectionView.hasReloaded {
                 self.collectionView.contentInset = UIEdgeInsets(top: 10, left: 12, bottom: 60, right: 12)
                 self.collectionView.reloadData()
             }
@@ -301,10 +299,11 @@ class ChattingViewController: OZMessagesViewController {
         return [
             // OZMessageCell
             OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 224, height: 158), CGSize(width: 800, height: 1000)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 100, height: 108), CGSize(width: 800, height: 1000)),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.cellBackgroundColor(UIColor(white: 204/255, alpha: 1), [.announcement]),
+            OZMessagesConfigurationItem.cellBackgroundColor(.white, [.voice, .mp3]),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.sepratorColor(.clear),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),

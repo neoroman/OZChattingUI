@@ -366,14 +366,16 @@ open class ImageMessageCell: OZMessageCell {
             if imageView.image == nil {
                 if message.content.lowercased().hasPrefix("file"),
                     let anUrl = URL(string: message.content),
-                    let anImage = UIImage(contentsOfFile: anUrl.relativePath),
-                    imageView.image != anImage {
+                    FileManager.default.isReadableFile(atPath: anUrl.relativePath),
+                    let data = FileManager.default.contents(atPath: anUrl.relativePath),
+                    let anImage = UIImage(data: data) {
                     // Local file with fileURL
                     imageView.image = anImage
                 }
                 else if message.content.hasPrefix("/"),
-                    let anImage = UIImage(contentsOfFile: message.content),
-                    imageView.image != anImage {
+                    FileManager.default.isReadableFile(atPath: message.content),
+                    let data = FileManager.default.contents(atPath: message.content),
+                    let anImage = UIImage(data: data) {
                     // Local file with relative path
                     imageView.image = anImage
                 }
@@ -902,27 +904,29 @@ open class OZMessageCell: DynamicView {
         }
         else if (message.type == .image || message.type == .emoticon),
             message.content.count > 0 {
-            var imageSize = CGSize.zero
-            if message.content.lowercased().hasPrefix("file"),
-                let anUrl = URL(string: message.content),
-                FileManager.default.isReadableFile(atPath: anUrl.relativePath),
-                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
-                // Local file with fileURL
-                imageSize = anImage.size
-            }
-            else if message.content.hasPrefix("/"),
-                FileManager.default.isReadableFile(atPath: message.content),
-                let anImage = UIImage(contentsOfFile: message.content) {
-                // Local file with relative path
-                imageSize = anImage.size
-            }
-            else if let anImg = UIImage(named: message.content) {
-                // 내장 이미지명
-                imageSize = anImg.size
-            }
-            else if let anImg = UIImage.frameworkImage(named: "\(message.content)@2x", ofType: "png") {
-                // 내장 이미지명
-                imageSize = anImg.size
+            var imageSize = CGSize.zero //message.chatImageSize
+            if imageSize == .zero {
+                if message.content.lowercased().hasPrefix("file"),
+                    let anUrl = URL(string: message.content),
+                    FileManager.default.isReadableFile(atPath: anUrl.relativePath),
+                    let data = FileManager.default.contents(atPath: anUrl.relativePath),
+                    let parsed = try? ImageSizeParser(data: data) {
+                    // Local file with fileURL
+                    //print("ImageSizeParser: format(\(parsed.format)), size(\(parsed.size))")
+                    imageSize = parsed.size
+                }
+                else if message.content.hasPrefix("/"),
+                    FileManager.default.isReadableFile(atPath: message.content),
+                    let data = FileManager.default.contents(atPath: message.content),
+                    let parsed = try? ImageSizeParser(data: data) {
+                    // Local file with relative path
+                    //print("ImageSizeParser: format(\(parsed.format)), size(\(parsed.size))")
+                    imageSize = parsed.size
+                }
+                else if let anImg = UIImage(named: message.content) {
+                    // 내장 이미지명
+                    imageSize = anImg.size
+                }
             }
             
             var maxImageSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: message.cellHeight)

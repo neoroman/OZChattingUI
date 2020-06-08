@@ -422,24 +422,24 @@ public class OZMessage: Equatable {
         return 25
     }
     
-    func copy() -> OZMessage {
+    public func copy(_ config: [OZMessagesConfigurationItem]? = nil) -> OZMessage {
         switch type {
         case .image:
-            return OZMessage(fromCurrentUser, image: content)
+            return OZMessage(fromCurrentUser, image: content, config: config ?? nil)
         case .announcement:
-            return OZMessage(announcement: content)
+            return OZMessage(announcement: content, config: config ?? nil)
         case .text:
-            return OZMessage(fromCurrentUser, content: content)
+            return OZMessage(fromCurrentUser, content: content, config: config ?? nil)
         case .emoticon:
-            return OZMessage(fromCurrentUser, emoticon: content)
+            return OZMessage(fromCurrentUser, emoticon: content, config: config ?? nil)
         case .status:
-            return OZMessage(fromCurrentUser, status: content)
+            return OZMessage(fromCurrentUser, status: content, config: config ?? nil)
         case .deviceStatus:
-            return OZMessage(deviceStatus: content, statusType: deviceStatus ?? .call)
+            return OZMessage(deviceStatus: content, statusType: deviceStatus ?? .call, config: config ?? nil)
         case .mp3:
-            return OZMessage(fromCurrentUser, mp3: content, duration: 0)
+            return OZMessage(fromCurrentUser, mp3: content, duration: 0, config: config ?? nil)
         case .voice:
-            return OZMessage(fromCurrentUser, voice: content, duration: 0)
+            return OZMessage(fromCurrentUser, voice: content, duration: 0, config: config ?? nil)
         default:
             return OZMessage()
         }

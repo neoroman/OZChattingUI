@@ -48,11 +48,13 @@ class SelectPhotoViewController: UIViewController {
     // MARK: - Targets and Actions
     
     @IBAction func pressedSendButton(_ sender: UIBarButtonItem) {
+        let imageMan = ImageManager()
+        
         for i in 0..<selectedIndexes.count {
             let asset = photoAssets?[selectedIndexes[i]]
-            ImageManager.shared.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { [weak self] image in
+            imageMan.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { [weak self] image in
                 if let image = image {
-                    ImageManager.shared.storeToTemporaryDirectory(image, completion: { [weak self] (imagePath, error) in
+                    imageMan.storeToTemporaryDirectory(image, completion: { [weak self] (imagePath, error) in
                         guard let imageURL = imagePath else {
                             return
                         }
@@ -131,10 +133,11 @@ extension SelectPhotoViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as? PhotoCollectionViewCell else { return UICollectionViewCell() }
         
+        let imageMan = ImageManager()
         let asset = self.photoAssets?[indexPath.item]
-        ImageManager.shared.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { image in
+        imageMan.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { [weak self] image in
             var index: Int?
-            if let n = self.selectedIndexes.firstIndex(of: indexPath.item) {
+            if let n = self?.selectedIndexes.firstIndex(of: indexPath.item) {
                 index = n + 1
                 collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             }
@@ -180,10 +183,7 @@ extension SelectPhotoViewController: UICollectionViewDelegate, UICollectionViewD
 }
 
 // MARK: - ImageManager
-final class ImageManager {
-    static var shared = ImageManager()
-    
-    fileprivate let imageManager = PHImageManager()
+fileprivate class ImageManager {
     var representedAssetIdentifier: String?
     
     func requestImage(with asset: PHAsset?, thumbnailSize: CGSize, completion: @escaping (UIImage?) -> Void) {
@@ -196,7 +196,7 @@ final class ImageManager {
         requestOptions.isSynchronous = true
         requestOptions.resizeMode = .fast
         self.representedAssetIdentifier = asset.localIdentifier
-        self.imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions) { (image, info) in
+        PHImageManager.default().requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions) { (image, info) in
             if self.representedAssetIdentifier == asset.localIdentifier {
                 completion(image)
             }

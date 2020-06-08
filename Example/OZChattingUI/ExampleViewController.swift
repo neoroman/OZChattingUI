@@ -108,7 +108,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.cellPadding(15, [.text]),
             OZMessagesConfigurationItem.cellPadding(3, [.emoticon]),
             OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 83, height: 83)),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 240, height: 160), CGSize(width: 400, height: 400)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 80, height: 100), CGSize(width: 400, height: 400)),
             OZMessagesConfigurationItem.fontColor(.black, [.voice, .mp3], .none),
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),

@@ -287,9 +287,9 @@ open class OZMessagesViewController: CollectionViewController {
         if isKeyboardShow || chatState == .emoticon {
             keyboardShowLayout(differHeight: 0, isPadding: true, animated: false)
         }
-        else {
-            reloadCollectionViewFrame()
-        }
+//        else {
+//            reloadCollectionViewFrame()
+//        }
     }
     
     // MARK: - Setup Input TextView Height Constraint
