@@ -1461,7 +1461,10 @@ extension OZMessagesViewController: UINavigationControllerDelegate, UIImagePicke
             for case .chatImageMaxNumberOfBytes(let bytes) in messagesConfigurations {
                 maxBytes = bytes
             }
-            guard let imageData = resizedImage.jpegData(maxNumberOfBytes: maxBytes) else { return }
+            guard let imageData = resizedImage.jpegData(maxNumberOfBytes: maxBytes) else {
+                saveFile(resizedImage)
+                return
+            }
             saveFile(imageData)
         }
     }
