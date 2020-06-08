@@ -360,26 +360,28 @@ open class ImageMessageCell: OZMessageCell {
     public var iconImage = UIImageView()
     public var isIconHidden = true
     public var timeLabel = UILabel()
-    
+        
     override public var message: OZMessage! {
         didSet {
-            if message.content.lowercased().hasPrefix("file"),
-                let anUrl = URL(string: message.content),
-                let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
-                // Local file with fileURL
-                imageView.image = anImage
+            if imageView.image == nil {
+                if message.content.lowercased().hasPrefix("file"),
+                    let anUrl = URL(string: message.content),
+                    let anImage = UIImage(contentsOfFile: anUrl.relativePath),
+                    imageView.image != anImage {
+                    // Local file with fileURL
+                    imageView.image = anImage
+                }
+                else if message.content.hasPrefix("/"),
+                    let anImage = UIImage(contentsOfFile: message.content),
+                    imageView.image != anImage {
+                    // Local file with relative path
+                    imageView.image = anImage
+                }
+                else if message.content.count > 0 ,let anImage = UIImage(named: message.content),
+                    imageView.image != anImage {
+                    imageView.image = anImage
+                }
             }
-            else if message.content.hasPrefix("/"),
-                let anImage = UIImage(contentsOfFile: message.content) {
-                // Local file with relative path
-                imageView.image = anImage
-            }
-            else if message.content.count > 0 ,let anImage = UIImage(named: message.content) {
-                imageView.image = anImage
-            }
-            
-            let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
-            imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
                         
             if message.type == .emoticon || message.showTimeLabelForImage {
                 timeLabel.textColor = message.timeFontColor
@@ -400,9 +402,9 @@ open class ImageMessageCell: OZMessageCell {
             }
 
             iconImage.isHidden = isIconHidden
-            iconImage.image = profileImage(path: message.iconImage)
-            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
-            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            if !iconImage.isHidden {
+                iconImage.image = profileImage(path: message.iconImage)
+            }
 
             if message.cellOpacity <= 1.0 {
                 for x in self.subviews {
@@ -458,8 +460,12 @@ open class ImageMessageCell: OZMessageCell {
         }
 
         iconImage.isHidden = isIconHidden
-        iconImage.layer.cornerRadius = iconImage.frame.height / 2
-        iconImage.layer.masksToBounds = true
+        if !iconImage.isHidden {
+            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            iconImage.layer.cornerRadius = iconImage.frame.height / 2
+            iconImage.layer.masksToBounds = true
+        }
 
         /// Call back to delegate
         if let dele = delegate {
@@ -730,11 +736,13 @@ open class OZMessageCell: DynamicView {
     fileprivate func profileImage(path: String) -> UIImage {
         if path.lowercased().hasPrefix("file"),
             let anUrl = URL(string: path),
+            FileManager.default.isReadableFile(atPath: anUrl.relativePath),
             let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
             // Local file with fileURL
             return anImage
         }
         else if path.hasPrefix("/"),
+            FileManager.default.isReadableFile(atPath: path),
             let anImage = UIImage(contentsOfFile: path) {
             // Local file with relative path
             return anImage
@@ -897,11 +905,13 @@ open class OZMessageCell: DynamicView {
             var imageSize = CGSize.zero
             if message.content.lowercased().hasPrefix("file"),
                 let anUrl = URL(string: message.content),
+                FileManager.default.isReadableFile(atPath: anUrl.relativePath),
                 let anImage = UIImage(contentsOfFile: anUrl.relativePath) {
                 // Local file with fileURL
                 imageSize = anImage.size
             }
             else if message.content.hasPrefix("/"),
+                FileManager.default.isReadableFile(atPath: message.content),
                 let anImage = UIImage(contentsOfFile: message.content) {
                 // Local file with relative path
                 imageSize = anImage.size
