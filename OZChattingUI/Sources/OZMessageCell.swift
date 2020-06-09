@@ -495,6 +495,7 @@ open class AudioMessageCell: OZMessageCell {
             else if #available(iOS 13.0, *) {
                 pauseImg = UIImage(systemName: "pause.fill") ?? UIImage()
             }
+            
             if let aDur = message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.05.22
                 textLabel.text = String(format: "%02d:%02d", aDur / 60, aDur % 60)
             }
@@ -654,6 +655,9 @@ open class AudioMessageCell: OZMessageCell {
         if self.backView.progress >= 1 {
             self.isPlaying = false
             self.backView.progress = 0
+            if let aDur = message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.05.22
+                self.textLabel.text = String(format: "%02d:%02d", aDur / 60, aDur % 60)
+            }
         }
     }
 }
