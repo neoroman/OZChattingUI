@@ -50,7 +50,9 @@ class OZToBottomButton: UIButton {
     private var _strokeWidth: CGFloat = 1.0
     private var _fillColor: UIColor = .clear
 
-    
+    private var circle: CAShapeLayer?
+    private var line: CAShapeLayer?
+
     // MARK: - Drawing
     
     override public func draw(_ rect: CGRect) {
@@ -60,38 +62,41 @@ class OZToBottomButton: UIButton {
     }
     
     func drawRect(rect: CGRect) {
-        let bounds = rect.insetBy(dx: rect.width * 0.2, dy: rect.height * 0.4)
         
         if _fillColor != .clear {
-            let circleCenter = CGPoint(x: rect.midX, y: rect.midY)
-            let circleRadius: CGFloat = rect.width / 2
-            let circlePath = UIBezierPath(arcCenter: circleCenter, radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)// (ovalIn: self.bounds)
-            
-            let progressCircle = CAShapeLayer ()
-            progressCircle.path = circlePath.cgPath
-            progressCircle.strokeColor = _fillColor.cgColor
-            progressCircle.fillColor = _fillColor.cgColor
-            progressCircle.lineWidth = _strokeWidth
-            
-            self.layer.addSublayer(progressCircle)
+            if circle == nil {
+                let circleCenter = CGPoint(x: rect.midX, y: rect.midY)
+                let circleRadius: CGFloat = rect.width / 2
+                let circlePath = UIBezierPath(arcCenter: circleCenter, radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)// (ovalIn: self.bounds)
+                
+                circle = CAShapeLayer ()
+                circle?.path = circlePath.cgPath
+                self.layer.addSublayer(circle!)
+            }
+            circle?.strokeColor = _fillColor.cgColor
+            circle?.fillColor = _fillColor.cgColor
+            circle?.lineWidth = _strokeWidth
         }
         
-        
-        let bezierPath = UIBezierPath()
-        bezierPath.move(to: CGPoint(x: bounds.minX, y: bounds.minY))
-        bezierPath.addLine(to: CGPoint(x: bounds.midX, y: bounds.maxY))
-        bezierPath.addLine(to: CGPoint(x: bounds.maxX, y: bounds.minY))
-        bezierPath.addLine(to: CGPoint(x: bounds.midX, y: bounds.maxY))
-        bezierPath.lineCapStyle = CGLineCap.round
-        bezierPath.lineWidth = _strokeWidth
-        bezierPath.stroke()
-        bezierPath.close()
-        
-        let line = CAShapeLayer ()
-        line.path = bezierPath.cgPath
-        line.strokeColor = _strokeColor.cgColor
-        line.lineWidth = _strokeWidth
+        if line == nil {
+            let bounds = rect.insetBy(dx: rect.width * 0.2, dy: rect.height * 0.4)
 
-        self.layer.addSublayer(line)
+            let bezierPath = UIBezierPath()
+            bezierPath.move(to: CGPoint(x: bounds.minX, y: bounds.minY))
+            bezierPath.addLine(to: CGPoint(x: bounds.midX, y: bounds.maxY))
+            bezierPath.addLine(to: CGPoint(x: bounds.maxX, y: bounds.minY))
+            bezierPath.addLine(to: CGPoint(x: bounds.midX, y: bounds.maxY))
+            bezierPath.lineCapStyle = CGLineCap.round
+            bezierPath.lineWidth = _strokeWidth
+            bezierPath.stroke()
+            bezierPath.close()
+            
+            line = CAShapeLayer ()
+            line?.path = bezierPath.cgPath
+            
+            self.layer.addSublayer(line!)
+        }
+        line?.strokeColor = _strokeColor.cgColor
+        line?.lineWidth = _strokeWidth
     }
 }

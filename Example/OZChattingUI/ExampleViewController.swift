@@ -30,7 +30,7 @@ class ExampleViewController: OZMessagesViewController {
 
         
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-            self.testChats(vc: self)
+            self.testChats(vc: self)            
         }
     }
     
@@ -104,7 +104,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.red.withAlphaComponent(0.7), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(UIColor.blue.withAlphaComponent(0.6), .fromOther),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
-            OZMessagesConfigurationItem.cellBackgroundColor(.lightGray, [.voice, .mp3]),
+            OZMessagesConfigurationItem.cellBackgroundColor(UIColor.green.withAlphaComponent(0.5), [.voice, .mp3]),
             OZMessagesConfigurationItem.cellPadding(15, [.text]),
             OZMessagesConfigurationItem.cellPadding(3, [.emoticon]),
             OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 83, height: 83)),
