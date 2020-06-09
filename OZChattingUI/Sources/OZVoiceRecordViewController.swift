@@ -122,11 +122,11 @@ open class OZVoiceRecordViewController: UIViewController {
             voiceRecordButton.setImage(vpBtnRecordStop, for: .normal)
             voiceRecordButton.setImage(vpBtnRecordStopPressed, for: .highlighted)
             
-            var aTime = Int(recordMaxDuration) - Int(recordElapsedTime)
+            var aTime = recordMaxDuration - recordElapsedTime
             if byState == .playing {
                 aTime = 0
             }
-            voiceTimeLabel.text = String(format: "%02d:%02d", aTime / 60, aTime % 60)
+            voiceTimeLabel.text = String(format: "%02d:%02d", Int(round(aTime)) / 60, Int(round(aTime)) % 60)
             voiceLevelView.startAnimating()
             voiceSendButton.isEnabled = false
         case .stop:
@@ -306,8 +306,8 @@ extension OZVoiceRecordViewController {
             aMaxTime = recordedDuration
         }
         voiceTimeLabel.text = String(format: "%02d:%02d",
-                                     Int(aMaxTime) / 60,
-                                     Int(aMaxTime) % 60)
+                                     Int(round(aMaxTime)) / 60,
+                                     Int(round(aMaxTime)) % 60)
     }
     
     func finishRecording(success: Bool) {
@@ -392,7 +392,7 @@ extension OZVoiceRecordViewController {
                 let aTime = recordMaxDuration - recordElapsedTime
                 print("OZVoice::: maxDuration(\(recordMaxDuration)), elapsedTime(\(recordElapsedTime)), aTime(\(aTime))")
                 if aTime >= 0 {
-                    voiceTimeLabel.text = String(format: "%02d:%02d", Int(aTime) / 60, Int(aTime) % 60)
+                    voiceTimeLabel.text = String(format: "%02d:%02d", Int(round(aTime)) / 60, Int(round(aTime)) % 60)
                 }
             } else {
                 recordElapsedTime = 0
@@ -470,7 +470,7 @@ extension OZVoiceRecordViewController {
             audioPlayer = OZAudioPlayer()
         }
         audioPlayer?.play(named: audioFilePath.relativePath, complete: { (elapse, duration) in
-            let aTime = Int(elapse)
+            let aTime = Int(round(elapse))
             self.voiceTimeLabel.text = String(format: "%02d:%02d", aTime / 60, aTime % 60)
             if elapse >= duration {
                 self.audioPlayer?.stop()
