@@ -1275,12 +1275,12 @@ extension OZMessagesViewController {
         let bottomPadding:CGFloat = 0 //window.safeAreaInsets.bottom
         let margin = UIEdgeInsets(top: 0, left: 0, bottom: bottomPadding + minTextViewHeight, right: 0)
 
-        UIView.animate(withDuration: 0.35, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             ecvh.constant = 0
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
-        }) { (comp) in
             self.collectionView.frame = self.view.bounds.inset(by: margin)
+        }) { (comp) in
             for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                 inset.bottom = inset.bottom + minTextViewHeight
                 self.collectionView.contentInset = inset
