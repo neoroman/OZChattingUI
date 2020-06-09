@@ -638,7 +638,8 @@ open class AudioMessageCell: OZMessageCell {
         }
     }
     func playProgress(_ elapsed: TimeInterval, _ duration: TimeInterval) {
-        self.backView.progress = CGFloat(elapsed / duration)
+        let maxDuration: Double = round(duration)
+        self.backView.progress = CGFloat(elapsed / maxDuration)
         if elapsed < 60 {
             self.textLabel.text = String(format: "00:%02d", Int(elapsed))
         }
@@ -649,8 +650,11 @@ open class AudioMessageCell: OZMessageCell {
             self.isPlaying = false
             self.backView.progress = 0
             delay(0.15) {
-                if let aDur = self.message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.05.22
+                if let aDur = self.message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.06.09
                     self.textLabel.text = String(format: "%02d:%02d", aDur / 60, aDur % 60)
+                }
+                else {
+                    self.textLabel.text = String(format: "%02d:%02d", Int(maxDuration) / 60, Int(maxDuration) % 60)
                 }
             }
         }
