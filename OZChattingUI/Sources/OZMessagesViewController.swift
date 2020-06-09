@@ -243,7 +243,10 @@ open class OZMessagesViewController: CollectionViewController {
         let imagePlusIconMessageViewSource = ClosureViewSource(viewUpdater: { (view: ImagePlusIconMessageCell, data: OZMessage, at: Int) in
             view.delegate = self
             view.message = data
-            if data.type == .emoticon { view.imageView.contentMode = .scaleAspectFit }
+            if data.type == .emoticon {
+                view.imageView.contentMode = .scaleAspectFit
+                view.imageView.image = UIImage(named: data.content)
+            }
             else if let anImage = self.getImage(identifier: data.identifier, imageView: view.imageView, message: data) {
                 view.imageView.image = anImage
                 data.imageSize = anImage.size
@@ -252,7 +255,10 @@ open class OZMessagesViewController: CollectionViewController {
         let imageMessageViewSource = ClosureViewSource(viewUpdater: { (view: ImageMessageCell, data: OZMessage, at: Int) in
             view.delegate = self
             view.message = data
-            if data.type == .emoticon { view.imageView.contentMode = .scaleAspectFit }
+            if data.type == .emoticon {
+                view.imageView.contentMode = .scaleAspectFit
+                view.imageView.image = UIImage(named: data.content)
+            }
             else if let anImage = self.getImage(identifier: data.identifier, imageView: view.imageView, message: data) {
                 view.imageView.image = anImage
                 data.imageSize = anImage.size
