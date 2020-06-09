@@ -136,15 +136,23 @@ open class OZMessagesViewController: CollectionViewController {
     
     // MARK: - Setup collectionView Frame
     open func reloadCollectionViewFrame() {
-        collectionView.frame = view.bounds
-
+        var safeInset: CGFloat = 0
+        if #available(iOS 11.0, *) {
+            collectionView.frame = view.bounds.inset(by: super.view.safeAreaInsets)
+            safeInset = super.view.safeAreaInsets.bottom + super.view.safeAreaInsets.top
+        } else {
+            // Fallback on earlier versions
+        }
+        
         collectionView.frame.origin = CGPoint.zero
         if UIDevice.current.orientation.isLandscape {
             //print("Landscape")
-            collectionView.frame.size = CGSize(width: super.view.bounds.height, height: super.view.bounds.width - minTextViewHeight)
+            collectionView.frame.size = CGSize(width: super.view.bounds.height - safeInset,
+                                               height: super.view.bounds.width - minTextViewHeight)
         } else {
             //print("Portrait")
-            collectionView.frame.size = CGSize(width: super.view.bounds.width, height: super.view.bounds.height - minTextViewHeight)
+            collectionView.frame.size = CGSize(width: super.view.bounds.width,
+                                               height: super.view.bounds.height - minTextViewHeight - safeInset)
         }
         for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
             inset.bottom = inset.bottom + minTextViewHeight

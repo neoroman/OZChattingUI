@@ -90,7 +90,7 @@ open class OZAudioPlayer {
             viewController?.present(alert, animated: true, completion: nil)
             delay(1) {
                 alert.dismiss(animated: true, completion: nil)
-            })
+            }
         }
     }
     
