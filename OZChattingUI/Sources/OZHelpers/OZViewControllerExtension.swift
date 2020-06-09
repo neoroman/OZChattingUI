@@ -70,7 +70,7 @@ extension UIViewController {
             if rootNC.topViewController != self {
                 rootVC.present(alert, animated: true) {
                     if alert.actions.count == 0 {
-                        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                        delay(2) {
                             alert.dismiss(animated: true, completion: nil)
                         }
                     }
@@ -81,7 +81,7 @@ extension UIViewController {
 
         self.present(alert, animated: true) {
             if alert.actions.count == 0 {
-                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                delay(2) {
                     alert.dismiss(animated: true, completion: nil)
                 }
             }
@@ -111,7 +111,7 @@ extension UIViewController {
             if rootNC.topViewController != self {
                 rootVC.present(alert, animated: true) {
                     if alert.actions.count == 0 {
-                        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                        delay(2) {
                             alert.dismiss(animated: true, completion: nil)
                         }
                     }
@@ -122,7 +122,7 @@ extension UIViewController {
         
         self.present(alert, animated: true) {
             if alert.actions.count == 0 {
-                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                delay(2) {
                     alert.dismiss(animated: true, completion: nil)
                 }
             }

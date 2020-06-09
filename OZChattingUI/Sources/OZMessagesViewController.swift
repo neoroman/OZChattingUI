@@ -111,7 +111,7 @@ open class OZMessagesViewController: CollectionViewController {
             dele.messageViewLoaded(isLoaded: isViewLoaded)
             
             if !isViewLoaded {
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+                delay(0.2) {
                     dele.messageViewLoaded(isLoaded: self.isViewLoaded)
                 }
             }
@@ -1180,7 +1180,7 @@ extension OZMessagesViewController {
                 self.view.setNeedsUpdateConstraints()
                 self.view.layoutIfNeeded()
             }) { (comp) in
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.05) {
+                delay(0.05) {
                     self.collectionView.frame = self.view.bounds.inset(by: margin)
                     for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                         inset.bottom = inset.bottom + minTextViewHeight
@@ -1210,7 +1210,7 @@ extension OZMessagesViewController {
             }
             ecvh.constant = normalHeight
             self.view.setNeedsUpdateConstraints()
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.05) {
+            delay(0.05) {
                 self.collectionView.frame = self.view.bounds.inset(by: margin)
                 
                 var isNotCase = true
@@ -1606,14 +1606,14 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             
             if !aMessage.isFolded, cell.frame.maxY > collectionView.contentOffset.y {
                 // Unfolded
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.15) {
+                delay(0.15) {
                     let rect = cell.frame.inset(by: UIEdgeInsets(top: cell.frame.height * 0.95, left: 10, bottom: 0, right: 10))
                     self.collectionView.scrollRectToVisible(rect, animated: false)
                 }
             }
             else if aMessage.isFolded, cell.frame.minY < collectionView.contentOffset.y {
                 // folded
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.15) {
+                delay(0.15) {
                     let rect = cell.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
                     self.collectionView.scrollRectToVisible(rect, animated: false)
                 }

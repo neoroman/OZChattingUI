@@ -88,7 +88,7 @@ open class OZAudioPlayer {
             let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
             let viewController = UIApplication.shared.keyWindow?.rootViewController
             viewController?.present(alert, animated: true, completion: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+            delay(1) {
                 alert.dismiss(animated: true, completion: nil)
             })
         }
