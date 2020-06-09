@@ -190,8 +190,8 @@ open class OZMessagesViewController: CollectionViewController {
     
     // MARK: - Setup Images in CollectionView
     fileprivate func setupImageView(imageView: UIImageView, message: OZMessage) -> (String, UIImage?)? {
-        if imageView.image == nil, message.content.count > 0 {
-            var image = UIImage(named: message.content)
+        if message.content.count > 0 {
+            var image: UIImage? = nil
             
             if message.content.lowercased().hasPrefix("file"),
                 let anUrl = URL(string: message.content),
@@ -207,6 +207,9 @@ open class OZMessagesViewController: CollectionViewController {
                 let anImage = UIImage(data: data) {
                 // Local file with relative path
                 image = anImage
+            }
+            else {
+                image = UIImage(named: message.content)
             }
             
             return (message.identifier, image)
