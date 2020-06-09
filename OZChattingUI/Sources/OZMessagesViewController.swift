@@ -59,6 +59,7 @@ open class OZMessagesViewController: CollectionViewController {
     fileprivate var isKeyboardShow: Bool = false
     fileprivate var imagePicker = UIImagePickerController()
     fileprivate var scrollToBottomButton = OZToBottomButton()
+    fileprivate var cachedImages: [String: UIImage] = [:]
     
     public var userIdentifier: String?
     public var isEchoMode: Bool = false
@@ -158,6 +159,44 @@ open class OZMessagesViewController: CollectionViewController {
     }
     
     
+    // MARK: - Setup Images in CollectionView
+    fileprivate func setupImageView(imageView: UIImageView, message: OZMessage) -> (String, UIImage?)? {
+        if imageView.image == nil, message.content.count > 0 {
+            var image = UIImage(named: message.content)
+            
+            if message.content.lowercased().hasPrefix("file"),
+                let anUrl = URL(string: message.content),
+                FileManager.default.isReadableFile(atPath: anUrl.relativePath),
+                let data = FileManager.default.contents(atPath: anUrl.relativePath),
+                let anImage = UIImage(data: data) {
+                // Local file with fileURL
+                image = anImage
+            }
+            else if message.content.hasPrefix("/"),
+                FileManager.default.isReadableFile(atPath: message.content),
+                let data = FileManager.default.contents(atPath: message.content),
+                let anImage = UIImage(data: data) {
+                // Local file with relative path
+                image = anImage
+            }
+            
+            return (message.identifier, image)
+        }
+        return nil
+    }
+    fileprivate func getImage(identifier: String, imageView: UIImageView, message: OZMessage) -> UIImage? {
+        guard let anImage = cachedImages[identifier] else {
+            if let (anID, image) = setupImageView(imageView: imageView, message: message),
+                let anImage = image {
+                    cachedImages[anID] = anImage
+                    return anImage
+            }
+            return nil
+        }
+        return anImage
+    }
+    
+    
     // MARK: - Setup CollectionKit DataProvider
     public func setupDataProvider(newDataSource: OZMessageDataProvider? = nil) {
         let incomingTextMessageViewSource = ClosureViewSource(viewUpdater: { (view: IncomingTextMessageCell, data: OZMessage, at: Int) in
@@ -176,16 +215,19 @@ open class OZMessagesViewController: CollectionViewController {
             view.delegate = self
             view.message = data
             if data.type == .emoticon { view.imageView.contentMode = .scaleAspectFit }
+            else if let anImage = self.getImage(identifier: data.identifier, imageView: view.imageView, message: data) {
+                view.imageView.image = anImage
+                data.imageSize = anImage.size
+            }
         })
         let imageMessageViewSource = ClosureViewSource(viewUpdater: { (view: ImageMessageCell, data: OZMessage, at: Int) in
             view.delegate = self
             view.message = data
             if data.type == .emoticon { view.imageView.contentMode = .scaleAspectFit }
-            // DONE: Emoticon image contentMode, now emoticon image from example project, i.e. not in framework any more.
-//            if let aInt = Int(data.content.digits), let bInt = Int(data.content.digits),
-//                aInt > 1000, bInt < 1025 {
-//                view.imageView.contentMode = .scaleAspectFit
-//            }
+            else if let anImage = self.getImage(identifier: data.identifier, imageView: view.imageView, message: data) {
+                view.imageView.image = anImage
+                data.imageSize = anImage.size
+            }
         })
         let deviceStatusViewSource = ClosureViewSource(viewUpdater: { (view: IncomingStatusMessageCell, data: OZMessage, at: Int) in
             view.delegate = self

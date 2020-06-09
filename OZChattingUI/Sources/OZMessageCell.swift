@@ -340,51 +340,18 @@ open class ImagePlusIconMessageCell: ImageMessageCell {
     }
     
     override open func layoutSubviews() {
-        // TODO: do something here by Henry on 2020.05.09
-        /*
-        if message.usingPackedImages,
-            let aSuper = self.superview {
-            let p = self.convert(self.frame.origin, to: aSuper)
-            if p.x > aSuper.bounds.minX + message.cellLeftPadding {
-                isIconHidden = true
-                layoutIfNeeded()
-            }
-        }
-         */
         super.layoutSubviews()
     }
 }
 
 open class ImageMessageCell: OZMessageCell {
-    open var imageView = UIImageView()
+    open var imageView = UIImageView()  /// Set from outsize of cell, eg. `setupDataProvider`
     public var iconImage = UIImageView()
     public var isIconHidden = true
     public var timeLabel = UILabel()
         
     override public var message: OZMessage! {
         didSet {
-            if imageView.image == nil {
-                if message.content.lowercased().hasPrefix("file"),
-                    let anUrl = URL(string: message.content),
-                    FileManager.default.isReadableFile(atPath: anUrl.relativePath),
-                    let data = FileManager.default.contents(atPath: anUrl.relativePath),
-                    let anImage = UIImage(data: data) {
-                    // Local file with fileURL
-                    imageView.image = anImage
-                }
-                else if message.content.hasPrefix("/"),
-                    FileManager.default.isReadableFile(atPath: message.content),
-                    let data = FileManager.default.contents(atPath: message.content),
-                    let anImage = UIImage(data: data) {
-                    // Local file with relative path
-                    imageView.image = anImage
-                }
-                else if message.content.count > 0 ,let anImage = UIImage(named: message.content),
-                    imageView.image != anImage {
-                    imageView.image = anImage
-                }
-            }
-                        
             if message.type == .emoticon || message.showTimeLabelForImage {
                 timeLabel.textColor = message.timeFontColor
                 timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
@@ -761,13 +728,14 @@ open class OZMessageCell: DynamicView {
         }
     }
     fileprivate func buttonContainerHandler(message: OZMessage, textLabel: OZBubbleLabel, buttonContainer: UIView) {
-
-        if message.usingFoldingOption,
-            OZMessageCell.sizeForText(message.content, fontName: message.fontName,
+        guard let dele = delegate, message.usingFoldingOption else { return }
+        
+        if OZMessageCell.sizeForText(message.content, fontName: message.fontName,
                                       fontSize: message.fontSize, maxWidth: textLabel.frame.width - 50,
                                       paddingX: leftPadding(message: message),
                                       paddingY: message.cellPadding).height > message.foldingMessageMaxHeight,
-            let dele = delegate {
+            buttonContainer.subviews.count == 0 {
+            
             for x in buttonContainer.subviews { x.removeFromSuperview() }
             for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
                 let copiedButton = UIButton(frame: button.frame)
@@ -904,7 +872,7 @@ open class OZMessageCell: DynamicView {
         }
         else if (message.type == .image || message.type == .emoticon),
             message.content.count > 0 {
-            var imageSize = CGSize.zero //message.chatImageSize
+            var imageSize = message.imageSize
             if imageSize == .zero {
                 if message.content.lowercased().hasPrefix("file"),
                     let anUrl = URL(string: message.content),
@@ -912,7 +880,6 @@ open class OZMessageCell: DynamicView {
                     let data = FileManager.default.contents(atPath: anUrl.relativePath),
                     let parsed = try? ImageSizeParser(data: data) {
                     // Local file with fileURL
-                    //print("ImageSizeParser: format(\(parsed.format)), size(\(parsed.size))")
                     imageSize = parsed.size
                 }
                 else if message.content.hasPrefix("/"),
@@ -920,7 +887,6 @@ open class OZMessageCell: DynamicView {
                     let data = FileManager.default.contents(atPath: message.content),
                     let parsed = try? ImageSizeParser(data: data) {
                     // Local file with relative path
-                    //print("ImageSizeParser: format(\(parsed.format)), size(\(parsed.size))")
                     imageSize = parsed.size
                 }
                 else if let anImg = UIImage(named: message.content) {

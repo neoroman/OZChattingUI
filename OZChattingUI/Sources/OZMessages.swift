@@ -87,6 +87,7 @@ public class OZMessage: Equatable {
     public var fromCurrentUser = false
     public var timestamp: Int = 0
     public var extra: [String: Any] = [:] // JSON?
+    internal var imageSize: CGSize = .zero
     
     public init() {
         self.identifier = ""
