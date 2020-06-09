@@ -122,7 +122,8 @@ open class OZMessagesViewController: CollectionViewController {
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
-        reloadCollectionViewFrame()
+        reloadCollectionViewFrame(size)
+        
         let inset = UIEdgeInsets(top: 30, left: 0, bottom: 54, right: -5) // Right(-5px) is max
         collectionView.scrollIndicatorInsets = inset
         collectionView.indicatorStyle = .black
@@ -135,7 +136,8 @@ open class OZMessagesViewController: CollectionViewController {
     
     
     // MARK: - Setup collectionView Frame
-    open func reloadCollectionViewFrame() {
+    open func reloadCollectionViewFrame(_ to: CGSize? = nil) {
+        
         var safeInset: CGFloat = 0
         if #available(iOS 11.0, *) {
             collectionView.frame = view.bounds.inset(by: super.view.safeAreaInsets)
@@ -144,21 +146,40 @@ open class OZMessagesViewController: CollectionViewController {
             // Fallback on earlier versions
         }
         
-        collectionView.frame.origin = CGPoint.zero
+//        if UIDevice.current.orientation.isLandscape, let size = to,
+//            size.width > super.view.bounds.width {
+//            collectionView.frame.size = CGSize(width: size.width,
+//                                               height: size.height - minTextViewHeight - safeInset)
+//        }
+//        else
         if UIDevice.current.orientation.isLandscape {
             //print("Landscape")
             collectionView.frame.size = CGSize(width: super.view.bounds.height - safeInset,
                                                height: super.view.bounds.width - minTextViewHeight)
-        } else {
+            if #available(iOS 11.0, *) {
+                collectionView.frame.origin.x = super.view.safeAreaInsets.bottom
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        else if UIDevice.current.orientation.isPortrait, let size = to,
+            size.width < super.view.bounds.width {
+            collectionView.frame.size = CGSize(width: size.width,
+                                               height: size.height - minTextViewHeight - safeInset)
+        }
+        else {
             //print("Portrait")
             collectionView.frame.size = CGSize(width: super.view.bounds.width,
                                                height: super.view.bounds.height - minTextViewHeight - safeInset)
         }
+
         for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
             inset.bottom = inset.bottom + minTextViewHeight
             collectionView.contentInset = inset //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
         }
+
         collectionView.reloadData()
+
         for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
             if autoScrollToBottom {
                 self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
