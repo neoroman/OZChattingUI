@@ -127,6 +127,24 @@ public enum OZMessagesConfigurationItem {
     /// CollectionView contentInset in OZMessagesViewController
     case collectionViewEdgeInsets(UIEdgeInsets)
     
+    /// Input box `emoticon` button tint color in OZMessagesViewController
+    case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
+    
+    /// Input box `file` button tint color in OZMessagesViewController
+    case inputBoxFileButtonTintColor(UIColor, _ selectedColor: UIColor)
+
+    /// Input box `mic` button tint color in OZMessagesViewController
+    case inputBoxMicButtonTintColor(UIColor, _ selectedColor: UIColor)
+
+    /// Input text view minimum height, default `56`, in OZMessagesViewController
+    case inputContainerMinimumHeight(CGFloat)
+
+    /// Input text view minimum height, default `56 * 3`, in OZMessagesViewController
+    case inputContainerMaximumHeight(CGFloat)
+
+    /// Input text vertical alignemnt in OZTextView
+    case inputTextVerticalAlignment(OZTextView.VerticalAlignment)
+
     /// Input text view font color in OZTextView
     case inputTextViewFont(UIFont)
 
@@ -135,18 +153,6 @@ public enum OZMessagesConfigurationItem {
 
     /// Input text view using `Enter` for sending in OZTextView
     case inputTextUsingEnterToSend(Bool)
-    
-    /// Input text vertical alignemnt in OZTextView
-    case inputTextVerticalAlignment(OZTextView.VerticalAlignment)
-    
-    /// Input box `file` button tint color in OZMessagesViewController
-    case inputBoxFileButtonTintColor(UIColor, _ selectedColor: UIColor)
-
-    /// Input box `mic` button tint color in OZMessagesViewController
-    case inputBoxMicButtonTintColor(UIColor, _ selectedColor: UIColor)
-
-    /// Input box `emoticon` button tint color in OZMessagesViewController
-    case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
     
     /// Button for scroll to bottom in OZMessagesViewController,
     /// Origin .zero, set default origin from 5 pixel from InputContainerView
@@ -221,16 +227,18 @@ public class OZChattingDefaultConfiguration: NSObject {
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(true, false),
             OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 10, bottom: 10 + minTextViewHeight, right: 10)),
+            OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
-            OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
+            OZMessagesConfigurationItem.inputContainerMinimumHeight(56),
+            OZMessagesConfigurationItem.inputContainerMaximumHeight(56*3),
             OZMessagesConfigurationItem.scrollToBottomButton(.zero, CGSize(width: 30, height: 30), 5, .clear, .gray, 0.4),
 
             // OZTextView
+            OZMessagesConfigurationItem.inputTextVerticalAlignment(.Middle),
             OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
-            OZMessagesConfigurationItem.inputTextVerticalAlignment(.Middle),
 
             // OZEmoticonViewController
             OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.magenta.withAlphaComponent(0.3)),
