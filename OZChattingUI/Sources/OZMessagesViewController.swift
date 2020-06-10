@@ -17,8 +17,8 @@ public enum OZMessagesViewState {
 public typealias OZChatFetchCompleteBlock = (_ newMessages: [OZMessage]) -> Void
 public typealias OZChatTapCompleteBlock = (_ success: Bool, _ path: String) -> Void
 
-public var minTextViewHeight: CGFloat = 56
-public var maxTextViewHeight: CGFloat = minTextViewHeight * 3 //120
+let minTextViewHeight: CGFloat = 56
+let maxTextViewHeight: CGFloat = minTextViewHeight * 3 //120
 
 open class OZMessagesViewController: CollectionViewController {
     
@@ -87,12 +87,11 @@ open class OZMessagesViewController: CollectionViewController {
         super.viewDidLoad()
 
         view.clipsToBounds = true
-        
         setupIBOutlets()
         setupUI()
-        
+
         collectionView.delegate = self
-        
+
         let inset = UIEdgeInsets(top: 30, left: 0, bottom: 54, right: -5) // Right(-5px) is max
         collectionView.scrollIndicatorInsets = inset
         collectionView.indicatorStyle = .black
@@ -132,62 +131,68 @@ open class OZMessagesViewController: CollectionViewController {
     
     
     // MARK: - Setup collectionView Frame
-    open func reloadCollectionViewFrame(_ to: CGSize? = nil, forceReload: Bool = false, bottomInset: CGFloat = 0) {
-        
-        var safeInset: CGFloat = 0
+    open func getSafeInsetBottom() -> CGFloat {
+        var safeInsetBottom: CGFloat = 0
         if #available(iOS 11.0, *) {
-            collectionView.frame = view.bounds.inset(by: super.view.safeAreaInsets)
-            safeInset = super.view.safeAreaInsets.bottom + super.view.safeAreaInsets.top
+            safeInsetBottom = super.view.safeAreaInsets.bottom + super.view.safeAreaInsets.top
+            if safeInsetBottom < view.safeAreaInsets.bottom + view.safeAreaInsets.top {
+                safeInsetBottom = view.safeAreaInsets.bottom + view.safeAreaInsets.top
+            }
         } else {
             // Fallback on earlier versions
         }
+        return safeInsetBottom
+    }
+    open func getBoundsBySaferArea(givenSize: CGSize? = .zero) -> CGRect {
+        var sBounds = super.view.bounds
+
+        if UIDevice.current.orientation.isLandscape {
+            if sBounds.width < view.bounds.width {
+                sBounds = view.bounds
+            }
+            if sBounds.width < sBounds.height {
+                let temp = sBounds.height
+                sBounds.size.width = sBounds.height
+                sBounds.size.height = temp
+            }
+            sBounds.origin.x = getSafeInsetBottom()
+            sBounds.size.width -= 2 * getSafeInsetBottom()
+        }
+        else if UIDevice.current.orientation.isPortrait,
+            let size = givenSize, size != .zero,
+            size.width < super.view.bounds.width {
+            sBounds.size.width = size.width
+            sBounds.size.height = size.height
+            sBounds.origin.x = 0
+        }
+        else {
+            if sBounds.width > view.bounds.width {
+                sBounds = view.bounds
+            }
+            sBounds.origin.x = 0
+        }
+        return sBounds
+    }
+    
+    open func reloadCollectionViewFrame(_ to: CGSize? = nil, forceReload: Bool = false, bottomInset: CGFloat = 0) {
         
+//        if #available(iOS 11.0, *) {
+//            collectionView.frame = view.bounds.inset(by: super.view.safeAreaInsets)
+//        }
+
         var boInset: CGFloat = minTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            boInset = height
+        }
         if bottomInset != 0, bottomInset > boInset {
             boInset = bottomInset
         }
         
-        if UIDevice.current.orientation.isLandscape {
-            //print("Landscape")
-            var sBounds = super.view.bounds
-            if sBounds.width < view.bounds.width {
-                sBounds = view.bounds
-            }
-            if sBounds.width > sBounds.height {
-                collectionView.frame.size = CGSize(width: sBounds.width - safeInset * 2,
-                                                   height: sBounds.height - boInset)
-            }
-            else {
-                collectionView.frame.size = CGSize(width: sBounds.height - safeInset,
-                                                   height: sBounds.width - boInset)
-            }
-            if #available(iOS 11.0, *) {
-                collectionView.frame.origin.x = super.view.safeAreaInsets.bottom
-            } else {
-                // Fallback on earlier versions
-            }
-        }
-        else if UIDevice.current.orientation.isPortrait, let size = to,
-            size.width < super.view.bounds.width {
-            collectionView.frame.size = CGSize(width: size.width,
-                                               height: size.height - boInset - safeInset)
-            collectionView.frame.origin.x = 0
-        }
-        else {
-            //print("Portrait")
-            var sBounds = super.view.bounds
-            if sBounds.width > view.bounds.width {
-                sBounds = view.bounds
-            }
-
-            collectionView.frame.size = CGSize(width: sBounds.width,
-                                               height: sBounds.height - boInset - safeInset)
-            collectionView.frame.origin.x = 0
-        }
-
+        let bounds = getBoundsBySaferArea()
+        collectionView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: boInset, right: 0))
+        
         if forceReload {
-            for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
-                inset.bottom = inset.bottom + minTextViewHeight
+            for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
                 collectionView.contentInset = inset //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
             }
             
@@ -415,7 +420,11 @@ open class OZMessagesViewController: CollectionViewController {
         ozEmoticonContainerViewHeight?.identifier = inputTextContstraintIDs[2]
         
         // Vertical Spacing
-        ozTextHeightConstraint = ic.heightAnchor.constraint(greaterThanOrEqualToConstant: height)
+        var minHeight = height
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            minHeight = height
+        }
+        ozTextHeightConstraint = ic.heightAnchor.constraint(greaterThanOrEqualToConstant: minHeight)
         ozTextHeightConstraint?.identifier = inputTextContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -483,7 +492,11 @@ open class OZMessagesViewController: CollectionViewController {
         fileButtonHeight.identifier = textViewContstraintIDs[2]
         
         // Bottom
-        let fileButtonBottom = NSLayoutConstraint(item: fb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
+        var minHeight = minTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            minHeight = height
+        }
+        let fileButtonBottom = NSLayoutConstraint(item: fb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minHeight/2 - 15))
         fileButtonBottom.identifier = textViewContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -515,7 +528,11 @@ open class OZMessagesViewController: CollectionViewController {
         micButtonHeight.identifier = micButtonContstraintIDs[2]
         
         // Bottom
-        let micButtonBottom = NSLayoutConstraint(item: mb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
+        var minHeight = minTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            minHeight = height
+        }
+        let micButtonBottom = NSLayoutConstraint(item: mb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minHeight/2 - 15))
         micButtonBottom.identifier = micButtonContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -547,7 +564,11 @@ open class OZMessagesViewController: CollectionViewController {
         emoticonButtonHeight.identifier = emoticonButtonContstraintIDs[2]
         
         // Bottom
-        let emoticonButtonBottom = NSLayoutConstraint(item: eb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minTextViewHeight/2 - 15))
+        var minHeight = minTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            minHeight = height
+        }
+        let emoticonButtonBottom = NSLayoutConstraint(item: eb as Any, attribute: .bottom, relatedBy: .equal, toItem: ic as Any, attribute: .bottom, multiplier: 1, constant: -(minHeight/2 - 15))
         emoticonButtonBottom.identifier = emoticonButtonContstraintIDs[3]
         
         self.view.setNeedsUpdateConstraints()
@@ -903,6 +924,11 @@ extension OZMessagesViewController: UIScrollViewDelegate {
 extension OZMessagesViewController {
     fileprivate func setupIBOutlets() {
         
+        var minHeight = minTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            minHeight = height
+        }
+
         /// Input Container
         if let ic = inputContainer {
             ozInputContainer = ic
@@ -910,8 +936,8 @@ extension OZMessagesViewController {
         else {
             if #available(iOS 11.0, *) {
                 let bottomInset: CGFloat = view.safeAreaInsets.bottom
-                let origin = CGPoint(x: 0, y: self.view.bounds.height - minTextViewHeight - bottomInset)
-                let size = CGSize(width: self.view.bounds.width, height: minTextViewHeight)
+                let origin = CGPoint(x: 0, y: self.view.bounds.height - minHeight - bottomInset)
+                let size = CGSize(width: self.view.bounds.width, height: minHeight)
                 ozInputContainer = UIView(frame: CGRect(origin: origin, size: size))
                 guard let ic = ozInputContainer else {return}
                 
@@ -920,19 +946,19 @@ extension OZMessagesViewController {
                 
                 let guide = view.safeAreaLayoutGuide
                 NSLayoutConstraint.activate([
-                    ic.heightAnchor.constraint(equalToConstant: minTextViewHeight),
+                    ic.heightAnchor.constraint(equalToConstant: minHeight),
                     guide.bottomAnchor.constraint(equalToSystemSpacingBelow: ic.bottomAnchor, multiplier: 1.0)
                 ])
             } else {
-                let origin = CGPoint(x: 0, y: self.view.bounds.height - minTextViewHeight)
-                let size = CGSize(width: self.view.bounds.width, height: minTextViewHeight)
+                let origin = CGPoint(x: 0, y: self.view.bounds.height - minHeight)
+                let size = CGSize(width: self.view.bounds.width, height: minHeight)
                 ozInputContainer = UIView(frame: CGRect(origin: origin, size: size))
                 guard let ic = ozInputContainer else {return}
 
                 ic.backgroundColor = .white
                 view.addSubview(ic)
                 
-                let standardSpacing: CGFloat = minTextViewHeight
+                let standardSpacing: CGFloat = minHeight
                 NSLayoutConstraint.activate([
                     ic.heightAnchor.constraint(equalToConstant: standardSpacing),
                     bottomLayoutGuide.topAnchor.constraint(equalTo: ic.bottomAnchor, constant: standardSpacing)
@@ -964,7 +990,7 @@ extension OZMessagesViewController {
             guard let fb = ozFileButton else {return}
 
             let origin = CGPoint(x: fb.frame.maxX + 10, y: 10)
-            let size = CGSize(width: self.view.bounds.width - 10 - origin.x, height: minTextViewHeight * 0.65)
+            let size = CGSize(width: self.view.bounds.width - 10 - origin.x, height: minHeight * 0.65)
             ozInputTextView = OZTextView(frame: CGRect(origin: origin, size: size))
             guard let itv = ozInputTextView else {return}
             guard let ic = ozInputContainer else {return}
@@ -1032,7 +1058,7 @@ extension OZMessagesViewController {
             ozEmoticonContainerViewHeight = ehc
         }
         else {
-            setupInputTextContainerViewFrame(height: minTextViewHeight)
+            setupInputTextContainerViewFrame(height: minHeight)
             setupTextViewFrame()
             setupFileButtonFrame()
             setupMicButtonFrame()
@@ -1217,7 +1243,11 @@ extension OZMessagesViewController {
                 normalHeight = 250
             }
         }
-        let margin = UIEdgeInsets(top: 0,left: 0, bottom: normalHeight + minTextViewHeight, right: 0)
+        var minHeight = minTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            minHeight = height
+        }
+        let margin = UIEdgeInsets(top: 0,left: 0, bottom: normalHeight + minHeight, right: 0)
 
         guard let ecvh = ozEmoticonContainerViewHeight else {return}
         if animated, chatState == .chat {
@@ -1230,9 +1260,9 @@ extension OZMessagesViewController {
                 self.view.layoutIfNeeded()
             }) { (comp) in
                 delay(0.05) {
-                    self.collectionView.frame = self.view.bounds.inset(by: margin)
-                    //self.reloadCollectionViewFrame(nil, forceReload: false, bottomInset: normalHeight + minTextViewHeight)
-                    
+                    //self.collectionView.frame = self.view.bounds.inset(by: margin)
+                    self.collectionView.frame = self.getBoundsBySaferArea().inset(by: margin)
+
                     for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                         inset.bottom = inset.bottom + minTextViewHeight
                         self.collectionView.contentInset = inset
@@ -1262,8 +1292,8 @@ extension OZMessagesViewController {
             ecvh.constant = normalHeight
             self.view.setNeedsUpdateConstraints()
             delay(0.05) {
-                self.collectionView.frame = self.view.bounds.inset(by: margin)
-                //self.reloadCollectionViewFrame(nil, forceReload: false, bottomInset: normalHeight + minTextViewHeight)
+                //self.collectionView.frame = self.view.bounds.inset(by: margin)
+                self.collectionView.frame = self.getBoundsBySaferArea().inset(by: margin)
 
                 var isNotCase = true
                 for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
@@ -1287,14 +1317,18 @@ extension OZMessagesViewController {
         guard let ecvh = ozEmoticonContainerViewHeight else {return}
 
         let bottomPadding:CGFloat = 0 //window.safeAreaInsets.bottom
-        let margin = UIEdgeInsets(top: 0, left: 0, bottom: bottomPadding + minTextViewHeight, right: 0)
+        var minHeight = minTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            minHeight = height
+        }
+        let margin = UIEdgeInsets(top: 0, left: 0, bottom: bottomPadding + minHeight, right: 0)
 
         UIView.animate(withDuration: 0.3, animations: {
             ecvh.constant = 0
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }) { (comp) in
-            self.collectionView.frame = self.view.bounds.inset(by: margin)
+            self.collectionView.frame = self.getBoundsBySaferArea().inset(by: margin)
 
             for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                 inset.bottom = inset.bottom + minTextViewHeight
@@ -1445,9 +1479,12 @@ extension OZMessagesViewController: UITextViewDelegate {
     public func adjustTextViewHeight(_ textView: UITextView) {
         guard let thc = ozTextHeightConstraint else {return}
         
+        var minHeight = minTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            minHeight = height
+        }
         if textView.text.count <= 0 {
-            thc.constant = minTextViewHeight
-//            self.ozTextHeightConstraint.isActive = true
+            thc.constant = minHeight
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
             return
@@ -1457,21 +1494,25 @@ extension OZMessagesViewController: UITextViewDelegate {
         let size = OZMessageCell.sizeForText(textView.text, maxWidth: width,
                                              paddingX: 20.0, paddingY: 20.0)
         
-        if thc.constant >= maxTextViewHeight {
+        var maxHeight = maxTextViewHeight
+        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+            maxHeight = height
+        }
+        if thc.constant >= maxHeight {
             UIView.animate(withDuration: 0.35, delay: 0.1, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
-                thc.constant = maxTextViewHeight
+                thc.constant = maxHeight
                 self.view.setNeedsUpdateConstraints()
                 self.view.layoutIfNeeded()
             }) { (complete) in
             }
         }
-        else if thc.constant < maxTextViewHeight, thc.constant < size.height {
+        else if thc.constant < maxHeight, thc.constant < size.height {
             thc.constant = size.height
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }
-        else if thc.constant < minTextViewHeight {
-            thc.constant = minTextViewHeight
+        else if thc.constant < minHeight {
+            thc.constant = minHeight
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }
