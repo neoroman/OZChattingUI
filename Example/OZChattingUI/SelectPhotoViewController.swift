@@ -75,7 +75,7 @@ class SelectPhotoViewController: UIViewController {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: false)]
         self.photoAssets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        self.thumbnailSize = CGSize(width: 1024 * self.scale, height: 1024 * self.scale)
+        self.thumbnailSize = CGSize(width: (self.view.frame.width - 70) / 3, height: 168)
     }
     
     fileprivate func showToast(controller: UIViewController, message: String, seconds: Double) {
@@ -194,7 +194,7 @@ fileprivate class ImageManager {
         let requestOptions = PHImageRequestOptions()
         requestOptions.deliveryMode = .highQualityFormat
         requestOptions.isSynchronous = true
-        requestOptions.resizeMode = .fast
+        requestOptions.resizeMode = .exact
         self.representedAssetIdentifier = asset.localIdentifier
         PHImageManager.default().requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions) { (image, info) in
             if self.representedAssetIdentifier == asset.localIdentifier {
