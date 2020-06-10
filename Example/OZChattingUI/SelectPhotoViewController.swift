@@ -22,7 +22,6 @@ class SelectPhotoViewController: UIViewController {
     // MARK: - Property
     var photoAssets: PHFetchResult<PHAsset>?
 
-    let scale = UIScreen.main.scale
     var thumbnailSize = CGSize.zero
     var selectedIndexes = [Int]()
     var selectedImagesPaths = [URL]()
@@ -51,8 +50,8 @@ class SelectPhotoViewController: UIViewController {
         let imageMan = ImageManager()
         
         for i in 0..<selectedIndexes.count {
-            let asset = photoAssets?[selectedIndexes[i]]
-            imageMan.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { [weak self] image in
+            guard let asset = photoAssets?[selectedIndexes[i]] else { return }
+            imageMan.requestImage(with: asset, thumbnailSize: PHImageManagerMaximumSize) { [weak self] image in
                 if let image = image {
                     imageMan.storeToTemporaryDirectory(image, completion: { [weak self] (imagePath, error) in
                         guard let imageURL = imagePath else {
@@ -70,12 +69,10 @@ class SelectPhotoViewController: UIViewController {
     // MARK: - Function
     
     fileprivate func fetchPhotos() {
-        // TODO: Wait for granting access photo library
-        
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: false)]
         self.photoAssets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        self.thumbnailSize = CGSize(width: (self.view.frame.width - 70) / 3, height: 168)
+        self.thumbnailSize = CGSize(width: self.view.frame.width - 70, height: 168 * 3)
     }
     
     fileprivate func showToast(controller: UIViewController, message: String, seconds: Double) {
