@@ -104,8 +104,8 @@ open class OZMessagesViewController: CollectionViewController {
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        reloadCollectionViewFrame()
-        
+        reloadCollectionViewFrame(nil, forceReload: true)
+
         if !isChatViewFirstLoaded, let dele = delegate {
             isChatViewFirstLoaded = true
             dele.messageViewLoaded(isLoaded: isViewLoaded)
@@ -122,21 +122,17 @@ open class OZMessagesViewController: CollectionViewController {
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
-        reloadCollectionViewFrame(size)
         
         let inset = UIEdgeInsets(top: 30, left: 0, bottom: 54, right: -5) // Right(-5px) is max
         collectionView.scrollIndicatorInsets = inset
         collectionView.indicatorStyle = .black
-        for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
-            inset.bottom = inset.bottom + minTextViewHeight
-            collectionView.contentInset = inset
-        }
-        collectionView.setNeedsReload()
+
+        reloadCollectionViewFrame(size, forceReload: true)
     }
     
     
     // MARK: - Setup collectionView Frame
-    open func reloadCollectionViewFrame(_ to: CGSize? = nil) {
+    open func reloadCollectionViewFrame(_ to: CGSize? = nil, forceReload: Bool = false, bottomInset: CGFloat = 0) {
         
         var safeInset: CGFloat = 0
         if #available(iOS 11.0, *) {
@@ -146,16 +142,25 @@ open class OZMessagesViewController: CollectionViewController {
             // Fallback on earlier versions
         }
         
-//        if UIDevice.current.orientation.isLandscape, let size = to,
-//            size.width > super.view.bounds.width {
-//            collectionView.frame.size = CGSize(width: size.width,
-//                                               height: size.height - minTextViewHeight - safeInset)
-//        }
-//        else
+        var boInset: CGFloat = minTextViewHeight
+        if bottomInset != 0, bottomInset > boInset {
+            boInset = bottomInset
+        }
+        
         if UIDevice.current.orientation.isLandscape {
             //print("Landscape")
-            collectionView.frame.size = CGSize(width: super.view.bounds.height - safeInset,
-                                               height: super.view.bounds.width - minTextViewHeight)
+            var sBounds = super.view.bounds
+            if sBounds.width < view.bounds.width {
+                sBounds = view.bounds
+            }
+            if sBounds.width > sBounds.height {
+                collectionView.frame.size = CGSize(width: sBounds.width - safeInset * 2,
+                                                   height: sBounds.height - boInset)
+            }
+            else {
+                collectionView.frame.size = CGSize(width: sBounds.height - safeInset,
+                                                   height: sBounds.width - boInset)
+            }
             if #available(iOS 11.0, *) {
                 collectionView.frame.origin.x = super.view.safeAreaInsets.bottom
             } else {
@@ -165,24 +170,31 @@ open class OZMessagesViewController: CollectionViewController {
         else if UIDevice.current.orientation.isPortrait, let size = to,
             size.width < super.view.bounds.width {
             collectionView.frame.size = CGSize(width: size.width,
-                                               height: size.height - minTextViewHeight - safeInset)
+                                               height: size.height - boInset - safeInset)
         }
         else {
             //print("Portrait")
-            collectionView.frame.size = CGSize(width: super.view.bounds.width,
-                                               height: super.view.bounds.height - minTextViewHeight - safeInset)
+            var sBounds = super.view.bounds
+            if sBounds.width > view.bounds.width {
+                sBounds = view.bounds
+            }
+
+            collectionView.frame.size = CGSize(width: sBounds.width,
+                                               height: sBounds.height - boInset - safeInset)
         }
 
-        for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
-            inset.bottom = inset.bottom + minTextViewHeight
-            collectionView.contentInset = inset //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
-        }
-
-        collectionView.reloadData()
-
-        for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
-            if autoScrollToBottom {
-                self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+        if forceReload {
+            for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
+                inset.bottom = inset.bottom + minTextViewHeight
+                collectionView.contentInset = inset //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
+            }
+            
+            collectionView.reloadData()
+            
+            for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
+                if autoScrollToBottom {
+                    self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                }
             }
         }
     }
@@ -365,7 +377,7 @@ open class OZMessagesViewController: CollectionViewController {
         }
         
         if isKeyboardShow || chatState == .emoticon {
-            keyboardShowLayout(differHeight: 0, isPadding: true, animated: false)
+            keyboardShowLayout(isPadding: true, animated: false)
         }
 //        else {
 //            reloadCollectionViewFrame()
@@ -1102,7 +1114,7 @@ extension OZMessagesViewController {
                 emoticonButtonToggle()
                 view.bringSubviewToFront(ec)
                 ec.layer.zPosition = CGFloat(MAXFLOAT)
-                self.keyboardShowLayout(differHeight: 0, isPadding: true, animated: false)
+                self.keyboardShowLayout(isPadding: true, animated: false)
             }
             UIView.setAnimationsEnabled(true)
         }
@@ -1179,7 +1191,7 @@ extension OZMessagesViewController {
     
     
     // MARK: - Bottom button above keyboard
-    fileprivate func keyboardShowLayout(differHeight: CGFloat = 0, isPadding: Bool = true, animated: Bool = true) {
+    fileprivate func keyboardShowLayout(isPadding: Bool = true, animated: Bool = true) {
         guard let window = UIApplication.shared.keyWindow else {
             return
         }
@@ -1193,10 +1205,7 @@ extension OZMessagesViewController {
         }
         
         var normalHeight = keyboardHeight - bottomPadding
-        if differHeight > 0 {
-            normalHeight = differHeight
-        }
-        else if normalHeight < 10 {
+        if normalHeight < 10 {
             if #available(iOS 11.0, *),
                 let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom, bottomPadding > 0 {
                 // isiPhoneX top and bottom padding exist
@@ -1220,6 +1229,8 @@ extension OZMessagesViewController {
             }) { (comp) in
                 delay(0.05) {
                     self.collectionView.frame = self.view.bounds.inset(by: margin)
+                    //self.reloadCollectionViewFrame(nil, forceReload: false, bottomInset: normalHeight + minTextViewHeight)
+                    
                     for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                         inset.bottom = inset.bottom + minTextViewHeight
                         self.collectionView.contentInset = inset
@@ -1250,7 +1261,8 @@ extension OZMessagesViewController {
             self.view.setNeedsUpdateConstraints()
             delay(0.05) {
                 self.collectionView.frame = self.view.bounds.inset(by: margin)
-                
+                //self.reloadCollectionViewFrame(nil, forceReload: false, bottomInset: normalHeight + minTextViewHeight)
+
                 var isNotCase = true
                 for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
                     isNotCase = false
@@ -1279,8 +1291,9 @@ extension OZMessagesViewController {
             ecvh.constant = 0
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
-            self.collectionView.frame = self.view.bounds.inset(by: margin)
         }) { (comp) in
+            self.collectionView.frame = self.view.bounds.inset(by: margin)
+
             for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                 inset.bottom = inset.bottom + minTextViewHeight
                 self.collectionView.contentInset = inset
