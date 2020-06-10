@@ -171,6 +171,7 @@ open class OZMessagesViewController: CollectionViewController {
             size.width < super.view.bounds.width {
             collectionView.frame.size = CGSize(width: size.width,
                                                height: size.height - boInset - safeInset)
+            collectionView.frame.origin.x = 0
         }
         else {
             //print("Portrait")
@@ -181,6 +182,7 @@ open class OZMessagesViewController: CollectionViewController {
 
             collectionView.frame.size = CGSize(width: sBounds.width,
                                                height: sBounds.height - boInset - safeInset)
+            collectionView.frame.origin.x = 0
         }
 
         if forceReload {
