@@ -226,7 +226,7 @@ public class OZChattingDefaultConfiguration: NSObject {
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(true, false),
-            OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 10, bottom: 10 + minTextViewHeight, right: 10)),
+            OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.black, .systemTeal),
@@ -251,6 +251,12 @@ public class OZChattingDefaultConfiguration: NSObject {
         for case .profileIconSize(let height, let types) in items {
             for x in types {
                 items.append(OZMessagesConfigurationItem.cellLeftPadding(height + 8, [x]))
+            }
+        }
+        for case .inputContainerMinimumHeight(let minHeight) in items {
+            for case .collectionViewEdgeInsets(var inset) in items {
+                inset.bottom = minHeight
+                items.append(OZMessagesConfigurationItem.collectionViewEdgeInsets(inset))
             }
         }
         

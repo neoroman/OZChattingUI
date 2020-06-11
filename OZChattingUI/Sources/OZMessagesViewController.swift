@@ -162,7 +162,7 @@ open class OZMessagesViewController: CollectionViewController {
             let size = givenSize, size != .zero,
             size.width < super.view.bounds.width {
             sBounds.size.width = size.width
-            sBounds.size.height = size.height
+            sBounds.size.height = size.height - getSafeInsetBottom()
             sBounds.origin.x = 0
         }
         else {
@@ -170,6 +170,7 @@ open class OZMessagesViewController: CollectionViewController {
                 sBounds = view.bounds
             }
             sBounds.origin.x = 0
+            sBounds.size.height = sBounds.size.height - getSafeInsetBottom()
         }
         return sBounds
     }

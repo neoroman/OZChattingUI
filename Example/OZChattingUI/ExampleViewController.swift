@@ -73,7 +73,7 @@ class ExampleViewController: OZMessagesViewController {
         DispatchQueue.main.asyncAfter(deadline: .now()+1.0) {
             vc.send(msg: "Hi... OZChattingUI!", type: .text) { (id, content) in
                 vc.dataSource.data.removeAll(where: { $0.content == "Delivered" })
-                vc.send(msg: "Delivered", type: .status, isDeliveredMsg: true)
+                //vc.send(msg: "Delivered", type: .status, isDeliveredMsg: true)
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+1.0) {
