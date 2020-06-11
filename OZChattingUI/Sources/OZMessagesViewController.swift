@@ -181,6 +181,9 @@ open class OZMessagesViewController: CollectionViewController {
         for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
             boInset = height
         }
+        if isKeyboardShow, keyboardHeight > 0 {
+            boInset += keyboardHeight
+        }
         if bottomInset != 0, bottomInset > boInset {
             boInset = bottomInset
         }
