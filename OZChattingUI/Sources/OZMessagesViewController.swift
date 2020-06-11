@@ -177,10 +177,6 @@ open class OZMessagesViewController: CollectionViewController {
     
     open func reloadCollectionViewFrame(_ to: CGSize? = nil, forceReload: Bool = false, bottomInset: CGFloat = 0) {
         
-//        if #available(iOS 11.0, *) {
-//            collectionView.frame = view.bounds.inset(by: super.view.safeAreaInsets)
-//        }
-
         var boInset: CGFloat = minTextViewHeight
         for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
             boInset = height
@@ -189,8 +185,13 @@ open class OZMessagesViewController: CollectionViewController {
             boInset = bottomInset
         }
         
-        let bounds = getBoundsBySaferArea()
-        collectionView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: boInset, right: 0))
+        var bounds = getBoundsBySaferArea().inset(by: UIEdgeInsets(top: 0, left: 0, bottom: boInset, right: 0))
+        for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
+            if yesOrNo {
+                bounds = rect
+            }
+        }
+        collectionView.frame = bounds
         
         if forceReload {
             for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
@@ -1261,8 +1262,13 @@ extension OZMessagesViewController {
                 self.view.layoutIfNeeded()
             }) { (comp) in
                 delay(0.05) {
-                    //self.collectionView.frame = self.view.bounds.inset(by: margin)
-                    self.collectionView.frame = self.getBoundsBySaferArea().inset(by: margin)
+                    var bounds = self.getBoundsBySaferArea().inset(by: margin)
+                    for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
+                        if yesOrNo {
+                            bounds = rect
+                        }
+                    }
+                    self.collectionView.frame = bounds
 
                     for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                         inset.bottom = inset.bottom + minTextViewHeight
@@ -1293,8 +1299,13 @@ extension OZMessagesViewController {
             ecvh.constant = normalHeight
             self.view.setNeedsUpdateConstraints()
             delay(0.05) {
-                //self.collectionView.frame = self.view.bounds.inset(by: margin)
-                self.collectionView.frame = self.getBoundsBySaferArea().inset(by: margin)
+                var bounds = self.getBoundsBySaferArea().inset(by: margin)
+                for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
+                    if yesOrNo {
+                        bounds = rect
+                    }
+                }
+                self.collectionView.frame = bounds
 
                 var isNotCase = true
                 for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
@@ -1329,7 +1340,13 @@ extension OZMessagesViewController {
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }) { (comp) in
-            self.collectionView.frame = self.getBoundsBySaferArea().inset(by: margin)
+            var bound = self.getBoundsBySaferArea().inset(by: margin)
+            for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
+                if yesOrNo {
+                    bound = rect
+                }
+            }
+            self.collectionView.frame = bound
 
             for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                 inset.bottom = inset.bottom + minTextViewHeight

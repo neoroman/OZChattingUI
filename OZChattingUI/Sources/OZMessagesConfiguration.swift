@@ -127,6 +127,9 @@ public enum OZMessagesConfigurationItem {
     /// CollectionView contentInset in OZMessagesViewController
     case collectionViewEdgeInsets(UIEdgeInsets)
     
+    /// CollectionView frame in OZMessageViewController, default `NO`
+    case customCollectionViewFrame(Bool, CGRect)
+    
     /// Input box `emoticon` button tint color in OZMessagesViewController
     case inputBoxEmoticonButtonTintColor(UIColor, _ selectedColor: UIColor)
     
