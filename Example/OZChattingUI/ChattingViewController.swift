@@ -29,6 +29,7 @@ class ChattingViewController: OZMessagesViewController {
     var sendingTimerCount: TimeInterval = 0
     var imagePaths: [URL]?
     var isHalfOpacity: Bool = false
+    var isCustomFrame: Bool = false
     
     // MARK: - ImageViewer
     var galleryVC: GalleryViewController?
@@ -296,7 +297,7 @@ class ChattingViewController: OZMessagesViewController {
         unfoldButton.setTitle("Unfold", for: .normal)
         unfoldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
 
-        return [
+        var configs = [
             // OZMessageCell
             OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 120, height: 150), CGSize(width: 800, height: 1000)),
@@ -330,6 +331,13 @@ class ChattingViewController: OZMessagesViewController {
             // OZVoiceRecordViewController
             OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0)
         ]
+        
+        if isCustomFrame {
+            let rect = CGRect(x: 100, y: 0, width: 265, height: 250)
+            configs.append(OZMessagesConfigurationItem.customCollectionViewFrame(true, rect))
+        }
+        
+        return configs
     }
     
 

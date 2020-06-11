@@ -18,7 +18,7 @@ class StartViewController: UITableViewController {
         return .lightContent
     }
 
-    let cells = ["Basic Example", "Basic Example (storyboard)", "Advanced Example (storyboard)", "Source Code", "CocoaPods"]
+    let cells = ["Basic Example", "Basic Example (storyboard)", "Advanced Example (storyboard)", "Advanced Example (storyboard)\n + custom frame", "Source Code", "CocoaPods"]
     
     // MARK: - View Life Cycle
     
@@ -65,6 +65,7 @@ class StartViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? UITableViewCell()
         cell.textLabel?.text = cells[indexPath.row]
+        cell.textLabel?.numberOfLines = 2
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -90,6 +91,13 @@ class StartViewController: UITableViewController {
                 navigationController?.pushViewController(vc, animated: true)
                 vc.title = cell
             }
+        case "Advanced Example (storyboard)\n + custom frame":
+            let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
+                navigationController?.pushViewController(vc, animated: true)
+                vc.title = cell
+                vc.isCustomFrame = true
+            }
         case "Real Advanced Example":
             let message = "ChattingViewController not implemented yet."
             let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
@@ -107,6 +115,16 @@ class StartViewController: UITableViewController {
         default:
             assertionFailure("You need to impliment the action for this cell: \(cell)")
             return
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let cell = cells[indexPath.row]
+        switch cell {
+        case "Advanced Example (storyboard)\n + custom frame":
+            return 80
+        default:
+            return 60
         }
     }
     
