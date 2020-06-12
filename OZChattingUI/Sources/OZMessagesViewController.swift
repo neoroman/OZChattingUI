@@ -56,6 +56,7 @@ open class OZMessagesViewController: CollectionViewController {
     public var ozVoiceContainer: UIView?
     
     fileprivate var keyboardHeight: CGFloat = 0.0
+    fileprivate var keyboardAnimationDuration: TimeInterval = 2.5
     fileprivate var isKeyboardShow: Bool = false
     fileprivate var imagePicker = UIImagePickerController()
     fileprivate var scrollToBottomButton = OZToBottomButton()
@@ -1256,7 +1257,7 @@ extension OZMessagesViewController {
 
         guard let ecvh = ozEmoticonContainerViewHeight else {return}
         if animated, chatState == .chat {
-            UIView.animate(withDuration: 0.35, animations: {
+            UIView.animate(withDuration: keyboardAnimationDuration, animations: {
                 if ecvh.identifier == "inputTextContainerBottom" {
                     normalHeight = -normalHeight
                 }
@@ -1338,11 +1339,11 @@ extension OZMessagesViewController {
         }
         let margin = UIEdgeInsets(top: 0, left: 0, bottom: bottomPadding + minHeight, right: 0)
 
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: keyboardAnimationDuration, animations: {
             ecvh.constant = 0
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
-        }) { (comp) in
+            
             var bound = self.getBoundsBySaferArea().inset(by: margin)
             for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
                 if yesOrNo {
@@ -1350,6 +1351,7 @@ extension OZMessagesViewController {
                 }
             }
             self.collectionView.frame = bound
+        }) { (comp) in
 
             for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                 inset.bottom = inset.bottom + minTextViewHeight
@@ -1364,6 +1366,9 @@ extension OZMessagesViewController {
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
+            keyboardAnimationDuration = duration
+        }
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             keyboardHeight = keyboardRectangle.height
@@ -1375,6 +1380,10 @@ extension OZMessagesViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification){
+        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
+            keyboardAnimationDuration = duration
+        }
+
         isKeyboardShow = false
         keyboardHideLayout()
     }

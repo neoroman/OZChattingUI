@@ -47,18 +47,23 @@ class SelectPhotoViewController: UIViewController {
     // MARK: - Targets and Actions
     
     @IBAction func pressedSendButton(_ sender: UIBarButtonItem) {
-        let imageMan = ImageManager()
-        
+        guard selectedIndexes.count > 0 else { return }
+
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.isSynchronous = true
+        requestOptions.deliveryMode = .highQualityFormat
+
         for i in 0..<selectedIndexes.count {
-            guard let asset = photoAssets?[selectedIndexes[i]] else { return }
-            imageMan.requestImage(with: asset, thumbnailSize: PHImageManagerMaximumSize) { [weak self] image in
-                if let image = image {
-                    imageMan.storeToTemporaryDirectory(image, completion: { [weak self] (imagePath, error) in
-                        guard let imageURL = imagePath else {
-                            return
-                        }
-                        self?.selectedImagesPaths.append(imageURL)
-                    })
+            if let asset = photoAssets?[selectedIndexes[i]] {
+                PHImageManager.default().requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .default, options: requestOptions) { (image, info) in
+                    if let anImage = image {
+                        self.storeToTemporaryDirectory(anImage, completion: { [weak self] (imagePath, error) in
+                            guard let imageURL = imagePath else {
+                                return
+                            }
+                            self?.selectedImagesPaths.append(imageURL)
+                        })
+                    }
                 }
             }
         }
@@ -119,6 +124,25 @@ class SelectPhotoViewController: UIViewController {
             sendButton.isEnabled = true
         }
     }
+    
+    fileprivate func storeToTemporaryDirectory(_ selectImage: UIImage, completion: @escaping (_ imagePath: URL?, _ error: Error?) -> Void) {
+        guard let data = selectImage.jpegData(compressionQuality: 1.0) else { return }
+        
+        let timestamp = Int(Date().timeIntervalSince1970 + Double(arc4random_uniform(500)))
+        let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+        let photoPath = tempDirectory.appendingPathComponent("\(timestamp)").appendingPathExtension("jpg")
+        
+        do {
+            try FileManager.default.createDirectory(at: tempDirectory, withIntermediateDirectories: true)
+            try data.write(to: photoPath, options: Data.WritingOptions.atomic)
+            
+            completion(photoPath, nil)
+        } catch {
+            print(error.localizedDescription)
+            completion(nil, error)
+        }
+    }
+
 }
 
 // MARK: - UICollectionViewDataSource
@@ -130,15 +154,21 @@ extension SelectPhotoViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as? PhotoCollectionViewCell else { return UICollectionViewCell() }
         
-        let imageMan = ImageManager()
-        let asset = self.photoAssets?[indexPath.item]
-        imageMan.requestImage(with: asset, thumbnailSize: self.thumbnailSize) { [weak self] image in
-            var index: Int?
-            if let n = self?.selectedIndexes.firstIndex(of: indexPath.item) {
-                index = n + 1
-                collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+        if let asset = self.photoAssets?[indexPath.item] {
+            
+            let requestOptions = PHImageRequestOptions()
+            requestOptions.deliveryMode = .highQualityFormat
+            requestOptions.isSynchronous = true
+            
+            let tSize = CGSize(width: (self.view.frame.width - 70), height: 168 * 3)
+            PHImageManager.default().requestImage(for: asset, targetSize: tSize, contentMode: .default, options: requestOptions) { (image, info) in
+                var index: Int?
+                if let n = self.selectedIndexes.firstIndex(of: indexPath.item) {
+                    index = n + 1
+                    collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                }
+                cell.configure(with: image, index: indexPath.item, selectedNum: index)
             }
-            cell.configure(with: image, index: indexPath.item, selectedNum: index)
         }
         return cell
     }
@@ -175,46 +205,6 @@ extension SelectPhotoViewController: UICollectionViewDelegate, UICollectionViewD
             cell.setDeselectedImage(cell.selectButton)
             selectImage(false, index: indexPath.item)
             collectionView.reloadItems(at: collectionView.indexPathsForSelectedItems ?? [])
-        }
-    }
-}
-
-// MARK: - ImageManager
-fileprivate class ImageManager {
-    var representedAssetIdentifier: String?
-    
-    func requestImage(with asset: PHAsset?, thumbnailSize: CGSize, completion: @escaping (UIImage?) -> Void) {
-        guard let asset = asset else {
-            completion(nil)
-            return
-        }
-        let requestOptions = PHImageRequestOptions()
-        requestOptions.deliveryMode = .highQualityFormat
-        requestOptions.isSynchronous = true
-        requestOptions.resizeMode = .exact
-        self.representedAssetIdentifier = asset.localIdentifier
-        PHImageManager.default().requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions) { (image, info) in
-            if self.representedAssetIdentifier == asset.localIdentifier {
-                completion(image)
-            }
-        }
-    }
-    
-    func storeToTemporaryDirectory(_ selectImage: UIImage, completion: @escaping (_ imagePath: URL?, _ error: Error?) -> Void) {
-        guard let data = selectImage.jpegData(compressionQuality: 1.0) else { return }
-        
-        let timestamp = Int(Date().timeIntervalSince1970 + Double(arc4random_uniform(500)))
-        let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
-        let photoPath = tempDirectory.appendingPathComponent("\(timestamp)").appendingPathExtension("jpg")
-        
-        do {
-            try FileManager.default.createDirectory(at: tempDirectory, withIntermediateDirectories: true)
-            try data.write(to: photoPath, options: Data.WritingOptions.atomic)
-            
-            completion(photoPath, nil)
-        } catch {
-            print(error.localizedDescription)
-            completion(nil, error)
         }
     }
 }
