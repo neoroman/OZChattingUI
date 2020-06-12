@@ -122,7 +122,6 @@ open class OZMessagesViewController: CollectionViewController {
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
-        
         let inset = UIEdgeInsets(top: 30, left: 0, bottom: 54, right: -5) // Right(-5px) is max
         collectionView.scrollIndicatorInsets = inset
         collectionView.indicatorStyle = .black
@@ -163,7 +162,7 @@ open class OZMessagesViewController: CollectionViewController {
             }
             sBounds.origin.x = getSafeInsetBottom()
             if sBounds.width < width {
-                sBounds.size.width = width - getSafeInsetBottom(isBottomOnly: true) * 2
+                sBounds.size.width = width - (getSafeInsetBottom(isBottomOnly: true) * 2)
             }
         }
         else if UIDevice.current.orientation.isPortrait,
@@ -223,9 +222,7 @@ open class OZMessagesViewController: CollectionViewController {
                 bounds = rect
             }
         }
-        #if DEBUG
         print("collectionViewFrame = \(bounds)")
-        #endif
         collectionView.frame = bounds
         
         if forceReload {
@@ -423,10 +420,34 @@ open class OZMessagesViewController: CollectionViewController {
         if isKeyboardShow || chatState == .emoticon {
             keyboardShowLayout(isPadding: true, animated: false)
         }
-//        else {
-//            reloadCollectionViewFrame()
-//        }
     }
+    
+    // MARK: - Navigation
+    override open func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "emoticon_view_segue",
+            let vc = segue.destination as? OZEmoticonViewController {
+            vc.delegate = self
+            emoticonViewController = vc
+            if let evc = ozEmoticonContainer {
+                vc.view.frame = evc.bounds
+            }
+        }
+        else if segue.identifier == "record_view_segue",
+            let vc = segue.destination as? OZVoiceRecordViewController {
+            vc.delegate = self
+            voiceViewController = vc
+            if let aVoiceContainer = ozVoiceContainer {
+                vc.view.frame = aVoiceContainer.bounds
+            }
+            
+            var aDuration: TimeInterval = 12
+            for case .voiceRecordMaxDuration(let duration) in messagesConfigurations {
+                aDuration = duration
+            }
+            vc.recordMaxDuration = aDuration
+        }
+    }
+
     
     // MARK: - Setup Input TextView Height Constraint
     fileprivate let inputTextContstraintIDs = ["inputTextContainerCenter",
@@ -673,32 +694,6 @@ open class OZMessagesViewController: CollectionViewController {
     }
     
 
-    
-    // MARK: - Navigation
-    override open func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "emoticon_view_segue",
-            let vc = segue.destination as? OZEmoticonViewController {
-            vc.delegate = self
-            emoticonViewController = vc
-            if let evc = ozEmoticonContainer {
-                vc.view.frame = evc.bounds
-            }
-        }
-        else if segue.identifier == "record_view_segue",
-            let vc = segue.destination as? OZVoiceRecordViewController {
-            vc.delegate = self
-            voiceViewController = vc
-            if let aVoiceContainer = ozVoiceContainer {
-                vc.view.frame = aVoiceContainer.bounds
-            }
-            
-            var aDuration: TimeInterval = 12
-            for case .voiceRecordMaxDuration(let duration) in messagesConfigurations {
-                aDuration = duration
-            }
-            vc.recordMaxDuration = aDuration
-        }
-    }
 }
 
 // MARK: - For sending new messages
@@ -1191,7 +1186,7 @@ extension OZMessagesViewController {
             
             guard let vc = ozVoiceContainer else {return}
             if state == oldState {
-                UIView.animate(withDuration: 0.25, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
+                UIView.animate(withDuration: 0.35, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.3, options: .curveEaseInOut, animations: {
                     vc.alpha = 0.0
                     self.keyboardHideLayout()
                 }) { (comp) in
@@ -1205,7 +1200,7 @@ extension OZMessagesViewController {
                 vc.isHidden = false
                 view.bringSubviewToFront(vc)
                 vc.layer.zPosition = CGFloat(MAXFLOAT)
-                UIView.animate(withDuration: 0.25, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
+                UIView.animate(withDuration: 0.35, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.3, options: .curveEaseInOut, animations: {
                     self.keyboardHideLayout()
                 }) { (comp) in
                     self.micButtonToggle()

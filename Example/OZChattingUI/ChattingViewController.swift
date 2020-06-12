@@ -139,7 +139,7 @@ class ChattingViewController: OZMessagesViewController {
     // MARK: - Function
     /// 최초 UI 설정
     fileprivate func setUI() {
-        self.view.backgroundColor = UIColor(red: 228/255, green: 232/255, blue: 232/255, alpha: 1.0)
+        collectionView.backgroundColor = UIColor(red: 228/255, green: 232/255, blue: 232/255, alpha: 1.0)
         
         if let ozitv = ozInputTextView {
             ozitv.textContainerInset = UIEdgeInsets(top: 11, left: 14, bottom: 8, right: 40)

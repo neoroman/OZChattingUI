@@ -64,6 +64,7 @@ open class OZVoiceRecordViewController: UIViewController {
 
     var timer: Timer?
     var isSending = false
+    var isClosing = false
     
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -153,14 +154,14 @@ open class OZVoiceRecordViewController: UIViewController {
     }
     
     // MARK: - Actions by VoiceState
-    fileprivate func actions(byState: RecordState, isForceStop: Bool = false) {
+    fileprivate func actions(byState: RecordState) {
 
-        guard !isSending else { return }
+        guard !isSending, !isClosing else { return }
         
         // Action by ``oldValue''
         switch byState {
         case .playing:
-            finishPlaying(!isForceStop)
+            finishPlaying()
         case .recording:
             if let aar = amrAudioRecorder, aar.isRecording {
                 aar.stopRecord()
@@ -201,13 +202,40 @@ open class OZVoiceRecordViewController: UIViewController {
         
     }
     @IBAction func micContainerCloseButtonPressed(_ sender: Any) {
-        if let dele = delegate as? OZMessagesViewController {
-            dele.chatState = .chat
+        
+        guard !isClosing else { return }
+        
+        var aDelay: TimeInterval = 0.0
+        if sender is UIButton {
+            UIView.animate(withDuration: 0.25) {
+                if let sv = self.view.superview {
+                    sv.alpha = 0.0
+                }
+            }
+            
+            if voiceState == .recording || voiceState == .playing {
+                voiceState = .stop
+            }
+            isClosing = true
+
+            if let vPath = voiceFilePath,
+                FileManager.default.isReadableFile(atPath: vPath.relativePath) {
+                aDelay = 0.5
+                delay(0.3) {
+                    do { try FileManager.default.removeItem(at: vPath) } catch { }
+                }
+            }
         }
-        if voiceState != .normal {
-            voiceState = .normal
+        delay(aDelay) {
+            if let dele = self.delegate as? OZMessagesViewController {
+                dele.chatState = .chat
+            }
+            self.initialVoiceMessage()
+            if self.voiceState != .normal {
+                self.voiceState = .normal
+            }
+            self.isClosing = false
         }
-        initialVoiceMessage()
     }
     @IBAction func voiceRecordButtonPressed(_ sender:Any) {
         print("OZVoiceVC:::::voiceRecordButtonPressed...!")
@@ -232,7 +260,7 @@ open class OZVoiceRecordViewController: UIViewController {
         print("OZVoiceVC:::::voiceSendButtonPressed...!")
         if !isSending {
             isSending = true
-            //finishPlaying(true)
+            //finishPlaying()
             
             if let dele = delegate as? OZMessagesViewController,
                 let url = self.voiceFilePath {
@@ -263,13 +291,23 @@ open class OZVoiceRecordViewController: UIViewController {
 // MARK: - Audio Route Change
 extension OZVoiceRecordViewController {
     @objc func routeChanged(_ noti: Notification) {
-        print("OZ >>>> noti = \(noti)")
+        #if DEBUG
+        //print("OZ >>>> noti = \(noti)")
+        #endif
     }
 }
 
 
 // MARK: - Audio Handling
 extension OZVoiceRecordViewController {
+    
+    func initialTimer() {
+        if timer != nil {
+            self.timer?.invalidate()
+            self.timer = nil
+        }
+    }
+
     //MARK: Initial Audio Recorder
     func initialVoiceMessage() {
         initialTimer()
@@ -277,9 +315,12 @@ extension OZVoiceRecordViewController {
         recordedDuration = 0
         voiceFilePath = nil
         voiceData = nil
-        audioPlayer = nil
+        if audioPlayer != nil { audioPlayer = nil }
         isSending = false
         resetViews()
+        
+        if amrAudioRecorder != nil { amrAudioRecorder = nil }
+        if audioRecorder != nil { audioRecorder = nil }
     }
     
     func resetViews() {
@@ -313,9 +354,15 @@ extension OZVoiceRecordViewController {
     func finishRecording(success: Bool) {
         
         initialTimer()
-        
+        if let vpv = voiceProgressView {
+            vpv.removeFromSuperview()
+            voiceProgressView = nil
+        }
+
         if isUsingAMRFormat {
             guard let url = tempFilePath, let waveData = try? Data(contentsOf: url) else { return }
+            do { try FileManager.default.removeItem(at: url) } catch { }
+            
             let amrData = OZAudioPlayer.encodeWav2Amr(waveData: waveData, channels: 1, bitsPerSample: 16)
             voiceData = amrData
             if let vPath = voiceFilePath {
@@ -323,11 +370,6 @@ extension OZVoiceRecordViewController {
                 if let duration = OZAudioRecorder.amrAudioDuration(from: amrData) {
                     recordedDuration = duration
                 }
-                if let vpv = voiceProgressView {
-                    vpv.removeFromSuperview()
-                    voiceProgressView = nil
-                }
-
                 if checkAudioFile(path: vPath),
                     let aar = amrAudioRecorder, !aar.isRecording {
                     aar.reset()
@@ -356,10 +398,6 @@ extension OZVoiceRecordViewController {
                     
                     //guard let voiceData = voiceData else { return }
                     recordedDuration = OZAudioPlayer.getAmrDuration(data:amrData)
-                    if let vpv = voiceProgressView {
-                        vpv.removeFromSuperview()
-                        voiceProgressView = nil
-                    }
                 }
                 self.audioRecorder = nil
             } else {
@@ -370,7 +408,7 @@ extension OZVoiceRecordViewController {
         voiceState = .stop
     }
     
-    func finishPlaying(_ success:Bool) {
+    func finishPlaying() {
         guard let ap = audioPlayer else { return }
         
         ap.stop()
@@ -378,11 +416,6 @@ extension OZVoiceRecordViewController {
         initialTimer()
         resetViews()
         voiceState = .stop
-    }
-    
-    func initialTimer() {
-        self.timer?.invalidate()
-        self.timer = nil
     }
     
     @objc func progressFn(_ :Timer) {
@@ -418,7 +451,7 @@ extension OZVoiceRecordViewController {
             if let aar = amrAudioRecorder {
                 self.voiceFilePath = self.generateFilePath()
                 aar.delegate = self
-                aar.stopPlay()
+                if aar.isPlaying { aar.stopPlay() }
                 aar.startRecord()
                 
                 self.recordElapsedTime = 0
@@ -517,10 +550,10 @@ extension OZVoiceRecordViewController {
             do {
                 let attr = try FileManager.default.attributesOfItem(atPath: finalUrl.path)
                 let fileSize = attr[FileAttributeKey.size] as! UInt64
-                print("OZVoiceVC:::::filesize : \(fileSize)")
+                print("OZVoiceVC:(from \(caller)):::::filesize : \(fileSize)")
                 return true
             } catch {
-                print("OZVoiceVC:(from \(caller))::::No such audio file in \(finalUrl.path)")
+                //print("OZVoiceVC:(from \(caller))::::No such audio file in \(finalUrl.path)")
             }
         }
         return false
@@ -605,7 +638,7 @@ extension OZVoiceRecordViewController: AVAudioRecorderDelegate {
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        finishPlaying(true)
+        finishPlaying()
     }
 }
 
@@ -614,7 +647,7 @@ extension OZVoiceRecordViewController: AVAudioRecorderDelegate {
 extension OZVoiceRecordViewController: OZAudioRecorderDelegate {
     // Recording
     public func audioRecorderDidStartRecording(_ audioRecorder: OZAudioRecorder) {
-        print("OZVoiceVC************start recording*********************")
+        print("OZVoiceVC************start recording:::audioRecorder(\(audioRecorder))*********************")
         //        state = .recording
     }
     public func audioRecorderDidCancelRecording(_ audioRecorder: OZAudioRecorder) {
@@ -642,7 +675,7 @@ extension OZVoiceRecordViewController: OZAudioRecorderDelegate {
     public func audioRecorderDidFinishPlaying(_ audioRecorder: OZAudioRecorder, successfully flag: Bool) {
         let result = flag ? "successfully" : "unsuccessfully"
         print("OZVoiceVC*************finish playing \(result)*********************")
-        finishPlaying(true)
+        finishPlaying()
     }
     public func audioRecorderEncodeErrorDidOccur(_ audioRecorder: OZAudioRecorder, error: Error?) {
         //code
