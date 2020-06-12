@@ -132,12 +132,12 @@ open class OZMessagesViewController: CollectionViewController {
     
     
     // MARK: - Setup collectionView Frame
-    open func getSafeInsetBottom() -> CGFloat {
+    open func getSafeInsetBottom(isBottomOnly: Bool = false) -> CGFloat {
         var safeInsetBottom: CGFloat = 0
         if #available(iOS 11.0, *) {
-            safeInsetBottom = super.view.safeAreaInsets.bottom + super.view.safeAreaInsets.top
-            if safeInsetBottom < view.safeAreaInsets.bottom + view.safeAreaInsets.top {
-                safeInsetBottom = view.safeAreaInsets.bottom + view.safeAreaInsets.top
+            safeInsetBottom = super.view.safeAreaInsets.bottom + (isBottomOnly ? 0 : super.view.safeAreaInsets.top)
+            if safeInsetBottom < view.safeAreaInsets.bottom + (isBottomOnly ? 0 : view.safeAreaInsets.top) {
+                safeInsetBottom = view.safeAreaInsets.bottom + (isBottomOnly ? 0 : view.safeAreaInsets.top)
             }
         } else {
             // Fallback on earlier versions
@@ -146,33 +146,61 @@ open class OZMessagesViewController: CollectionViewController {
     }
     open func getBoundsBySaferArea(givenSize: CGSize? = .zero) -> CGRect {
         var sBounds = super.view.bounds
+        let width: CGFloat = min(UIScreen.main.bounds.height, UIScreen.main.bounds.width)
 
+        #if DEBUG
+        let beforeFormat = "orientation(%@), getBounds%@"
+        var before = ""
+        #endif
         if UIDevice.current.orientation.isLandscape {
-            if sBounds.width < view.bounds.width {
-                sBounds = view.bounds
-            }
+            #if DEBUG
+            before = String(format: beforeFormat, UIDevice.current.orientation.isLandscape ? "Landscape" : "Potrait", sBounds as CVarArg)
+            #endif
             if sBounds.width < sBounds.height {
-                let temp = sBounds.height
+                let temp = sBounds.width
                 sBounds.size.width = sBounds.height
                 sBounds.size.height = temp
             }
             sBounds.origin.x = getSafeInsetBottom()
-            sBounds.size.width -= 2 * getSafeInsetBottom()
+            if sBounds.width < width {
+                sBounds.size.width = width - getSafeInsetBottom(isBottomOnly: true) * 2
+            }
         }
         else if UIDevice.current.orientation.isPortrait,
             let size = givenSize, size != .zero,
             size.width < super.view.bounds.width {
+            #if DEBUG
+            before = String(format: beforeFormat, UIDevice.current.orientation.isLandscape ? "Landscape" : "Potrait", sBounds as CVarArg)
+            #endif
             sBounds.size.width = size.width
             sBounds.size.height = size.height - getSafeInsetBottom()
             sBounds.origin.x = 0
+            if sBounds.width < width {
+                sBounds.size.width = width
+            }
         }
         else {
-            if sBounds.width > view.bounds.width {
-                sBounds = view.bounds
+            #if DEBUG
+            before = String(format: beforeFormat, UIDevice.current.orientation.isLandscape ? "Landscape" : "Potrait", sBounds as CVarArg)
+            #endif
+            if sBounds.width > sBounds.height {
+                let temp = sBounds.height
+                sBounds.size.height = sBounds.width
+                sBounds.size.width = temp
             }
             sBounds.origin.x = 0
             sBounds.size.height = sBounds.size.height - getSafeInsetBottom()
+            if sBounds.width < width {
+                sBounds.size.width = width
+            }
         }
+        #if DEBUG
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(before)
+        let debug = String(format: "orientation(%@), getBounds\(sBounds), insetBottom(\(getSafeInsetBottom()))", UIDevice.current.orientation.isLandscape ? "Landscape" : "Potrait")
+        print(debug)
+        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        #endif
         return sBounds
     }
     
@@ -195,6 +223,9 @@ open class OZMessagesViewController: CollectionViewController {
                 bounds = rect
             }
         }
+        #if DEBUG
+        print("collectionViewFrame = \(bounds)")
+        #endif
         collectionView.frame = bounds
         
         if forceReload {
