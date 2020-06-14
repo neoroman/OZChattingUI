@@ -953,13 +953,6 @@ extension OZMessagesViewController: UIScrollViewDelegate {
             if visibleRow > 0 {
                 for case .customCollectionViewFrame(let isCustom, let rect, _) in messagesConfigurations {
                     if isCustom {
-                        var subData: [OZMessage] = []
-
-                        let startIndex = dataSource.data.count - visibleRow
-                        for i in startIndex..<dataSource.data.count {
-                            subData.append(dataSource.data[i])
-                        }
-                        setupDataProvider(newDataSource: OZMessageDataProvider(data: subData))
                         collectionView.frame.size.height = getHeightOfFrame(rect: rect, row: visibleRow)
                         collectionView.contentInset.bottom = 0
                         return

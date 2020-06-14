@@ -331,8 +331,9 @@ public class OZMessage: Equatable {
             case .timeFontSize(let fontPoint):
                 timeFontSize = fontPoint
                 break
-            case .usingPackedImages(let yesOrNo):
+            case .usingPackedImages(let yesOrNo, let isStrickSized):
                 usingPackedImages = yesOrNo
+                usingPackedImagesAsStrictSize = isStrickSized
                 break
             case .usingLongMessageFolding(let yesOrNo, let maxHeight, let size, let foldAlignment, let unfoldAlignment):
                 usingFoldingOption = yesOrNo
@@ -392,8 +393,9 @@ public class OZMessage: Equatable {
     public var timeFontColor: UIColor = .gray
     public var timeFontFormat: String = "h:mm a"
     public var timeFontSize: CGFloat = 0
-    public var usingPackedImages: Bool = true
     public var usingFoldingOption: Bool = false
+    public var usingPackedImages: Bool = true
+    public var usingPackedImagesAsStrictSize: Bool = false
 
     public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
         if type == .image && previousMessage.type == .image {

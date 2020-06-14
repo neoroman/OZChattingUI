@@ -118,7 +118,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.profileIconSize(30, [.deviceStatus]),
             OZMessagesConfigurationItem.roundedCorner(true, [.announcement]),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
-            OZMessagesConfigurationItem.usingPackedImages(false),
+            OZMessagesConfigurationItem.usingPackedImages(false, false),
             OZMessagesConfigurationItem.usingLongMessageFolding(false, 108, foldingButtonSize, .right, .center),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
 

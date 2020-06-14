@@ -102,8 +102,9 @@ public enum OZMessagesConfigurationItem {
     /// Alignment of content in OZMessageCell
     case alignment(OZMessageAlignment, [OZMessageType], _ userType: OZMessagesUserSideConfigType)
     
-    /// Using packed images, default `YES` in OZMessageCell
-    case usingPackedImages(Bool)
+    /// Using packed images, default `YES` in OZMessageCell,
+    /// isStrictSizeAsChatImage, default ``NO`` in OZMessageCell
+    case usingPackedImages(Bool, _ isStrictSizeAsChatImage: Bool)
     
     /// Show time label for image, default `NO` in OZMessageCell
     case showTimeLabelForImage(Bool)
@@ -222,7 +223,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.right, OZMessageType.allTypes(), .fromCurrent),
             OZMessagesConfigurationItem.alignment(.left, OZMessageType.allTypes(), .fromOther),
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
-            OZMessagesConfigurationItem.usingPackedImages(true),
+            OZMessagesConfigurationItem.usingPackedImages(true, false),
             OZMessagesConfigurationItem.showTimeLabelForImage(false),
             OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, CGSize(width: 100, height: 25), .center, .center),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(UIButton(type: .infoLight), UIButton(type: .detailDisclosure)),

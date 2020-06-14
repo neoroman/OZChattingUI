@@ -293,7 +293,7 @@ class ChattingViewController: OZMessagesViewController {
         var configs = [
             // OZMessageCell
             OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 120, height: 150), CGSize(width: 800, height: 1000)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 120, height: 120), CGSize(width: 800, height: 800)),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.cellBackgroundColor(UIColor(white: 204/255, alpha: 1), [.announcement]),
@@ -306,7 +306,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
             OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .center, .left),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
-            OZMessagesConfigurationItem.usingPackedImages(true),
+            OZMessagesConfigurationItem.usingPackedImages(true, true),
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),

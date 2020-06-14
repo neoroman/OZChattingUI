@@ -782,6 +782,9 @@ open class OZMessageCell: DynamicView {
                                            y: textLabel.frame.maxY - height - message.cellPadding,
                                            width: textLabel.frame.width - message.cellPadding *  2,
                                            height: height + message.cellPadding)
+            if buttonContainer.subviews.count == 0 {
+               buttonContainerHandler(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
+            }
             for x in buttonContainer.subviews {
                 if let button = x as? UIButton {
                     button.isHidden = true
@@ -902,16 +905,21 @@ open class OZMessageCell: DynamicView {
                 message.cellHeight != message.chatImageSize.height {
                 maxImageSize = message.chatImageSize
             }
-            if imageSize.width > maxImageSize.width {
-                imageSize.height /= imageSize.width/maxImageSize.width
-                imageSize.width = maxImageSize.width
+            if message.usingPackedImages, message.usingPackedImagesAsStrictSize {
+                imageSize = message.chatImageSize
             }
-            if imageSize.height > maxImageSize.height {
-                imageSize.width /= imageSize.height/maxImageSize.height
-                imageSize.height = maxImageSize.height
-            }
-            if !message.usingPackedImages, message.cellHeight < imageSize.height {
-                imageSize.height = message.cellHeight
+            else {
+                if imageSize.width > maxImageSize.width {
+                    imageSize.height /= imageSize.width/maxImageSize.width
+                    imageSize.width = maxImageSize.width
+                }
+                if imageSize.height > maxImageSize.height {
+                    imageSize.width /= imageSize.height/maxImageSize.height
+                    imageSize.height = maxImageSize.height
+                }
+                if !message.usingPackedImages, message.cellHeight < imageSize.height {
+                    imageSize.height = message.cellHeight
+                }
             }
             if message.alignment == .left {
                 if message.iconImage.count > 0 { imageSize.width += message.cellLeftPadding }
