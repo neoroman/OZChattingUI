@@ -10,10 +10,9 @@ import UIKit
 import CollectionKit
 import NVActivityIndicatorView
 
-public var kCornerRadius: CGFloat = 7
 public var kTextFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
 
-open class IncomingTextMessageCell: OZMessageCell {
+open class TextMessageCell: OZMessageCell {
     public var textLabel = OZBubbleLabel()
     public var iconImage = UIImageView()
     public var timeLabel = UILabel()
@@ -25,19 +24,32 @@ open class IncomingTextMessageCell: OZMessageCell {
             textLabel.attributedText = NSAttributedString(string: message.content, attributes: [ NSAttributedString.Key.font: kTextFont as Any ])
             textLabel.textColor = message.textColor
             textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
-            textLabel.incomingColor = message.bubbleColor
+            if message.alignment == .left {
+                textLabel.incomingColor = message.bubbleColor
+                textLabel.isIncoming = true
+            }
+            else {
+                textLabel.outgoingColor = message.bubbleColor
+                textLabel.isIncoming = false
+            }
             if message.canMessageSelectable {
                 textLabel.isUserInteractionEnabled = true
                 textLabel.addGestureRecognizer(UILongPressGestureRecognizer(target: textLabel, action: #selector(textLabel.handleLongPress(_:))))
             }
             
-            iconImage.image = profileImage(path: message.iconImage)
-            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
-            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            if message.iconImage.count > 0 {
+                iconImage.image = profileImage(path: message.iconImage)
+            }
             
             timeLabel.textColor = message.timeFontColor
             timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
             timeLabel.frame.size = CGSize(width: 50, height: 12)
+            if message.alignment == .left {
+                timeLabel.textAlignment = .left
+            }
+            else {
+                timeLabel.textAlignment = .right
+            }
             if message.timestamp > 0 {
                 timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
             }
@@ -67,7 +79,6 @@ open class IncomingTextMessageCell: OZMessageCell {
         super.init(frame: frame)
         textLabel.frame = frame
         textLabel.numberOfLines = 0
-        textLabel.isIncoming = true
         addSubview(textLabel)
         addSubview(iconImage)
         timeLabel.frame = frame
@@ -83,96 +94,36 @@ open class IncomingTextMessageCell: OZMessageCell {
     
     override open func layoutSubviews() {
         super.layoutSubviews()
-        iconImage.layer.cornerRadius = iconImage.frame.height / 2
+        
+        iconImage.layer.cornerRadius = message.iconSize/2
         iconImage.layer.masksToBounds = true
-        let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
-        timeLabel.frame.origin = CGPoint(x: self.bounds.maxX+5, y: timeLabelOriginY)
 
-        let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
-        textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
-
-        layoutButtonContainer(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
-
-        /// Call back to delegate
-        if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: self)
+        if iconImage.image != nil {
+            iconImage.isHidden = false
         }
-    }
-}
-
-open class OutgoingTextMessageCell: OZMessageCell {
-    public var textLabel = OZBubbleLabel()
-    public var timeLabel = UILabel()
- 
-    public var buttonContainer = UIView()
-
-    override public var message: OZMessage! {
-        didSet {
-            textLabel.attributedText = NSAttributedString(string: message.content, attributes: [ NSAttributedString.Key.font: kTextFont as Any ])
-            textLabel.textColor = message.textColor
-            textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
-            textLabel.outgoingColor = message.bubbleColor
-            if message.canMessageSelectable {
-                textLabel.isUserInteractionEnabled = true
-                textLabel.addGestureRecognizer(UILongPressGestureRecognizer(target: textLabel, action: #selector(textLabel.handleLongPress(_:))))
-            }
-
-            timeLabel.textColor = message.timeFontColor
-            timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
-            timeLabel.frame.size = CGSize(width: 50, height: 12)
-            timeLabel.textAlignment = .right
-            if message.timestamp > 0 {
-                timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
-            }
-            else {
-                #if DEBUG
-                timeLabel.text = "3:52 PM"
-                #endif
-            }
+        else {
+            iconImage.isHidden = true
+        }
+        let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
+        if message.alignment == .left {
+            timeLabel.frame.origin = CGPoint(x: self.bounds.maxX+5, y: timeLabelOriginY)
+            let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
+            textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
             
-            buttonContainer.isHidden = true
-            buttonContainerHandler(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
-
-            if message.cellOpacity <= 1.0 {
-                for x in self.subviews {
-                    x.alpha = message.cellOpacity
-                }
-            }
-            // Callback to delegate
-            if let dele = delegate {
-                dele.messageCellDidSetMessage(cell: self)
-            }
-            setNeedsLayout()
+            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
         }
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        textLabel.frame = frame
-        textLabel.numberOfLines = 0
-        textLabel.isIncoming = false
-        addSubview(textLabel)
-        timeLabel.frame = frame
-        addSubview(timeLabel)
-        buttonContainer.frame = frame
-        addSubview(buttonContainer)
-        buttonContainer.isHidden = true
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
-        timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+        else {
+            timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+            let rightInset = message.iconImage.count > 0 ? message.cellRightPadding : 0
+            textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: rightInset))
+            
+            iconImage.frame.origin = CGPoint(x: bounds.maxX-message.iconSize, y: bounds.maxY-message.iconSize/2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+        }
 
-        textLabel.frame = bounds
-        
         layoutButtonContainer(message: message, textLabel: textLabel, buttonContainer: buttonContainer)
-        
+
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
@@ -181,7 +132,7 @@ open class OutgoingTextMessageCell: OZMessageCell {
 }
 
 
-open class TextMessageCell: OZMessageCell {
+open class StatusMessageCell: OZMessageCell {
     var textLabel = UILabel()
     var seperator = UIImageView()
     
@@ -329,25 +280,9 @@ open class IncomingStatusMessageCell: OZMessageCell {
     }
 }
 
-open class ImagePlusIconMessageCell: ImageMessageCell {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        isIconHidden = false
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-    }
-}
-
 open class ImageMessageCell: OZMessageCell {
     open var imageView = UIImageView()  /// Set from outsize of cell, eg. `setupDataProvider`
     public var iconImage = UIImageView()
-    public var isIconHidden = true
     public var timeLabel = UILabel()
         
     override public var message: OZMessage! {
@@ -370,8 +305,7 @@ open class ImageMessageCell: OZMessageCell {
                 timeLabel.isHidden = true
             }
 
-            iconImage.isHidden = isIconHidden
-            if !iconImage.isHidden {
+            if message.iconImage.count > 0 {
                 iconImage.image = profileImage(path: message.iconImage)
             }
 
@@ -406,16 +340,33 @@ open class ImageMessageCell: OZMessageCell {
     
     override open func layoutSubviews() {
         super.layoutSubviews()
-        if isIconHidden {
-            imageView.frame = bounds
+        iconImage.layer.cornerRadius = message.iconSize/2
+        iconImage.layer.masksToBounds = true
+
+        if iconImage.image != nil {
+            iconImage.isHidden = false
+            
         }
         else {
+            iconImage.isHidden = true
+        }
+        if message.alignment == .left {
             let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
             imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
+            
+            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
         }
-        imageView.layer.cornerRadius = kCornerRadius
+        else {
+            let rightInset = message.iconImage.count > 0 ? message.cellRightPadding : 0
+            imageView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: rightInset))
+            
+            iconImage.frame.origin = CGPoint(x: bounds.maxX-message.iconSize, y: bounds.maxY-message.iconSize/2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+        }
+        imageView.layer.cornerRadius = message.chatImageCornerRadius
         imageView.layer.masksToBounds = true
-                
+
         if message.type == .emoticon || message.showTimeLabelForImage {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
             if message.alignment == .right {
@@ -428,29 +379,10 @@ open class ImageMessageCell: OZMessageCell {
             }
         }
 
-        iconImage.isHidden = isIconHidden
-        if !iconImage.isHidden {
-            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
-            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
-            iconImage.layer.cornerRadius = iconImage.frame.height / 2
-            iconImage.layer.masksToBounds = true
-        }
-
         /// Call back to delegate
         if let dele = delegate {
             dele.messageCellLayoutSubviews(cell: self)
         }
-    }
-}
-
-open class AudioPlusIconMessageCell: AudioMessageCell {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        isIconHidden = false
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -464,7 +396,6 @@ open class AudioMessageCell: OZMessageCell {
     public var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
     public var iconImage = UIImageView()
     public var eTimeLabel = UILabel()
-    public var isIconHidden = true
     
     open var isPlaying = false {
         didSet {
@@ -519,14 +450,13 @@ open class AudioMessageCell: OZMessageCell {
             textLabel.backgroundColor = .clear
             textLabel.textAlignment = .right
             
-            iconImage.image = profileImage(path: message.iconImage)
-            iconImage.frame.origin = CGPoint(x: 0, y: 0)
-            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            if message.iconImage.count > 0 {
+                iconImage.image = profileImage(path: message.iconImage)
+            }
             
             playImage.image = isPlaying ? pauseImg : playImg
             
             backView.progressColor = message.audioProgressColor
-            backView.center.y = iconImage.center.y
             backView.tintColoredImageView = playImage
             backView.tintColoredImage = pauseImg
             
@@ -578,27 +508,42 @@ open class AudioMessageCell: OZMessageCell {
     
     override open func layoutSubviews() {
         super.layoutSubviews()
-        if isIconHidden {
-            backView.frame = bounds
+        
+        backView.frame = bounds
+        if iconImage.image != nil {
+            iconImage.isHidden = false
+            iconImage.layer.cornerRadius = message.iconSize/2
+            iconImage.layer.masksToBounds = true
+
+            if message.alignment == .left {
+                backView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: message.cellLeftPadding, bottom: 0, right: 0))
+            }
+            else if message.alignment == .right {
+                backView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: message.cellRightPadding))
+            }
+            
+            if message.alignment == .left {
+                iconImage.frame.origin = CGPoint(x: 0, y: 0)
+                iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            }
+            else {
+                iconImage.frame.origin = CGPoint(x: bounds.maxX-message.iconSize, y: 0)
+                iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+            }
         }
         else {
-            let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
-            backView.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
+            iconImage.isHidden = true
         }
-        textLabel.layer.cornerRadius = kCornerRadius
-        textLabel.layer.masksToBounds = true
+
         textLabel.frame = backView.bounds.insetBy(dx: 14, dy: 11)
         
-        backView.layer.cornerRadius = kCornerRadius
+        backView.layer.cornerRadius = message.chatImageCornerRadius
         backView.layer.masksToBounds = true
         
         playImage.frame = CGRect(x: 10, y: 10, width: 20, height: 20)
         
-        iconImage.isHidden = isIconHidden
-        iconImage.layer.cornerRadius = iconImage.frame.height / 2
-        iconImage.layer.masksToBounds = true
         
-        if isIconHidden {
+        if message.alignment == .right {
             eTimeLabel.frame.origin = CGPoint(x: bounds.minX-55, y: bounds.maxY-12)
         }
         else {
@@ -858,7 +803,7 @@ open class OZMessageCell: DynamicView {
         return rect.size
     }
         
-    static func frameForMessage(_ message: OZMessage, containerWidth: CGFloat) -> CGRect {
+    public static func frameForMessage(_ message: OZMessage, containerWidth: CGFloat) -> CGRect {
         let aMaxWidth = containerWidth * message.bubbleWidthRatio
         var xOrigin: CGFloat = 0
         if message.alignment == .right {
@@ -872,7 +817,9 @@ open class OZMessageCell: DynamicView {
                 return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: eSize)
             }
             else {
-                return CGRect(origin: CGPoint(x: containerWidth - message.chatEmoticonSize.width, y: 0), size: message.chatEmoticonSize)
+                var eSize = message.chatEmoticonSize
+                if message.iconImage.count > 0 { eSize.width += message.cellRightPadding }
+                return CGRect(origin: CGPoint(x: containerWidth - eSize.width, y: 0), size: eSize)
             }
         }
         else if (message.type == .image || message.type == .emoticon),
@@ -926,6 +873,7 @@ open class OZMessageCell: DynamicView {
                 return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: imageSize)
             }
             else {
+                if message.iconImage.count > 0 { imageSize.width += message.cellRightPadding }
                 return CGRect(origin: CGPoint(x: containerWidth - imageSize.width, y: 0), size: imageSize)
             }
         }
@@ -940,8 +888,9 @@ open class OZMessageCell: DynamicView {
                 return CGRect(origin: CGPoint(x: 0, y: 0), size: size)
             }
             else {
-                let size = CGSize(width: 120 + message.cellPadding, height: message.cellHeight)
-                return CGRect(origin: CGPoint(x: containerWidth - 120 - message.cellPadding, y: 0), size: size)
+                let rightPadding = message.iconImage.count > 0 ? message.cellRightPadding : message.cellPadding
+                let size = CGSize(width: 120 + rightPadding, height: message.cellHeight)
+                return CGRect(origin: CGPoint(x: containerWidth - size.width, y: 0), size: size)
             }
         }
         
@@ -952,19 +901,20 @@ open class OZMessageCell: DynamicView {
                                    paddingX: message.cellPadding, paddingY: message.cellPadding)
             return CGRect(x: (containerWidth - size.width)/2, y: 0, width: size.width + message.cellPadding * 4, height: size.height)
         } else {
-            var leftPadding = message.cellPadding
-            if message.alignment == .left {
-                if message.iconImage.count > 0 {
-                    leftPadding = message.cellLeftPadding
+            var paddingX = message.cellPadding
+            if message.iconImage.count > 0 {
+                if message.alignment == .left {
+                    paddingX = message.cellLeftPadding
                 }
-                else {
-                    leftPadding = message.cellPadding
+                else if message.alignment == .right {
+                    paddingX = message.cellRightPadding
                 }
             }
+        
             let marginForScreen = (50/375) * UIScreen.main.bounds.width
             var size = sizeForText(message.content, fontName: message.fontName,
                                    fontSize: message.fontSize, maxWidth: aMaxWidth - marginForScreen,
-                                   paddingX: leftPadding,
+                                   paddingX: paddingX,
                                    paddingY: message.cellPadding)
             if message.usingFoldingOption, size.height > message.foldingMessageMaxHeight {
                 if message.isFolded {
@@ -976,8 +926,8 @@ open class OZMessageCell: DynamicView {
                 if size.width > aMaxWidth - marginForScreen {
                     size.width = aMaxWidth - marginForScreen
                 }
-                else if size.width < message.foldingButtonSize.width + leftPadding {
-                    size.width = message.foldingButtonSize.width + leftPadding
+                else if size.width < message.foldingButtonSize.width + paddingX {
+                    size.width = message.foldingButtonSize.width + paddingX
                 }
             }
             let origin: CGPoint = (message.alignment == .left) ? .zero : CGPoint(x: containerWidth - size.width, y: 0)

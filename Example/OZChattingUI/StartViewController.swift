@@ -84,6 +84,7 @@ class StartViewController: UITableViewController {
             if let vc = storyboard.instantiateViewController(withIdentifier: "ExampleViewController") as? ExampleViewController {
                 navigationController?.pushViewController(vc, animated: true)
                 vc.title = cell
+                vc.isFromStoryboard = true
             }
         case "Advanced Example (storyboard)":
             let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)

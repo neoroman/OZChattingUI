@@ -39,7 +39,7 @@ public protocol OZMessagesViewControllerDelegate {
     // Optional from here
     func messageViewLoaded(isLoaded: Bool)
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage)
-    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage)
+    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage, nextMessage: OZMessage?)
     func messageInputTextViewWillShow(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat)
     func messageInputTextViewWillHide(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat)
     func messageTextViewBeginEditing(textView: UITextView)
@@ -64,7 +64,7 @@ public protocol OZMessagesViewControllerDelegate {
 public extension OZMessagesViewControllerDelegate {
     func messageViewLoaded(isLoaded: Bool) { }
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) { }
-    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) { }
+    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage, nextMessage: OZMessage?) { }
     func messageInputTextViewWillShow(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat) { }
     func messageInputTextViewWillHide(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat) { }
     func messageTextViewBeginEditing(textView: UITextView) { }

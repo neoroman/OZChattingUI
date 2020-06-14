@@ -293,7 +293,7 @@ class ChattingViewController: OZMessagesViewController {
         var configs = [
             // OZMessageCell
             OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 120, height: 120), CGSize(width: 800, height: 800)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 90, height: 90), 10, CGSize(width: 800, height: 800)),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.cellBackgroundColor(UIColor(white: 204/255, alpha: 1), [.announcement]),
@@ -384,82 +384,131 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
         collectionView.scrollTo(edge: .bottom, animated: false)
     }
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
+        
         if cell.message.type == .text {
-            
-            /* TODO: need more survey by Henry on 2020.05.31
-            let shadowColor = UIColor.black
-            cell.layer.shadowOffset = CGSize(width: 0, height: 2)
-            cell.layer.shadowOpacity = 0.2
-            cell.layer.shadowRadius = 8
-            cell.layer.shadowColor = shadowColor.cgColor
-            cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 12).cgPath
-             */
-            
-            if let incomingCell = cell as? IncomingTextMessageCell {
-                
-                if previousMessage.type == .text,
+                        
+            if let textCell = cell as? TextMessageCell {
+                textCell.textLabel.layer.shadowOffset = CGSize(width: 0, height: 2)
+                textCell.textLabel.layer.shadowOpacity = 0.04
+                textCell.textLabel.layer.shadowRadius = 8
+                textCell.textLabel.layer.shadowColor = UIColor.black.cgColor
+                textCell.textLabel.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 12).cgPath
+
+                textCell.timeLabel.layer.shadowOffset = CGSize(width: 0, height: 1)
+                textCell.timeLabel.layer.shadowOpacity = 0.1
+                textCell.timeLabel.layer.shadowRadius = 2
+                textCell.timeLabel.layer.shadowColor = UIColor.black.cgColor
+
+                if !isCustomFrame, previousMessage.type == .text,
                     previousMessage.alignment == cell.message.alignment {
-                    incomingCell.textLabel.type = .noDraw
-                    incomingCell.textLabel.layer.cornerRadius = kBubbleRadius
-                    incomingCell.textLabel.layer.masksToBounds = true
-                    incomingCell.textLabel.backgroundColor = .white
+                    textCell.textLabel.type = .noDraw
+                    textCell.textLabel.layer.cornerRadius = kBubbleRadius
+                    textCell.textLabel.layer.masksToBounds = true
+                    if textCell.message.alignment == .right {
+                        textCell.textLabel.backgroundColor = UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000)
+                    }
+                    else {
+                        textCell.textLabel.backgroundColor = .white
+                    }
                 }
                 else {
-                    incomingCell.textLabel.type = .hasOwnDrawing
+                    textCell.textLabel.type = .hasOwnDrawing
+                    textCell.textLabel.backgroundColor = .clear
+                    if textCell.message.alignment == .right {
+                        textCell.textLabel.outgoingColor = UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000)
+                    }
+                    else {
+                        textCell.textLabel.incomingColor = .white
+                    }
                 }
             }
-            else if let outgoingCell = cell as? OutgoingTextMessageCell {
-                
-                if previousMessage.type == .text,
-                    previousMessage.alignment == cell.message.alignment {
-                    outgoingCell.textLabel.type = .noDraw
-                    outgoingCell.textLabel.layer.cornerRadius = kBubbleRadius
-                    outgoingCell.textLabel.layer.masksToBounds = true
-                    outgoingCell.textLabel.backgroundColor = UIColor(red: 0.000, green: 0.746, blue: 0.718, alpha: 1.000)
-                }
-                else {
-                    outgoingCell.textLabel.type = .hasOwnDrawing
-                }
-            }
+            cell.setNeedsLayout()
         }
-        cell.setNeedsLayout()
     }
     
-    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage) {
-        if cell.message.alignment == .right {
-            if cell.message.type == .text,
-                let outgoingCell = cell as? OutgoingTextMessageCell {
-                var inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                if previousMessage.type == .text,
-                    previousMessage.alignment == cell.message.alignment {
+    func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage, nextMessage: OZMessage?) {
+        if cell.message.type == .text,
+            let textCell = cell as? TextMessageCell {
+            var inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            if previousMessage.type == .text,
+                previousMessage.alignment == cell.message.alignment {
+                if cell.message.alignment == .right {
                     inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: kNotchInsetX)
                 }
-                outgoingCell.textLabel.frame = outgoingCell.bounds.inset(by: inset)
-            }
-        }
-        else if cell.message.alignment == .left {
-            switch cell.message.type {
-            case .text:
-                guard let incomingCell = cell as? IncomingTextMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                var inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                if previousMessage.type == .text,
-                    previousMessage.alignment == cell.message.alignment {
+                else if cell.message.alignment == .left {
                     inset = UIEdgeInsets(top: 0, left: kNotchInsetX, bottom: 0, right: 0)
                 }
-                incomingCell.textLabel.frame = incomingCell.bounds.inset(by: inset)
-            case .image, .emoticon:
-                guard let incomingCell = cell as? ImageMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.imageView.frame = incomingCell.bounds.inset(by: inset)
-            case .voice, .mp3:
-                guard let incomingCell = cell as? AudioPlusIconMessageCell else { return }
-                incomingCell.iconImage.isHidden = true
-                let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                incomingCell.backView.frame = incomingCell.bounds.inset(by: inset)
-            default:
-                print(".....\(cell.message.type), prevMsg(\(String(describing: previousMessage))).....")
+            }
+            textCell.textLabel.frame = textCell.bounds.inset(by: inset)
+        }
+        else if cell.message.type == .image,
+            let imageCell = cell as? ImageMessageCell,
+            imageCell.message.usingPackedImages {
+            
+            imageCell.imageView.layer.cornerRadius = 0
+            imageCell.imageView.layer.masksToBounds = false
+            
+            let maxWidth = collectionView.contentSize.width
+            let cellFrame = OZMessageCell.frameForMessage(imageCell.message, containerWidth: maxWidth)
+            let lastFrame = OZMessageCell.frameForMessage(previousMessage, containerWidth: maxWidth)
+            if previousMessage.type == .image,
+                imageCell.message.alignment == previousMessage.alignment {
+                
+                if let nm = nextMessage,
+                    imageCell.message.alignment != nm.alignment {
+                    if imageCell.message.alignment == .left,
+                        lastFrame.maxX + cellFrame.width + 2 < maxWidth {
+                        let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
+                                                     byRoundingCorners: [.topRight],
+                                                     cornerRadii: CGSize(width: 10, height: 10))
+                        let maskLayer1 = CAShapeLayer()
+                        maskLayer1.frame = imageCell.imageView.bounds
+                        maskLayer1.path = maskPath1.cgPath
+                        imageCell.imageView.layer.mask = maskLayer1
+                    } else if imageCell.message.alignment == .right && lastFrame.minX - cellFrame.width - 2 > 0 {
+                        let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
+                                                     byRoundingCorners: [.topLeft],
+                                                     cornerRadii: CGSize(width: 10, height: 10))
+                        let maskLayer1 = CAShapeLayer()
+                        maskLayer1.frame = imageCell.imageView.bounds
+                        maskLayer1.path = maskPath1.cgPath
+                        imageCell.imageView.layer.mask = maskLayer1
+                    }
+                }
+                else {
+                    if imageCell.message.alignment == .left {
+                        let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
+                                                     byRoundingCorners: [.bottomLeft, .topLeft],
+                            cornerRadii: CGSize(width: 10, height: 10))
+                        let maskLayer1 = CAShapeLayer()
+                        maskLayer1.frame = imageCell.imageView.bounds
+                        maskLayer1.path = maskPath1.cgPath
+                        imageCell.imageView.layer.mask = maskLayer1
+                    } else if imageCell.message.alignment == .right {
+                        let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
+                                                     byRoundingCorners: [.bottomRight, .topRight],
+                            cornerRadii: CGSize(width: 10, height: 10))
+                        let maskLayer1 = CAShapeLayer()
+                        maskLayer1.frame = imageCell.imageView.bounds
+                        maskLayer1.path = maskPath1.cgPath
+                        imageCell.imageView.layer.mask = maskLayer1
+                    }
+                }
+            } else {
+                // first image
+                let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
+                                             byRoundingCorners: imageCell.message.alignment == .left ? [.topLeft] : [.topRight],
+                    cornerRadii: CGSize(width: 10, height: 10))
+                let maskLayer1 = CAShapeLayer()
+                maskLayer1.frame = imageCell.imageView.bounds
+                maskLayer1.path = maskPath1.cgPath
+                imageCell.imageView.layer.mask = maskLayer1
+            }
+            if let nm = nextMessage, nm.type == .image {
+                imageCell.timeLabel.isHidden = true
+            }
+            else {
+                imageCell.timeLabel.isHidden = false
             }
         }
     }

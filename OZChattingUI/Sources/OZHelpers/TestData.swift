@@ -36,15 +36,14 @@ public let testMessages = [
   OZMessage(announcement: "Fri, Feb 7, 2020"),
   OZMessage(false, content: "Good luck ;)"),
   OZMessage(true, content: "Have a great day!"),
-  OZMessage(true, content: "Guys", timestamp: 1589136050),
+  OZMessage(false, content: "You too."),
   OZMessage(deviceStatus: "Vivi called with you for 9 minutes.", statusType: OZMessageDeviceType.call),
   OZMessage(false, mp3: "test.mp3"),
   OZMessage(deviceStatus: "Sally joined Koala's event", statusType: OZMessageDeviceType.campaign),
   OZMessage(deviceStatus: "Apple Watch", statusType: OZMessageDeviceType.watchOff),
   OZMessage(true, mp3: "test.mp3"),
-  OZMessage(true, image: "1020"),
+  OZMessage(true, emoticon: "oz1014"),
   OZMessage(true, status: "Delivered"),
-  //Message(false, image: "6"),
 ]
 
 let testImages: [UIImage] = [

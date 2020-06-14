@@ -96,53 +96,89 @@ public class OZMessage: Equatable {
     
     public init(_ fromCurrentUser: Bool, content: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
+        if fromCurrentUser {
+            self.alignment = .right
+        }
+        else {
+            self.alignment = .left
+        }
         self.type = .text
         self.content = content
-        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
 
         setupConfigurations(config: config)
+        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
     public init(_ fromCurrentUser: Bool, emoticon: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
+        if fromCurrentUser {
+            self.alignment = .right
+        }
+        else {
+            self.alignment = .left
+        }
         self.type = .emoticon
         self.content = emoticon
-        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
 
         setupConfigurations(config: config)
+        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
     public init(_ fromCurrentUser: Bool, status: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
+        if fromCurrentUser {
+            self.alignment = .right
+        }
+        else {
+            self.alignment = .left
+        }
         self.type = .status
         self.content = status
-        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
 
         setupConfigurations(config: config)
+        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
     public init(_ fromCurrentUser: Bool, image: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
+        if fromCurrentUser {
+            self.alignment = .right
+        }
+        else {
+            self.alignment = .left
+        }
         self.type = .image
         self.content = image
-        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
  
         setupConfigurations(config: config)
+        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
     public init(_ fromCurrentUser: Bool, voice: String, duration: Int = 0, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
+        if fromCurrentUser {
+            self.alignment = .right
+        }
+        else {
+            self.alignment = .left
+        }
         self.type = .voice
         self.content = voice
         self.extra["duration"] = duration
-        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
 
         setupConfigurations(config: config)
+        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
     public init(_ fromCurrentUser: Bool, mp3: String, duration: Int = 0, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
+        if fromCurrentUser {
+            self.alignment = .right
+        }
+        else {
+            self.alignment = .left
+        }
         self.type = .mp3
         self.content = mp3
         self.extra["duration"] = duration
-        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
 
         setupConfigurations(config: config)
+        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
     public init(announcement: String, timestamp: Int = 0, config: [OZMessagesConfigurationItem]? = nil) {
         self.type = .announcement
@@ -164,20 +200,12 @@ public class OZMessage: Equatable {
     }
     
     private func initWithUserProfileAndTimestamp(_ fromCurrentUser: Bool, tm: Int, img: String?) {
-        if !fromCurrentUser {
-            if let anImg = img {
-                self.iconImage = anImg
-            }
-            else {
-                self.iconImage = ""
-            }
-            if tm == 0 { self.timestamp = Int(Date().timeIntervalSince1970) }
-            else { self.timestamp = tm }
+        self.iconImage = ""
+        if let anImg = img {
+            self.iconImage = anImg
         }
-        else {
-            if tm == 0 { self.timestamp = Int(Date().timeIntervalSince1970) }
-            else { self.timestamp = tm }
-        }
+        if tm == 0 { self.timestamp = Int(Date().timeIntervalSince1970) }
+        else { self.timestamp = tm }
     }
     
     private func checkUserType(_ userType: OZMessagesUserSideConfigType) -> Bool {
@@ -236,19 +264,9 @@ public class OZMessage: Equatable {
                     cellHeight = height
                 }
                 break
-            case .cellLeftPadding(let padding, let types):
-                if types.contains(type) {
-                    cellLeftPadding = padding
-                }
-                break
             case .cellPadding(let padding, let types):
                 if types.contains(type) {
                     cellPadding = padding
-                }
-                break
-            case .cellRightPadding(let padding, let types):
-                if types.contains(type) {
-                    cellRightPadding = padding
                 }
                 break
             case .cellOpacity(let alpha, let types):
@@ -259,8 +277,9 @@ public class OZMessage: Equatable {
             case .chatEmoticonSize(let emoticonSize):
                 chatEmoticonSize = emoticonSize
                 break
-            case .chatImageSize(let displaySize, _):
+            case .chatImageSize(let displaySize, let radius, _):
                 chatImageSize = displaySize
+                chatImageCornerRadius = radius
                 break
             case .fontColor(let color, let types, let userType):
                 if types.contains(type), checkUserType(userType) {
@@ -280,18 +299,23 @@ public class OZMessage: Equatable {
             case .maxWidthRatio(let ratio):
                 bubbleWidthRatio = ratio
                 break
-            case .profileIconName(let name, let types):
-                if types.contains(type) {
+            case .profileIconName(let name, let types, let userType):
+                if types.contains(type), checkUserType(userType) {
                     iconImage = name
+                }
+                else {
+                    iconImage = ""
                 }
             case .profileIconPadding(let padding, let types):
                 if types.contains(type) {
                     iconPadding = padding
                 }
                 break
-            case .profileIconSize(let height, let types):
+            case .profileIconSize(let height, let types, let paddingX):
                 if types.contains(type) {
                     iconSize = height
+                    cellRightPadding = height + paddingX
+                    cellLeftPadding = height + paddingX
                 }
                 break
             case .roundedCorner(let yesOrNo, let types):
@@ -367,6 +391,7 @@ public class OZMessage: Equatable {
     public var cellOpacity: CGFloat = 1.0
     public var chatEmoticonSize: CGSize = .zero
     public var chatImageSize: CGSize = .zero
+    public var chatImageCornerRadius: CGFloat = 0
     public var isFolded: Bool = false
     public var foldingMessageMaxHeight: CGFloat = 160
     public var foldingButtonSize: CGSize = .zero
@@ -399,7 +424,17 @@ public class OZMessage: Equatable {
 
     public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
         if type == .image && previousMessage.type == .image {
-            return 2 + previousMessage.iconSize / 2
+            if iconImage.count > 0 {
+                return 2 + previousMessage.iconSize / 2
+            }
+            else {
+                return 2
+            }
+        }
+        if fromCurrentUser {
+            if previousMessage.iconImage.count > 0 {
+                return previousMessage.iconSize / 2
+            }
         }
         if type == .announcement {
             return 38

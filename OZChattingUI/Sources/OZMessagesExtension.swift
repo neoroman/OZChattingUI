@@ -56,9 +56,9 @@ open class OZMessageLayout: SimpleLayout {
             var xOffset: CGFloat = 0
             var cellFrame = OZMessageCell.frameForMessage(message, containerWidth: maxWidth)
             if let lastMessage = lastMessage, let lastFrame = lastFrame {
-                if message.usingPackedImages &&
-                    message.type == .image &&
+                if message.usingPackedImages && message.type == .image &&
                     lastMessage.type == .image && message.alignment == lastMessage.alignment {
+                    
                     if message.alignment == .left && lastFrame.maxX + cellFrame.width + 2 < maxWidth {
                         yHeight = lastFrame.minY
                         xOffset = lastFrame.maxX + 2
@@ -69,12 +69,13 @@ open class OZMessageLayout: SimpleLayout {
                     } else {
                         yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage)
                     }
-                } else if message.alignment == .left {
-                    var halfIconHeight: CGFloat = 0
+                    
                     if message.iconImage.count > 0 {
-                        halfIconHeight = message.iconSize / 2
+                        if message.alignment == .left {
+                        }
+                        else if message.alignment == .right {
+                        }
                     }
-                    yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage) + halfIconHeight
                 } else {
                     yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage)
                 }

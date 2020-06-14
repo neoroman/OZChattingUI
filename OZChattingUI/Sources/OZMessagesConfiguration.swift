@@ -38,17 +38,17 @@ public enum OZMessagesConfigurationItem {
     case timeFontColor(UIColor)
     
     /// Profile icon name in OZMessageCell
-    case profileIconName(String, [OZMessageType])
+    case profileIconName(String, [OZMessageType], _ userType: OZMessagesUserSideConfigType)
 
     /// Profile icon size in OZMessageCell
-    case profileIconSize(CGFloat, [OZMessageType])
+    case profileIconSize(CGFloat, [OZMessageType], _ paddingX: CGFloat)
 
     /// Profile icon padding in OZMessageCell
     case profileIconPadding(CGFloat, [OZMessageType])
 
     /// Default image size of messages in OZMessagesCell
     /// Display image height won't be greater than cellHeight
-    case chatImageSize(CGSize, _ forSeding: CGSize)
+    case chatImageSize(CGSize, _ cornerRadius: CGFloat, _ forSeding: CGSize)
 
     /// Default image max bytes in OZMessagesCell
     case chatImageMaxNumberOfBytes(Int)
@@ -58,12 +58,6 @@ public enum OZMessagesConfigurationItem {
     
     /// Common cell padding(inset for bubble) in OZMessageCell
     case cellPadding(CGFloat, [OZMessageType])
-
-    /// Left cell padding(inset for bubble and profile icon) in OZMessageCell
-    case cellLeftPadding(CGFloat, [OZMessageType])
-
-    /// Right cell padding(inset for bubble and profile icon) in OZMessageCell
-    case cellRightPadding(CGFloat, [OZMessageType])
 
     /// Cell height in OZMessageCell
     case cellHeight(CGFloat, [OZMessageType])
@@ -190,15 +184,14 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.timeFontSize(12),
             OZMessagesConfigurationItem.timeFontFormat("h:mm a"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1)),
-            OZMessagesConfigurationItem.profileIconName("", OZMessageType.allTypes()),
-            OZMessagesConfigurationItem.profileIconSize(32, OZMessageType.allTypes()),
-            OZMessagesConfigurationItem.profileIconSize(20, [.deviceStatus]),
+            OZMessagesConfigurationItem.profileIconName("", OZMessageType.allTypes(), .none),
+            OZMessagesConfigurationItem.profileIconSize(32, OZMessageType.allTypes(), 8),
+            OZMessagesConfigurationItem.profileIconSize(20, [.deviceStatus], 8),
             OZMessagesConfigurationItem.profileIconPadding(0, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellPadding(0, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellPadding(4, [.announcement]),
             OZMessagesConfigurationItem.cellPadding(12, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.cellPadding(2, [.status]),
-            OZMessagesConfigurationItem.cellRightPadding(0, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellHeight(60, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellHeight(40, [.mp3, .voice]),
             OZMessagesConfigurationItem.cellHeight(120, [.image]),
@@ -206,7 +199,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.maxWidthRatio(0.9),
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1), .fromCurrent),
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), .fromOther),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225), CGSize(width: 400, height: 400)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 400, height: 225), 7, CGSize(width: 400, height: 400)),
             OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
             OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 50, height: 50)),
             OZMessagesConfigurationItem.cellBackgroundColor(.clear, OZMessageType.allTypes()),
@@ -254,11 +247,6 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.voiceRecordMaxDuration(10.0),
         ]
         
-        for case .profileIconSize(let height, let types) in items {
-            for x in types {
-                items.append(OZMessagesConfigurationItem.cellLeftPadding(height + 8, [x]))
-            }
-        }
         for case .inputContainerMinimumHeight(let minHeight) in items {
             for case .collectionViewEdgeInsets(var inset) in items {
                 inset.bottom = minHeight

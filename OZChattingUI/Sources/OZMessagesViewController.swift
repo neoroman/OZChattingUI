@@ -161,14 +161,7 @@ open class OZMessagesViewController: CollectionViewController {
         var sBounds = super.view.bounds
         let width: CGFloat = min(UIScreen.main.bounds.height, UIScreen.main.bounds.width)
 
-        #if DEBUG
-        let beforeFormat = "orientation(%@), getBounds%@"
-        var before = ""
-        #endif
         if UIDevice.current.orientation.isLandscape {
-            #if DEBUG
-            before = String(format: beforeFormat, UIDevice.current.orientation.isLandscape ? "Landscape" : "Potrait", sBounds as CVarArg)
-            #endif
             if sBounds.width < sBounds.height {
                 let temp = sBounds.width
                 sBounds.size.width = sBounds.height
@@ -182,9 +175,6 @@ open class OZMessagesViewController: CollectionViewController {
         else if UIDevice.current.orientation.isPortrait,
             let size = givenSize, size != .zero,
             size.width < super.view.bounds.width {
-            #if DEBUG
-            before = String(format: beforeFormat, UIDevice.current.orientation.isLandscape ? "Landscape" : "Potrait", sBounds as CVarArg)
-            #endif
             sBounds.size.width = size.width
             sBounds.size.height = size.height - getSafeInsetBottom()
             sBounds.origin.x = 0
@@ -193,9 +183,6 @@ open class OZMessagesViewController: CollectionViewController {
             }
         }
         else {
-            #if DEBUG
-            before = String(format: beforeFormat, UIDevice.current.orientation.isLandscape ? "Landscape" : "Potrait", sBounds as CVarArg)
-            #endif
             if sBounds.width > sBounds.height {
                 let temp = sBounds.height
                 sBounds.size.height = sBounds.width
@@ -207,13 +194,6 @@ open class OZMessagesViewController: CollectionViewController {
                 sBounds.size.width = width
             }
         }
-        #if DEBUG
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        print(before)
-        let debug = String(format: "orientation(%@), getBounds\(sBounds), insetBottom(\(getSafeInsetBottom()))", UIDevice.current.orientation.isLandscape ? "Landscape" : "Potrait")
-        print(debug)
-        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-        #endif
         return sBounds
     }
     
@@ -304,29 +284,13 @@ open class OZMessagesViewController: CollectionViewController {
     
     // MARK: - Setup CollectionKit DataProvider
     public func setupDataProvider(newDataSource: OZMessageDataProvider? = nil) {
-        let incomingTextMessageViewSource = ClosureViewSource(viewUpdater: { (view: IncomingTextMessageCell, data: OZMessage, at: Int) in
-            view.delegate = self
-            view.message = data
-        })
-        let outgoingTextMessageViewSource = ClosureViewSource(viewUpdater: { (view: OutgoingTextMessageCell, data: OZMessage, at: Int) in
-            view.delegate = self
-            view.message = data
-        })
         let textMessageViewSource = ClosureViewSource(viewUpdater: { (view: TextMessageCell, data: OZMessage, at: Int) in
             view.delegate = self
             view.message = data
         })
-        let imagePlusIconMessageViewSource = ClosureViewSource(viewUpdater: { (view: ImagePlusIconMessageCell, data: OZMessage, at: Int) in
+        let statusMessageViewSource = ClosureViewSource(viewUpdater: { (view: StatusMessageCell, data: OZMessage, at: Int) in
             view.delegate = self
             view.message = data
-            if data.type == .emoticon {
-                view.imageView.contentMode = .scaleAspectFit
-                view.imageView.image = UIImage(named: data.content)
-            }
-            else if let anImage = self.getImage(identifier: data.identifier, imageView: view.imageView, message: data) {
-                view.imageView.image = anImage
-                data.imageSize = anImage.size
-            }
         })
         let imageMessageViewSource = ClosureViewSource(viewUpdater: { (view: ImageMessageCell, data: OZMessage, at: Int) in
             view.delegate = self
@@ -336,15 +300,12 @@ open class OZMessagesViewController: CollectionViewController {
                 view.imageView.image = UIImage(named: data.content)
             }
             else if let anImage = self.getImage(identifier: data.identifier, imageView: view.imageView, message: data) {
+                view.imageView.contentMode = .scaleAspectFill
                 view.imageView.image = anImage
                 data.imageSize = anImage.size
             }
         })
         let deviceStatusViewSource = ClosureViewSource(viewUpdater: { (view: IncomingStatusMessageCell, data: OZMessage, at: Int) in
-            view.delegate = self
-            view.message = data
-        })
-        let audioPlusIconViewSource = ClosureViewSource(viewUpdater: { (view: AudioPlusIconMessageCell, data: OZMessage, at: Int) in
             view.delegate = self
             view.message = data
         })
@@ -367,30 +328,15 @@ open class OZMessagesViewController: CollectionViewController {
             viewSource: ComposedViewSource(viewSourceSelector: { data in
                 switch data.type {
                 case .image, .emoticon:
-                    if data.alignment == .left {
-                        return imagePlusIconMessageViewSource
-                    }
-                    else {
-                        return imageMessageViewSource
-                    }
+                    return imageMessageViewSource
                 case .text:
-                    if data.alignment == .left {
-                        return incomingTextMessageViewSource
-                    }
-                    else {
-                        return outgoingTextMessageViewSource
-                    }
+                    return textMessageViewSource
                 case .deviceStatus:
                     return deviceStatusViewSource
                 case .mp3, .voice:
-                    if data.alignment == .left {
-                        return audioPlusIconViewSource
-                    }
-                    else {
-                        return audioViewSource
-                    }
+                    return audioViewSource
                 default:
-                    return textMessageViewSource
+                    return statusMessageViewSource
                 }
             }),
             layout: OZMessageLayout().insetVisibleFrame(by: visibleFrameInsets),
@@ -788,28 +734,36 @@ extension OZMessagesViewController {
         guard let text = msg, text.count > 0 else { return }
         
         var sendingMsg: OZMessage!
+        
+        var anImgName = ""
+        for case .profileIconName(let name, _, let userType) in self.messagesConfigurations {
+            if userType == .fromCurrent {
+                anImgName = name
+            }
+        }
+
         DispatchQueue.main.async {
             //self.animator.sendingMessage = true
             if type == .image {
-                sendingMsg = OZMessage(true, image: text, config: self.messagesConfigurations)
+                sendingMsg = OZMessage(true, image: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
             else if type == .emoticon {
-                sendingMsg = OZMessage(true, emoticon: text, config: self.messagesConfigurations)
+                sendingMsg = OZMessage(true, emoticon: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
             else if type == .mp3 {
-                sendingMsg = OZMessage(true, mp3: text, config: self.messagesConfigurations)
+                sendingMsg = OZMessage(true, mp3: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
             else if type == .voice {
-                sendingMsg = OZMessage(true, voice: text, config: self.messagesConfigurations)
+                sendingMsg = OZMessage(true, voice: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
             else if type == .announcement {
                 sendingMsg = OZMessage(announcement: text, config: self.messagesConfigurations)
             }
             else if type == .status {
-                sendingMsg = OZMessage(true, status: text, config: self.messagesConfigurations)
+                sendingMsg = OZMessage(true, status: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
             else {
-                sendingMsg = OZMessage(true, content: text, config: self.messagesConfigurations)
+                sendingMsg = OZMessage(true, content: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
             if isDeliveredMsg,
                 let lastRightMsg = (self.dataSource.data.filter{ $0.alignment == .right }).last,
@@ -842,29 +796,27 @@ extension OZMessagesViewController {
             
             if self.isEchoMode, type.isEchoEnable() {
                 var anImgName = ""
-                for case .profileIconName(let name, _) in self.messagesConfigurations {
-                    anImgName = name
-                }
-                let anUserImg = UIImage(named: "nopic")
-                if anImgName.count == 0, anUserImg == nil {
-                    anImgName = "nopic@2x.png"
+                for case .profileIconName(let name, _, let userType) in self.messagesConfigurations {
+                    if userType == .fromOther {
+                        anImgName = name
+                    }
                 }
 
                 delay(1.0) {
                     if type == .image {
-                        self.dataSource.data.append(OZMessage(false, image: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                        self.dataSource.data.append(OZMessage(false, image: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
                     }
                     else if type == .emoticon {
-                        self.dataSource.data.append(OZMessage(false, emoticon: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                        self.dataSource.data.append(OZMessage(false, emoticon: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
                     }
                     else if type == .voice {
-                        self.dataSource.data.append(OZMessage(false, voice: text, duration: 0, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                        self.dataSource.data.append(OZMessage(false, voice: text, duration: 0, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
                     }
                     else if type == .mp3 {
-                        self.dataSource.data.append(OZMessage(false, mp3: text, duration: 0, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                        self.dataSource.data.append(OZMessage(false, mp3: text, duration: 0, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
                     }
                     else {
-                        self.dataSource.data.append(OZMessage(false, content: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                        self.dataSource.data.append(OZMessage(false, content: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
                     }
                     self.collectionView.reloadData() // send echo (for debugging)
                     self.collectionView.scrollTo(edge: .bottom, animated:true)
@@ -882,37 +834,36 @@ extension OZMessagesViewController {
                       profileIconPath: String? = nil) {
         guard let text = msg else { return }
 
+        var anImgName = ""
+        for case .profileIconName(let name, _, let userType) in self.messagesConfigurations {
+            if userType == .fromOther {
+                anImgName = name
+            }
+        }
+
         DispatchQueue.main.async {
             if let anim = self.animator as? OZMessageAnimator {
                 anim.sendingMessage = true
             }
-            let anUserImg = UIImage(named: "nopic")
-            var anImgName = ""
-            if let piPath = profileIconPath {
-                anImgName = piPath
-            }
-            else if anUserImg == nil {
-                anImgName = "nopic@2x.png"
-            }
             
             let aTimestamp = timestamp > 0 ? timestamp : Int(Date().timeIntervalSince1970)
             if type == .image {
-                self.dataSource.data.append(OZMessage(false, image: text, timestamp: aTimestamp, iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                self.dataSource.data.append(OZMessage(false, image: text, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
             else if type == .mp3 {
-                self.dataSource.data.append(OZMessage(false, mp3: text, duration: duration, timestamp: aTimestamp, iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                self.dataSource.data.append(OZMessage(false, mp3: text, duration: duration, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
             else if type == .emoticon {
-                self.dataSource.data.append(OZMessage(false, emoticon: text, timestamp: aTimestamp, iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                self.dataSource.data.append(OZMessage(false, emoticon: text, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
             else if type == .voice {
-                self.dataSource.data.append(OZMessage(false, mp3: text, duration: duration, timestamp: aTimestamp, iconImage: anImgName.count > 0 ? anImgName : nil, config: self.messagesConfigurations))
+                self.dataSource.data.append(OZMessage(false, mp3: text, duration: duration, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
             else if type == .deviceStatus, let aType = activeType {
                 self.dataSource.data.append(OZMessage(deviceStatus: text, statusType: aType, iconNamed: nil, timestamp: aTimestamp, config: self.messagesConfigurations))
             }
             else {
-                self.dataSource.data.append(OZMessage(false, content: text, timestamp: aTimestamp, iconImage: nil, config: self.messagesConfigurations))
+                self.dataSource.data.append(OZMessage(false, content: text, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
             self.collectionView.reloadData() //receive
             self.collectionView.scrollTo(edge: .bottom, animated:true)
@@ -1709,7 +1660,7 @@ extension OZMessagesViewController: UINavigationControllerDelegate, UIImagePicke
         
         if let anImg = UIImage(data: imageData) {
             var imgSize = CGSize(width: 400, height: 400)
-            for case .chatImageSize(_, let realSize) in messagesConfigurations {
+            for case .chatImageSize(_, _, let realSize) in messagesConfigurations {
                 imgSize = realSize
             }
             let resizedImage = anImg.resize(width: imgSize.width, height: imgSize.height)
@@ -1789,10 +1740,14 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             if let currentMessageIndex = dataSource.data.firstIndex(of: cell.message),
                 currentMessageIndex - 1 >= 0 {
                 let previousMessage = dataSource.data(at: currentMessageIndex - 1)
-                dele.messageCellLayoutSubviews(cell: cell, previousMessage: previousMessage)
+                var nextMessage: OZMessage? = nil
+                if dataSource.data.count > currentMessageIndex + 1 {
+                    nextMessage = dataSource.data(at: currentMessageIndex + 1)
+                }
+                dele.messageCellLayoutSubviews(cell: cell, previousMessage: previousMessage, nextMessage: nextMessage)
             }
             else {
-                dele.messageCellLayoutSubviews(cell: cell, previousMessage: OZMessage())
+                dele.messageCellLayoutSubviews(cell: cell, previousMessage: OZMessage(), nextMessage: nil)
             }
         }
     }
