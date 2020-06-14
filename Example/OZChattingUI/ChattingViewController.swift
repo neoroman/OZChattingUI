@@ -326,8 +326,8 @@ class ChattingViewController: OZMessagesViewController {
         ]
         
         if isCustomFrame {
-            let rect = CGRect(x: 100, y: 0, width: 265, height: 250)
-            configs.append(OZMessagesConfigurationItem.customCollectionViewFrame(true, rect))
+            let rect = CGRect(x: 100, y: 0, width: 265, height: 100)
+            configs.append(OZMessagesConfigurationItem.customCollectionViewFrame(true, rect, 1))
         }
         
         return configs

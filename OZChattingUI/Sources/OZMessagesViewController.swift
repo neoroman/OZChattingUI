@@ -61,6 +61,7 @@ open class OZMessagesViewController: CollectionViewController {
     fileprivate var imagePicker = UIImagePickerController()
     fileprivate var scrollToBottomButton = OZToBottomButton()
     fileprivate var cachedImages: [String: UIImage] = [:]
+    fileprivate var visibleRow: Int = 0
     
     public var userIdentifier: String?
     public var isEchoMode: Bool = false
@@ -229,10 +230,18 @@ open class OZMessagesViewController: CollectionViewController {
             boInset = bottomInset
         }
         
+        var isCustomFrame = false
         var bounds = getBoundsBySaferArea().inset(by: UIEdgeInsets(top: 0, left: 0, bottom: boInset, right: 0))
-        for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
+        for case .customCollectionViewFrame(let yesOrNo, let rect, let row) in self.messagesConfigurations {
             if yesOrNo {
+                isCustomFrame = yesOrNo
                 bounds = rect
+                visibleRow = row
+                
+                let height = self.getHeightOfFrame(rect: rect, row: row)
+                if rect.height < height {
+                    bounds.size.height = height
+                }
             }
         }
         print("collectionViewFrame = \(bounds)")
@@ -240,7 +249,8 @@ open class OZMessagesViewController: CollectionViewController {
         
         if forceReload {
             for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-                collectionView.contentInset = inset //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
+                //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
+                if !isCustomFrame { self.collectionView.contentInset = inset }
             }
             
             collectionView.reloadData() { // 1st call
@@ -916,12 +926,47 @@ extension OZMessagesViewController {
 
 // MARK: - UIScrollViewDelegate for CollectionKit
 extension OZMessagesViewController: UIScrollViewDelegate {
+    public func getHeightOfFrame(rect: CGRect, row: Int) -> CGFloat {
+        var height: CGFloat = 0
+
+        if row > 0 {
+            let startIndex = dataSource.data.count - row
+            if startIndex >= 0, startIndex < dataSource.data.count {
+                for i in startIndex..<dataSource.data.count {
+                    height += OZMessageCell.frameForMessage(dataSource.data[i], containerWidth: collectionView.contentSize.width).height
+                }
+                if rect.height > height {
+                    height = rect.height
+                }
+            }
+        }
+        return height
+    }
+    
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // PULL TO LOAD MORE
         // load more messages if we scrolled to the top
         if dataSource.data.count > 0,
             let datum = dataSource.data.first,
             datum.content.count > 0 {
+            
+            if visibleRow > 0 {
+                for case .customCollectionViewFrame(let isCustom, let rect, _) in messagesConfigurations {
+                    if isCustom {
+                        var subData: [OZMessage] = []
+
+                        let startIndex = dataSource.data.count - visibleRow
+                        for i in startIndex..<dataSource.data.count {
+                            subData.append(dataSource.data[i])
+                        }
+                        setupDataProvider(newDataSource: OZMessageDataProvider(data: subData))
+                        collectionView.frame.size.height = getHeightOfFrame(rect: rect, row: visibleRow)
+                        collectionView.contentInset.bottom = 0
+                        return
+                    }
+                }
+            }
+            
             if collectionView.hasReloaded,
                 scrollView.contentOffset.y < 500,
                 !loading, let dele = delegate {
@@ -1303,16 +1348,22 @@ extension OZMessagesViewController {
             }) { (comp) in
                 delay(0.05) {
                     var bounds = self.getBoundsBySaferArea().inset(by: margin)
-                    for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
+                    var isCustomFrame = false
+                    for case .customCollectionViewFrame(let yesOrNo, let rect, let row) in self.messagesConfigurations {
                         if yesOrNo {
+                            isCustomFrame = yesOrNo
                             bounds = rect
+                            let height = self.getHeightOfFrame(rect: rect, row: row)
+                            if rect.height < height {
+                                bounds.size.height = height
+                            }
                         }
                     }
                     self.collectionView.frame = bounds
 
                     for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                         inset.bottom = inset.bottom + minTextViewHeight
-                        self.collectionView.contentInset = inset
+                        if !isCustomFrame { self.collectionView.contentInset = inset }
                         self.collectionView.reloadData()
                     }
                     
@@ -1340,9 +1391,13 @@ extension OZMessagesViewController {
             self.view.setNeedsUpdateConstraints()
             delay(0.05) {
                 var bounds = self.getBoundsBySaferArea().inset(by: margin)
-                for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
+                for case .customCollectionViewFrame(let yesOrNo, let rect, let row) in self.messagesConfigurations {
                     if yesOrNo {
                         bounds = rect
+                        let height = self.getHeightOfFrame(rect: rect, row: row)
+                        if rect.height < height {
+                            bounds.size.height = height
+                        }
                     }
                 }
                 self.collectionView.frame = bounds
@@ -1375,23 +1430,29 @@ extension OZMessagesViewController {
         }
         let margin = UIEdgeInsets(top: 0, left: 0, bottom: bottomPadding + minHeight, right: 0)
 
+        var isCustomFrame = false
         UIView.animate(withDuration: keyboardAnimationDuration, animations: {
             ecvh.constant = 0
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
             
-            var bound = self.getBoundsBySaferArea().inset(by: margin)
-            for case .customCollectionViewFrame(let yesOrNo, let rect) in self.messagesConfigurations {
+            var bounds = self.getBoundsBySaferArea().inset(by: margin)
+            for case .customCollectionViewFrame(let yesOrNo, let rect, let row) in self.messagesConfigurations {
                 if yesOrNo {
-                    bound = rect
+                    isCustomFrame = yesOrNo
+                    bounds = rect
+                    let height = self.getHeightOfFrame(rect: rect, row: row)
+                    if rect.height < height {
+                        bounds.size.height = height
+                    }
                 }
             }
-            self.collectionView.frame = bound
+            self.collectionView.frame = bounds
         }) { (comp) in
 
             for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
                 inset.bottom = inset.bottom + minTextViewHeight
-                self.collectionView.contentInset = inset
+                if !isCustomFrame { self.collectionView.contentInset = inset }
                 self.collectionView.reloadData()
             }
         }
