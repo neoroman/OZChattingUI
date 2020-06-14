@@ -58,7 +58,7 @@ public protocol OZMessagesViewControllerDelegate {
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool
 
     /// Long message folding and unfolding button action
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) -> Bool
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView, isFolded: Bool) -> Bool
 }
 // MARK: - Optional OZMessagesViewControllerDelegate
 public extension OZMessagesViewControllerDelegate {
@@ -76,5 +76,5 @@ public extension OZMessagesViewControllerDelegate {
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) -> Bool { return true }
+    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView, isFolded: Bool) -> Bool { return true }
 }

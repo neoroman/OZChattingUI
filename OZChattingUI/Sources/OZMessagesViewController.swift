@@ -230,12 +230,9 @@ open class OZMessagesViewController: CollectionViewController {
                 collectionView.contentInset = inset //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
             }
             
-            collectionView.reloadData()
-            
-            for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, _) in self.messagesConfigurations {
-                if autoScrollToBottom {
-                    self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
-                }
+            collectionView.reloadData() { // 1st call
+                return CGPoint(x: self.collectionView.contentOffset.x,
+                               y: self.collectionView.offsetFrame.maxY)
             }
         }
     }
@@ -1487,7 +1484,7 @@ extension OZMessagesViewController {
             let fileImg = fbi.image else { return }
         
         for case .inputBoxFileButtonTintColor(let color, let selected) in messagesConfigurations {
-            //ozFileButton.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
+            fb.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if isForceRed {
                 fb.tintColor = selected
             }
@@ -1501,7 +1498,7 @@ extension OZMessagesViewController {
             let micImg = mbi.image else { return }
         
         for case .inputBoxMicButtonTintColor(let color, let selected) in messagesConfigurations {
-            //ozMicButton.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
+            mb.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if chatState == .voice {
                 mb.tintColor = selected
             }
@@ -1515,7 +1512,7 @@ extension OZMessagesViewController {
             let emotImg = ebi.image else { return }
         
         for case .inputBoxEmoticonButtonTintColor(let color, let selected) in messagesConfigurations {
-            //emoticonButton.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
+            eb.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
             if chatState == .emoticon {
                 eb.tintColor = selected
             }
@@ -1753,19 +1750,23 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             aMessage.isFolded.toggle()
             dataSource.data[index] = aMessage
             collectionView.layoutIfNeeded()
-            
-            if !aMessage.isFolded, cell.frame.maxY > collectionView.contentOffset.y {
-                // Unfolded
-                delay(0.15) {
-                    let rect = cell.frame.inset(by: UIEdgeInsets(top: cell.frame.height * 0.95, left: 10, bottom: 0, right: 10))
-                    self.collectionView.scrollRectToVisible(rect, animated: false)
+
+            if let dele = self.delegate,
+                dele.messageCellLongMessageButtonTapped(cell: cell, view: view, isFolded: aMessage.isFolded) {
+                
+                if !aMessage.isFolded, cell.frame.maxY > collectionView.contentOffset.y {
+                    // Unfolded
+                    delay(0.15) {
+                        let rect = cell.frame.inset(by: UIEdgeInsets(top: cell.frame.height * 0.95, left: 10, bottom: 0, right: 10))
+                        self.collectionView.scrollRectToVisible(rect, animated: false)
+                    }
                 }
-            }
-            else if aMessage.isFolded, cell.frame.minY < collectionView.contentOffset.y {
-                // folded
-                delay(0.15) {
-                    let rect = cell.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
-                    self.collectionView.scrollRectToVisible(rect, animated: false)
+                else if aMessage.isFolded, cell.frame.minY < collectionView.contentOffset.y {
+                    // folded
+                    delay(0.15) {
+                        let rect = cell.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+                        self.collectionView.scrollRectToVisible(rect, animated: false)
+                    }
                 }
             }
         }
