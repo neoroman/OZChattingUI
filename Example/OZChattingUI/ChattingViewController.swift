@@ -103,14 +103,7 @@ class ChattingViewController: OZMessagesViewController {
             if trimmed.count > 0 {
                 stopLoading = false
                 rotateLoadingImage(3)
-                send(msg: trimmed)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                    self.dataSource.data.removeAll(where: { $0.content == "Delivered" })
-                    self.send(msg: "Delivered", type: .status, isDeliveredMsg: true) { (id, path) in
-                        // code
-                    }
-                }
+                send(msg: trimmed)                
             }
             ozitv.text.removeAll()
             adjustTextViewHeight(ozitv)

@@ -68,7 +68,13 @@ open class OZMessagesViewController: CollectionViewController {
     var loading = false
     
     public var dataSource = OZMessageDataProvider(data: [])
-    public let animator = OZMessageAnimator()
+    public var animator = Animator() {
+        didSet {
+            if animator is OZMessageAnimator {
+                self.setupDataProvider(newDataSource: OZMessageDataProvider(data: dataSource.data))
+            }
+        }
+    }
     
     private var _messagesConfig: [OZMessagesConfigurationItem] = []
     public var messagesConfigurations: [OZMessagesConfigurationItem] {
@@ -97,7 +103,7 @@ open class OZMessagesViewController: CollectionViewController {
         collectionView.scrollIndicatorInsets = inset
         collectionView.indicatorStyle = .black
         collectionView.showsHorizontalScrollIndicator = false
-        
+        collectionView.alpha = 0.3
         setupDataProvider()
     }
     
@@ -110,9 +116,16 @@ open class OZMessagesViewController: CollectionViewController {
             isChatViewFirstLoaded = true
             dele.messageViewLoaded(isLoaded: isViewLoaded)
             
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+                self.collectionView.alpha = 1.0
+            }) { (complete) in
+                    self.animator = OZMessageAnimator()
+            }
+
             if !isViewLoaded {
                 delay(0.2) {
                     dele.messageViewLoaded(isLoaded: self.isViewLoaded)
+                    self.animator = OZMessageAnimator()
                 }
             }
         }
@@ -332,8 +345,10 @@ open class OZMessagesViewController: CollectionViewController {
         if let newDataSrc = newDataSource {
             dataSource = newDataSrc
         }
-        animator.sourceView = ozInputContainer
-        animator.dataSource = dataSource
+        if let anim = animator as? OZMessageAnimator {
+            anim.sourceView = ozInputContainer
+            anim.dataSource = dataSource
+        }
 
         let visibleFrameInsets = UIEdgeInsets(top: -200, left: 0, bottom: -200, right: 0)
         self.provider = BasicProvider(
@@ -858,7 +873,9 @@ extension OZMessagesViewController {
         guard let text = msg else { return }
 
         DispatchQueue.main.async {
-            self.animator.sendingMessage = true
+            if let anim = self.animator as? OZMessageAnimator {
+                anim.sendingMessage = true
+            }
             let anUserImg = UIImage(named: "nopic")
             var anImgName = ""
             if let piPath = profileIconPath {
@@ -889,7 +906,9 @@ extension OZMessagesViewController {
             }
             self.collectionView.reloadData() //receive
             self.collectionView.scrollTo(edge: .bottom, animated:true)
-            self.animator.sendingMessage = false
+            if let anim = self.animator as? OZMessageAnimator {
+                anim.sendingMessage = false
+            }
         }
     }
 }
@@ -910,12 +929,6 @@ extension OZMessagesViewController: UIScrollViewDelegate {
                 delay(0.5) { // Simulate network request
                     dele.messageAppend { (newMessages) in
                         if newMessages.count > 0 {
-                            if let aMsg = newMessages.first, aMsg.type == .announcement,
-                                aMsg.content == "OZPLACEHOLDER" {
-                                // 테스트를 위한 메세지인 경우 추가 안함 by Henry on 2020.05.07
-                                self.loading = false
-                                return
-                            }
                             self.dataSource.data = newMessages + self.dataSource.data
                             let oldContentHeight = self.collectionView.offsetFrame.maxY - self.collectionView.contentOffset.y
                             self.collectionView.reloadData() { //adding new data

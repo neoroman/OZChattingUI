@@ -736,8 +736,7 @@ open class OZMessageCell: DynamicView {
         if OZMessageCell.sizeForText(message.content, fontName: message.fontName,
                                       fontSize: message.fontSize, maxWidth: textLabel.frame.width - 50,
                                       paddingX: leftPadding(message: message),
-                                      paddingY: message.cellPadding).height > message.foldingMessageMaxHeight,
-            buttonContainer.subviews.count == 0 {
+                                      paddingY: message.cellPadding).height > message.foldingMessageMaxHeight {
             
             for x in buttonContainer.subviews { x.removeFromSuperview() }
             for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {

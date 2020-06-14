@@ -39,7 +39,6 @@
 		BA5F32C02482D7A800FF8E62 /* OZChattingUI2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA5F32BE2482D7A800FF8E62 /* OZChattingUI2.storyboard */; };
 		BA5F32C32482D7EA00FF8E62 /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5F32C12482D7E900FF8E62 /* ChattingViewController.swift */; };
 		BA5F32C42482D7EA00FF8E62 /* BubbleLabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5F32C22482D7E900FF8E62 /* BubbleLabelExtension.swift */; };
-		BA714F06247D0FEA00D7F455 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA714F02247D0FEA00D7F455 /* Main.storyboard */; };
 		BA714F07247D0FEA00D7F455 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA714F04247D0FEA00D7F455 /* LaunchScreen.storyboard */; };
 		BAA31F822488B7D600DE982B /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA31F812488B7D600DE982B /* StartViewController.swift */; };
 		BAA31F852489BEF700DE982B /* CommonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA31F842489BEF700DE982B /* CommonData.swift */; };
@@ -111,7 +110,6 @@
 		BA5F32BF2482D7A800FF8E62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/OZChattingUI2.storyboard; sourceTree = "<group>"; };
 		BA5F32C12482D7E900FF8E62 /* ChattingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChattingViewController.swift; sourceTree = "<group>"; };
 		BA5F32C22482D7E900FF8E62 /* BubbleLabelExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleLabelExtension.swift; sourceTree = "<group>"; };
-		BA714F03247D0FEA00D7F455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BA714F05247D0FEA00D7F455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BAA31F812488B7D600DE982B /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		BAA31F842489BEF700DE982B /* CommonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonData.swift; sourceTree = "<group>"; };
@@ -201,7 +199,6 @@
 			isa = PBXGroup;
 			children = (
 				BA714F04247D0FEA00D7F455 /* LaunchScreen.storyboard */,
-				BA714F02247D0FEA00D7F455 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				BAFE5D8A247CEE5D002B0A4B /* Sound */,
 				607FACD41AFB9204008FA782 /* Info.plist */,
@@ -399,7 +396,6 @@
 				BAFE5DD7247CEE5E002B0A4B /* voicemsBtnRecordStopPress@2x.png in Resources */,
 				BAFE5DD5247CEE5E002B0A4B /* camera@2x.png in Resources */,
 				BA5F32B02482A48B00FF8E62 /* oz1013@2x.png in Resources */,
-				BA714F06247D0FEA00D7F455 /* Main.storyboard in Resources */,
 				BA5F32B72482A48B00FF8E62 /* oz1019@2x.png in Resources */,
 				BAFE5DDC247CEE5E002B0A4B /* addFile@2x.png in Resources */,
 				BAFE5DE1247CEE5E002B0A4B /* voicemsBtnRecordPlayPress@2x.png in Resources */,
@@ -531,14 +527,6 @@
 				BA5F32BF2482D7A800FF8E62 /* Base */,
 			);
 			name = OZChattingUI2.storyboard;
-			sourceTree = "<group>";
-		};
-		BA714F02247D0FEA00D7F455 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BA714F03247D0FEA00D7F455 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		BA714F04247D0FEA00D7F455 /* LaunchScreen.storyboard */ = {
