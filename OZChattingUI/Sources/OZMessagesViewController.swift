@@ -890,6 +890,35 @@ extension OZMessagesViewController: UIScrollViewDelegate {
                     height = rect.height
                 }
             }
+            if let firstMsg = dataSource.data.last, firstMsg.type == .image {
+                let maxWidth = collectionView.contentSize.width
+                var packedImageHeight: CGFloat = 0
+                let cellFrame = OZMessageCell.frameForMessage(firstMsg, containerWidth: maxWidth)
+                var nextFrame = cellFrame
+                for i in 1..<dataSource.data.count {
+                    let index = dataSource.data.count - i
+                    let nextMsg = dataSource.data[index]
+                    if nextMsg.type == firstMsg.type, nextMsg.alignment == firstMsg.alignment {
+                        
+                        let aFrame = OZMessageCell.frameForMessage(nextMsg, containerWidth: maxWidth)
+                        
+                        if nextMsg.alignment == .left && nextFrame.maxX + aFrame.width + 2 < maxWidth {
+                            nextFrame.origin.x += aFrame.width
+                        } else if nextMsg.alignment == .right && nextFrame.minX - aFrame.width - 2 > 0 {
+                            nextFrame.origin.x -= 2 + aFrame.width
+                        } else {
+                            nextFrame.origin.y += aFrame.height
+                            packedImageHeight += aFrame.height
+                        }
+                    }
+                    else {
+                        break
+                    }
+                }
+                if packedImageHeight > height {
+                    height = packedImageHeight
+                }
+            }
         }
         return height
     }

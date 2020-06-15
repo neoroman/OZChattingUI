@@ -301,7 +301,7 @@ class ChattingViewController: OZMessagesViewController {
         var configs = [
             // OZMessageCell
             OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
-            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 90, height: 90), 10, CGSize(width: 800, height: 800)),
+            OZMessagesConfigurationItem.chatImageSize(CGSize(width: 100, height: 100), 10, CGSize(width: 800, height: 800)),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.fontColor(UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1), [.announcement], .none),
             OZMessagesConfigurationItem.cellBackgroundColor(UIColor(white: 204/255, alpha: 1), [.announcement]),
@@ -457,7 +457,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
             imageCell.imageView.layer.masksToBounds = false
             
             let maxWidth = collectionView.contentSize.width
-            let cellFrame = OZMessageCell.frameForMessage(imageCell.message, containerWidth: maxWidth)
+            let cellFrame = cell.frame
             let lastFrame = OZMessageCell.frameForMessage(previousMessage, containerWidth: maxWidth)
             if previousMessage.type == .image,
                 imageCell.message.alignment == previousMessage.alignment {

@@ -68,14 +68,7 @@ open class OZMessageLayout: SimpleLayout {
                         cellFrame.origin.x = 0
                     } else {
                         yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage)
-                    }
-                    
-                    if message.iconImage.count > 0 {
-                        if message.alignment == .left {
-                        }
-                        else if message.alignment == .right {
-                        }
-                    }
+                    }                    
                 } else {
                     yHeight = lastFrame.maxY + message.verticalPaddingBetweenMessage(lastMessage)
                 }
