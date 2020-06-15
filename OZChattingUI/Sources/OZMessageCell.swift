@@ -40,6 +40,9 @@ open class TextMessageCell: OZMessageCell {
             if message.iconImage.count > 0 {
                 iconImage.image = profileImage(path: message.iconImage)
             }
+            else {
+                iconImage.image = nil
+            }
             
             timeLabel.textColor = message.timeFontColor
             timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
@@ -314,6 +317,9 @@ open class ImageMessageCell: OZMessageCell {
             if message.iconImage.count > 0 {
                 iconImage.image = profileImage(path: message.iconImage)
             }
+            else {
+                iconImage.image = nil
+            }
 
             if message.cellOpacity <= 1.0 {
                 for x in self.subviews {
@@ -459,7 +465,10 @@ open class AudioMessageCell: OZMessageCell {
             if message.iconImage.count > 0 {
                 iconImage.image = profileImage(path: message.iconImage)
             }
-            
+            else {
+                iconImage.image = nil
+            }
+
             playImage.image = isPlaying ? pauseImg : playImg
             
             backView.progressColor = message.audioProgressColor
