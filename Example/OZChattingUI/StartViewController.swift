@@ -25,12 +25,20 @@ class StartViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.tableFooterView = UIView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.barTintColor = kMainColor
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         if #available(iOS 11.0, *) {
             navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+            navigationController?.navigationBar.prefersLargeTitles = true
         }
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -38,15 +46,6 @@ class StartViewController: UITableViewController {
 
         title = "OZChattingUI"
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.tableFooterView = UIView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if #available(iOS 11.0, *) {
-            navigationController?.navigationBar.prefersLargeTitles = true
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

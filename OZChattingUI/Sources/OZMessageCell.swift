@@ -186,6 +186,12 @@ open class StatusMessageCell: OZMessageCell {
             seperator.frame.size.height = 1.0
             seperator.center = bounds.center
         }
+        else if message.alignment == .right {
+            textLabel.textAlignment = .right
+        }
+        else if message.alignment == .left {
+            textLabel.textAlignment = .left
+        }
         
         /// Call back to delegate
         if let dele = delegate {

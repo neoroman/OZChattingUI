@@ -26,11 +26,13 @@ class ExampleViewController: OZMessagesViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
+        if !isFromStoryboard {
+            view.backgroundColor = .groupTableViewBackground
+        }
+
         self.delegate = self
         self.messagesConfigurations = addMessageConfiguration()
-
         
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
             self.testChats(vc: self)            
@@ -40,6 +42,14 @@ class ExampleViewController: OZMessagesViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.barTintColor = .red
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.view.backgroundColor = .red
+
         DispatchQueue.main.asyncAfter(deadline: .now()+0.35) {
             if self.isViewLoaded, !self.collectionView.hasReloaded  {
                 self.collectionView.contentInset = UIEdgeInsets(top: 10, left: 12, bottom: 60, right: 12)
@@ -68,7 +78,7 @@ class ExampleViewController: OZMessagesViewController {
             vc.receive(msg: "Viviana joined special event.", type: .deviceStatus, activeType: .campaign, timestamp: aTimestamp-300)
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
-            for i in 0...6 {
+            for i in 1...6 {
                 vc.send(msg: "\(i)", type: .image)
             }
         }
@@ -166,12 +176,12 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
         print("messageCellTapped => index(\(index)), cell(\(cell))")
         
         // Do someting here and callback to OZChattingUI
-        if let aCell = cell as? AudioMessageCell {
-            if let aPath = aCell.message.extra["filePath"] as? String, aPath.count > 0 {
+        if let audioCell = cell as? AudioMessageCell {
+            if let aPath = audioCell.message.extra["filePath"] as? String, aPath.count > 0 {
                 complete(true, aPath)
             }
             else {
-                aCell.preparePlay(file: "")
+                audioCell.preparePlay(file: "")
                 if let aPath = Bundle.main.path(forResource: "test", ofType: "mp3") {
                     DispatchQueue.main.asyncAfter(deadline: .now()+2) {
                         complete(true, aPath)
@@ -179,14 +189,14 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                 }
             }
         }
-        else if let aCell = cell as? ImageMessageCell {
-            if aCell.message.type == .emoticon {
+        else if let imageCell = cell as? ImageMessageCell {
+            if imageCell.message.type == .emoticon {
                 // It's emoticon
                 return
             }
-            selectedImage = aCell.imageView.image
+            selectedImage = imageCell.imageView.image
             makeGalleryItemsFromAllMessages()
-            showGalleryImageViewer(identifier: aCell.message.identifier)
+            showGalleryImageViewer(identifier: imageCell.message.identifier)
         }
     }
     
@@ -219,8 +229,11 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage, nextMessage: OZMessage?) {
-        //print("messageCellLayoutSubviews...!")
-        if let imageCell = cell as? ImageMessageCell {
+        
+        if let imageCell = cell as? ImageMessageCell,
+            imageCell.iconImage.image != nil,
+            imageCell.message.usingPackedImages {
+            
             let maxWidth = collectionView.contentSize.width
             let cellFrame = cell.frame
             let lastFrame = OZMessageCell.frameForMessage(previousMessage, containerWidth: maxWidth)
@@ -241,7 +254,11 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
                     imageCell.imageView.frame = imageCell.bounds.inset(by: inset)
                 }
                 else {
+                    imageCell.iconImage.isHidden = true
                 }
+            }
+            else {
+                imageCell.iconImage.isHidden = false
             }
             if let nm = nextMessage, nm.type == .image {
                 imageCell.timeLabel.isHidden = true
@@ -399,10 +416,7 @@ extension ExampleViewController {
             if x.type == .emoticon { continue }
             guard let dataIndex = self.dataSource.data.firstIndex(of: x) else { continue }
             
-            if x.content.hasPrefix("/") {
-                makeGalleryItems(path: x.content, data: x)
-            }
-            else if let imgCell = self.collectionView.cell(at: dataIndex) as? ImageMessageCell,
+            if let imgCell = self.collectionView.cell(at: dataIndex) as? ImageMessageCell,
                 x.type == .image {
                 
                 makeGalleryItems(cell: imgCell)
@@ -421,25 +435,8 @@ extension ExampleViewController {
         guard !chatImageItems.contains(where: { (a) -> Bool in
             return a.identifier == imgCell.message.identifier
         }) else { return }
-        chatImageItems.append(DataItem(identifier: imgCell.message.identifier, timestamp: imgCell.message.timestamp, imageView: imageView, galleryItem: galleryItem))
-        chatImageItems.sort { (a, b) -> Bool in
-            return a.timestamp < b.timestamp
-        }
-    }
-    func makeGalleryItems(path: String, data: OZMessage) {
-        guard let anImage = UIImage(contentsOfFile: path) else{ return }
-
-        var galleryItem: GalleryItem!
-        galleryItem = GalleryItem.image { $0(anImage) }
         
-        guard !chatImageItems.contains(where: { (a) -> Bool in
-            return a.identifier == data.identifier
-        }) else { return }
-        let anImageView = UIImageView(image: anImage)
-        chatImageItems.append(DataItem(identifier: data.identifier, timestamp: data.timestamp, imageView: anImageView, galleryItem: galleryItem))
-        chatImageItems.sort { (a, b) -> Bool in
-            return a.timestamp < b.timestamp
-        }
+        chatImageItems.append(DataItem(identifier: imgCell.message.identifier, timestamp: imgCell.message.timestamp, imageView: imageView, galleryItem: galleryItem))
     }
     func showGalleryImageViewer(identifier: String) {
         for x in chatImageItems {
@@ -451,16 +448,11 @@ extension ExampleViewController {
     }
     func showGalleryImageViewer(index: Int = 0) {
         
-        var anIndex = index
-        if anIndex == 0, chatImageItems.count > 0 {
-            anIndex = chatImageItems.count - 1
-        }
-        
         let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
-        let headerView = CounterView(frame: frame, currentIndex: anIndex, count: chatImageItems.count)
-        let footerView = CounterView(frame: frame, currentIndex: anIndex, count: chatImageItems.count)
+        let headerView = CounterView(frame: frame, currentIndex: index, count: chatImageItems.count)
+        let footerView = CounterView(frame: frame, currentIndex: index, count: chatImageItems.count)
         
-        let galleryViewController = GalleryViewController(startIndex: anIndex, itemsDataSource: self, itemsDelegate: self, displacedViewsDataSource: self, configuration: galleryConfiguration())
+        let galleryViewController = GalleryViewController(startIndex: index, itemsDataSource: self, itemsDelegate: self, displacedViewsDataSource: self, configuration: galleryConfiguration())
         galleryViewController.headerView = headerView
         galleryViewController.footerView = footerView
         galleryVC = galleryViewController

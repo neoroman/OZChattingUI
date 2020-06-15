@@ -424,17 +424,16 @@ public class OZMessage: Equatable {
 
     public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
         if type == .image && previousMessage.type == .image {
-            if iconImage.count > 0 {
+            if iconImage.count > 0, !usingPackedImages {
                 return 2 + previousMessage.iconSize / 2
             }
             else {
                 return 2
             }
         }
-        if fromCurrentUser {
-            if previousMessage.iconImage.count > 0 {
-                return previousMessage.iconSize / 2
-            }
+        if fromCurrentUser, !usingPackedImages,
+            previousMessage.iconImage.count > 0 {
+            return previousMessage.iconSize / 2
         }
         if type == .announcement {
             return 38

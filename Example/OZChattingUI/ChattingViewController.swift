@@ -72,6 +72,14 @@ class ChattingViewController: OZMessagesViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.barTintColor = kMainColor
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.view.backgroundColor = kMainColor
+
         DispatchQueue.main.asyncAfter(deadline: .now()+0.35) {
             if self.isViewLoaded, !self.collectionView.hasReloaded {
                 self.collectionView.contentInset = UIEdgeInsets(top: 10, left: 12, bottom: 60, right: 12)
@@ -641,10 +649,7 @@ extension ChattingViewController {
             if x.type == .emoticon { continue }
             guard let dataIndex = self.dataSource.data.firstIndex(of: x) else { continue }
             
-            if x.content.hasPrefix("/") {
-                makeGalleryItems(path: x.content, data: x)
-            }
-            else if let imgCell = self.collectionView.cell(at: dataIndex) as? ImageMessageCell,
+            if let imgCell = self.collectionView.cell(at: dataIndex) as? ImageMessageCell,
                 x.type == .image {
                 
                 makeGalleryItems(cell: imgCell)
@@ -663,25 +668,8 @@ extension ChattingViewController {
         guard !chatImageItems.contains(where: { (a) -> Bool in
             return a.identifier == imgCell.message.identifier
         }) else { return }
-        chatImageItems.append(DataItem(identifier: imgCell.message.identifier, timestamp: imgCell.message.timestamp, imageView: imageView, galleryItem: galleryItem))
-        chatImageItems.sort { (a, b) -> Bool in
-            return a.timestamp < b.timestamp
-        }
-    }
-    func makeGalleryItems(path: String, data: OZMessage) {
-        guard let anImage = UIImage(contentsOfFile: path) else{ return }
-
-        var galleryItem: GalleryItem!
-        galleryItem = GalleryItem.image { $0(anImage) }
         
-        guard !chatImageItems.contains(where: { (a) -> Bool in
-            return a.identifier == data.identifier
-        }) else { return }
-        let anImageView = UIImageView(image: anImage)
-        chatImageItems.append(DataItem(identifier: data.identifier, timestamp: data.timestamp, imageView: anImageView, galleryItem: galleryItem))
-        chatImageItems.sort { (a, b) -> Bool in
-            return a.timestamp < b.timestamp
-        }
+        chatImageItems.append(DataItem(identifier: imgCell.message.identifier, timestamp: imgCell.message.timestamp, imageView: imageView, galleryItem: galleryItem))
     }
     func showGalleryImageViewer(identifier: String) {
         for x in chatImageItems {
@@ -693,16 +681,11 @@ extension ChattingViewController {
     }
     func showGalleryImageViewer(index: Int = 0) {
         
-        var anIndex = index
-        if anIndex == 0, chatImageItems.count > 0 {
-            anIndex = chatImageItems.count - 1
-        }
-        
         let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
-        let headerView = CounterView(frame: frame, currentIndex: anIndex, count: chatImageItems.count)
-        let footerView = CounterView(frame: frame, currentIndex: anIndex, count: chatImageItems.count)
+        let headerView = CounterView(frame: frame, currentIndex: index, count: chatImageItems.count)
+        let footerView = CounterView(frame: frame, currentIndex: index, count: chatImageItems.count)
         
-        let galleryViewController = GalleryViewController(startIndex: anIndex, itemsDataSource: self, itemsDelegate: self, displacedViewsDataSource: self, configuration: galleryConfiguration())
+        let galleryViewController = GalleryViewController(startIndex: index, itemsDataSource: self, itemsDelegate: self, displacedViewsDataSource: self, configuration: galleryConfiguration())
         galleryViewController.headerView = headerView
         galleryViewController.footerView = footerView
         galleryVC = galleryViewController
