@@ -242,45 +242,58 @@ open class OZMessagesViewController: CollectionViewController {
     
     
     // MARK: - Setup Images in CollectionView
-    fileprivate func setupImageView(imageView: UIImageView, message: OZMessage) -> (String, UIImage?)? {
-        if message.content.count > 0 {
+    fileprivate func setupImageView(path: String) -> UIImage? {
+        if path.count > 0 {
             var image: UIImage? = nil
             
-            if message.content.lowercased().hasPrefix("file"),
-                let anUrl = URL(string: message.content),
+            if path.lowercased().hasPrefix("file"),
+                let anUrl = URL(string: path),
                 FileManager.default.isReadableFile(atPath: anUrl.relativePath),
                 let data = FileManager.default.contents(atPath: anUrl.relativePath),
                 let anImage = UIImage(data: data) {
                 // Local file with fileURL
                 image = anImage
             }
-            else if message.content.hasPrefix("/"),
-                FileManager.default.isReadableFile(atPath: message.content),
-                let data = FileManager.default.contents(atPath: message.content),
+            else if path.hasPrefix("/"),
+                FileManager.default.isReadableFile(atPath: path),
+                let data = FileManager.default.contents(atPath: path),
                 let anImage = UIImage(data: data) {
                 // Local file with relative path
                 image = anImage
             }
             else {
-                image = UIImage(named: message.content)
+                image = UIImage(named: path)
             }
             
-            return (message.identifier, image)
+            return image
         }
         return nil
     }
-    fileprivate func getImage(identifier: String, imageView: UIImageView, message: OZMessage) -> UIImage? {
-        guard let anImage = cachedImages[identifier] else {
-            if let (anID, image) = setupImageView(imageView: imageView, message: message),
-                let anImage = image {
-                    cachedImages[anID] = anImage
-                    return anImage
+    fileprivate func getImage(identifier: String, message: OZMessage) -> UIImage? {
+        guard let cachedImage = cachedImages[identifier] else {
+            if let image = setupImageView(path: message.content) {
+                cachedImages[message.identifier] = image
+                return image
             }
             return nil
         }
-        return anImage
+        return cachedImage
     }
-    
+    fileprivate func getMultipleImages(message: OZMessage) -> [UIImage] {
+        let pathArray = message.content.components(separatedBy: "|")
+        var images: [UIImage] = []
+        for index in 0..<pathArray.count {
+            if let anImage = cachedImages[pathArray[index]] {
+                images.append(anImage)
+            }
+            else if let anImage = setupImageView(path: pathArray[index]) {
+                cachedImages[pathArray[index]] = anImage
+                images.append(anImage)
+            }
+        }
+        return images
+    }
+
     
     // MARK: - Setup CollectionKit DataProvider
     public func setupDataProvider(newDataSource: OZMessageDataProvider? = nil) {
@@ -299,11 +312,34 @@ open class OZMessagesViewController: CollectionViewController {
                 view.imageView.contentMode = .scaleAspectFit
                 view.imageView.image = UIImage(named: data.content)
             }
-            else if let anImage = self.getImage(identifier: data.identifier, imageView: view.imageView, message: data) {
+            else if let anImage = self.getImage(identifier: data.identifier, message: data) {
                 view.imageView.contentMode = .scaleAspectFill
                 view.imageView.image = anImage
                 data.imageSize = anImage.size
             }
+        })
+        let multipleImagesMessageViewSource = ClosureViewSource(viewUpdater: { (view: MultipleImageMessageCell, data: OZMessage, at: Int) in
+            view.delegate = self
+            view.message = data
+            
+            var imageViews: [UIImageView] = []
+            var count: CGFloat = 0
+            for anImage in self.getMultipleImages(message: data) {
+                let anImageView = UIImageView()
+                anImageView.contentMode = .scaleAspectFill
+                anImageView.image = anImage
+                imageViews.append(anImageView)
+                count += 1
+            }
+            view.imageViews = imageViews
+            
+            let rows: CGFloat = count / 3 + 1
+            let height = max(data.cellHeight, data.chatImageSize.height) * rows
+            var paddingX = data.alignment == .left ? data.cellLeftPadding : data.cellPadding
+            if data.alignment == .right {
+                paddingX = data.cellRightPadding
+            }
+            data.imageSize = CGSize(width: self.collectionView.contentSize.width - paddingX, height: height)
         })
         let deviceStatusViewSource = ClosureViewSource(viewUpdater: { (view: IncomingStatusMessageCell, data: OZMessage, at: Int) in
             view.delegate = self
@@ -335,6 +371,8 @@ open class OZMessagesViewController: CollectionViewController {
                     return deviceStatusViewSource
                 case .mp3, .voice:
                     return audioViewSource
+                case .multipleImages:
+                    return multipleImagesMessageViewSource
                 default:
                     return statusMessageViewSource
                 }
@@ -746,6 +784,9 @@ extension OZMessagesViewController {
             //self.animator.sendingMessage = true
             if type == .image {
                 sendingMsg = OZMessage(true, image: text, iconImage: anImgName, config: self.messagesConfigurations)
+            }
+            else if type == .multipleImages {
+                sendingMsg = OZMessage(true, multipleImages: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
             else if type == .emoticon {
                 sendingMsg = OZMessage(true, emoticon: text, iconImage: anImgName, config: self.messagesConfigurations)

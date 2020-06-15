@@ -314,7 +314,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
             OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .center, .left),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
-            OZMessagesConfigurationItem.usingPackedImages(true, true),
+            OZMessagesConfigurationItem.usingPackedImages(true, false),
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),
@@ -453,60 +453,90 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
             let imageCell = cell as? ImageMessageCell,
             imageCell.message.usingPackedImages {
             
+            /*
+            let cornerRadius: CGFloat = 10
+            
             imageCell.imageView.layer.cornerRadius = 0
             imageCell.imageView.layer.masksToBounds = false
             
             let maxWidth = collectionView.contentSize.width
-            let cellFrame = cell.frame
-            let lastFrame = OZMessageCell.frameForMessage(previousMessage, containerWidth: maxWidth)
+            var nextFrame = CGRect.zero
+            if let nm = nextMessage {
+                nextFrame = OZMessageCell.frameForMessage(nm, containerWidth: maxWidth)
+            }
+            
             if previousMessage.type == .image,
                 imageCell.message.alignment == previousMessage.alignment {
                 
                 if let nm = nextMessage,
-                    imageCell.message.alignment != nm.alignment {
-                    if imageCell.message.alignment == .left,
-                        lastFrame.maxX + cellFrame.width + 2 < maxWidth {
-                        let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
-                                                     byRoundingCorners: [.topRight],
-                                                     cornerRadii: CGSize(width: 10, height: 10))
+                    (imageCell.message.alignment != nm.alignment || imageCell.message.type != nm.type) {
+                    // 다음 메세지가 align이 다르거나 타입이 다른 경우
+                    let maskPath1 = UIBezierPath(
+                        roundedRect: imageCell.imageView.bounds,
+                        byRoundingCorners: imageCell.message.alignment == .right ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight],
+                        cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+                    
+                    let maskLayer1 = CAShapeLayer()
+                    maskLayer1.frame = imageCell.imageView.bounds
+                    maskLayer1.path = maskPath1.cgPath
+                    imageCell.imageView.layer.mask = maskLayer1
+                }
+                else if imageCell.message.alignment == .left {
+                    if cell.frame.minX < cell.frame.width {
+                        let maskPath1 = UIBezierPath(
+                            roundedRect: imageCell.imageView.bounds,
+                            byRoundingCorners: [.bottomLeft],
+                            cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+                        
                         let maskLayer1 = CAShapeLayer()
                         maskLayer1.frame = imageCell.imageView.bounds
                         maskLayer1.path = maskPath1.cgPath
                         imageCell.imageView.layer.mask = maskLayer1
-                    } else if imageCell.message.alignment == .right && lastFrame.minX - cellFrame.width - 2 > 0 {
-                        let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
-                                                     byRoundingCorners: [.topLeft],
-                                                     cornerRadii: CGSize(width: 10, height: 10))
+                    }
+                    else if cell.frame.maxX + nextFrame.width > maxWidth {
+                        let maskPath1 = UIBezierPath(
+                            roundedRect: imageCell.imageView.bounds,
+                            byRoundingCorners: [.topRight],
+                            cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+                        
                         let maskLayer1 = CAShapeLayer()
                         maskLayer1.frame = imageCell.imageView.bounds
                         maskLayer1.path = maskPath1.cgPath
                         imageCell.imageView.layer.mask = maskLayer1
                     }
                 }
-                else {
-                    if imageCell.message.alignment == .left {
-                        let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
-                                                     byRoundingCorners: [.bottomLeft, .topLeft],
-                            cornerRadii: CGSize(width: 10, height: 10))
+                else if imageCell.message.alignment == .right {
+                    if cell.frame.maxX > maxWidth - cell.frame.width {
+                        let maskPath1 = UIBezierPath(
+                            roundedRect: imageCell.imageView.bounds,
+                            byRoundingCorners: [.bottomRight],
+                            cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+                        
                         let maskLayer1 = CAShapeLayer()
                         maskLayer1.frame = imageCell.imageView.bounds
                         maskLayer1.path = maskPath1.cgPath
                         imageCell.imageView.layer.mask = maskLayer1
-                    } else if imageCell.message.alignment == .right {
-                        let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
-                                                     byRoundingCorners: [.bottomRight, .topRight],
-                            cornerRadii: CGSize(width: 10, height: 10))
+                    }
+                    else if cell.frame.minX - nextFrame.width < 0 {
+                        let maskPath1 = UIBezierPath(
+                            roundedRect: imageCell.imageView.bounds,
+                            byRoundingCorners: [.topLeft],
+                            cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+                        
                         let maskLayer1 = CAShapeLayer()
                         maskLayer1.frame = imageCell.imageView.bounds
                         maskLayer1.path = maskPath1.cgPath
                         imageCell.imageView.layer.mask = maskLayer1
                     }
                 }
-            } else {
+            }
+            else {
                 // first image
-                let maskPath1 = UIBezierPath(roundedRect: imageCell.imageView.bounds,
-                                             byRoundingCorners: imageCell.message.alignment == .left ? [.topLeft] : [.topRight],
-                    cornerRadii: CGSize(width: 10, height: 10))
+                let maskPath1 = UIBezierPath(
+                    roundedRect: imageCell.imageView.bounds,
+                    byRoundingCorners: imageCell.message.alignment == .left ? [.topLeft] : [.topRight],
+                    cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+                
                 let maskLayer1 = CAShapeLayer()
                 maskLayer1.frame = imageCell.imageView.bounds
                 maskLayer1.path = maskPath1.cgPath
@@ -518,6 +548,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
             else {
                 imageCell.timeLabel.isHidden = false
             }
+             */
         }
     }
     
@@ -615,7 +646,7 @@ extension ChattingViewController: SelectPhotoDelegate {
     func sendImageData(_ paths: [URL]) {
         self.imagePaths = paths
         guard let imagePaths = imagePaths else { return }
-        
+        /*
         for i in 0..<imagePaths.count {
             let imagePath = imagePaths[i].absoluteString
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -623,6 +654,15 @@ extension ChattingViewController: SelectPhotoDelegate {
                     print("senddd: \(id), \(content)")
                 }
             }
+        }
+         */
+        var iPaths: [String] = []
+        for x in imagePaths {
+            iPaths.append(x.relativePath)
+        }
+        let joinedPath = iPaths.joined(separator: "|")
+        self.send(msg: joinedPath, type: .multipleImages, isDeliveredMsg: false) { (id, path) in
+            //code
         }
     }
 }

@@ -40,6 +40,7 @@ public enum OZMessageType: Int {
     case announcement
     case status
     case image
+    case multipleImages
     case deviceStatus
     case mp3
     case voice
@@ -89,11 +90,13 @@ public class OZMessage: Equatable {
     public var extra: [String: Any] = [:] // JSON?
     internal var imageSize: CGSize = .zero
     
+    // MARK: - Dummy init
     public init() {
         self.identifier = ""
         self.type = .UNKNOWN
     }
     
+    // MARK: - Text init
     public init(_ fromCurrentUser: Bool, content: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
         if fromCurrentUser {
@@ -108,6 +111,7 @@ public class OZMessage: Equatable {
         setupConfigurations(config: config)
         self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
+    // MARK: - Emoticon init
     public init(_ fromCurrentUser: Bool, emoticon: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
         if fromCurrentUser {
@@ -122,6 +126,7 @@ public class OZMessage: Equatable {
         setupConfigurations(config: config)
         self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
+    // MARK: - Status(text like `Delivered`) init
     public init(_ fromCurrentUser: Bool, status: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
         if fromCurrentUser {
@@ -136,6 +141,7 @@ public class OZMessage: Equatable {
         setupConfigurations(config: config)
         self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
+    // MARK: - Image init
     public init(_ fromCurrentUser: Bool, image: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
         if fromCurrentUser {
@@ -150,6 +156,22 @@ public class OZMessage: Equatable {
         setupConfigurations(config: config)
         self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
+    // MARK: - Multiple image init
+    public init(_ fromCurrentUser: Bool, multipleImages: String, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
+        self.fromCurrentUser = fromCurrentUser
+        if fromCurrentUser {
+            self.alignment = .right
+        }
+        else {
+            self.alignment = .left
+        }
+        self.type = .multipleImages
+        self.content = multipleImages
+        
+        setupConfigurations(config: config)
+        self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
+    }
+    // MARK: - Voice init
     public init(_ fromCurrentUser: Bool, voice: String, duration: Int = 0, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
         if fromCurrentUser {
@@ -165,6 +187,7 @@ public class OZMessage: Equatable {
         setupConfigurations(config: config)
         self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
+    // MARK: - MP3 init
     public init(_ fromCurrentUser: Bool, mp3: String, duration: Int = 0, timestamp: Int = 0, iconImage: String? = nil, config: [OZMessagesConfigurationItem]? = nil) {
         self.fromCurrentUser = fromCurrentUser
         if fromCurrentUser {
@@ -180,6 +203,7 @@ public class OZMessage: Equatable {
         setupConfigurations(config: config)
         self.initWithUserProfileAndTimestamp(fromCurrentUser, tm: timestamp, img: iconImage)
     }
+    // MARK: - Announcement(such as date seperator) init
     public init(announcement: String, timestamp: Int = 0, config: [OZMessagesConfigurationItem]? = nil) {
         self.type = .announcement
         self.content = announcement
@@ -188,6 +212,7 @@ public class OZMessage: Equatable {
 
         setupConfigurations(config: config)
     }
+    // MARK: - Device status init
     public init(deviceStatus: String, statusType: OZMessageDeviceType? = .call, iconNamed: String? = "", timestamp: Int = 0, config: [OZMessagesConfigurationItem]? = nil) {
         self.type = .deviceStatus
         self.content = deviceStatus
@@ -199,6 +224,7 @@ public class OZMessage: Equatable {
         setupConfigurations(config: config)
     }
     
+    // MARK: - Init Helpers
     private func initWithUserProfileAndTimestamp(_ fromCurrentUser: Bool, tm: Int, img: String?) {
         self.iconImage = ""
         if let anImg = img {
@@ -207,7 +233,6 @@ public class OZMessage: Equatable {
         if tm == 0 { self.timestamp = Int(Date().timeIntervalSince1970) }
         else { self.timestamp = tm }
     }
-    
     private func checkUserType(_ userType: OZMessagesUserSideConfigType) -> Bool {
         if fromCurrentUser, userType == .fromCurrent {
             return true
@@ -221,6 +246,7 @@ public class OZMessage: Equatable {
         return false
     }
     
+    // MARK: - Setup Configurations
     private func setupConfigurations(config: [OZMessagesConfigurationItem]?) {
         var configItems: [OZMessagesConfigurationItem] = OZChattingDefaultConfiguration.defaulMessageConfiguration()
         if let configList = config {
@@ -422,6 +448,7 @@ public class OZMessage: Equatable {
     public var usingPackedImages: Bool = true
     public var usingPackedImagesAsStrictSize: Bool = false
 
+    // MARK: - Vertical Padding Between Messages
     public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
         if type == .image && previousMessage.type == .image {
             if iconImage.count > 0, !usingPackedImages {

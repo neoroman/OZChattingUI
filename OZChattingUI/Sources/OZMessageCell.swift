@@ -12,6 +12,7 @@ import NVActivityIndicatorView
 
 public var kTextFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
 
+// MARK: - TextMessageCell
 open class TextMessageCell: OZMessageCell {
     public var textLabel = OZBubbleLabel()
     public var iconImage = UIImageView()
@@ -21,9 +22,13 @@ open class TextMessageCell: OZMessageCell {
 
     override public var message: OZMessage! {
         didSet {
-            textLabel.attributedText = NSAttributedString(string: message.content, attributes: [ NSAttributedString.Key.font: kTextFont as Any ])
+            var textFont = kTextFont
+            if message.fontName.count > 0, message.fontSize > 0 {
+                textFont = UIFont(name: message.fontName, size: message.fontSize)
+            }
+            textLabel.attributedText = NSAttributedString(string: message.content, attributes: [ NSAttributedString.Key.font: textFont as Any ])
             textLabel.textColor = message.textColor
-            textLabel.font = UIFont(name: message.fontName, size: message.fontSize)
+            textLabel.font = textFont
             if message.alignment == .left {
                 textLabel.incomingColor = message.bubbleColor
                 textLabel.isIncoming = true
@@ -134,7 +139,7 @@ open class TextMessageCell: OZMessageCell {
     }
 }
 
-
+// MARK: - StatusMessageCell
 open class StatusMessageCell: OZMessageCell {
     var textLabel = UILabel()
     var seperator = UIImageView()
@@ -203,6 +208,7 @@ open class StatusMessageCell: OZMessageCell {
     }
 }
 
+// MARK: - IncomingStatusMessageCell
 open class IncomingStatusMessageCell: OZMessageCell {
     var textLabel = UILabel()
     var iconImage = UIImageView()
@@ -289,6 +295,7 @@ open class IncomingStatusMessageCell: OZMessageCell {
     }
 }
 
+// MARK: - ImageMessageCell
 open class ImageMessageCell: OZMessageCell {
     open var imageView = UIImageView()  /// Set from outsize of cell, eg. `setupDataProvider`
     public var iconImage = UIImageView()
@@ -357,7 +364,6 @@ open class ImageMessageCell: OZMessageCell {
 
         if iconImage.image != nil {
             iconImage.isHidden = false
-            
         }
         else {
             iconImage.isHidden = true
@@ -398,6 +404,151 @@ open class ImageMessageCell: OZMessageCell {
     }
 }
 
+// MARK: - MultipleImageMessageCell
+open class MultipleImageMessageCell: OZMessageCell {
+    open var imageContainer = UIView()
+    open var imageViews: [UIImageView] = [] {
+        didSet {
+            for x in imageContainer.subviews {
+                x.removeFromSuperview()
+            }
+            let count: CGFloat = CGFloat(imageViews.count)
+            let rows: CGFloat = count / 3 + 1
+            let maxWidth = max(imageContainer.bounds.width, message.imageSize.width)
+            let maxHeight = max(imageContainer.bounds.height, message.imageSize.height)
+            let size = CGSize(width: maxWidth / 3 - 2, height: maxHeight / rows - 2)
+            var lastFrame = CGRect.zero
+            for i in 0..<imageViews.count {
+                var yHeight: CGFloat = 0
+                var xOffset: CGFloat = 0
+                if lastFrame.maxX + size.width + 2 <= maxWidth {
+                    yHeight = lastFrame.minY
+                    xOffset = lastFrame.maxX + 2
+                } else {
+                    yHeight = lastFrame.maxY + 2
+                }
+                imageViews[i].frame.origin.x += xOffset
+                imageViews[i].frame.origin.y = yHeight
+                imageViews[i].frame.size = size
+                
+                if Int(count / 3) * 3 < i {
+                    switch Int(count) % 3 {
+                    case 2:
+                        imageViews[i].frame.size.width = maxWidth / 2
+                        break
+                    case 1:
+                        imageViews[i].frame.size.width = maxWidth
+                        break
+                    default: //3
+                        break
+                    }
+                }
+                lastFrame = imageViews[i].frame
+                imageViews[i].clipsToBounds = true
+                imageContainer.addSubview(imageViews[i])
+            }
+        }
+    }
+    public var iconImage = UIImageView()
+    public var timeLabel = UILabel()
+        
+    override public var message: OZMessage! {
+        didSet {
+            if message.type == .emoticon || message.showTimeLabelForImage {
+                timeLabel.textColor = message.timeFontColor
+                timeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
+                timeLabel.frame.size = CGSize(width: 50, height: 12)
+                if message.timestamp > 0 {
+                    timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
+                }
+                timeLabel.isHidden = false
+            }
+            else {
+                timeLabel.isHidden = true
+            }
+
+            if message.iconImage.count > 0 {
+                iconImage.image = profileImage(path: message.iconImage)
+            }
+            else {
+                iconImage.image = nil
+            }
+
+            if message.cellOpacity <= 1.0 {
+                for x in self.subviews {
+                    x.alpha = message.cellOpacity
+                }
+            }
+            // Callback to delegate
+            if let dele = delegate {
+                dele.messageCellDidSetMessage(cell: self)
+            }
+            setNeedsLayout()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        iconImage.frame = frame
+        addSubview(iconImage)
+        timeLabel.frame = frame
+        addSubview(timeLabel)
+        imageContainer.frame = frame
+        addSubview(imageContainer)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        iconImage.layer.cornerRadius = message.iconSize/2
+        iconImage.layer.masksToBounds = true
+
+        if iconImage.image != nil {
+            iconImage.isHidden = false
+        }
+        else {
+            iconImage.isHidden = true
+        }
+        if message.alignment == .left {
+            let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
+            imageContainer.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
+            
+            iconImage.frame.origin = CGPoint(x: 0, y: -message.iconSize / 2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+        }
+        else {
+            let rightInset = message.iconImage.count > 0 ? message.cellRightPadding : 0
+            imageContainer.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: rightInset))
+            
+            iconImage.frame.origin = CGPoint(x: bounds.maxX-message.iconSize, y: bounds.maxY-message.iconSize/2)
+            iconImage.frame.size = CGSize(width: message.iconSize, height: message.iconSize)
+        }
+        imageContainer.layer.cornerRadius = message.chatImageCornerRadius
+        imageContainer.layer.masksToBounds = true
+
+        if message.type == .emoticon || message.showTimeLabelForImage {
+            let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
+            if message.alignment == .right {
+                timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+                timeLabel.textAlignment = .right
+            }
+            else {
+                timeLabel.frame.origin = CGPoint(x: self.imageContainer.frame.maxX+5, y: timeLabelOriginY)
+                timeLabel.textAlignment = .left
+            }
+        }
+
+        /// Call back to delegate
+        if let dele = delegate {
+            dele.messageCellLayoutSubviews(cell: self)
+        }
+    }
+}
+
+// MARK: - AudioMessageCell
 open class AudioMessageCell: OZMessageCell {
     open var pauseImg = UIImage()
     open var playImg = UIImage()
@@ -621,6 +772,8 @@ open class AudioMessageCell: OZMessageCell {
     }
 }
 
+
+// MARK: - Super OZMessageCell
 open class OZMessageCell: DynamicView {
     
     var delegate: OZMessageCellDelegate?
