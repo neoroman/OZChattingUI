@@ -938,7 +938,7 @@ open class OZMessageCell: DynamicView {
             } else {
                 yHeight = lastFrame.maxY + (lastFrame.maxY > 0 ? spacing : 0)
             }
-            imageViews[i].frame.origin.x += xOffset
+            imageViews[i].frame.origin.x = xOffset
             imageViews[i].frame.origin.y = yHeight
             imageViews[i].frame.size = size
             
