@@ -877,6 +877,9 @@ extension OZMessagesViewController {
             if type == .image {
                 self.dataSource.data.append(OZMessage(false, image: text, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
+            else if type == .multipleImages {
+                 self.dataSource.data.append(OZMessage(false, multipleImages: text, iconImage: anImgName, config: self.messagesConfigurations))
+            }
             else if type == .mp3 {
                 self.dataSource.data.append(OZMessage(false, mp3: text, duration: duration, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
