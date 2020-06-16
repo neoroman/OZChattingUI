@@ -55,7 +55,7 @@ class ChattingViewController: OZMessagesViewController {
 //            expandInputView()
 //        }
         
-        let configuredTestMessages = testMessages.map{ $0.copy(messagesConfigurations) }
+        let configuredTestMessages = testMessages.map{ $0.copy(messagesConfigurations, userSide: nil) }
         self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: configuredTestMessages))
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
             //self.collectionView.scrollTo(edge: .bottom, animated: false)
@@ -385,6 +385,16 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
             makeGalleryItemsFromAllMessages()
             showGalleryImageViewer(identifier: aCell.message.identifier)
         }
+        else if let multiCell = cell as? MultipleImageMessageCell {
+            if let aLast = multiCell.imageViews.last {
+                selectedImage = aLast.image
+                let ids = multiCell.message.content.components(separatedBy: "|")
+                makeGalleryItemsFromAllMessages(multiCell.imageViews, identifiers: ids)
+                if let bLast = ids.last {
+                    showGalleryImageViewer(identifier: bLast)
+                }
+            }
+        }
     }
     
     // View Related
@@ -684,7 +694,7 @@ extension ChattingViewController {
             gvc.present(activityVC, animated: true)
         }
     }
-    func makeGalleryItemsFromAllMessages() {
+    func makeGalleryItemsFromAllMessages(_ imageViews: [UIImageView]? = nil, identifiers: [String]? = nil) {
         for x in self.dataSource.data {
             if x.type == .emoticon { continue }
             guard let dataIndex = self.dataSource.data.firstIndex(of: x) else { continue }
@@ -693,6 +703,19 @@ extension ChattingViewController {
                 x.type == .image {
                 
                 makeGalleryItems(cell: imgCell)
+            }
+        }
+        if let ivs = imageViews, let ids = identifiers, ivs.count == ids.count {
+            let ts = Date().timeIntervalSince1970
+            for i in 0..<ivs.count {
+                var galleryItem: GalleryItem!
+                
+                guard let image = ivs[i].image else { return }
+                galleryItem = GalleryItem.image { $0(image) }
+                
+                guard !chatImageItems.contains(where: {$0.identifier == ids[i]}) else { return }
+                
+                chatImageItems.append(DataItem(identifier: ids[i], timestamp: Int(ts), imageView: ivs[i], galleryItem: galleryItem))
             }
         }
     }
@@ -705,9 +728,7 @@ extension ChattingViewController {
         guard let image = imageView.image else { return }
         galleryItem = GalleryItem.image { $0(image) }
         
-        guard !chatImageItems.contains(where: { (a) -> Bool in
-            return a.identifier == imgCell.message.identifier
-        }) else { return }
+        guard !chatImageItems.contains(where: { $0.identifier == imgCell.message.identifier }) else { return }
         
         chatImageItems.append(DataItem(identifier: imgCell.message.identifier, timestamp: imgCell.message.timestamp, imageView: imageView, galleryItem: galleryItem))
     }

@@ -844,21 +844,7 @@ extension OZMessagesViewController {
                 }
 
                 delay(1.0) {
-                    if type == .image {
-                        self.dataSource.data.append(OZMessage(false, image: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
-                    }
-                    else if type == .emoticon {
-                        self.dataSource.data.append(OZMessage(false, emoticon: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
-                    }
-                    else if type == .voice {
-                        self.dataSource.data.append(OZMessage(false, voice: text, duration: 0, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
-                    }
-                    else if type == .mp3 {
-                        self.dataSource.data.append(OZMessage(false, mp3: text, duration: 0, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
-                    }
-                    else {
-                        self.dataSource.data.append(OZMessage(false, content: text, timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: self.messagesConfigurations))
-                    }
+                    self.dataSource.data.append(sendingMsg.copy(self.messagesConfigurations, userSide: !sendingMsg.fromCurrentUser, userProfile: anImgName))
                     self.collectionView.reloadData() // send echo (for debugging)
                     self.collectionView.scrollTo(edge: .bottom, animated:true)
                 }

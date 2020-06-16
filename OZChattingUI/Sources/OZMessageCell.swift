@@ -407,48 +407,7 @@ open class ImageMessageCell: OZMessageCell {
 // MARK: - MultipleImageMessageCell
 open class MultipleImageMessageCell: OZMessageCell {
     open var imageContainer = UIView()
-    open var imageViews: [UIImageView] = [] {
-        didSet {
-            for x in imageContainer.subviews {
-                x.removeFromSuperview()
-            }
-            let count: CGFloat = CGFloat(imageViews.count)
-            let rows: CGFloat = count / 3 + 1
-            let maxWidth = max(imageContainer.bounds.width, message.imageSize.width)
-            let maxHeight = max(imageContainer.bounds.height, message.imageSize.height)
-            let size = CGSize(width: maxWidth / 3 - 2, height: maxHeight / rows - 2)
-            var lastFrame = CGRect.zero
-            for i in 0..<imageViews.count {
-                var yHeight: CGFloat = 0
-                var xOffset: CGFloat = 0
-                if lastFrame.maxX + size.width + 2 <= maxWidth {
-                    yHeight = lastFrame.minY
-                    xOffset = lastFrame.maxX + 2
-                } else {
-                    yHeight = lastFrame.maxY + 2
-                }
-                imageViews[i].frame.origin.x += xOffset
-                imageViews[i].frame.origin.y = yHeight
-                imageViews[i].frame.size = size
-                
-                if Int(count / 3) * 3 < i {
-                    switch Int(count) % 3 {
-                    case 2:
-                        imageViews[i].frame.size.width = maxWidth / 2
-                        break
-                    case 1:
-                        imageViews[i].frame.size.width = maxWidth
-                        break
-                    default: //3
-                        break
-                    }
-                }
-                lastFrame = imageViews[i].frame
-                imageViews[i].clipsToBounds = true
-                imageContainer.addSubview(imageViews[i])
-            }
-        }
-    }
+    open var imageViews: [UIImageView] = []
     public var iconImage = UIImageView()
     public var timeLabel = UILabel()
         
@@ -528,6 +487,7 @@ open class MultipleImageMessageCell: OZMessageCell {
         }
         imageContainer.layer.cornerRadius = message.chatImageCornerRadius
         imageContainer.layer.masksToBounds = true
+        imageContainer.backgroundColor = .clear
 
         if message.type == .emoticon || message.showTimeLabelForImage {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
@@ -540,6 +500,9 @@ open class MultipleImageMessageCell: OZMessageCell {
                 timeLabel.textAlignment = .left
             }
         }
+        
+        /// Handling Multiple Images
+        resetFrameOfMultipleImages(bounds: imageContainer.bounds, imageContainer: imageContainer, imageViews: imageViews)
 
         /// Call back to delegate
         if let dele = delegate {
@@ -952,6 +915,51 @@ open class OZMessageCell: DynamicView {
         }
         return leftPadding
     }
+    fileprivate func resetFrameOfMultipleImages(bounds: CGRect, imageContainer: UIView, imageViews: [UIImageView], spacing: CGFloat = 4) {
+        for x in imageContainer.subviews {
+            x.removeFromSuperview()
+        }
+        let count: Int = imageViews.count
+        let rows: Int = count / 3 + (count % 3 == 0 ? 0 : 1)
+        let maxWidth = bounds.width
+        let maxHeight = bounds.height
+        let height: CGFloat = (maxHeight / CGFloat(rows))
+        let size = CGSize(width: maxWidth / (count < 3 ? CGFloat(count) : 3), height: height)
+
+        var lastFrame = CGRect.zero
+        
+        for i in 0..<imageViews.count {
+            var yHeight: CGFloat = 0
+            var xOffset: CGFloat = 0
+
+            if lastFrame.maxX + size.width <= maxWidth + spacing * 2 {
+                yHeight = lastFrame.minY
+                xOffset = lastFrame.maxX + (lastFrame.maxX > 0 ? spacing : 0)
+            } else {
+                yHeight = lastFrame.maxY + (lastFrame.maxY > 0 ? spacing : 0)
+            }
+            imageViews[i].frame.origin.x += xOffset
+            imageViews[i].frame.origin.y = yHeight
+            imageViews[i].frame.size = size
+            
+            if Int(count / 3) * 3 <= i {
+                switch Int(count) % 3 {
+                case 2:
+                    imageViews[i].frame.size.width = maxWidth / 2
+                    break
+                case 1:
+                    imageViews[i].frame.size.width = maxWidth
+                    break
+                default: //3
+                    break
+                }
+            }
+            lastFrame = imageViews[i].frame
+            imageViews[i].layer.cornerRadius = 1.5
+            imageViews[i].layer.masksToBounds = true
+            imageContainer.addSubview(imageViews[i])
+        }
+    }
 
     // MARK: - Helpers from MessageKit
     public static func labelRect(for text: String, font: UIFont, considering maxSize: CGSize) -> CGRect {
@@ -988,6 +996,30 @@ open class OZMessageCell: DynamicView {
                 var eSize = message.chatEmoticonSize
                 if message.iconImage.count > 0 { eSize.width += message.cellRightPadding }
                 return CGRect(origin: CGPoint(x: containerWidth - eSize.width, y: 0), size: eSize)
+            }
+        }
+        else if message.type == .multipleImages {
+            let count = message.content.components(separatedBy: "|").count
+            var size = message.chatImageSize
+            size.width = min(size.width * 3, containerWidth * 0.8)
+            if count > 6 {
+                size.height = max(size.height * 3, message.cellHeight)
+            }
+            else if count > 3 {
+                size.height = max(size.height * 2, message.cellHeight)
+            }
+            else {
+                size.height = max(size.height, message.cellHeight)
+            }
+            if message.alignment == .left {
+                let leftPadding = message.iconImage.count > 0 ? message.cellLeftPadding : message.cellPadding
+                let finalSize = CGSize(width: size.width + leftPadding, height: size.height)
+                return CGRect(origin: CGPoint(x: 0, y: 0), size: finalSize)
+            }
+            else if message.alignment == .right {
+                let rightPadding = message.iconImage.count > 0 ? message.cellRightPadding : message.cellPadding
+                let finalSize = CGSize(width: size.width + rightPadding, height: size.height)
+                return CGRect(origin: CGPoint(x: containerWidth - size.width, y: 0), size: finalSize)
             }
         }
         else if (message.type == .image || message.type == .emoticon),
@@ -1040,7 +1072,7 @@ open class OZMessageCell: DynamicView {
                 if message.iconImage.count > 0 { imageSize.width += message.cellLeftPadding }
                 return CGRect(origin: CGPoint(x: xOrigin, y: 0), size: imageSize)
             }
-            else {
+            else if message.alignment == .right {
                 if message.iconImage.count > 0 { imageSize.width += message.cellRightPadding }
                 return CGRect(origin: CGPoint(x: containerWidth - imageSize.width, y: 0), size: imageSize)
             }
@@ -1055,7 +1087,7 @@ open class OZMessageCell: DynamicView {
                 let size = CGSize(width: 120 + leftPadding, height: message.cellHeight)
                 return CGRect(origin: CGPoint(x: 0, y: 0), size: size)
             }
-            else {
+            else if message.alignment == .right {
                 let rightPadding = message.iconImage.count > 0 ? message.cellRightPadding : message.cellPadding
                 let size = CGSize(width: 120 + rightPadding, height: message.cellHeight)
                 return CGRect(origin: CGPoint(x: containerWidth - size.width, y: 0), size: size)

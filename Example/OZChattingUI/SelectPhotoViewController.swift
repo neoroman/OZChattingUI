@@ -13,6 +13,8 @@ protocol SelectPhotoDelegate: class {
     func sendImageData(_ paths: [URL])
 }
 
+public var maxPhotoSelected = 13
+
 class SelectPhotoViewController: UIViewController {
     
     // MARK: - IBOutlet
@@ -100,8 +102,8 @@ class SelectPhotoViewController: UIViewController {
     }
     
     fileprivate func confirmMax(_ isSelect: Bool) -> Bool {
-        if selectedIndexes.count >= 5 {
-            showToast(controller: self, message: "Can select 5 images max", seconds: 3)
+        if selectedIndexes.count >= maxPhotoSelected {
+            showToast(controller: self, message: "Can select \(maxPhotoSelected) images max", seconds: 3)
             return true
         }
         return false
@@ -193,7 +195,7 @@ extension SelectPhotoViewController: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCollectionViewCell {
-            if selectedIndexes.count < 5 {
+            if selectedIndexes.count < maxPhotoSelected {
                 cell.setSelectedImage(cell.selectButton, num: selectedIndexes.count + 1)
             }
             selectImage(true, index: indexPath.item)

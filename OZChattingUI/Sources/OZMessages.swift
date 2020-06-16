@@ -486,24 +486,30 @@ public class OZMessage: Equatable {
         return 25
     }
     
-    public func copy(_ config: [OZMessagesConfigurationItem]? = nil) -> OZMessage {
+    public func copy(_ config: [OZMessagesConfigurationItem]? = nil, userSide: Bool? = nil, userProfile: String? = nil) -> OZMessage {
+        var aFromCurrentUser = fromCurrentUser
+        if let anUserSide = userSide {
+            aFromCurrentUser = anUserSide
+        }
         switch type {
         case .image:
-            return OZMessage(fromCurrentUser, image: content, config: config ?? nil)
+            return OZMessage(aFromCurrentUser, image: content, iconImage: userProfile ?? nil, config: config ?? nil)
         case .announcement:
             return OZMessage(announcement: content, config: config ?? nil)
         case .text:
-            return OZMessage(fromCurrentUser, content: content, config: config ?? nil)
+            return OZMessage(aFromCurrentUser, content: content, iconImage: userProfile ?? nil, config: config ?? nil)
         case .emoticon:
-            return OZMessage(fromCurrentUser, emoticon: content, config: config ?? nil)
+            return OZMessage(aFromCurrentUser, emoticon: content, iconImage: userProfile ?? nil, config: config ?? nil)
         case .status:
-            return OZMessage(fromCurrentUser, status: content, config: config ?? nil)
+            return OZMessage(aFromCurrentUser, status: content, iconImage: userProfile ?? nil, config: config ?? nil)
         case .deviceStatus:
             return OZMessage(deviceStatus: content, statusType: deviceStatus ?? .call, config: config ?? nil)
         case .mp3:
-            return OZMessage(fromCurrentUser, mp3: content, duration: 0, config: config ?? nil)
+            return OZMessage(aFromCurrentUser, mp3: content, duration: 0, iconImage: userProfile ?? nil, config: config ?? nil)
         case .voice:
-            return OZMessage(fromCurrentUser, voice: content, duration: 0, config: config ?? nil)
+            return OZMessage(aFromCurrentUser, voice: content, duration: 0, iconImage: userProfile ?? nil, config: config ?? nil)
+        case .multipleImages:
+            return OZMessage(aFromCurrentUser, multipleImages: content, iconImage: userProfile ?? nil, config: config ?? nil)
         default:
             return OZMessage()
         }
