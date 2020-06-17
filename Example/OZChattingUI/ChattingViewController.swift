@@ -30,6 +30,8 @@ class ChattingViewController: OZMessagesViewController {
     var imagePaths: [URL]?
     var isHalfOpacity: Bool = false
     var isCustomFrame: Bool = false
+    var receiveTimer: Timer?
+    var receiveCount: Int = 0
     
     // MARK: - ImageViewer
     var galleryVC: GalleryViewController?
@@ -58,7 +60,6 @@ class ChattingViewController: OZMessagesViewController {
         let configuredTestMessages = testMessages.map{ $0.copy(messagesConfigurations, userSide: nil) }
         self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: configuredTestMessages))
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-            //self.collectionView.scrollTo(edge: .bottom, animated: false)
             self.isEchoMode = true
         }
         if self.navigationController != nil {
@@ -66,6 +67,40 @@ class ChattingViewController: OZMessagesViewController {
             item.isOn = false
             item.addTarget(self, action: #selector(switchTapped), for: [.touchDragInside, .touchUpInside])
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: item)
+        }
+        if !isCustomFrame {
+            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+                self.receiveTimer = Timer.scheduledTimer(withTimeInterval: 3.5, repeats: true) { (timer) in
+                    let randomTime = Int(arc4random_uniform(5))
+                    let threshold = self.receiveCount % (randomTime > 0 ? randomTime : 1)
+                    if threshold == 0 {
+                        self.isEchoMode = false
+                        var array: [String] = []
+                        while array.count < randomTime + 3 {
+                            let num = "\(arc4random_uniform(UInt32(randomTime + 3)))"
+                            if !array.contains(num) {
+                                array.append(num)
+                            }
+                        }
+                        if randomTime % 2 == 0 {
+                            self.send(msg: array.joined(separator: "|"), type: .multipleImages, isDeliveredMsg: false) { (id, path) in
+                                self.isEchoMode = true
+                            }
+                        }
+                        else {
+                            self.receive(msg: array.joined(separator: "|"), type: .multipleImages, activeType: nil, duration: 0, timestamp: 0, profileIconPath: nil)
+                            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+                                self.isEchoMode = true
+                            }
+                        }
+                    }
+                    self.receiveCount += 1
+                    
+                    if Double(self.receiveCount) >= Float64.infinity {
+                        self.receiveCount = 0
+                    }
+                }
+            }
         }
     }
     
@@ -85,6 +120,14 @@ class ChattingViewController: OZMessagesViewController {
                 self.collectionView.contentInset = UIEdgeInsets(top: 10, left: 12, bottom: 60, right: 12)
                 self.collectionView.reloadData()
             }
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if let timer = self.receiveTimer {
+            timer.invalidate()
         }
     }
 
@@ -315,6 +358,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .center, .left),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
             OZMessagesConfigurationItem.usingPackedImages(true, false),
+            OZMessagesConfigurationItem.multipleImages(4, 4, #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)),
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),
@@ -438,6 +482,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
                     }
                 }
                 else {
+                    textCell.textLabel.layer.cornerRadius = 0
                     textCell.textLabel.type = .hasOwnDrawing
                     textCell.textLabel.backgroundColor = .clear
                     if textCell.message.alignment == .right {

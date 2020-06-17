@@ -13,7 +13,7 @@ protocol SelectPhotoDelegate: class {
     func sendImageData(_ paths: [URL])
 }
 
-public var maxPhotoSelected = 13
+public var maxPhotoSelected = 25
 
 class SelectPhotoViewController: UIViewController {
     
@@ -128,7 +128,7 @@ class SelectPhotoViewController: UIViewController {
     }
     
     fileprivate func storeToTemporaryDirectory(_ selectImage: UIImage, completion: @escaping (_ imagePath: URL?, _ error: Error?) -> Void) {
-        guard let data = selectImage.jpegData(compressionQuality: 1.0) else { return }
+        guard let data = selectImage.jpegData(compressionQuality: 0.5) else { return }
         
         let timestamp = Int(Date().timeIntervalSince1970 + Double(arc4random_uniform(500)))
         let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())

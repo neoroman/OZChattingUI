@@ -835,15 +835,15 @@ extension OZMessagesViewController {
                 }
             }
             
-            if self.isEchoMode, type.isEchoEnable() {
-                var anImgName = ""
-                for case .profileIconName(let name, _, let userType) in self.messagesConfigurations {
-                    if userType == .fromOther {
-                        anImgName = name
+            delay(1.0) {
+                if self.isEchoMode, type.isEchoEnable() {
+                    var anImgName = ""
+                    for case .profileIconName(let name, _, let userType) in self.messagesConfigurations {
+                        if userType == .fromOther {
+                            anImgName = name
+                        }
                     }
-                }
-
-                delay(1.0) {
+                    
                     self.dataSource.data.append(sendingMsg.copy(self.messagesConfigurations, userSide: !sendingMsg.fromCurrentUser, userProfile: anImgName))
                     self.collectionView.reloadData() // send echo (for debugging)
                     self.collectionView.scrollTo(edge: .bottom, animated:true)

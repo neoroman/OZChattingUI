@@ -205,7 +205,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), .fromOther),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 100, height: 100), 7, CGSize(width: 400, height: 400)),
             OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
-            OZMessagesConfigurationItem.multipleImages(4, 2, .clear),
+            OZMessagesConfigurationItem.multipleImages(4, 1, .clear),
             OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 50, height: 50)),
             OZMessagesConfigurationItem.cellBackgroundColor(.clear, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellBackgroundColor(.white, [.announcement]),

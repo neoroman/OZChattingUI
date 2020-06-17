@@ -960,7 +960,7 @@ open class OZMessageCell: DynamicView {
             
             let leftover = count - (i + 1)
             var threshold = count % 2 == 0 ? 4 : 5
-            if count == 8 {
+            if count == 8 || count == 14 {
                 threshold = 3
             }
             if count % 3 != 0,
@@ -1021,10 +1021,10 @@ open class OZMessageCell: DynamicView {
             var size = message.chatImageSize
             size.width = min(size.width * 3, containerWidth * 0.8)
             if count > 6 {
-                size.height = max(size.height * 3, message.cellHeight * 3)
+                size.height = max(size.height * 3, message.cellHeight * 2)
             }
             else if count > 3 {
-                size.height = max(size.height * 2, message.cellHeight * 2)
+                size.height = max(size.height * 2, message.cellHeight)
             }
             else {
                 size.height = max(size.height, message.cellHeight)
