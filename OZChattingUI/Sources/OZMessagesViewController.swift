@@ -381,12 +381,12 @@ open class OZMessagesViewController: CollectionViewController {
             animator: animator,
             // MARK: ******** Cell Tap Handler here *******
             tapHandler: { [weak self] context in
-                //self?.cellTapped(data: context.data, view: context.view) // Not Available, unless context generic understood by Henry on 2020.05.06 => error as 'Generic parameter 'Data' could not be inferred'
-                self?.cellTapped(context: context) // Not Available, unless context generic understood by Henry on 2020.05.06
-                
-                let aMessage = context.data
-                
                 if let dele = self?.delegate, let ozCell = context.view as? OZMessageCell {
+                    //self?.cellTapped(data: context.data, view: context.view) // Not Available, unless context generic understood by Henry on 2020.05.06 => error as 'Generic parameter 'Data' could not be inferred'
+                    self?.cellTapped(context: context) // Not Available, unless context generic understood by Henry on 2020.05.06
+                    
+                    let aMessage = context.data
+                    
                     dele.messageCellTapped(cell: ozCell, index: context.index) { (success, path) in
                         if success {
                             if let cell = ozCell as? AudioMessageCell,
@@ -1782,7 +1782,7 @@ extension OZMessagesViewController: UIGestureRecognizerDelegate {
 
 
 extension OZMessagesViewController: OZMessageCellDelegate {
-    func messageCellDidSetMessage(cell: OZMessageCell) {
+    func cellDidSetMessage(cell: OZMessageCell) {
         if let dele = delegate {
             if let currentMessageIndex = dataSource.data.firstIndex(of: cell.message),
                 currentMessageIndex - 1 >= 0 {
@@ -1794,7 +1794,7 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             }
         }
     }
-    func messageCellLayoutSubviews(cell: OZMessageCell) {
+    func cellLayoutSubviews(cell: OZMessageCell) {
         if let dele = delegate {
             if let currentMessageIndex = dataSource.data.firstIndex(of: cell.message),
                 currentMessageIndex - 1 >= 0 {
@@ -1810,7 +1810,7 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             }
         }
     }
-    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] {
+    func cellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] {
         var isUsingFold = false
         for case .usingLongMessageFolding(let yesOrNo, _, _, _, _) in messagesConfigurations {
             isUsingFold = yesOrNo
@@ -1822,7 +1822,7 @@ extension OZMessagesViewController: OZMessageCellDelegate {
         }
         return [(UIButton(), .none)]
     }
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) {
+    func cellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) {
         /// Long Message Folding Options
         if let aMessage = cell.message,
             aMessage.usingFoldingOption, aMessage.type == .text,
@@ -1851,6 +1851,12 @@ extension OZMessagesViewController: OZMessageCellDelegate {
                 }
             }
         }
-
+    }
+    func cellMultipleImageTapped(cell: OZMessageCell, view: UIImageView, index: Int) {
+        // Multiple image tapped
+        if let dele = self.delegate,
+            dele.messageCellMultipleImageTapped(cell: cell, image: view, indexOfImage: index) {
+            // currently there're nothing to do
+        }
     }
 }

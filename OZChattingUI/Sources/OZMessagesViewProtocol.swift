@@ -10,19 +10,25 @@ import UIKit
 
 // MARK: - OZMessageCellDelegate
 protocol OZMessageCellDelegate {
-    func messageCellDidSetMessage(cell: OZMessageCell)
-    func messageCellLayoutSubviews(cell: OZMessageCell)
+    func cellDidSetMessage(cell: OZMessageCell)
+    func cellLayoutSubviews(cell: OZMessageCell)
     
+    /// Optional from here
+    ///
     /// Long message folding option need buttons to display, so they have own tag {Int}
-    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)]
+    func cellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)]
     
     /// Long message folding and unfolding button action
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView)
+    func cellLongMessageButtonTapped(cell: OZMessageCell, view: UIView)
+    
+    /// Multiple image tapped
+    func cellMultipleImageTapped(cell: OZMessageCell, view: UIImageView, index: Int)
 }
 
 extension OZMessageCellDelegate {
-    func messageCellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] { return [(UIButton(), .none)] }
-    func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) { }
+    func cellLongMessageFoldingButtons(cell: OZMessageCell) -> [(UIButton, OZMessageFoldState)] { return [(UIButton(), .none)] }
+    func cellLongMessageButtonTapped(cell: OZMessageCell, view: UIView) { }
+    func cellMultipleImageTapped(cell: OZMessageCell, view: UIImageView, index: Int) { }
 }
 
 
@@ -36,7 +42,8 @@ public protocol OZMessagesViewControllerDelegate {
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations
 
     
-    // Optional from here
+    /// Optional from here
+    ///
     func messageViewLoaded(isLoaded: Bool)
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage)
     func messageCellLayoutSubviews(cell: OZMessageCell, previousMessage: OZMessage, nextMessage: OZMessage?)
@@ -59,6 +66,9 @@ public protocol OZMessagesViewControllerDelegate {
 
     /// Long message folding and unfolding button action
     func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView, isFolded: Bool) -> Bool
+    
+    /// Multiple image tapped, should return boolean for `internal` processing or not
+    func messageCellMultipleImageTapped(cell: OZMessageCell, image: UIImageView, indexOfImage: Int) -> Bool
 }
 // MARK: - Optional OZMessagesViewControllerDelegate
 public extension OZMessagesViewControllerDelegate {
@@ -75,6 +85,6 @@ public extension OZMessagesViewControllerDelegate {
 
     func messageEmoticonButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
-    
     func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView, isFolded: Bool) -> Bool { return true }
+    func messageCellMultipleImageTapped(cell: OZMessageCell, image: UIImageView, indexOfImage: Int) -> Bool { return true }
 }

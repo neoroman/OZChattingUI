@@ -77,7 +77,7 @@ open class TextMessageCell: OZMessageCell {
             }
             // Callback to delegate
             if let dele = delegate {
-                dele.messageCellDidSetMessage(cell: self)
+                dele.cellDidSetMessage(cell: self)
             }
             setNeedsLayout()
         }
@@ -134,7 +134,7 @@ open class TextMessageCell: OZMessageCell {
 
         /// Call back to delegate
         if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: self)
+            dele.cellLayoutSubviews(cell: self)
         }
     }
 }
@@ -166,7 +166,7 @@ open class StatusMessageCell: OZMessageCell {
             }
             // Callback to delegate
             if let dele = delegate {
-                dele.messageCellDidSetMessage(cell: self)
+                dele.cellDidSetMessage(cell: self)
             }
             setNeedsLayout()
         }
@@ -203,7 +203,7 @@ open class StatusMessageCell: OZMessageCell {
         
         /// Call back to delegate
         if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: self)
+            dele.cellLayoutSubviews(cell: self)
         }
     }
 }
@@ -258,7 +258,7 @@ open class IncomingStatusMessageCell: OZMessageCell {
             }
             // Callback to delegate
             if let dele = delegate {
-                dele.messageCellDidSetMessage(cell: self)
+                dele.cellDidSetMessage(cell: self)
             }
             setNeedsLayout()
         }
@@ -290,7 +290,7 @@ open class IncomingStatusMessageCell: OZMessageCell {
         
         /// Call back to delegate
         if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: self)
+            dele.cellLayoutSubviews(cell: self)
         }
     }
 }
@@ -335,7 +335,7 @@ open class ImageMessageCell: OZMessageCell {
             }
             // Callback to delegate
             if let dele = delegate {
-                dele.messageCellDidSetMessage(cell: self)
+                dele.cellDidSetMessage(cell: self)
             }
             setNeedsLayout()
         }
@@ -399,7 +399,7 @@ open class ImageMessageCell: OZMessageCell {
 
         /// Call back to delegate
         if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: self)
+            dele.cellLayoutSubviews(cell: self)
         }
     }
 }
@@ -440,7 +440,7 @@ open class MultipleImageMessageCell: OZMessageCell {
             }
             // Callback to delegate
             if let dele = delegate {
-                dele.messageCellDidSetMessage(cell: self)
+                dele.cellDidSetMessage(cell: self)
             }
             setNeedsLayout()
         }
@@ -487,7 +487,9 @@ open class MultipleImageMessageCell: OZMessageCell {
         }
         imageContainer.layer.cornerRadius = message.chatImageCornerRadius
         imageContainer.layer.masksToBounds = true
-        imageContainer.backgroundColor = .clear
+        imageContainer.backgroundColor = message.multipleImageBackground
+        imageContainer.layer.borderColor = message.multipleImageBackground.cgColor
+        imageContainer.layer.borderWidth = message.multipleImageBorderWidth
 
         if message.type == .emoticon || message.showTimeLabelForImage {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
@@ -502,11 +504,11 @@ open class MultipleImageMessageCell: OZMessageCell {
         }
         
         /// Handling Multiple Images
-        resetFrameOfMultipleImages(bounds: imageContainer.bounds, imageContainer: imageContainer, imageViews: imageViews)
+        resetFrameOfMultipleImages(bounds: imageContainer.bounds, imageContainer: imageContainer, imageViews: imageViews, spacing: message.multipleImageSpacing)
 
         /// Call back to delegate
         if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: self)
+            dele.cellLayoutSubviews(cell: self)
         }
     }
 }
@@ -611,7 +613,7 @@ open class AudioMessageCell: OZMessageCell {
             }
             // Callback to delegate
             if let dele = delegate {
-                dele.messageCellDidSetMessage(cell: self)
+                dele.cellDidSetMessage(cell: self)
             }
             setNeedsLayout()
         }
@@ -682,7 +684,7 @@ open class AudioMessageCell: OZMessageCell {
 
         /// Call back to delegate
         if let dele = delegate {
-            dele.messageCellLayoutSubviews(cell: self)
+            dele.cellLayoutSubviews(cell: self)
         }
     }
     
@@ -815,7 +817,7 @@ open class OZMessageCell: DynamicView {
                                       paddingY: message.cellPadding).height > message.foldingMessageMaxHeight {
             
             for x in buttonContainer.subviews { x.removeFromSuperview() }
-            for (button, type) in dele.messageCellLongMessageFoldingButtons(cell: self) {
+            for (button, type) in dele.cellLongMessageFoldingButtons(cell: self) {
                 let copiedButton = UIButton(frame: button.frame)
                 for x in 0..<4 {
                     let state = UIControl.State(rawValue: UInt(x))
@@ -840,7 +842,7 @@ open class OZMessageCell: DynamicView {
     }
     @objc fileprivate func longMessageFoldingButtonTapped(_ gesture: UITapGestureRecognizer) {
         if gesture.state == .recognized, let dele = delegate, let aView = gesture.view {
-            dele.messageCellLongMessageButtonTapped(cell: self, view: aView)
+            dele.cellLongMessageButtonTapped(cell: self, view: aView)
         }
     }
     fileprivate func layoutButtonContainer(message: OZMessage, textLabel: OZBubbleLabel, buttonContainer: UIView) {
@@ -915,8 +917,22 @@ open class OZMessageCell: DynamicView {
         }
         return leftPadding
     }
+    @objc fileprivate func multipleImageButtonTapped(_ gesture: UITapGestureRecognizer) {
+        if gesture.state == .recognized, let dele = delegate,
+            let multiCell = self as? MultipleImageMessageCell, let aView = gesture.view as? UIImageView {
+            if let index = multiCell.imageViews.firstIndex(of: aView) {
+                dele.cellMultipleImageTapped(cell: multiCell, view: aView, index: index)
+            }
+            else {
+                dele.cellMultipleImageTapped(cell: multiCell, view: aView, index: 0)
+            }
+        }
+    }
     fileprivate func resetFrameOfMultipleImages(bounds: CGRect, imageContainer: UIView, imageViews: [UIImageView], spacing: CGFloat = 4) {
         for x in imageContainer.subviews {
+            if let gr = x.gestureRecognizers {
+                for y in gr { x.removeGestureRecognizer(y) }
+            }
             x.removeFromSuperview()
         }
         let count: Int = imageViews.count
@@ -942,22 +958,24 @@ open class OZMessageCell: DynamicView {
             imageViews[i].frame.origin.y = yHeight
             imageViews[i].frame.size = size
             
-            if Int(count / 3) * 3 <= i {
-                switch Int(count) % 3 {
-                case 2:
-                    imageViews[i].frame.size.width = maxWidth / 2
-                    break
-                case 1:
-                    imageViews[i].frame.size.width = maxWidth
-                    break
-                default: //3
-                    break
-                }
+            let leftover = count - (i + 1)
+            var threshold = count % 2 == 0 ? 4 : 5
+            if count == 8 {
+                threshold = 3
+            }
+            if count % 3 != 0,
+                (i >= 3 || count == 4),
+                leftover < threshold {
+                imageViews[i].frame.size.width = maxWidth / 2
             }
             lastFrame = imageViews[i].frame
             imageViews[i].layer.cornerRadius = 1.5
             imageViews[i].layer.masksToBounds = true
             imageContainer.addSubview(imageViews[i])
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(multipleImageButtonTapped(_:)))
+            imageViews[i].addGestureRecognizer(tap)
+            imageViews[i].isUserInteractionEnabled = true
         }
     }
 
@@ -1003,10 +1021,10 @@ open class OZMessageCell: DynamicView {
             var size = message.chatImageSize
             size.width = min(size.width * 3, containerWidth * 0.8)
             if count > 6 {
-                size.height = max(size.height * 3, message.cellHeight)
+                size.height = max(size.height * 3, message.cellHeight * 3)
             }
             else if count > 3 {
-                size.height = max(size.height * 2, message.cellHeight)
+                size.height = max(size.height * 2, message.cellHeight * 2)
             }
             else {
                 size.height = max(size.height, message.cellHeight)

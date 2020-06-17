@@ -53,6 +53,10 @@ public enum OZMessagesConfigurationItem {
     /// Default image max bytes in OZMessagesCell
     case chatImageMaxNumberOfBytes(Int)
     
+    /// Multiple image related in OZMessageCell,
+    /// maxHeight = 0 means default, i.e. chatImageSize.height x 3
+    case multipleImages(_ spacing: CGFloat, _ borderWidth: CGFloat, _ backgroundColor: UIColor)
+    
     /// Default emoticon size of messages in OZMessageCell
     case chatEmoticonSize(CGSize)
     
@@ -123,7 +127,7 @@ public enum OZMessagesConfigurationItem {
     case collectionViewEdgeInsets(UIEdgeInsets)
     
     /// CollectionView frame in OZMessageViewController, default `NO`,
-    /// ``visibleRow = 0`` means show all message with scroll
+    /// ``visibleRow = 0`` means show all message with scroll,
     /// ``visibleRow > 0`` means only show given row of messages without scroll
     case customCollectionViewFrame(Bool, _ customRect: CGRect, _ visibleRow: Int)
     
@@ -201,6 +205,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.bubbleBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), .fromOther),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 100, height: 100), 7, CGSize(width: 400, height: 400)),
             OZMessagesConfigurationItem.chatImageMaxNumberOfBytes(16384),
+            OZMessagesConfigurationItem.multipleImages(4, 2, .clear),
             OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 50, height: 50)),
             OZMessagesConfigurationItem.cellBackgroundColor(.clear, OZMessageType.allTypes()),
             OZMessagesConfigurationItem.cellBackgroundColor(.white, [.announcement]),

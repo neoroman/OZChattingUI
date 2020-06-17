@@ -385,16 +385,24 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
             makeGalleryItemsFromAllMessages()
             showGalleryImageViewer(identifier: aCell.message.identifier)
         }
-        else if let multiCell = cell as? MultipleImageMessageCell {
-            if let aLast = multiCell.imageViews.last {
-                selectedImage = aLast.image
-                let ids = multiCell.message.content.components(separatedBy: "|")
-                makeGalleryItemsFromAllMessages(multiCell.imageViews, identifiers: ids)
-                if let bLast = ids.last {
-                    showGalleryImageViewer(identifier: bLast)
-                }
+        else if let multiCell = cell as? MultipleImageMessageCell,
+            let aLast = multiCell.imageViews.last {
+            selectedImage = aLast.image
+            let ids = multiCell.message.content.components(separatedBy: "|")
+            makeGalleryItemsFromAllMessages(multiCell.imageViews, identifiers: ids)
+            if let bLast = ids.last {
+                showGalleryImageViewer(identifier: bLast)
             }
         }
+    }
+    func messageCellMultipleImageTapped(cell: OZMessageCell, image: UIImageView, indexOfImage: Int) -> Bool {
+        if let multiCell = cell as? MultipleImageMessageCell {
+            selectedImage = image.image
+            let ids = multiCell.message.content.components(separatedBy: "|")
+            makeGalleryItemsFromAllMessages(multiCell.imageViews, identifiers: ids)
+            showGalleryImageViewer(identifier: ids[indexOfImage])
+        }
+        return true
     }
     
     // View Related

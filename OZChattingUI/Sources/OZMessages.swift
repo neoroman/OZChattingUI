@@ -307,6 +307,11 @@ public class OZMessage: Equatable {
                 chatImageSize = displaySize
                 chatImageCornerRadius = radius
                 break
+            case .multipleImages(let spacing, let border, let color):
+                multipleImageBorderWidth = border
+                multipleImageSpacing = spacing
+                multipleImageBackground = color
+                break
             case .fontColor(let color, let types, let userType):
                 if types.contains(type), checkUserType(userType) {
                     textColor = color
@@ -428,6 +433,9 @@ public class OZMessage: Equatable {
     public var iconPadding: CGFloat = 0
     public var iconSize: CGFloat = 0
     public var inputTextFieldFontColor: UIColor = .black
+    public var multipleImageSpacing: CGFloat = 0
+    public var multipleImageBorderWidth: CGFloat = 0
+    public var multipleImageBackground: UIColor = .clear
     public var roundedCornder: Bool = true
     public var scrollToBottomButtonAlpha: CGFloat = 0
     public var scrollToBottomButtonOrigin: CGPoint = .zero
