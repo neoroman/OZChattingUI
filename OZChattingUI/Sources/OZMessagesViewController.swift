@@ -768,7 +768,7 @@ extension OZMessagesViewController {
                    msg: String? = nil,
                    type: OZMessageType = .text,
                    isDeliveredMsg: Bool = false,
-                   isEchoable: Bool? = false,
+                   isEchoable: Bool? = nil,
                    callback: ((_ identifier: String, _ sendingContentPath: String) -> Void)? = nil) {
         guard let text = msg, text.count > 0 else { return }
         

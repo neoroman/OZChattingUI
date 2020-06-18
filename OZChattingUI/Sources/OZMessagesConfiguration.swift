@@ -126,7 +126,7 @@ public enum OZMessagesConfigurationItem {
     /// CollectionView contentInset in OZMessagesViewController
     case collectionViewEdgeInsets(UIEdgeInsets)
     
-    /// CollectionView frame in OZMessageViewController, default `NO`,
+    /// CollectionView frame in OZMessagesViewController, default `NO`,
     /// ``visibleRow = 0`` means show all message with scroll,
     /// ``visibleRow > 0`` means only show given row of messages without scroll
     case customCollectionViewFrame(Bool, _ customRect: CGRect, _ visibleRow: Int)

@@ -395,10 +395,12 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     
     // Data Related
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage) -> Bool {
-        // Delivered message here
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
-            self.dataSource.data.removeAll(where: { $0.content == "Delivered" })
-            self.send(msg: "Delivered", type: .status, isDeliveredMsg: true)
+        if !isCustomFrame {
+            // Delivered message here
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                self.dataSource.data.removeAll(where: { $0.content == "Delivered" })
+                self.send(msg: "Delivered", type: .status, isDeliveredMsg: true)
+            }
         }
         return true
     }
