@@ -40,6 +40,7 @@ open class OZVoiceRecordViewController: UIViewController {
     // Recorder
     public var voiceFilePath: URL?
     public var tempFilePath: URL?
+    public var displayMaxDuration: TimeInterval = 0
     public var recordMaxDuration: TimeInterval = 10
     fileprivate var recordElapsedTime: TimeInterval = 0
     fileprivate var recordedDuration: TimeInterval = 0
@@ -71,7 +72,7 @@ open class OZVoiceRecordViewController: UIViewController {
         
         // Do any additional setup after loading the view.
         // Voice view related
-        voiceTimeLabel.text = ""
+        //voiceTimeLabel.text = ""
         voiceSendButton.setTitle(NSLocalizedString("Send", comment: ""), for: .normal)
         voiceSendButton.setTitleColor(UIColor(white: 153.0 / 255.0, alpha: 1.0), for: .normal)
         voiceSendButton.layer.cornerRadius = voiceSendButton.frame.height / 2
@@ -128,6 +129,7 @@ open class OZVoiceRecordViewController: UIViewController {
                 aTime = 0
             }
             voiceTimeLabel.text = String(format: "%02d:%02d", Int(round(aTime)) / 60, Int(round(aTime)) % 60)
+            showFakeRecordDuration()
             voiceLevelView.startAnimating()
             voiceSendButton.isEnabled = false
         case .stop:
@@ -145,10 +147,21 @@ open class OZVoiceRecordViewController: UIViewController {
             voiceRecordButton.setImage(vpBtnRecord, for: .normal)
             voiceRecordButton.setImage(vpBtnRecordPressed, for: .highlighted)
             voiceTimeLabel.text = ""
+            showFakeRecordDuration()
             voiceSendButton.isEnabled = false
             if let vpv = voiceProgressView {
                 vpv.removeFromSuperview()
                 voiceProgressView = nil
+            }
+        }
+    }
+    func showFakeRecordDuration() {
+        if displayMaxDuration > 0 {
+            if displayMaxDuration < 60 {
+                voiceTimeLabel.text = String(format: "00:%02d", Int(displayMaxDuration))
+            }
+            else {
+                voiceTimeLabel.text = String(format: "%02d:%02d", Int(displayMaxDuration/60), displayMaxDuration)
             }
         }
     }
@@ -349,6 +362,7 @@ extension OZVoiceRecordViewController {
         voiceTimeLabel.text = String(format: "%02d:%02d",
                                      Int(round(aMaxTime)) / 60,
                                      Int(round(aMaxTime)) % 60)
+        showFakeRecordDuration()
     }
     
     func finishRecording(success: Bool) {

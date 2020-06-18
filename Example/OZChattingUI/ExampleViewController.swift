@@ -158,7 +158,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.magenta),
 
             // OZVoiceRecordViewController
-            OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0),
+            OZMessagesConfigurationItem.voiceRecordMaxDuration(14.0, 15),
         ]
         
         if !isFromStoryboard {

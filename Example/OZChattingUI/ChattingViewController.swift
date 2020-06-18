@@ -377,7 +377,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             
             // OZVoiceRecordViewController
-            OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0)
+            OZMessagesConfigurationItem.voiceRecordMaxDuration(12.0, 0)
         ]
         
         if isCustomFrame {

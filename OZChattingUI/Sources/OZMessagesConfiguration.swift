@@ -164,7 +164,7 @@ public enum OZMessagesConfigurationItem {
         
     // ============ OZVoiceRecordViewController ==================
     /// Max duration of voice record in OZVoiceRecordViewController
-    case voiceRecordMaxDuration(TimeInterval)
+    case voiceRecordMaxDuration(TimeInterval, _ displayMaxDuration: Int)
     
 
     // ============ OZEmoticonViewController ==================
@@ -249,7 +249,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.emoticonCurrentPageIndicatorTintColor(UIColor.magenta),
 
             // OZVoiceRecordViewController
-            OZMessagesConfigurationItem.voiceRecordMaxDuration(10.0),
+            OZMessagesConfigurationItem.voiceRecordMaxDuration(10.0, 0),
         ]
         
         for case .inputContainerMinimumHeight(let minHeight) in items {

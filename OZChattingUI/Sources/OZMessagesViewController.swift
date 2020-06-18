@@ -445,12 +445,6 @@ open class OZMessagesViewController: CollectionViewController {
             if let aVoiceContainer = ozVoiceContainer {
                 vc.view.frame = aVoiceContainer.bounds
             }
-            
-            var aDuration: TimeInterval = 12
-            for case .voiceRecordMaxDuration(let duration) in messagesConfigurations {
-                aDuration = duration
-            }
-            vc.recordMaxDuration = aDuration
         }
     }
 
@@ -1373,7 +1367,7 @@ extension OZMessagesViewController {
                     }
                     self.collectionView.frame = bounds
 
-                    for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
+                    for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
                         //inset.bottom = inset.bottom + minTextViewHeight
                         if !isCustomFrame { self.collectionView.contentInset = inset }
                         self.collectionView.reloadData()
@@ -1462,7 +1456,7 @@ extension OZMessagesViewController {
             self.collectionView.frame = bounds
         }) { (comp) in
 
-            for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
+            for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
                 //inset.bottom = inset.bottom + minTextViewHeight
                 if !isCustomFrame { self.collectionView.contentInset = inset }
                 self.collectionView.reloadData()
@@ -1562,6 +1556,15 @@ extension OZMessagesViewController {
         if let dele = delegate,
             dele.messageMicButtonTapped(viewController: self, sender: sender) {
             chatState = .voice
+            if let ozvvc = voiceViewController {
+                var aDuration: TimeInterval = 12
+                for case .voiceRecordMaxDuration(let duration, let displayMax) in messagesConfigurations {
+                    aDuration = duration
+                    ozvvc.displayMaxDuration = TimeInterval(displayMax)
+                }
+                ozvvc.recordMaxDuration = aDuration
+                ozvvc.showFakeRecordDuration()
+            }
         }
     }
 
