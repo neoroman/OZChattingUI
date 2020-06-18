@@ -1370,7 +1370,7 @@ extension OZMessagesViewController {
                     self.collectionView.frame = bounds
 
                     for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
-                        inset.bottom = inset.bottom + minTextViewHeight
+                        //inset.bottom = inset.bottom + minTextViewHeight
                         if !isCustomFrame { self.collectionView.contentInset = inset }
                         self.collectionView.reloadData()
                     }
@@ -1459,7 +1459,7 @@ extension OZMessagesViewController {
         }) { (comp) in
 
             for case .collectionViewEdgeInsets(var inset) in self.messagesConfigurations {
-                inset.bottom = inset.bottom + minTextViewHeight
+                //inset.bottom = inset.bottom + minTextViewHeight
                 if !isCustomFrame { self.collectionView.contentInset = inset }
                 self.collectionView.reloadData()
             }
