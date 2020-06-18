@@ -361,6 +361,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
             OZMessagesConfigurationItem.usingPackedImages(true, false),
             OZMessagesConfigurationItem.multipleImages(4, 4, #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)),
+            OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),

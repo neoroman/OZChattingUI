@@ -392,7 +392,7 @@ public class OZMessage: Equatable {
                 break
             case .usingLongMessageFolding(let yesOrNo, let maxHeight, let size, let foldAlignment, let unfoldAlignment):
                 usingFoldingOption = yesOrNo
-                foldingMessageMaxHeight = maxHeight
+                foldingMessageMaxHeight = maxHeight + (cellPadding * 2)
                 foldingButtonSize = size
                 foldingButtonAlignment = foldAlignment
                 unfoldingButtonAlignment = unfoldAlignment

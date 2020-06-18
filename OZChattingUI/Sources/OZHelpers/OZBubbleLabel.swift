@@ -153,13 +153,15 @@ open class OZBubbleLabel: UILabel {
     }
     
     override open func drawText(in rect: CGRect) {
-        if isIncoming {
-            let insets = UIEdgeInsets.init(top: topInset, left: leftInset + notchInsetX, bottom: bottomInset, right: rightInset - notchInsetX)
-            super.drawText(in: rect.inset(by: insets))
-        }
-        else {
-            let insets = UIEdgeInsets.init(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
-            super.drawText(in: rect.inset(by: insets))
+        if type == .basic {
+            if isIncoming {
+                let insets = UIEdgeInsets.init(top: topInset, left: leftInset + notchInsetX, bottom: bottomInset, right: rightInset - notchInsetX)
+                super.drawText(in: rect.inset(by: insets))
+            }
+            else {
+                let insets = UIEdgeInsets.init(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+                super.drawText(in: rect.inset(by: insets))
+            }
         }
     }
     
