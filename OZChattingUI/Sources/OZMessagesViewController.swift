@@ -782,7 +782,9 @@ extension OZMessagesViewController {
         }
 
         DispatchQueue.main.async {
-            //self.animator.sendingMessage = true
+//            if let ozani = self.animator as? OZMessageAnimator {
+//                ozani.sendingMessage = true
+//            }
             if type == .image {
                 sendingMsg = OZMessage(true, image: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
@@ -817,8 +819,10 @@ extension OZMessagesViewController {
             }
             self.collectionView.reloadData() //send
             self.collectionView.scrollTo(edge: .bottom, animated:true)
-            //self.animator.sendingMessage = false
-            
+            //            if let ozani = self.animator as? OZMessageAnimator {
+            //                ozani.sendingMessage = false
+            //            }
+
             self.resetButtons(false)
 
             if let cb = callback {

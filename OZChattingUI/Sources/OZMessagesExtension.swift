@@ -90,13 +90,14 @@ open class OZMessageAnimator: WobbleAnimator {
     var dataSource: OZMessageDataProvider?
     weak var sourceView: UIView?
     var sendingMessage = false
+    public var isNoAnimation = false
     
     override open func insert(collectionView: CollectionView, view: UIView, at index: Int, frame: CGRect) {
         super.insert(collectionView: collectionView, view: view, at: index, frame: frame)
         guard let messages = dataSource?.data,
             let sourceView = sourceView,
             collectionView.hasReloaded,
-            collectionView.isReloading else { return }
+            collectionView.isReloading, !isNoAnimation else { return }
         if sendingMessage && index == messages.count - 1 {
             // we just sent this message, lets animate it from inputToolbarView to it's position
             view.frame = collectionView.convert(sourceView.bounds, from: sourceView)
