@@ -436,11 +436,14 @@ extension OZVoiceRecordViewController {
         if self.voiceState == .recording {
             if recordElapsedTime < recordMaxDuration {
                 recordElapsedTime += 1
-                let aTime = recordMaxDuration - recordElapsedTime
-                print("OZVoice::: maxDuration(\(recordMaxDuration)), elapsedTime(\(recordElapsedTime)), aTime(\(aTime))")
+                var aTime = recordMaxDuration - recordElapsedTime
                 if aTime >= 0 {
+                    if displayMaxDuration > 0 {
+                        aTime = displayMaxDuration - recordElapsedTime
+                    }
                     voiceTimeLabel.text = String(format: "%02d:%02d", Int(round(aTime)) / 60, Int(round(aTime)) % 60)
                 }
+                print("OZVoice::: maxDuration(\(recordMaxDuration)), elapsedTime(\(recordElapsedTime)), aTime(\(aTime))")
             } else {
                 recordElapsedTime = 0
                 initialTimer()
