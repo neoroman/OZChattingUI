@@ -768,6 +768,7 @@ extension OZMessagesViewController {
                    msg: String? = nil,
                    type: OZMessageType = .text,
                    isDeliveredMsg: Bool = false,
+                   isEchoable: Bool? = false,
                    callback: ((_ identifier: String, _ sendingContentPath: String) -> Void)? = nil) {
         guard let text = msg, text.count > 0 else { return }
         
@@ -836,7 +837,11 @@ extension OZMessagesViewController {
             }
             
             delay(1.0) {
-                if self.isEchoMode, type.isEchoEnable() {
+                var isEchoEnabled = self.isEchoMode
+                if let echo = isEchoable {
+                    isEchoEnabled = echo
+                }
+                if isEchoEnabled, type.isEchoEnable() {
                     var anImgName = ""
                     for case .profileIconName(let name, _, let userType) in self.messagesConfigurations {
                         if userType == .fromOther {
