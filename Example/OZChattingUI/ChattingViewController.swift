@@ -98,7 +98,7 @@ class ChattingViewController: OZMessagesViewController {
                     }
                     self.receiveCount += 1
                     
-                    if Double(self.receiveCount) >= Float64.infinity {
+                    if Double(self.receiveCount) - 100 >= Float64.infinity {
                         self.receiveCount = 0
                     }
                 }
@@ -365,6 +365,7 @@ class ChattingViewController: OZMessagesViewController {
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),
+            OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(false, true),
             OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(kMainColor, kMainColor),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(kMainColor, kMainColor),
@@ -407,7 +408,8 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     }
     
     func messageAppend(complete: @escaping OZChatFetchCompleteBlock) {
-        // code
+        let configuredTestMessages = testMessages.map{ $0.copy(messagesConfigurations, userSide: nil) }
+        complete(configuredTestMessages)
     }
     
     func messageCellTapped(cell: OZMessageCell, index: Int, complete: @escaping OZChatTapCompleteBlock) {

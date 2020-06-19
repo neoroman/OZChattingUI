@@ -122,6 +122,10 @@ public enum OZMessagesConfigurationItem {
     // ============ OZMessagesViewController ==================
     /// Auto scroll to bottom after begin text editting in OZMessagesViewController
     case autoScrollToBottomBeginTextInput(Bool, _ isShowScrollToBottomButton: Bool)
+    
+    /// Auto scroll to bottom while new message arrived in OZMessagesViewController,
+    /// Default is ``YES``, isShowNewBadgeCount = ``NO``
+    case autoScrollToBottomNewMessageArrived(Bool, _ isShowNewBadgeCount: Bool)
         
     /// CollectionView contentInset in OZMessagesViewController
     case collectionViewEdgeInsets(UIEdgeInsets)
@@ -230,6 +234,7 @@ public class OZChattingDefaultConfiguration: NSObject {
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(true, false),
+            OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(true, false),
             OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),

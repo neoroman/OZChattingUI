@@ -52,6 +52,22 @@ class OZToBottomButton: UIButton {
 
     private var circle: CAShapeLayer?
     private var line: CAShapeLayer?
+    
+    
+    
+    // MARK: - Show count badge
+    func showBadge(count: Int, color: UIColor = .green) {
+        let label = UILabel(frame: bounds.insetBy(dx: 10, dy: 10))
+        label.text = "\(count)"
+        label.textAlignment = .center
+        label.layer.cornerRadius = label.frame.height / 2
+        label.layer.masksToBounds = true
+        label.backgroundColor = color
+        label.textColor = .white
+        label.center.y = bounds.midY
+        self.addSubview(label)
+    }
+    
 
     // MARK: - Drawing
     

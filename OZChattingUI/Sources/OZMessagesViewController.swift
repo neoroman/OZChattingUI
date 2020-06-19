@@ -812,10 +812,11 @@ extension OZMessagesViewController {
                 self.dataSource.data.append(sendingMsg)
             }
             self.collectionView.reloadData() //send
-            self.collectionView.scrollTo(edge: .bottom, animated:true)
-            //            if let ozani = self.animator as? OZMessageAnimator {
-            //                ozani.sendingMessage = false
-            //            }
+            for case .autoScrollToBottomNewMessageArrived(let yesOrNo, _) in self.messagesConfigurations {
+                if yesOrNo {
+                    self.collectionView.scrollTo(edge: .bottom, animated:true)
+                }
+            }
 
             self.resetButtons(false)
 
@@ -899,7 +900,18 @@ extension OZMessagesViewController {
                 self.dataSource.data.append(OZMessage(false, content: text, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
             self.collectionView.reloadData() //receive
-            self.collectionView.scrollTo(edge: .bottom, animated:true)
+            for case .autoScrollToBottomNewMessageArrived(let yesOrNo, let showBadge) in self.messagesConfigurations {
+                if yesOrNo {
+                    self.collectionView.scrollTo(edge: .bottom, animated:true)
+                }
+                else if showBadge {
+                    for case .autoScrollToBottomBeginTextInput(_, let showButton) in self.messagesConfigurations {
+                        if showButton {
+                            self.scrollToBottomButton.showBadge(count: 1)
+                        }
+                    }
+                }
+            }
             if let anim = self.animator as? OZMessageAnimator {
                 anim.sendingMessage = false
             }
