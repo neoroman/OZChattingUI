@@ -653,7 +653,7 @@ open class OZMessagesViewController: CollectionViewController {
         }
     }
 
-    fileprivate func setupScrollToBottomButton() {
+    fileprivate func setupScrollToBottomButton(_ isShow: Bool = false) {
         guard let ozic = self.ozInputContainer else { return }
         
         var myOrigin = CGPoint.zero
@@ -674,7 +674,7 @@ open class OZMessagesViewController: CollectionViewController {
             else {
                 myOrigin = CGPoint(x: ozic.frame.maxX - height - 5, y: ozic.frame.minY - height - 5)
             }
-            scrollToBottomButton.alpha = 1 //alpha
+            scrollToBottomButton.alpha = isShow ? 1 : 0 //alpha
             scrollToBottomButton.fillColor = fill.withAlphaComponent(alpha)
             scrollToBottomButton.strokeWidth = width
             scrollToBottomButton.strokeColor = stroke.withAlphaComponent(alpha)
@@ -774,9 +774,6 @@ extension OZMessagesViewController {
         }
 
         DispatchQueue.main.async {
-//            if let ozani = self.animator as? OZMessageAnimator {
-//                ozani.sendingMessage = true
-//            }
             if type == .image {
                 sendingMsg = OZMessage(true, image: text, iconImage: anImgName, config: self.messagesConfigurations)
             }
@@ -810,11 +807,7 @@ extension OZMessagesViewController {
                 self.dataSource.data.append(sendingMsg)
             }
             self.collectionView.reloadData() //send
-            for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in self.messagesConfigurations {
-                if yesOrNo {
-                    self.collectionView.scrollTo(edge: .bottom, animated:true)
-                }
-            }
+            self.collectionView.scrollTo(edge: .bottom, animated:true)
 
             self.resetButtons(false)
 
@@ -848,7 +841,11 @@ extension OZMessagesViewController {
                     
                     self.dataSource.data.append(sendingMsg.copy(self.messagesConfigurations, userSide: !sendingMsg.fromCurrentUser, userProfile: anImgName))
                     self.collectionView.reloadData() // send echo (for debugging)
-                    self.collectionView.scrollTo(edge: .bottom, animated:true)
+                    for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in self.messagesConfigurations {
+                        if yesOrNo {
+                            self.collectionView.scrollTo(edge: .bottom, animated:true)
+                        }
+                    }
                 }
             }
         }
@@ -1013,13 +1010,14 @@ extension OZMessagesViewController: UIScrollViewDelegate {
                 UIView.animate(withDuration: 0.25, animations: {
                     self.scrollToBottomButton.alpha = 0
                 }) { (success) in
+                    self.scrollToBottomButton.badgeCount = 0
                     self.scrollToBottomButton.removeFromSuperview()
                 }
             }
             else if threshold <= collectionView.contentSize.height {
                 for case .autoScrollToBottomBeginTextInput(_, let isShow) in self.messagesConfigurations {
                     if isShow {
-                        self.setupScrollToBottomButton()
+                        self.setupScrollToBottomButton(true)
                     }
                     else {
                         self.scrollToBottomButton.alpha = 0
@@ -1347,6 +1345,11 @@ extension OZMessagesViewController {
             bottomPadding = 0
         }
         
+        var isBottom = false
+        if abs(Int(collectionView.contentOffset.y + collectionView.frame.height) - Int(collectionView.contentSize.height)) < 15 {
+            isBottom = true
+        }
+        
         var normalHeight = keyboardHeight - bottomPadding
         if normalHeight < 10 {
             if #available(iOS 11.0, *),
@@ -1395,27 +1398,27 @@ extension OZMessagesViewController {
                         self.collectionView.reloadData()
                     }
                         
-                    // TODO: on 2020.06.19
-                    if self.collectionView.contentOffset.y + 50 > self.collectionView.contentSize.height {
+                    if isBottom {
                         self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
                     }
-
-                    var isNotCase = true
-                    for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, let isShow) in self.messagesConfigurations {
-                        isNotCase = false
-                        if autoScrollToBottom {
+                    else {
+                        var isNotCase = true
+                        for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, let isShow) in self.messagesConfigurations {
+                            isNotCase = false
+                            if autoScrollToBottom {
+                                self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                            }
+                            if isShow,
+                                self.getThresholdOfScrollToBottomButtonShow() <= self.collectionView.contentSize.height {
+                                self.setupScrollToBottomButton(true)
+                            }
+                            else {
+                                self.scrollToBottomButton.alpha = 0
+                            }
+                        }
+                        if isNotCase {
                             self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
                         }
-                        if isShow,
-                            self.getThresholdOfScrollToBottomButtonShow() <= self.collectionView.contentSize.height {
-                            self.setupScrollToBottomButton()
-                        }
-                        else {
-                            self.scrollToBottomButton.alpha = 0
-                        }
-                    }
-                    if isNotCase {
-                        self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
                     }
                 }
             }
@@ -1459,12 +1462,21 @@ extension OZMessagesViewController {
     fileprivate func keyboardHideLayout() {
         guard let ecvh = ozEmoticonContainerViewHeight else {return}
 
-        let bottomPadding:CGFloat = 0 //window.safeAreaInsets.bottom
         var minHeight = minTextViewHeight
         for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
             minHeight = height
         }
-        let margin = UIEdgeInsets(top: 0, left: 0, bottom: bottomPadding + minHeight, right: 0)
+        if let ozic = ozInputTextView, ozic.isHidden {
+            minHeight = 0
+        }
+        let margin = UIEdgeInsets(top: 0, left: 0, bottom: minHeight, right: 0)
+
+        for case .autoScrollToBottomBeginTextInput(_, let isShow) in self.messagesConfigurations {
+            if isShow,
+                self.getThresholdOfScrollToBottomButtonShow() <= self.collectionView.contentSize.height {
+                self.scrollToBottomButton.alpha = 1
+            }
+        }
 
         var isCustomFrame = false
         UIView.animate(withDuration: keyboardAnimationDuration, animations: {
@@ -1483,6 +1495,17 @@ extension OZMessagesViewController {
                     }
                 }
             }
+            
+            for case .autoScrollToBottomBeginTextInput(_, let isShow) in self.messagesConfigurations {
+                if isShow,
+                    self.getThresholdOfScrollToBottomButtonShow() <= self.collectionView.contentSize.height {
+                    self.setupScrollToBottomButton(true)
+                }
+                else {
+                    self.scrollToBottomButton.alpha = 0
+                }
+            }
+
             self.collectionView.frame = bounds
         }) { (comp) in
 
