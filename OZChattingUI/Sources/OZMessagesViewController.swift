@@ -935,7 +935,8 @@ extension OZMessagesViewController: UIScrollViewDelegate {
                     height = rect.height
                 }
             }
-            if let firstMsg = dataSource.data.last, firstMsg.type == .image {
+            /*
+            if  let firstMsg = dataSource.data.last, firstMsg.type == .image {
                 let maxWidth = collectionView.contentSize.width
                 var packedImageHeight: CGFloat = 0
                 let cellFrame = OZMessageCell.frameForMessage(firstMsg, containerWidth: maxWidth)
@@ -964,6 +965,7 @@ extension OZMessagesViewController: UIScrollViewDelegate {
                     height = packedImageHeight
                 }
             }
+             */
         }
         return height
     }
@@ -978,6 +980,7 @@ extension OZMessagesViewController: UIScrollViewDelegate {
             if visibleRow > 0 {
                 for case .customCollectionViewFrame(let isCustom, let rect, _) in messagesConfigurations {
                     if isCustom {
+                        let aMaxHeight = collectionView.frame.size.height * 0.4
                         collectionView.frame.size.height = getHeightOfFrame(rect: rect, row: visibleRow)
                         collectionView.contentInset.bottom = 0
                         return
