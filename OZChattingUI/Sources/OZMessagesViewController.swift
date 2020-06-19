@@ -654,8 +654,8 @@ open class OZMessagesViewController: CollectionViewController {
     }
 
     fileprivate func setupScrollToBottomButton(_ isShow: Bool = false) {
-        guard let ozic = self.ozInputContainer else { return }
-        
+        guard let ozic = self.ozInputContainer, !ozic.isHidden else { return }
+
         var myOrigin = CGPoint.zero
         var mySize = CGSize.zero
         for case .scrollToBottomButton(let origin, let size, let width, let stroke, let fill, let alpha) in messagesConfigurations {
