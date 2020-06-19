@@ -125,8 +125,8 @@ public enum OZMessagesConfigurationItem {
     
     /// Auto scroll to bottom while new message arrived in OZMessagesViewController,
     /// Default is ``YES``, isShowNewBadgeCount = ``NO``
-    case autoScrollToBottomNewMessageArrived(Bool, _ isShowNewBadgeCount: Bool)
-        
+    case autoScrollToBottomNewMessageArrived(Bool)
+            
     /// CollectionView contentInset in OZMessagesViewController
     case collectionViewEdgeInsets(UIEdgeInsets)
     
@@ -166,6 +166,13 @@ public enum OZMessagesConfigurationItem {
     /// Origin .zero, set default origin from 5 pixel from InputContainerView
     case scrollToBottomButton(CGPoint, CGSize, _ strokeWidth: CGFloat, _ strokeColor: UIColor, _ fillColor: UIColor, _ buttonAlpha: CGFloat)
         
+    /// Badge shape for auto scroll to bottom while new message arrived in OZMessagesViewController,
+    /// Default is ``NO``,
+    /// font is ``AppleSDGothicNeo-Medium``, ``12pt``,
+    /// height is ``15``, textColor is ``white``, backgroundColor is ``green``
+    case scrollToBottomNewMessageBadge(Bool, _ fontName: String, _ fontSize: CGFloat,
+        _ height: CGFloat, _ textColor: UIColor, _ backgroundColor: UIColor)
+
     // ============ OZVoiceRecordViewController ==================
     /// Max duration of voice record in OZVoiceRecordViewController
     case voiceRecordMaxDuration(TimeInterval, _ displayMaxDuration: Int)
@@ -234,7 +241,7 @@ public class OZChattingDefaultConfiguration: NSObject {
 
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(true, false),
-            OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(true, false),
+            OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(true),
             OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.black, .systemTeal),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.black, .systemTeal),

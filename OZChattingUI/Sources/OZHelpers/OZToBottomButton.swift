@@ -43,29 +43,76 @@ class OZToBottomButton: UIButton {
         }
     }
 
+    public var badgeCount: Int {
+        get {
+            return _badgeCount
+        }
+        set(newValue) {
+            if newValue == 0, let aLabel = self.viewWithTag(tag4Label) {
+                aLabel.removeFromSuperview()
+            }
+            else if _badgeCount != newValue {
+                showBadge(count: newValue)
+            }
+            _badgeCount = newValue
+            setNeedsDisplay()
+        }
+    }
+
     
     // MARK: - Private Properties
     
     private var _strokeColor: UIColor = .gray
     private var _strokeWidth: CGFloat = 1.0
     private var _fillColor: UIColor = .clear
+    private var _badgeCount: Int = 0
 
     private var circle: CAShapeLayer?
     private var line: CAShapeLayer?
-    
-    
+        
     
     // MARK: - Show count badge
-    func showBadge(count: Int, color: UIColor = .green) {
-        let label = UILabel(frame: bounds.insetBy(dx: 10, dy: 10))
-        label.text = "\(count)"
-        label.textAlignment = .center
-        label.layer.cornerRadius = label.frame.height / 2
-        label.layer.masksToBounds = true
-        label.backgroundColor = color
-        label.textColor = .white
-        label.center.y = bounds.midY
-        self.addSubview(label)
+    fileprivate let tag4Label = 1717017
+    func showBadge(count: Int,
+                   fontName: String = "AppleSDGothicNeo-Medium",
+                   fontSize: CGFloat = 12,
+                   height: CGFloat = 15,
+                   textColor: UIColor = .white,
+                   backgroundColor: UIColor = .green) {
+        self.clipsToBounds = false
+        self.layer.masksToBounds = false
+        _badgeCount = count > 0 ? count : 1
+        var size = OZMessageCell.sizeForText("\(_badgeCount)", fontName: fontName, fontSize: fontSize, maxWidth: 100, paddingX: 3, paddingY: 0)
+        if size.height < height {
+            size.height = height
+        }
+        if size.width < height {
+            size.width = height
+        }
+
+        guard let aLabel = self.viewWithTag(tag4Label) as? UILabel else {
+            let rect = CGRect(x: 0, y: 0, width: height, height: height)
+            let label = UILabel(frame: rect)
+            label.tag = tag4Label
+            label.textAlignment = .center
+            label.layer.cornerRadius = label.frame.height / 2
+            label.layer.masksToBounds = true
+            label.text = "\(_badgeCount)"
+            label.textColor = textColor
+            label.backgroundColor = backgroundColor
+            label.center.y = bounds.minY
+            label.center.x = bounds.midX
+            label.frame.size = size
+            self.addSubview(label)
+            return
+        }
+        
+        aLabel.text = "\(_badgeCount)"
+        aLabel.textColor = textColor
+        aLabel.backgroundColor = backgroundColor
+        aLabel.center.y = bounds.minY
+        aLabel.center.x = bounds.midX
+        aLabel.frame.size = size
     }
     
 
@@ -75,6 +122,7 @@ class OZToBottomButton: UIButton {
         super.draw(rect)
 
         drawRect(rect: bounds)
+        
     }
     
     func drawRect(rect: CGRect) {

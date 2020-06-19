@@ -354,13 +354,6 @@ public class OZMessage: Equatable {
                     roundedCornder = yesOrNo
                 }
                 break
-            case .scrollToBottomButton(let point, let size, let width, let stroke, let fill, let alpha):
-                scrollToBottomButtonAlpha = alpha
-                scrollToBottomButtonFillColor = fill
-                scrollToBottomButtonOrigin = point
-                scrollToBottomButtonSize = size
-                scrollToBottomButtonStrokeColor = stroke
-                scrollToBottomButtonStrokeWidth = width
             case .sepratorColor(let color):
                 seperatorColor = color
                 break
@@ -436,12 +429,6 @@ public class OZMessage: Equatable {
     public private(set) var multipleImageBorderWidth: CGFloat = 0
     public private(set) var multipleImageBackground: UIColor = .clear
     public private(set) var roundedCornder: Bool = true
-    public private(set) var scrollToBottomButtonAlpha: CGFloat = 0
-    public private(set) var scrollToBottomButtonOrigin: CGPoint = .zero
-    public private(set) var scrollToBottomButtonSize: CGSize = .zero
-    public private(set) var scrollToBottomButtonFillColor: UIColor = .clear
-    public private(set) var scrollToBottomButtonStrokeColor: UIColor = .clear
-    public private(set) var scrollToBottomButtonStrokeWidth: CGFloat = 0
     public private(set) var seperatorColor: UIColor = UIColor(white: 238.0 / 255.0, alpha: 1.0)
     public private(set) var shadowColor: UIColor = .black
     public private(set) var showScrollToBottomButton: Bool = false
