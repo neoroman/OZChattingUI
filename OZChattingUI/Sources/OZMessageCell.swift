@@ -725,11 +725,11 @@ open class AudioMessageCell: OZMessageCell {
         if self.backView.progress > 0.95 {
             self.isPlaying = false
             self.backView.progress = 0
-            delay(0.15) {
-                if let aDur = self.message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.06.09
-                    self.textLabel.text = String(format: "%02d:%02d", aDur / 60, aDur % 60)
-                }
-                else {
+            if let aDur = self.message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.06.09
+                self.textLabel.text = String(format: "%02d:%02d", aDur / 60, aDur % 60)
+            }
+            else {
+                delay(0.15) {
                     self.textLabel.text = String(format: "%02d:%02d", Int(maxDuration) / 60, Int(maxDuration) % 60)
                 }
             }

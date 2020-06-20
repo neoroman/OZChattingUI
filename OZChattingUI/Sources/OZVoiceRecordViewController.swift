@@ -358,11 +358,13 @@ extension OZVoiceRecordViewController {
         var aMaxTime = recordMaxDuration
         if recordedDuration > 0 {
             aMaxTime = recordedDuration
+            voiceTimeLabel.text = String(format: "%02d:%02d",
+                                         Int(round(aMaxTime)) / 60,
+                                         Int(round(aMaxTime)) % 60)
         }
-        voiceTimeLabel.text = String(format: "%02d:%02d",
-                                     Int(round(aMaxTime)) / 60,
-                                     Int(round(aMaxTime)) % 60)
-        showFakeRecordDuration()
+        else {
+            showFakeRecordDuration()
+        }
     }
     
     func finishRecording(success: Bool) {
