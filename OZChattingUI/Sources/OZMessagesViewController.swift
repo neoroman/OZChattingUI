@@ -977,15 +977,16 @@ extension OZMessagesViewController: UIScrollViewDelegate {
             let datum = dataSource.data.first,
             datum.content.count > 0 {
             
-            if visibleRow > 0 {
+            if collectionView.hasReloaded, !loading, visibleRow > 0 {
+                loading = true
                 for case .customCollectionViewFrame(let isCustom, let rect, _) in messagesConfigurations {
                     if isCustom {
-                        let aMaxHeight = collectionView.frame.size.height * 0.4
                         collectionView.frame.size.height = getHeightOfFrame(rect: rect, row: visibleRow)
                         collectionView.contentInset.bottom = 0
                         return
                     }
                 }
+                loading = false
             }
             
             if collectionView.hasReloaded,

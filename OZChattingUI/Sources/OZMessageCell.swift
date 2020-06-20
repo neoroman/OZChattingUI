@@ -722,7 +722,7 @@ open class AudioMessageCell: OZMessageCell {
         else {
             self.textLabel.text = String(format: "%02d:%02d", Int(elapsed) / 60, Int(elapsed) % 60)
         }
-        if self.backView.progress >= 1 {
+        if self.backView.progress > 0.95 {
             self.isPlaying = false
             self.backView.progress = 0
             delay(0.15) {

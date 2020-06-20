@@ -141,6 +141,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
 
             // OZMessagesViewController
+            OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(true),
             OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGray, .systemOrange),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(.systemGray, .systemPink),
