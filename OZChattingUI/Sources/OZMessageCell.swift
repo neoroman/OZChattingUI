@@ -705,30 +705,26 @@ open class AudioMessageCell: OZMessageCell {
             if let aFile = named,
                 FileManager.isFileExist(named: aFile) {
                 audioPlayer.play(named: aFile) { (elapse, dur) in
-                    self.playProgress(elapse, dur)
+                    if let aDur = self.message.extra["duration"] as? Int, aDur > 0,
+                        elapse >= Double(aDur) * 0.96 { // WTF... by Henry on 2020.06.09
+                        let finalDur = TimeInterval(aDur)
+                        self.playProgress(finalDur, finalDur)
+                    }
+                    else {
+                        self.playProgress(elapse, dur)
+                    }
                 }
             }
         }
     }
     func playProgress(_ elapsed: TimeInterval, _ duration: TimeInterval) {
-        let maxDuration: Double = round(duration)
-        self.backView.progress = CGFloat(elapsed / maxDuration)
-        if elapsed < 60 {
-            self.textLabel.text = String(format: "00:%02d", Int(elapsed))
-        }
-        else {
+        if self.isPlaying {
+            let maxDuration: Double = round(duration)
+            self.backView.progress = CGFloat(elapsed / maxDuration)
             self.textLabel.text = String(format: "%02d:%02d", Int(elapsed) / 60, Int(elapsed) % 60)
-        }
-        if self.isPlaying,
-            (self.backView.progress > 0.96 || elapsed == duration || Int(maxDuration) == 0) {
-            var finalDur: Int = Int(maxDuration)
-            if let aDur = self.message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.06.09
-                finalDur = aDur
-            }
-            self.backView.progress = 1
-            delay(max(duration * 0.04, 0.3)) {
+            if elapsed >= duration || Int(maxDuration) == 0 {
+                let finalDur: Int = Int(maxDuration)
                 self.isPlaying = false
-                self.backView.progress = 0
                 self.textLabel.text = String(format: "%02d:%02d", finalDur / 60, finalDur % 60)
             }
         }

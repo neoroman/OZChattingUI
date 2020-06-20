@@ -17,17 +17,24 @@ open class OZProgressBarView: UIView {
     fileprivate var counter: TimeInterval = 0
     var progress: CGFloat = 0.0 {
         didSet {
-            if oldValue < progress {
+            if progress == 0, oldValue == 1 {
+                delay(0.05) {
+                    self.setNeedsDisplay()
+                }
+            }
+            else if progress == 0 || progress == 1 {
+                self.setNeedsDisplay()
+            }
+            else if oldValue < progress {
                 Timer.scheduledTimer(withTimeInterval: TimeInterval(progress - oldValue)/maxCount, repeats: true) { (aTimer) in
                     self.setNeedsDisplay()
                     self.counter += 1
-                    if self.counter >= self.maxCount {
+                    if self.progress >= 1.0 || self.counter >= self.maxCount {
                         aTimer.invalidate()
                         self.counter = 0
                     }
                 }
             }
-            self.setNeedsDisplay()
         }
     }
     

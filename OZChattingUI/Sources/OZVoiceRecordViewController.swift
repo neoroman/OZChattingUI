@@ -132,12 +132,16 @@ open class OZVoiceRecordViewController: UIViewController {
             showFakeRecordDuration()
             voiceLevelView.startAnimating()
             voiceSendButton.isEnabled = false
+            voiceSendButton.layer.borderColor = UIColor.gray.cgColor
+            voiceSendButton.setTitleColor(.gray, for: .normal)
         case .stop:
             resetViews()
             voiceRecordButton.setImage(vpBtnRecordPlay, for: .normal)
             voiceRecordButton.setImage(vpBtnRecordPlayPressed, for: .highlighted)
             if checkAudioFile(path: nil) {
                 voiceSendButton.isEnabled = true
+                voiceSendButton.layer.borderColor = UIColor.red.cgColor
+                voiceSendButton.setTitleColor(.red, for: .normal)
                 if let vpv = voiceProgressView {
                     vpv.removeFromSuperview()
                     voiceProgressView = nil
@@ -149,6 +153,8 @@ open class OZVoiceRecordViewController: UIViewController {
             voiceTimeLabel.text = ""
             showFakeRecordDuration()
             voiceSendButton.isEnabled = false
+            voiceSendButton.layer.borderColor = UIColor.gray.cgColor
+            voiceSendButton.setTitleColor(.gray, for: .normal)
             if let vpv = voiceProgressView {
                 vpv.removeFromSuperview()
                 voiceProgressView = nil
