@@ -13,11 +13,6 @@ open class OZProgressBarView: UIView {
     @IBInspectable var radius: CGFloat = 7
     @IBInspectable var progressColor: UIColor = .red
     
-    @IBInspectable var imageTintColorDesired: UIColor = .black
-    @IBInspectable var imageTintColorOriginal: UIColor = .white
-    weak var tintColoredImageView: UIImageView?
-    weak var tintColoredImage: UIImage?
-    
     fileprivate let maxCount: TimeInterval = 10
     fileprivate var counter: TimeInterval = 0
     var progress: CGFloat = 0.0 {
@@ -26,21 +21,6 @@ open class OZProgressBarView: UIView {
                 Timer.scheduledTimer(withTimeInterval: TimeInterval(progress - oldValue)/maxCount, repeats: true) { (aTimer) in
                     self.setNeedsDisplay()
                     self.counter += 1
-                    /* TODO: Do something here ... by Henry on 2020.05.06
-                    if let anImgView = self.tintColoredImageView,
-                        let anImg = anImgView.image,
-                        let oImg = self.tintColoredImage,
-                        anImg == oImg {
-                        anImgView.image = anImg.withRenderingMode(.alwaysTemplate)
-                        if self.bounds.width * self.progress < anImgView.frame.midX {
-                            anImgView.tintColor = self.imageTintColorDesired
-                        }
-                        else {
-                            anImgView.tintColor = self.imageTintColorOriginal
-                        }
-                    }
-                    */
-                    
                     if self.counter >= self.maxCount {
                         aTimer.invalidate()
                         self.counter = 0

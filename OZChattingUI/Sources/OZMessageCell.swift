@@ -588,9 +588,6 @@ open class AudioMessageCell: OZMessageCell {
             playImage.image = isPlaying ? pauseImg : playImg
             
             backView.progressColor = message.audioProgressColor
-            backView.tintColoredImageView = playImage
-            backView.tintColoredImage = pauseImg
-            
             backView.backgroundColor = message.backgroundColor
             self.backgroundColor = .clear
             
@@ -722,16 +719,17 @@ open class AudioMessageCell: OZMessageCell {
         else {
             self.textLabel.text = String(format: "%02d:%02d", Int(elapsed) / 60, Int(elapsed) % 60)
         }
-        if self.backView.progress > 0.95 {
-            self.isPlaying = false
-            self.backView.progress = 0
+        if self.isPlaying,
+            (self.backView.progress > 0.96 || elapsed == duration || Int(maxDuration) == 0) {
+            var finalDur: Int = Int(maxDuration)
             if let aDur = self.message.extra["duration"] as? Int, aDur > 0 { // WTF... by Henry on 2020.06.09
-                self.textLabel.text = String(format: "%02d:%02d", aDur / 60, aDur % 60)
+                finalDur = aDur
             }
-            else {
-                delay(0.15) {
-                    self.textLabel.text = String(format: "%02d:%02d", Int(maxDuration) / 60, Int(maxDuration) % 60)
-                }
+            self.backView.progress = 1
+            delay(max(duration * 0.04, 0.3)) {
+                self.isPlaying = false
+                self.backView.progress = 0
+                self.textLabel.text = String(format: "%02d:%02d", finalDur / 60, finalDur % 60)
             }
         }
     }
