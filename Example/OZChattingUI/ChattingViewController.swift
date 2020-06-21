@@ -265,7 +265,7 @@ class ChattingViewController: OZMessagesViewController {
             // OZMessagesViewController
             OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),
             OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(false),
-            OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)),
+            OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(kMainColor, kMainColor),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(kMainColor, kMainColor),
             OZMessagesConfigurationItem.inputContainerMinimumHeight(56),

@@ -230,6 +230,12 @@ open class OZMessagesViewController: CollectionViewController {
         if forceReload {
             for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
                 if !isCustomFrame { self.collectionView.contentInset = inset }
+                else {
+                    let originInset = self.collectionView.contentInset
+                    let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
+                                                bottom: originInset.bottom, right: inset.right)
+                    self.collectionView.contentInset = newInset
+                }
             }
             
             collectionView.reloadData() { // 1st call
@@ -1397,8 +1403,13 @@ extension OZMessagesViewController {
                     self.collectionView.frame = bounds
 
                     for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-                        //inset.bottom = inset.bottom + minTextViewHeight
                         if !isCustomFrame { self.collectionView.contentInset = inset }
+                        else {
+                            let originInset = self.collectionView.contentInset
+                            let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
+                                                        bottom: originInset.bottom, right: inset.right)
+                            self.collectionView.contentInset = newInset
+                        }
                         self.collectionView.reloadData()
                     }
                         
@@ -1514,8 +1525,13 @@ extension OZMessagesViewController {
         }) { (comp) in
 
             for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-                //inset.bottom = inset.bottom + minTextViewHeight
                 if !isCustomFrame { self.collectionView.contentInset = inset }
+                else {
+                    let originInset = self.collectionView.contentInset
+                    let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
+                                                bottom: originInset.bottom, right: inset.right)
+                    self.collectionView.contentInset = newInset
+                }
                 self.collectionView.reloadData()
             }
         }
