@@ -75,10 +75,12 @@ public enum OZMessageAlignment {
     case center
     case right
 }
-public class OZMessage: Equatable {
+open class OZMessage: Equatable {
     public static func == (lhs: OZMessage, rhs: OZMessage) -> Bool {
         return lhs.identifier == rhs.identifier
     }
+    
+    var delegate: OZMessageDelegate?
     
     public var identifier: String = UUID().uuidString
     public var content = ""
@@ -443,7 +445,17 @@ public class OZMessage: Equatable {
     public private(set) var usingPackedImagesAsStrictSize: Bool = false
 
     // MARK: - Vertical Padding Between Messages
-    public func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
+    func verticalPaddingBetweenMessage(_ previousMessage: OZMessage) -> CGFloat {
+        ////////////////////////////////////////////////////////////////////////
+        // OZMessageCellDelegate
+        if let dele = delegate {
+            let padding = dele.verticalPaddingBetweenMessage(message: self, previousMessage: previousMessage)
+            if padding > 0 {
+                return padding
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////
+
         if type == .image && previousMessage.type == .image {
             if iconImage.count > 0, !usingPackedImages {
                 return 2 + previousMessage.iconSize / 2

@@ -8,7 +8,24 @@
 import UIKit
 
 
+////////////////////////////////////////////////////////////////////////////////
+// MARK: - OZMessageDelegate
+////////////////////////////////////////////////////////////////////////////////
+protocol OZMessageDelegate {
+    
+    /// Optional from here
+    
+    /// Messages vertical padding between messages
+    func verticalPaddingBetweenMessage(message: OZMessage, previousMessage: OZMessage) -> CGFloat
+}
+extension OZMessageDelegate {
+    func verticalPaddingBetweenMessage(message: OZMessage, previousMessage: OZMessage) -> CGFloat { return 0 }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 // MARK: - OZMessageCellDelegate
+////////////////////////////////////////////////////////////////////////////////
 protocol OZMessageCellDelegate {
     func cellDidSetMessage(cell: OZMessageCell)
     func cellLayoutSubviews(cell: OZMessageCell)
@@ -32,7 +49,9 @@ extension OZMessageCellDelegate {
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
 // MARK: - OZMessagesViewControllerDelegate
+////////////////////////////////////////////////////////////////////////////////
 public protocol OZMessagesViewControllerDelegate {
     func messageSending(identifier: String, type: OZMessageType, data: OZMessage) -> Bool
     func messageAppend(complete: @escaping OZChatFetchCompleteBlock)
@@ -69,6 +88,9 @@ public protocol OZMessagesViewControllerDelegate {
     
     /// Multiple image tapped, should return boolean for `internal` processing or not
     func messageCellMultipleImageTapped(cell: OZMessageCell, image: UIImageView, indexOfImage: Int) -> Bool
+    
+    /// Messages vertical padding between messages
+    func messageVerticalPaddingBetweenMessage(message: OZMessage, previousMessage: OZMessage) -> CGFloat
 }
 // MARK: - Optional OZMessagesViewControllerDelegate
 public extension OZMessagesViewControllerDelegate {
@@ -87,4 +109,5 @@ public extension OZMessagesViewControllerDelegate {
     func messageFileButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageCellLongMessageButtonTapped(cell: OZMessageCell, view: UIView, isFolded: Bool) -> Bool { return true }
     func messageCellMultipleImageTapped(cell: OZMessageCell, image: UIImageView, indexOfImage: Int) -> Bool { return true }
+    func messageVerticalPaddingBetweenMessage(message: OZMessage, previousMessage: OZMessage) -> CGFloat { return 0 }
 }

@@ -3,7 +3,7 @@
 //  OZChattingUI_Example
 //
 //  Created by 이재은 on 2020/05/28.
-//  Copyright © 2020 CocoaPods. All rights reserved.
+//  Copyright © 2020 ALTERANT. All rights reserved.
 //
 
 import UIKit
@@ -23,9 +23,6 @@ class ChattingViewController: OZMessagesViewController {
     @IBOutlet weak var loadingImageView: UIImageView!
     
     // MARK: - Property
-    var successToSend: Bool = true
-    var needsToMic: Bool = false
-    var stopLoading: Bool = false
     var sendingTimerCount: TimeInterval = 0
     var imagePaths: [URL]?
     var isHalfOpacity: Bool = false
@@ -50,12 +47,6 @@ class ChattingViewController: OZMessagesViewController {
         
         setUI()
         setDefaultState()
-//        if !needsToMic {
-//            micButton.isHidden = true
-//            keyboardButton.isHidden = true
-//            micMotionButton.isHidden = true
-//            expandInputView()
-//        }
         
         let configuredTestMessages = testMessages.map{ $0.copy(messagesConfigurations, userSide: nil) }
         self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: configuredTestMessages))
@@ -147,24 +138,22 @@ class ChattingViewController: OZMessagesViewController {
         }
     }
     
-    /// 메시지 전송
+    /// Button for sendign message
     @IBAction func pressedSendButton(_ sender: UIButton) {
         guard let ozitv = ozInputTextView else { return }
         
         if let fullText = ozitv.text {
             let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
             if trimmed.count > 0 {
-                stopLoading = false
                 rotateLoadingImage(3)
                 send(msg: trimmed)                
             }
             ozitv.text.removeAll()
             adjustTextViewHeight(ozitv)
         }
-//                        setFailToSending()
     }
     
-    /// 텍스트 입력 상태로 전환
+    /// Change keyboard input mode
     @IBAction func pressedKeyboardButton(_ sender: UIButton) {
         guard let ozitv = ozInputTextView else { return }
 
@@ -172,18 +161,9 @@ class ChattingViewController: OZMessagesViewController {
         ozitv.becomeFirstResponder()
     }
     
-    /// 입력한 텍스트 삭제
-    @IBAction func pressedClearButton(_ sender: UIButton) {
-        setDefaultState()
-    }
-    
-    ///
-    @IBAction func pressedMicMotionButton(_ sender: UIButton) {
-        
-    }
     
     // MARK: - Function
-    /// 최초 UI 설정
+    /// Set initial look
     fileprivate func setUI() {
         collectionView.backgroundColor = UIColor(red: 228/255, green: 232/255, blue: 232/255, alpha: 1.0)
         
@@ -198,7 +178,7 @@ class ChattingViewController: OZMessagesViewController {
         keyboardButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
     }
     
-    /// View, Button의 default 상태 설정
+    /// Set to default Views and Buttons
     fileprivate func setDefaultState() {
         if let ozitv = ozInputTextView {
             ozitv.textColor = UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)
@@ -222,90 +202,9 @@ class ChattingViewController: OZMessagesViewController {
             ozmb.isHidden = false
         }
         keyboardButton.isHidden = true
-        
-        successToSend = true // 임시
     }
-    
-    /// mic 기능 없는 inputView에 대한 설정
-    fileprivate func expandInputView() {
-        guard let ozitv = ozInputTextView, let ozmb = ozMicButton else { return }
-
-        ozmb.isHidden = true
-        ozitv.trailingAnchor.constraint(equalTo: ozmb.trailingAnchor).isActive = true
-        sendButton.trailingAnchor.constraint(equalTo: ozmb.trailingAnchor).isActive = true
-    }
-    
-    /// 메시지 전송 실패 뷰 설정
-    fileprivate func setFailToSending() {
-        guard let ozitv = ozInputTextView else { return }
-
-        if successToSend {
-            ozitv.text += "\nFail to send"
-            let attr = NSMutableAttributedString(string: ozitv.text)
-            attr.addAttribute(NSAttributedString.Key.foregroundColor,
-                              value: UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1),
-                              range: NSMakeRange(0, ozitv.text.count - 4))
-            attr.addAttribute(NSAttributedString.Key.init(kCTFontAttributeName as String),
-                              value: UIFont(name:"AppleSDGothicNeo-Regular", size: 16) as Any,
-                              range: NSMakeRange(0, ozitv.text.count - 4))
-            attr.addAttribute(NSAttributedString.Key.foregroundColor,
-                              value: UIColor(red: 248/255, green: 72/255, blue: 94/255, alpha: 1),
-                              range: (ozitv.text as NSString).range(of: "Fail to send"))
-            attr.addAttribute(NSAttributedString.Key.init(kCTFontAttributeName as String),
-                              value: UIFont(name:"AppleSDGothicNeo-Regular", size: 12) as Any,
-                              range: (ozitv.text as NSString).range(of: "Fail to send"))
             
-            ozitv.attributedText = attr
-            successToSend = false
-        }
-        
-        sendButton.setImage(UIImage(named: "btnCallCancel"), for: .normal)
-        clearButton.isHidden = false
-        ozitv.isEditable = false
-        ozitv.tintColor = .clear
-        adjustTextViewHeight(ozitv)
-    }
-    
-    /// 음성 인식 가능한 상태 뷰 설정
-    fileprivate func setSuccessToMic() {
-        setMicGuideText("Speech recognizer not implemented.")
-        micMotionButton.isHidden = false
-        
-        micCircleView?.isHidden = false
-        micCircleView?.layer.cornerRadius = 15
-        micCircleView?.clipsToBounds = true
-        
-        if let ozitv = ozInputTextView {
-            ozitv.isEditable = false
-        }
-    }
-    
-    /// 음성 인식 불가한 상태 뷰 설정
-    fileprivate func setFailToMic() {
-        setMicGuideText("Cannot use microphone.")
-        micMotionButton.isHidden = false
-        micMotionButton.isEnabled = false
-        sendButton.isHidden = true
-        
-        if let ozitv = ozInputTextView {
-            ozitv.resignFirstResponder()
-            ozitv.isEditable = false
-        }
-    }
-    
-    /// 마이크 상태에 대한 안내 문구 설정
-    /// - Parameter text: 안내 문구 텍스트
-    fileprivate func setMicGuideText(_ text: String) {
-        if let ozitv = ozInputTextView {
-            ozitv.text.removeAll()
-            adjustTextViewHeight(ozitv)
-            ozitv.text = text
-            ozitv.font = UIFont(name:"AppleSDGothicNeo-Medium", size: 12)
-            ozitv.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
-        }
-    }
-    
-    /// 메세지 전송시 로딩 표시
+    /// Show loading just before sending message
     @objc private func rotateLoadingImage(_ timeout: TimeInterval = 5) {
         sendButton.isEnabled = false
         sendButton.isHidden = true
@@ -355,7 +254,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.sepratorColor(.clear),
             OZMessagesConfigurationItem.showTimeLabelForImage(true),
             OZMessagesConfigurationItem.timeFontSize(12.0),
-            OZMessagesConfigurationItem.timeFontFormat("hh:mm"),
+            OZMessagesConfigurationItem.timeFontFormat("hh:mm a"),
             OZMessagesConfigurationItem.timeFontColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)),
             OZMessagesConfigurationItem.usingLongMessageFolding(true, 108, foldingButtonSize, .center, .left),
             OZMessagesConfigurationItem.usingLongMessageFoldingButtons(foldButton, unfoldButton),
@@ -462,6 +361,28 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     func messageViewLoaded(isLoaded: Bool) {
         collectionView.scrollTo(edge: .bottom, animated: false)
     }
+    func messageVerticalPaddingBetweenMessage(message: OZMessage, previousMessage: OZMessage) -> CGFloat {
+        if message.type == .announcement {
+            return 16
+        }
+        if previousMessage.type == .announcement {
+            return 16.5
+        }
+        if message.type == .image || message.type == .multipleImages {
+            return 9
+        }
+        if previousMessage.type == .image || previousMessage.type == .multipleImages {
+            return 9
+        }
+        if message.type == .status {
+            return 3
+        }
+        if message.type == .text, message.type == previousMessage.type,
+            message.fromCurrentUser == previousMessage.fromCurrentUser {
+            return 8
+        }
+        return 10
+    }
     func messageCellDidSetMessage(cell: OZMessageCell, previousMessage: OZMessage) {
         
         if cell.message.type == .text {
@@ -524,6 +445,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
         else if cell.message.type == .image,
             let imageCell = cell as? ImageMessageCell,
             imageCell.message.usingPackedImages {
+            // code
         }
     }
     
@@ -556,8 +478,6 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
         if let ozmb = ozMicButton { ozmb.isHidden = true }
         sendButton.isHidden = true
         
-        setSuccessToMic()
-        //setFailToMic()
         return false
     }
     
@@ -621,16 +541,6 @@ extension ChattingViewController: SelectPhotoDelegate {
     func sendImageData(_ paths: [URL]) {
         self.imagePaths = paths
         guard let imagePaths = imagePaths else { return }
-        /*
-        for i in 0..<imagePaths.count {
-            let imagePath = imagePaths[i].absoluteString
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.send(msg: imagePath, type: .image) { (id, content) in
-                    print("senddd: \(id), \(content)")
-                }
-            }
-        }
-         */
         var iPaths: [String] = []
         for x in imagePaths {
             iPaths.append(x.relativePath)
@@ -670,7 +580,7 @@ extension ChattingViewController {
                 makeGalleryItems(cell: imgCell)
             }
         }
-        if let ivs = imageViews, let ids = identifiers /*, ivs.count == ids.count */ {
+        if let ivs = imageViews, let ids = identifiers {
             let ts = Date().timeIntervalSince1970
             for i in 0..<ivs.count {
                 var galleryItem: GalleryItem!
@@ -743,14 +653,10 @@ extension ChattingViewController {
             print("LANDED AT INDEX: \(index)")
             self.selectedImage = self.chatImageItems[index].imageView.image
             
-            // headerView.count = self.chatImageItems.count
-            // headerView.currentIndex = index
-
             let dateFormatterGet = DateFormatter()
             dateFormatterGet.dateFormat = "MMM. d, h:mm a"
 
             headerView.countLabel.text = "\(Date(timeIntervalSince1970: TimeInterval(self.chatImageItems[index].timestamp)))"
-            headerView.isHidden = false // by Henry on 2020.05.13
             footerView.count = self.chatImageItems.count
             footerView.currentIndex = index
         }
@@ -840,4 +746,3 @@ extension ChattingViewController: GalleryItemsDelegate {
         chatImageItems.remove(at: index)
     }
 }
-

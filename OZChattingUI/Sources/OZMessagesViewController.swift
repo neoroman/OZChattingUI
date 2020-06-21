@@ -18,7 +18,7 @@ public typealias OZChatFetchCompleteBlock = (_ newMessages: [OZMessage]) -> Void
 public typealias OZChatTapCompleteBlock = (_ success: Bool, _ path: String) -> Void
 
 let minTextViewHeight: CGFloat = 56
-let maxTextViewHeight: CGFloat = minTextViewHeight * 3 //120
+let maxTextViewHeight: CGFloat = minTextViewHeight * 3
 
 open class OZMessagesViewController: CollectionViewController {
     
@@ -229,7 +229,6 @@ open class OZMessagesViewController: CollectionViewController {
         
         if forceReload {
             for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-                //UIEdgeInsets(top: 20, left: 10, bottom: 54, right: 10)
                 if !isCustomFrame { self.collectionView.contentInset = inset }
             }
             
@@ -362,6 +361,7 @@ open class OZMessagesViewController: CollectionViewController {
             identifier: "OZChat2020",
             dataSource: dataSource,
             viewSource: ComposedViewSource(viewSourceSelector: { data in
+                data.delegate = self
                 switch data.type {
                 case .image, .emoticon:
                     return imageMessageViewSource
@@ -1695,7 +1695,7 @@ extension OZMessagesViewController: UITextViewDelegate {
                                              paddingX: 20.0, paddingY: 20.0)
         
         var maxHeight = maxTextViewHeight
-        for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
+        for case .inputContainerMaximumHeight(let height) in messagesConfigurations {
             maxHeight = height
         }
         if thc.constant >= maxHeight {
@@ -1928,5 +1928,15 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             dele.messageCellMultipleImageTapped(cell: cell, image: view, indexOfImage: index) {
             // currently there're nothing to do
         }
+    }
+}
+
+extension OZMessagesViewController: OZMessageDelegate {
+    func verticalPaddingBetweenMessage(message: OZMessage, previousMessage: OZMessage) -> CGFloat {
+        if let dele = self.delegate {
+            let padding = dele.messageVerticalPaddingBetweenMessage(message: message, previousMessage: previousMessage)
+            return padding
+        }
+        return 0
     }
 }

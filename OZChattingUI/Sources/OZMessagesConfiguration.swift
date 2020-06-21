@@ -159,7 +159,7 @@ public enum OZMessagesConfigurationItem {
     /// Input text view font color in OZTextView
     case inputTextViewFontColor(UIColor)
 
-    /// Input text view using `Enter` for sending in OZTextView
+    /// Input text view using `Enter` for sending in OZTextView, Default is ``NO``
     case inputTextUsingEnterToSend(Bool)
     
     /// Button for scroll to bottom in OZMessagesViewController,
@@ -254,7 +254,7 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.inputTextVerticalAlignment(.Middle),
             OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
             OZMessagesConfigurationItem.inputTextViewFontColor(.black),
-            OZMessagesConfigurationItem.inputTextUsingEnterToSend(true),
+            OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
 
             // OZEmoticonViewController
             OZMessagesConfigurationItem.emoticonPageIndicatorTintColor(UIColor.magenta.withAlphaComponent(0.3)),

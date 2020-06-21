@@ -3,7 +3,7 @@
 //  OZChattingUI_Example
 //
 //  Created by 이재은 on 2020/06/02.
-//  Copyright © 2020 CocoaPods. All rights reserved.
+//  Copyright © 2020 ALTERANT. All rights reserved.
 //
 
 import UIKit
