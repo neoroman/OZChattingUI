@@ -234,8 +234,6 @@ public class OZChattingDefaultConfiguration: NSObject {
             OZMessagesConfigurationItem.alignment(.center, [.announcement, .deviceStatus], .none),
             OZMessagesConfigurationItem.usingPackedImages(true, false),
             OZMessagesConfigurationItem.showTimeLabelForImage(false),
-            OZMessagesConfigurationItem.usingLongMessageFolding(false, 200, CGSize(width: 100, height: 25), .center, .center),
-            OZMessagesConfigurationItem.usingLongMessageFoldingButtons(UIButton(type: .infoLight), UIButton(type: .detailDisclosure)),
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(false),
             OZMessagesConfigurationItem.audioButtonsName("play.fill", "pause.fill"),
 

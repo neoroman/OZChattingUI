@@ -79,10 +79,10 @@ open class OZMessagesViewController: CollectionViewController {
     
     private var _messagesConfig: [OZMessagesConfigurationItem] = []
     public var messagesConfigurations: [OZMessagesConfigurationItem] {
-        set { _messagesConfig = newValue }
+        set { _messagesConfig = OZChattingDefaultConfiguration.defaulMessageConfiguration() + newValue }
         get {
             if _messagesConfig.count == 0, let dele = delegate {
-                _messagesConfig = dele.messageConfiguration(viewController: self)
+                _messagesConfig = OZChattingDefaultConfiguration.defaulMessageConfiguration() + dele.messageConfiguration(viewController: self)
             }
             return _messagesConfig
         }
@@ -241,6 +241,19 @@ open class OZMessagesViewController: CollectionViewController {
             collectionView.reloadData() { // 1st call
                 return CGPoint(x: self.collectionView.contentOffset.x,
                                y: self.collectionView.offsetFrame.maxY)
+            }
+        }
+        else {
+            collectionView.setNeedsReload()
+            var isAutoScrollToBottom = true
+            for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in messagesConfigurations {
+                if yesOrNo {
+                    isAutoScrollToBottom = false
+                    collectionView.scrollTo(edge: .bottom, animated: false)
+                }
+            }
+            if isAutoScrollToBottom {
+                collectionView.scrollTo(edge: .bottom, animated: false)
             }
         }
     }
@@ -847,10 +860,15 @@ extension OZMessagesViewController {
                     
                     self.dataSource.data.append(sendingMsg.copy(self.messagesConfigurations, userSide: !sendingMsg.fromCurrentUser, userProfile: anImgName))
                     self.collectionView.reloadData() // send echo (for debugging)
+                    var isAutoScrollToBottom = true
                     for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in self.messagesConfigurations {
                         if yesOrNo {
+                            isAutoScrollToBottom = false
                             self.collectionView.scrollTo(edge: .bottom, animated:true)
                         }
+                    }
+                    if isAutoScrollToBottom {
+                        self.collectionView.scrollTo(edge: .bottom, animated:true)
                     }
                 }
             }
@@ -901,11 +919,18 @@ extension OZMessagesViewController {
                 self.dataSource.data.append(OZMessage(false, content: text, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
             self.collectionView.reloadData() //receive
+            
+            var isAutoScrollToBottom = true
             for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in self.messagesConfigurations {
                 if yesOrNo {
+                    isAutoScrollToBottom = false
                     self.collectionView.scrollTo(edge: .bottom, animated:true)
                 }
             }
+            if isAutoScrollToBottom {
+                self.collectionView.scrollTo(edge: .bottom, animated:true)
+            }
+
             for case .scrollToBottomNewMessageBadge(let showBadge, let fontName,
                                                     let fontSize, let height,
                                                     let textColor, let bgColor) in self.messagesConfigurations {
