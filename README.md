@@ -11,7 +11,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 
 ## Demo
-[Demo](https://github.com/neoroman/OZChattingUI/blob/master/Demo/demo-OZChattingUI.gif?raw=true)
+[![Demo](https://github.com/neoroman/OZChattingUI/blob/master/Demo/demo-OZChattingUI.gif?raw=true)](https://github.com/neoroman/OZChattingUI/blob/master/Demo/demo-OZChattingUI.gif?raw=true)
 
 
 ## Requirements
