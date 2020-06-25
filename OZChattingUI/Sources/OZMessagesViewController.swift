@@ -77,13 +77,13 @@ open class OZMessagesViewController: CollectionViewController {
         }
     }
     
-    // TODO: handle with OZChattingDefaultConfiguration.defaulMessageConfiguration()
+    // DONE(2020.06.26): handle with OZChattingDefaultConfiguration.defaulMessageConfiguration()
     private var _messagesConfig: [OZMessagesConfigurationItem] = []
     public var messagesConfigurations: [OZMessagesConfigurationItem] {
-        set { _messagesConfig = newValue }
+        set { _messagesConfig = OZChattingDefaultConfiguration.refineMessegeConfiguration(from: newValue) }
         get {
             if _messagesConfig.count == 0, let dele = delegate {
-                _messagesConfig = dele.messageConfiguration(viewController: self)
+                _messagesConfig = OZChattingDefaultConfiguration.refineMessegeConfiguration(from: dele.messageConfiguration(viewController: self))
             }
             return _messagesConfig
         }

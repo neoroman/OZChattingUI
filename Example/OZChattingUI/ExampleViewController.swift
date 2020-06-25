@@ -116,6 +116,13 @@ class ExampleViewController: OZMessagesViewController {
         unfoldButton.setTitle("Unfold Message", for: .normal)
         unfoldButton.setTitleColor(UIColor(white: 74/255, alpha: 0.7), for: .normal)
 
+        var deviceStatusTextColor = UIColor.black
+        if #available(iOS 13.0, *),
+            collectionView.backgroundColor != .white,
+            super.view.backgroundColor != .white {
+            deviceStatusTextColor = UIColor.label
+        }
+        
         var configs: [OZMessagesConfigurationItem] = [
             // OZMessageCell
             OZMessagesConfigurationItem.audioProgressColor(.systemPink, .none),
@@ -128,6 +135,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.chatEmoticonSize(CGSize(width: 83, height: 83)),
             OZMessagesConfigurationItem.chatImageSize(CGSize(width: 80, height: 100), 7, CGSize(width: 400, height: 400)),
             OZMessagesConfigurationItem.fontColor(.black, [.voice, .mp3], .none),
+            OZMessagesConfigurationItem.fontColor(deviceStatusTextColor, [.deviceStatus], .none),
             OZMessagesConfigurationItem.fontColor(.white, [.text], .fromOther),
             OZMessagesConfigurationItem.fontSize(16.0, [.text, .deviceStatus]),
             OZMessagesConfigurationItem.fontName("AppleSDGothicNeo-Bold", OZMessageType.allTypes()),

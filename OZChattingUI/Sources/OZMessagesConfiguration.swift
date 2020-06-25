@@ -17,7 +17,10 @@ public enum OZMessagesUserSideConfigType {
 public typealias OZMessagesConfigurations = [OZMessagesConfigurationItem]
 
 public enum OZMessagesConfigurationItem {
-    
+    func title() -> String {
+        return String(describing: self).trimmingCharacters(in: CharacterSet(charactersIn: ".("))
+    }
+
     // ============ OZMessageCell ==================
     ///  Bubble font name in OZMessageCell
     case fontName(String, [OZMessageType])
@@ -116,9 +119,6 @@ public enum OZMessagesConfigurationItem {
     /// Can message selectable by long press gesture, default `NO` in OZMessageCell
     case canMessageSelectableByLongPressGesture(Bool)
 
-    /// TODO: Vertical padding between messages in OZMessageCell
-    //case verticalPaddingBetweenMessage(_ currentMessage: OZMessage, _ previousMessage: OZMessage)
-    
     // ============ OZMessagesViewController ==================
     /// Auto scroll to bottom after begin text editting in OZMessagesViewController
     case autoScrollToBottomBeginTextInput(Bool, _ isShowScrollToBottomButton: Bool)
@@ -187,6 +187,20 @@ public enum OZMessagesConfigurationItem {
 }
 
 public class OZChattingDefaultConfiguration: NSObject {
+    static func refineMessegeConfiguration(from: OZMessagesConfigurations) -> OZMessagesConfigurations {
+        let reference = OZChattingDefaultConfiguration.defaulMessageConfiguration()
+        var result: [OZMessagesConfigurationItem] = []
+        let titleOfFrom = from.map({$0.title()})
+        for i in 0..<reference.count {
+            if titleOfFrom.contains(reference[i].title()) {
+                continue
+            }
+            result.append(reference[i])
+        }
+        result.append(contentsOf: from)
+        return result
+    }
+    
     static func defaulMessageConfiguration() -> OZMessagesConfigurations {
         var items = [
             // OZMessageCell

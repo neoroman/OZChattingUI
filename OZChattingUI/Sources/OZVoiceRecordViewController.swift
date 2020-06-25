@@ -100,23 +100,7 @@ open class OZVoiceRecordViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: AVAudioSession.routeChangeNotification, object: nil)
     }
-    
-    // MARK: - Orientations
-    /* TODO: do something here by Henry on 2020.05.09
-     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-     super.viewWillTransition(to: size, with: coordinator)
-     self.view.frame.origin = CGPoint.zero
-     if UIDevice.current.orientation.isLandscape {
-     print("Landscape")
-     self.view.frame.size = CGSize(width: super.view.bounds.height / 2, height: super.view.bounds.width)
-     } else {
-     print("Portrait")
-     self.view.frame.size = CGSize(width: super.view.bounds.width, height: super.view.bounds.height)
-     }
-     self.view.setNeedsLayout()
-     }
-     */
-    
+        
     // MARK: - Display by VoiceState
     fileprivate func display(byState: RecordState) {
         switch byState {
