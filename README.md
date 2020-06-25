@@ -9,7 +9,15 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+
+## Demo
+[Demo](https://github.com/neoroman/OZChattingUI/blob/master/Demo/demo-OZChattingUI.gif?raw=true)
+
+
 ## Requirements
+- iOS 10.0 or later
+- Swift 5.0 or later
+- Xcode 11.x
 
 ## Installation
 
