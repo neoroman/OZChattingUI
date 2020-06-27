@@ -18,7 +18,11 @@ public typealias OZMessagesConfigurations = [OZMessagesConfigurationItem]
 
 public enum OZMessagesConfigurationItem {
     func title() -> String {
-        return String(describing: self).trimmingCharacters(in: CharacterSet(charactersIn: ".("))
+        let text = String(describing: self).trimmingCharacters(in: CharacterSet(charactersIn: "."))
+        if let aFirst = text.components(separatedBy: "(").first {
+            return aFirst
+        }
+        return text
     }
 
     // ============ OZMessageCell ==================

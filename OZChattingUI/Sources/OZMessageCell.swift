@@ -17,6 +17,7 @@ open class TextMessageCell: OZMessageCell {
     public var textLabel = OZBubbleLabel()
     public var iconImage = UIImageView()
     public var timeLabel = UILabel()
+    private var timeLabelSize = CGSize.zero
     
     public var buttonContainer = UIView()
 
@@ -60,6 +61,12 @@ open class TextMessageCell: OZMessageCell {
             }
             if message.timestamp > 0 {
                 timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
+                if let aTime = timeLabel.text {
+                    timeLabelSize = OZMessageCell.sizeForText(aTime, fontName: message.fontName, fontSize: message.timeFontSize, maxWidth: 200, paddingX: 5, paddingY: 0)
+                    if timeLabelSize.width > timeLabel.frame.width {
+                        timeLabel.frame.size.width = timeLabelSize.width + 5
+                    }
+                }
             }
             else {
                 #if DEBUG
@@ -115,6 +122,7 @@ open class TextMessageCell: OZMessageCell {
         let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
         if message.alignment == .left {
             timeLabel.frame.origin = CGPoint(x: self.bounds.maxX+5, y: timeLabelOriginY)
+            
             let leftInset = message.iconImage.count > 0 ? message.cellLeftPadding : 0
             textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0))
             
@@ -123,6 +131,10 @@ open class TextMessageCell: OZMessageCell {
         }
         else {
             timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+            if timeLabel.frame.width > 50 {
+                timeLabel.frame.origin = CGPoint(x: self.bounds.minX-timeLabel.frame.width-5, y: timeLabelOriginY)
+            }
+            
             let rightInset = message.iconImage.count > 0 ? message.cellRightPadding : 0
             textLabel.frame = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: rightInset))
             
@@ -300,6 +312,7 @@ open class ImageMessageCell: OZMessageCell {
     open var imageView = UIImageView()  /// Set from outsize of cell, eg. `setupDataProvider`
     public var iconImage = UIImageView()
     public var timeLabel = UILabel()
+    private var timeLabelSize = CGSize.zero
         
     override public var message: OZMessage! {
         didSet {
@@ -309,11 +322,12 @@ open class ImageMessageCell: OZMessageCell {
                 timeLabel.frame.size = CGSize(width: 50, height: 12)
                 if message.timestamp > 0 {
                     timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
-                }
-                else {
-                    #if DEBUG
-                    timeLabel.text = "3:52 PM"
-                    #endif
+                    if let aTime = timeLabel.text {
+                        timeLabelSize = OZMessageCell.sizeForText(aTime, fontName: message.fontName, fontSize: message.timeFontSize, maxWidth: 200, paddingX: 5, paddingY: 0)
+                        if timeLabelSize.width > timeLabel.frame.width {
+                            timeLabel.frame.size.width = timeLabelSize.width + 5
+                        }
+                    }
                 }
                 timeLabel.isHidden = false
             }
@@ -389,6 +403,9 @@ open class ImageMessageCell: OZMessageCell {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
             if message.alignment == .right {
                 timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+                if timeLabel.frame.width > 50 {
+                    timeLabel.frame.origin = CGPoint(x: self.bounds.minX-timeLabel.frame.width-5, y: timeLabelOriginY)
+                }
                 timeLabel.textAlignment = .right
             }
             else {
@@ -410,6 +427,7 @@ open class MultipleImageMessageCell: OZMessageCell {
     open var imageViews: [UIImageView] = []
     public var iconImage = UIImageView()
     public var timeLabel = UILabel()
+    private var timeLabelSize = CGSize.zero
         
     override public var message: OZMessage! {
         didSet {
@@ -419,6 +437,12 @@ open class MultipleImageMessageCell: OZMessageCell {
                 timeLabel.frame.size = CGSize(width: 50, height: 12)
                 if message.timestamp > 0 {
                     timeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
+                    if let aTime = timeLabel.text {
+                        timeLabelSize = OZMessageCell.sizeForText(aTime, fontName: message.fontName, fontSize: message.timeFontSize, maxWidth: 200, paddingX: 5, paddingY: 0)
+                        if timeLabelSize.width > timeLabel.frame.width {
+                            timeLabel.frame.size.width = timeLabelSize.width + 5
+                        }
+                    }
                 }
                 timeLabel.isHidden = false
             }
@@ -495,6 +519,9 @@ open class MultipleImageMessageCell: OZMessageCell {
             let timeLabelOriginY = self.bounds.maxY - timeLabel.font.pointSize * 1.3
             if message.alignment == .right {
                 timeLabel.frame.origin = CGPoint(x: self.bounds.minX-55, y: timeLabelOriginY)
+                if timeLabel.frame.width > 50 {
+                    timeLabel.frame.origin = CGPoint(x: self.bounds.minX-timeLabel.frame.width-5, y: timeLabelOriginY)
+                }
                 timeLabel.textAlignment = .right
             }
             else {
@@ -524,6 +551,7 @@ open class AudioMessageCell: OZMessageCell {
     public var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
     public var iconImage = UIImageView()
     public var eTimeLabel = UILabel()
+    private var eTimeLabelSize = CGSize.zero
     
     open var isPlaying = false {
         didSet {
@@ -593,15 +621,16 @@ open class AudioMessageCell: OZMessageCell {
             
             eTimeLabel.textColor = message.timeFontColor
             eTimeLabel.font = UIFont(name: message.fontName, size: message.timeFontSize)
+            eTimeLabel.frame.size = CGSize(width: 50, height: 12)
             if message.timestamp > 0 {
                 eTimeLabel.text = "\(Date.formDateForChat(timestamp: message.timestamp, format: message.timeFontFormat))"
+                if let aTime = eTimeLabel.text {
+                    eTimeLabelSize = OZMessageCell.sizeForText(aTime, fontName: message.fontName, fontSize: message.timeFontSize, maxWidth: 200, paddingX: 5, paddingY: 0)
+                    if eTimeLabelSize.width > eTimeLabel.frame.width {
+                        eTimeLabel.frame.size.width = eTimeLabelSize.width + 5
+                    }
+                }
             }
-            else {
-                #if DEBUG
-                eTimeLabel.text = "3:52 PM"
-                #endif
-            }
-            eTimeLabel.sizeToFit()
 
             if message.cellOpacity <= 1.0 {
                 for x in self.subviews {
@@ -673,6 +702,9 @@ open class AudioMessageCell: OZMessageCell {
         
         if message.alignment == .right {
             eTimeLabel.frame.origin = CGPoint(x: bounds.minX-55, y: bounds.maxY-12)
+            if eTimeLabel.frame.width > 50 {
+                eTimeLabel.frame.origin = CGPoint(x: bounds.minX-eTimeLabel.frame.width-5, y: bounds.maxY-12)
+            }
         }
         else {
             eTimeLabel.frame.origin = CGPoint(x: bounds.maxX + 5, y: bounds.maxY-12)

@@ -248,8 +248,8 @@ open class OZMessagesViewController: CollectionViewController {
             collectionView.setNeedsReload()
             var isAutoScrollToBottom = true
             for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in messagesConfigurations {
+                isAutoScrollToBottom = false
                 if yesOrNo {
-                    isAutoScrollToBottom = false
                     collectionView.scrollTo(edge: .bottom, animated: false)
                 }
             }
@@ -863,8 +863,8 @@ extension OZMessagesViewController {
                     self.collectionView.reloadData() // send echo (for debugging)
                     var isAutoScrollToBottom = true
                     for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in self.messagesConfigurations {
+                        isAutoScrollToBottom = false
                         if yesOrNo {
-                            isAutoScrollToBottom = false
                             self.collectionView.scrollTo(edge: .bottom, animated:true)
                         }
                     }
@@ -923,25 +923,29 @@ extension OZMessagesViewController {
             
             var isAutoScrollToBottom = true
             for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in self.messagesConfigurations {
-                if yesOrNo {
+                if self.getThresholdOfScrollToBottomButtonShow() + 150 <= self.collectionView.contentSize.height {
                     isAutoScrollToBottom = false
+                }
+                if yesOrNo {
                     self.collectionView.scrollTo(edge: .bottom, animated:true)
                 }
             }
             if isAutoScrollToBottom {
                 self.collectionView.scrollTo(edge: .bottom, animated:true)
             }
-
-            for case .scrollToBottomNewMessageBadge(let showBadge, let fontName,
-                                                    let fontSize, let height,
-                                                    let textColor, let bgColor) in self.messagesConfigurations {
-                if showBadge {
-                    for case .autoScrollToBottomBeginTextInput(_, let showButton) in self.messagesConfigurations {
-                        if showButton {
-                            let count = self.scrollToBottomButton.badgeCount + 1
-                            self.scrollToBottomButton.showBadge(count: count, fontName: fontName, fontSize: fontSize, height: height, textColor: textColor, backgroundColor: bgColor)
+            else {
+                for case .scrollToBottomNewMessageBadge(
+                    let showBadge, let fontName,
+                    let fontSize, let height,
+                    let textColor, let bgColor) in self.messagesConfigurations {
+                        if showBadge {
+                            for case .autoScrollToBottomBeginTextInput(_, let showButton) in self.messagesConfigurations {
+                                if showButton {
+                                    let count = self.scrollToBottomButton.badgeCount + 1
+                                    self.scrollToBottomButton.showBadge(count: count, fontName: fontName, fontSize: fontSize, height: height, textColor: textColor, backgroundColor: bgColor)
+                                }
+                            }
                         }
-                    }
                 }
             }
             if let anim = self.animator as? OZMessageAnimator {
@@ -967,37 +971,6 @@ extension OZMessagesViewController: UIScrollViewDelegate {
                     height = rect.height
                 }
             }
-            /*
-            if  let firstMsg = dataSource.data.last, firstMsg.type == .image {
-                let maxWidth = collectionView.contentSize.width
-                var packedImageHeight: CGFloat = 0
-                let cellFrame = OZMessageCell.frameForMessage(firstMsg, containerWidth: maxWidth)
-                var nextFrame = cellFrame
-                for i in 1..<dataSource.data.count {
-                    let index = dataSource.data.count - i
-                    let nextMsg = dataSource.data[index]
-                    if nextMsg.type == firstMsg.type, nextMsg.alignment == firstMsg.alignment {
-                        
-                        let aFrame = OZMessageCell.frameForMessage(nextMsg, containerWidth: maxWidth)
-                        
-                        if nextMsg.alignment == .left && nextFrame.maxX + aFrame.width + 2 < maxWidth {
-                            nextFrame.origin.x += aFrame.width
-                        } else if nextMsg.alignment == .right && nextFrame.minX - aFrame.width - 2 > 0 {
-                            nextFrame.origin.x -= 2 + aFrame.width
-                        } else {
-                            nextFrame.origin.y += aFrame.height
-                            packedImageHeight += aFrame.height
-                        }
-                    }
-                    else {
-                        break
-                    }
-                }
-                if packedImageHeight > height {
-                    height = packedImageHeight
-                }
-            }
-             */
         }
         return height
     }
@@ -1064,7 +1037,7 @@ extension OZMessagesViewController: UIScrollViewDelegate {
     }
     
     func getThresholdOfScrollToBottomButtonShow() -> CGFloat {
-        return collectionView.contentOffset.y + collectionView.bounds.height + 100
+        return collectionView.contentOffset.y + collectionView.bounds.height + 50
     }
 }
 

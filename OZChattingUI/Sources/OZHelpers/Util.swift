@@ -1,3 +1,4 @@
+import Foundation
 import UIKit
 
 extension UIColor {
@@ -176,7 +177,7 @@ extension String {
     }
     
     var localized: String {
-        var localizedString = NSLocalizedString(self, comment: "")
+        let localizedString = NSLocalizedString(self, comment: "")
         return localizedString
     }
     
@@ -188,7 +189,13 @@ extension String {
 
 extension Date {
     static func formDateForChat(timestamp: Int, format: String = "h:mm a") -> String {
-        return Date(timeIntervalSince1970: TimeInterval(timestamp)).toString(DateFormat.custom(format), timeZone: .local)
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = format
+        dateFormatterPrint.locale = .current
+        dateFormatterPrint.timeZone = TimeZone(identifier: TimeZone.current.identifier)
+
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
+        return dateFormatterPrint.string(from: date)
     }
 }
 

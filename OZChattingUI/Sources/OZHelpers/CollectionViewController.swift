@@ -20,7 +20,6 @@ open class CollectionViewController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
-//        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: insetMarginTop, left: insetMarginX, bottom: insetMarginBottom, right: insetMarginX))
     }
     
     override open func viewDidLayoutSubviews() {

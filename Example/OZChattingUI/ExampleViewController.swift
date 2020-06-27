@@ -34,8 +34,13 @@ class ExampleViewController: OZMessagesViewController {
         self.delegate = self
         self.messagesConfigurations = addMessageConfiguration()
         
-        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-            self.testChats(vc: self)            
+        if isFromStoryboard {
+            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                self.testChats(vc: self)
+            }
+        }
+        else {
+            isEchoMode = true
         }
     }
     
