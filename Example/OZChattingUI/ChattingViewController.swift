@@ -47,57 +47,13 @@ class ChattingViewController: OZMessagesViewController {
         
         setUI()
         setDefaultState()
-        
+                
         let configuredTestMessages = testMessages.map{ $0.copy(messagesConfigurations, userSide: nil) }
         self.setupDataProvider(newDataSource: OZMessageDataProvider.init(data: configuredTestMessages))
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
             self.isEchoMode = true
         }
-        if self.navigationController != nil {
-            let item = UISwitch(frame: .zero)
-            item.isOn = false
-            item.addTarget(self, action: #selector(switchTapped), for: [.touchDragInside, .touchUpInside])
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: item)
-        }
-        if !isCustomFrame {
-            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                self.receiveTimer = Timer.scheduledTimer(withTimeInterval: 3.5, repeats: true) { (timer) in
-                    let randomTime = Int(arc4random_uniform(9))
-                    let threshold = self.receiveCount % (randomTime > 0 ? randomTime : 1)
-                    if threshold == 0, randomTime > 2 {
-                        var array: [String] = []
-                        while array.count < randomTime {
-                            let num = arc4random_uniform(9)
-                            var numString = "\(num)"
-                            switch num {
-                            case 7: numString = "l1"
-                            case 8: numString = "l2"
-                            case 9: numString = "l3"
-                            default: break
-                            }
-                            if num > 0, !array.contains(numString) {
-                                array.append(numString)
-                            }
-                        }
-                        if randomTime % 2 == 0 {
-                            self.send(msg: array.joined(separator: "|"), type: .multipleImages, isDeliveredMsg: false, isEchoable: false) { (id, path) in
-                            }
-                        }
-                        else {
-                            self.receive(msg: array.joined(separator: "|"), type: .multipleImages, activeType: nil, duration: 0, timestamp: 0, profileIconPath: nil)
-                        }
-                    }
-                    self.receiveCount += 1
-                    
-                    if Double(self.receiveCount) - 100 >= Float64.infinity {
-                        self.receiveCount = 0
-                    }
-                }
-            }
-        }
-        else {
-            switchTapped()
-        }
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -179,6 +135,56 @@ class ChattingViewController: OZMessagesViewController {
             messageTextViewBeginEditing(textView: ozitv)
         }
         keyboardButton.tintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
+        
+        
+        if self.navigationController != nil {
+            let item = UISwitch(frame: .zero)
+            item.isOn = false
+            if isCustomFrame {
+                item.isOn = true
+            }
+            item.addTarget(self, action: #selector(switchTapped), for: [.touchDragInside, .touchUpInside])
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: item)
+        }
+        if isCustomFrame {
+            switchTapped()
+        }
+        else {
+            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+                self.receiveTimer = Timer.scheduledTimer(withTimeInterval: 3.5, repeats: true) { (timer) in
+                    let randomTime = Int(arc4random_uniform(9))
+                    let threshold = self.receiveCount % (randomTime > 0 ? randomTime : 1)
+                    if threshold == 0, randomTime > 2 {
+                        var array: [String] = []
+                        while array.count < randomTime {
+                            let num = arc4random_uniform(9)
+                            var numString = "\(num)"
+                            switch num {
+                            case 7: numString = "l1"
+                            case 8: numString = "l2"
+                            case 9: numString = "l3"
+                            default: break
+                            }
+                            if num > 0, !array.contains(numString) {
+                                array.append(numString)
+                            }
+                        }
+                        if randomTime % 2 == 0 {
+                            self.send(msg: array.joined(separator: "|"), type: .multipleImages, isDeliveredMsg: false, isEchoable: false) { (id, path) in
+                            }
+                        }
+                        else {
+                            self.receive(msg: array.joined(separator: "|"), type: .multipleImages, activeType: nil, duration: 0, timestamp: 0, profileIconPath: nil)
+                        }
+                    }
+                    self.receiveCount += 1
+                    
+                    if Double(self.receiveCount) - 100 >= Float64.infinity {
+                        self.receiveCount = 0
+                    }
+                }
+            }
+        }
     }
     
     /// Set to default Views and Buttons
