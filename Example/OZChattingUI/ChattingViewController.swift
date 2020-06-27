@@ -95,6 +95,9 @@ class ChattingViewController: OZMessagesViewController {
                 }
             }
         }
+        else {
+            switchTapped()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

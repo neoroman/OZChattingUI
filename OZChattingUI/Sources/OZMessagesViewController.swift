@@ -923,9 +923,11 @@ extension OZMessagesViewController {
             
             var isAutoScrollToBottom = true
             for case .autoScrollToBottomNewMessageArrived(let yesOrNo) in self.messagesConfigurations {
-                if self.getThresholdOfScrollToBottomButtonShow() + 150 <= self.collectionView.contentSize.height {
-                    isAutoScrollToBottom = false
-                }
+                // TODO: do something here on 2020.06.27
+//                if self.getThresholdOfScrollToBottomButtonShow() > self.collectionView.contentSize.height {
+//                    isAutoScrollToBottom = false
+//                }
+                isAutoScrollToBottom = false
                 if yesOrNo {
                     self.collectionView.scrollTo(edge: .bottom, animated:true)
                 }
