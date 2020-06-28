@@ -132,6 +132,17 @@ open class OZMessagesViewController: CollectionViewController {
             }
         }
     }
+    
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        for i in 0..<dataSource.data.count {
+            guard let anAudioCell = collectionView.cell(at: i) as? AudioMessageCell else { continue }
+            if anAudioCell.isPlaying {
+                anAudioCell.playOrStop()
+            }
+        }
+    }
         
     // MARK: - Orientations
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

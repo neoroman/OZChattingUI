@@ -560,7 +560,6 @@ open class AudioMessageCell: OZMessageCell {
             }
             else {
                 self.playImage.image = self.playImg
-                self.backView.progress = 0.0
                 self.activityIndicator.stopAnimating()
             }
         }
@@ -757,6 +756,7 @@ open class AudioMessageCell: OZMessageCell {
             if elapsed >= duration || Int(maxDuration) == 0 {
                 let finalDur: Int = Int(maxDuration)
                 self.isPlaying = false
+                self.backView.progress = 0.0
                 self.textLabel.text = String(format: "%02d:%02d", finalDur / 60, finalDur % 60)
             }
         }
