@@ -281,6 +281,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.inputContainerMaximumHeight(56*3),
             OZMessagesConfigurationItem.scrollToBottomButton(.zero, CGSize(width: 40, height: 40), 2, UIColor.white, UIColor.gray, 0.4),
             OZMessagesConfigurationItem.scrollToBottomNewMessageBadge(true, "AppleSDGothicNeo-Medium", 14, 24, .white, .red),
+            OZMessagesConfigurationItem.showTypingIndicator(true, 10, .gray),
 
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
@@ -314,6 +315,7 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
                 self.send(msg: "Delivered", type: .status, isDeliveredMsg: true)
             }
         }
+        isTyping = false
         return true
     }
     
@@ -468,15 +470,18 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
     func messageTextViewDidChanged(textView: UITextView) {
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
             sendButton.isEnabled = true
+            isTyping = true
         }
         else {
             sendButton.isEnabled = false
+            isTyping = false
         }
     }
     
     func messageTextViewEndEditing(textView: UITextView) {
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count <= 0 {
             sendButton.isEnabled = false
+            isTyping = false
         }
     }
     

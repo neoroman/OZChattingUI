@@ -20,6 +20,7 @@ extension OZBubbleLabel {
         let radius: CGFloat = kBubbleRadius
 
         if type == .hasOwnDrawing {
+            notchInsetX = kNotchInsetX
             
             let width = bounds.width
             let height = bounds.height
@@ -29,7 +30,6 @@ extension OZBubbleLabel {
             
             let startX: CGFloat = radius
             
-            let notchInsetX: CGFloat = kNotchInsetX
             let notchHeight: CGFloat = 8.0 / 12.0 * radius
             let notchRadius: CGFloat = 3.0 / 12.0 * radius
             let notchCircleStartPoint = CGPoint(x: width-notchInsetX + (3.6/12.0*radius),
@@ -262,12 +262,12 @@ extension OZBubbleLabel {
     }
     
     override open func drawText(in rect: CGRect) {
-        var insetX = kNotchInsetX
-        if type == .basic {
-            insetX = 10
-        }
+//        var insetX = kNotchInsetX
+//        if type == .basic {
+//            insetX = 10
+//        }
         if isIncoming {
-            let insets = UIEdgeInsets.init(top: topInset, left: leftInset + insetX, bottom: bottomInset, right: rightInset - insetX)
+            let insets = UIEdgeInsets.init(top: topInset, left: leftInset + notchInsetX, bottom: bottomInset, right: rightInset - notchInsetX)
             super.drawText(in: rect.inset(by: insets))
         }
         else {

@@ -19,6 +19,7 @@ public typealias OZChatTapCompleteBlock = (_ success: Bool, _ path: String) -> V
 
 let minTextViewHeight: CGFloat = 56
 let maxTextViewHeight: CGFloat = minTextViewHeight * 3
+fileprivate let kTypingBubbleViewTag = 1717259
 
 open class OZMessagesViewController: CollectionViewController {
     
@@ -93,7 +94,13 @@ open class OZMessagesViewController: CollectionViewController {
         didSet {
             guard typingCanVisible, typingIsVisible != oldValue else { return }
             if typingIsVisible {
-                let typeMessage = OZMessage(false, content: "typing...", timestamp: Int(Date().timeIntervalSince1970), iconImage: nil, config: messagesConfigurations)
+                var anImgName = ""
+                for case .profileIconName(let name, _, let userType) in messagesConfigurations {
+                    if userType == .fromOther {
+                        anImgName = name
+                    }
+                }
+                let typeMessage = OZMessage(false, content: "typing", timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: messagesConfigurations)
                 typingMessageId = typeMessage.identifier
                 dataSource.data.append(typeMessage)
                 collectionView.setNeedsReload()
@@ -961,6 +968,11 @@ extension OZMessagesViewController {
             else {
                 self.dataSource.data.append(OZMessage(false, content: text, timestamp: aTimestamp, iconImage: anImgName, config: self.messagesConfigurations))
             }
+            
+            if self.typingCanVisible {
+                self.isTyping = false
+            }
+
             self.collectionView.reloadData() //receive
             
             var isAutoScrollToBottom = true
@@ -1282,6 +1294,30 @@ extension OZMessagesViewController {
             ic.layer.masksToBounds = false
             view.bringSubviewToFront(ic)
         }
+    }
+    
+    func setupTypingBubble(cell: TextMessageCell) {
+        func resetTypingBubble(textCell: TextMessageCell, bubble: OZTypingBubble) {
+            bubble.center.y = textCell.textLabel.bounds.midY
+            bubble.center.x = textCell.textLabel.bounds.midX + (textCell.textLabel.type != OZBubbleLabelType.noDraw ? textCell.textLabel.notchInsetX : 0)
+            textCell.textLabel.textColor = .clear
+            textCell.timeLabel.isHidden = true
+            bubble.startAnimating()
+        }
+        
+        if let tBubble = cell.textLabel.viewWithTag(kTypingBubbleViewTag) as? OZTypingBubble {
+            resetTypingBubble(textCell: cell, bubble: tBubble)
+            return
+        }
+        let rect = cell.textLabel.bounds.insetBy(dx: 10, dy: 15)
+        let typingBubble = OZTypingBubble(frame: rect)
+        typingBubble.frame.size = CGSize(width: typingBubbleHeight * 3 + 5 * 2, height: typingBubbleHeight)
+        typingBubble.dotColor = typingBubbleColor
+        typingBubble.tag = kTypingBubbleViewTag
+        cell.textLabel.addSubview(typingBubble)
+        resetTypingBubble(textCell: cell, bubble: typingBubble)
+        
+        collectionView.scrollTo(edge: .bottom, animated: true)
     }
     
     func reloadAllView(_ state: OZMessagesViewState = .chat, oldState: OZMessagesViewState? = nil) {
@@ -1931,21 +1967,10 @@ extension OZMessagesViewController: OZMessageCellDelegate {
             if isTyping, cell.message.type == .text, cell.message.alignment == .left,
                 cell.message.identifier == typingMessageId,
                 let tCell = cell as? TextMessageCell {
-                var rect = tCell.textLabel.bounds.insetBy(dx: 10, dy: 15)
-                rect.size.height = typingBubbleHeight
-                rect.size.width = typingBubbleHeight * 3 + 5 * 2
-                let typingBubble = OZTypingBubble(frame: rect)
-                typingBubble.dotColor = typingBubbleColor
-                typingBubble.tag = 1717259
-                typingBubble.center.y = tCell.textLabel.bounds.midY
-                typingBubble.center.x = tCell.textLabel.bounds.midX + 5 //+ tCell.textLabel.notchInsetX
-                tCell.textLabel.addSubview(typingBubble)
-                tCell.textLabel.textColor = .clear
-                tCell.timeLabel.isHidden = true
-                typingBubble.startAnimating()
+                setupTypingBubble(cell: tCell)
             }
             else if let tCell = cell as? TextMessageCell,
-                let tBubble = tCell.textLabel.viewWithTag(1717259) {
+                let tBubble = tCell.textLabel.viewWithTag(kTypingBubbleViewTag) {
                 tBubble.removeFromSuperview()
             }
         }
