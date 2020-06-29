@@ -115,8 +115,10 @@ int caclAMRFrameSize(unsigned char frameHeader) {
 	temp1 &= 0x78; // 0111-1000
 	temp1 >>= 3;
 	
+    NSLog(@"ARM::: temp1 = %d", temp1);
 	mode = amrEncodeMode[temp1];
-	
+    NSLog(@"ARM::: ARM encode mode = %d", mode);
+
 	// 计算amr音频数据帧大小
 	// 原理: amr 一帧对应20ms, 那么一秒有50帧的音频数据
 	temp2 = roundNumber((double)(((double)mode / (double)AMR_FRAME_COUNT_PER_SECOND) / (double)8));

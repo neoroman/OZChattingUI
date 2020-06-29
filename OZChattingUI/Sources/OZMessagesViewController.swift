@@ -442,18 +442,15 @@ open class OZMessagesViewController: CollectionViewController {
         
         let isAtBottom = collectionView.contentOffset.y >= collectionView.offsetFrame.maxY - 10
         if !collectionView.hasReloaded, !collectionView.isReloading {
-            UIView.setAnimationsEnabled(false)
             collectionView.reloadData() { // 1st call
                 return CGPoint(x: self.collectionView.contentOffset.x,
                                y: self.collectionView.offsetFrame.maxY)
             }
-            UIView.setAnimationsEnabled(true)
         }
         if isAtBottom, !collectionView.hasReloaded, !collectionView.isReloading {
             collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x,
                                                     y: collectionView.offsetFrame.maxY), animated: false)
-        }
-        
+        }        
         if isKeyboardShow || chatState == .emoticon {
             keyboardShowLayout(isPadding: true, animated: false)
         }
@@ -1726,23 +1723,24 @@ extension OZMessagesViewController: UITextViewDelegate {
         for case .inputContainerMaximumHeight(let height) in messagesConfigurations {
             maxHeight = height
         }
+                
         if thc.constant >= maxHeight {
             UIView.animate(withDuration: 0.35, delay: 0.1, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
                 thc.constant = maxHeight
                 self.view.setNeedsUpdateConstraints()
-                self.view.layoutIfNeeded()
+                //self.view.layoutIfNeeded()
             }) { (complete) in
             }
         }
         else if thc.constant < maxHeight, thc.constant < size.height {
             thc.constant = size.height
             self.view.setNeedsUpdateConstraints()
-            self.view.layoutIfNeeded()
+            //self.view.layoutIfNeeded()
         }
         else if thc.constant < minHeight {
             thc.constant = minHeight
             self.view.setNeedsUpdateConstraints()
-            self.view.layoutIfNeeded()
+            //self.view.layoutIfNeeded()
         }
     }
     
