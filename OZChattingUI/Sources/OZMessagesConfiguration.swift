@@ -176,6 +176,11 @@ public enum OZMessagesConfigurationItem {
     /// height is ``15``, textColor is ``white``, backgroundColor is ``green``
     case scrollToBottomNewMessageBadge(Bool, _ fontName: String, _ fontSize: CGFloat,
         _ height: CGFloat, _ textColor: UIColor, _ backgroundColor: UIColor)
+    
+    /// Show typing indicator in left-side in OZMessagesViewController,
+    /// Default is ``NO``, isTyping only work this value is ``YES``
+    case showTypingIndicator(Bool, CGFloat, UIColor)
+    
 
     // ============ OZVoiceRecordViewController ==================
     /// Max duration of voice record in OZVoiceRecordViewController

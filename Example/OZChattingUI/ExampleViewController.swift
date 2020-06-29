@@ -161,6 +161,7 @@ class ExampleViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGray, .systemTeal),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(.systemGreen, .systemRed),
             OZMessagesConfigurationItem.inputBoxEmoticonButtonTintColor(.systemGreen, .systemRed),
+            OZMessagesConfigurationItem.showTypingIndicator(true, 7, .red),
 
             // OZTextView
             OZMessagesConfigurationItem.inputTextViewFont(UIFont.boldSystemFont(ofSize: 18)),
@@ -227,6 +228,8 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
             self.send(msg: "Delivered", type: .status)
         }
         
+        isTyping = false
+
         return true
     }
     func messageConfiguration(viewController: OZMessagesViewController) -> OZMessagesConfigurations {
@@ -302,10 +305,12 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
             ozmb.setImage(UIImage(named: "send"), for: .normal)
             ozmb.tag = kSendButtonTag
+            isTyping = true
         }
         else {
             ozmb.setImage(UIImage(named: "mic"), for: .normal)
             ozmb.tag = kMicButtonTag
+            isTyping = false
         }
     }
     func messageTextViewEndEditing(textView: UITextView) {
@@ -315,6 +320,8 @@ extension ExampleViewController: OZMessagesViewControllerDelegate {
             ozmb.setImage(UIImage(named: "mic"), for: .normal)
             ozmb.tag = kMicButtonTag
         }
+        
+        isTyping = false
     }
     func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) {
         // Do something here just before record permission granted

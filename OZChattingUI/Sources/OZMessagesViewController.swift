@@ -66,7 +66,7 @@ open class OZMessagesViewController: CollectionViewController {
     public var userIdentifier: String?
     public var isEchoMode: Bool = false
     
-    var loading = false
+    public private(set) var loading = false
     
     public var dataSource = OZMessageDataProvider(data: [])
     public var animator = Animator() {
@@ -76,7 +76,41 @@ open class OZMessagesViewController: CollectionViewController {
             }
         }
     }
-    
+    private var typingMessageId: String = ""
+    private var typingCanVisible: Bool = false
+    private var typingBubbleHeight: CGFloat = 0
+    private var typingBubbleColor: UIColor = .clear
+    private var typingIsVisible: Bool = false {
+        willSet {
+            for case .showTypingIndicator(let yesOrNo, let height, let color) in messagesConfigurations {
+                if yesOrNo {
+                    typingCanVisible = true
+                    typingBubbleHeight = height
+                    typingBubbleColor = color
+                }
+            }
+        }
+        didSet {
+            guard typingCanVisible, typingIsVisible != oldValue else { return }
+            if typingIsVisible {
+                let typeMessage = OZMessage(false, content: "typing...", timestamp: Int(Date().timeIntervalSince1970), iconImage: nil, config: messagesConfigurations)
+                typingMessageId = typeMessage.identifier
+                dataSource.data.append(typeMessage)
+                collectionView.setNeedsReload()
+            }
+            else if let typeIndex = dataSource.data.firstIndex(where: {$0.identifier == typingMessageId}) {
+                dataSource.data.remove(at: typeIndex)
+                collectionView.setNeedsReload()
+            }
+        }
+    }
+    public var isTyping: Bool = false {
+        didSet {
+            guard isTyping != oldValue else { return }
+            typingIsVisible = isTyping
+        }
+    }
+
     // DONE(2020.06.26): handle with OZChattingDefaultConfiguration.defaulMessageConfiguration()
     private var _messagesConfig: [OZMessagesConfigurationItem] = []
     public var messagesConfigurations: [OZMessagesConfigurationItem] {
@@ -450,7 +484,7 @@ open class OZMessagesViewController: CollectionViewController {
         if isAtBottom, !collectionView.hasReloaded, !collectionView.isReloading {
             collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x,
                                                     y: collectionView.offsetFrame.maxY), animated: false)
-        }        
+        }
         if isKeyboardShow || chatState == .emoticon {
             keyboardShowLayout(isPadding: true, animated: false)
         }
@@ -1891,6 +1925,31 @@ extension OZMessagesViewController: OZMessageCellDelegate {
         }
     }
     func cellLayoutSubviews(cell: OZMessageCell) {
+        
+        /// for typing message
+        if typingCanVisible {
+            if isTyping, cell.message.type == .text, cell.message.alignment == .left,
+                cell.message.identifier == typingMessageId,
+                let tCell = cell as? TextMessageCell {
+                var rect = tCell.textLabel.bounds.insetBy(dx: 10, dy: 15)
+                rect.size.height = typingBubbleHeight
+                rect.size.width = typingBubbleHeight * 3 + 5 * 2
+                let typingBubble = OZTypingBubble(frame: rect)
+                typingBubble.dotColor = typingBubbleColor
+                typingBubble.tag = 1717259
+                typingBubble.center.y = tCell.textLabel.bounds.midY
+                typingBubble.center.x = tCell.textLabel.bounds.midX + 5 //+ tCell.textLabel.notchInsetX
+                tCell.textLabel.addSubview(typingBubble)
+                tCell.textLabel.textColor = .clear
+                tCell.timeLabel.isHidden = true
+                typingBubble.startAnimating()
+            }
+            else if let tCell = cell as? TextMessageCell,
+                let tBubble = tCell.textLabel.viewWithTag(1717259) {
+                tBubble.removeFromSuperview()
+            }
+        }
+
         if let dele = delegate {
             if let currentMessageIndex = dataSource.data.firstIndex(of: cell.message),
                 currentMessageIndex - 1 >= 0 {
