@@ -144,7 +144,7 @@ extension OZBubbleLabel {
         }
         else if type == .basic {
             let width = bounds.width
-            let height = bounds.height * heightRatio
+            let height = bounds.height
             
             let notchInsetX: CGFloat = 10.0
             let cornerRatio: CGFloat = 6.27 / 14.0
@@ -262,12 +262,12 @@ extension OZBubbleLabel {
     }
     
     override open func drawText(in rect: CGRect) {
-//        var insetX = kNotchInsetX
-//        if type == .basic {
-//            insetX = 10
-//        }
+        var insetX = kNotchInsetX
+        if type == .basic {
+            insetX = 10
+        }
         if isIncoming {
-            let insets = UIEdgeInsets.init(top: topInset, left: leftInset + notchInsetX, bottom: bottomInset, right: rightInset - notchInsetX)
+            let insets = UIEdgeInsets.init(top: topInset, left: leftInset + insetX, bottom: bottomInset, right: rightInset - insetX)
             super.drawText(in: rect.inset(by: insets))
         }
         else {

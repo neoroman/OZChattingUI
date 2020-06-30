@@ -1298,8 +1298,9 @@ extension OZMessagesViewController {
     
     func setupTypingBubble(cell: TextMessageCell) {
         func resetTypingBubble(textCell: TextMessageCell, bubble: OZTypingBubble) {
+            let offsetX = (textCell.textLabel.type != OZBubbleLabelType.noDraw ? textCell.textLabel.notchInsetX : 0)
+            bubble.center.x = textCell.textLabel.bounds.midX + offsetX
             bubble.center.y = textCell.textLabel.bounds.midY
-            bubble.center.x = textCell.textLabel.bounds.midX + (textCell.textLabel.type != OZBubbleLabelType.noDraw ? textCell.textLabel.notchInsetX : 0)
             textCell.textLabel.textColor = .clear
             textCell.timeLabel.isHidden = true
             bubble.startAnimating()

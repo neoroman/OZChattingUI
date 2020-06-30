@@ -26,9 +26,7 @@ open class OZBubbleLabel: UILabel {
     @IBInspectable public var bottomInset: CGFloat = kBubbleLabelBottomInset
     @IBInspectable public var leftInset: CGFloat = kBubbleLabelLeftInset
     @IBInspectable public var rightInset: CGFloat = kBubbleLabelRightInset
-    @IBInspectable public var notchInsetXRatio: CGFloat = 0.67
-    @IBInspectable public var heightRatio: CGFloat = 1
-    public var notchInsetX: CGFloat = 10.0
+    public var notchInsetX: CGFloat = 0.0
 
     public var isIncoming = false
     public var incomingColor = UIColor(white: 244.0 / 255.0, alpha: 1.0)
@@ -37,8 +35,10 @@ open class OZBubbleLabel: UILabel {
     override open func draw(_ rect: CGRect) {
         
         if type == .basic {
+            notchInsetX = 10.0
+            
             let width = bounds.width
-            let height = bounds.height * heightRatio
+            let height = bounds.height
             
             let cornerRatio: CGFloat = 6.27 / 14.0
             let cntlRadius: CGFloat = radius * cornerRatio
@@ -154,6 +154,7 @@ open class OZBubbleLabel: UILabel {
     
     override open func drawText(in rect: CGRect) {
         if type == .basic {
+            notchInsetX = 10.0
             if isIncoming {
                 let insets = UIEdgeInsets.init(top: topInset, left: leftInset + notchInsetX, bottom: bottomInset, right: rightInset - notchInsetX)
                 super.drawText(in: rect.inset(by: insets))

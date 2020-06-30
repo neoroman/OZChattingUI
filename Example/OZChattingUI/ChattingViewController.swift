@@ -272,15 +272,16 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.canMessageSelectableByLongPressGesture(true),
 
             // OZMessagesViewController
-            OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),
-            OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(false),
+            //OZMessagesConfigurationItem.autoScrollToBottomBeginTextInput(false, true),
+            //OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(false),
+            OZMessagesConfigurationItem.autoScrollToBottomNewMessageArrived(true),
             OZMessagesConfigurationItem.collectionViewEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)),
             OZMessagesConfigurationItem.inputBoxMicButtonTintColor(kMainColor, kMainColor),
             OZMessagesConfigurationItem.inputBoxFileButtonTintColor(kMainColor, kMainColor),
             OZMessagesConfigurationItem.inputContainerMinimumHeight(56),
             OZMessagesConfigurationItem.inputContainerMaximumHeight(56*3),
-            OZMessagesConfigurationItem.scrollToBottomButton(.zero, CGSize(width: 40, height: 40), 2, UIColor.white, UIColor.gray, 0.4),
-            OZMessagesConfigurationItem.scrollToBottomNewMessageBadge(true, "AppleSDGothicNeo-Medium", 14, 24, .white, .red),
+            //OZMessagesConfigurationItem.scrollToBottomButton(.zero, CGSize(width: 40, height: 40), 2, UIColor.white, UIColor.gray, 0.4),
+            //OZMessagesConfigurationItem.scrollToBottomNewMessageBadge(true, "AppleSDGothicNeo-Medium", 14, 24, .white, .red),
             OZMessagesConfigurationItem.showTypingIndicator(true, 10, .gray),
 
             // OZTextView
