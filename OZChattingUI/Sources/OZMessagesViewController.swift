@@ -94,14 +94,7 @@ open class OZMessagesViewController: CollectionViewController {
         didSet {
             guard typingCanVisible, typingIsVisible != oldValue else { return }
             if typingIsVisible {
-                var anImgName = ""
-                for case .profileIconName(let name, _, let userType) in messagesConfigurations {
-                    if userType == .fromOther {
-                        anImgName = name
-                    }
-                }
-                let typeMessage = OZMessage(false, content: "typing", timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: messagesConfigurations)
-                typingMessageId = typeMessage.identifier
+                let typeMessage = getTypingIndicatorMessage()
                 dataSource.data.append(typeMessage)
                 collectionView.setNeedsReload()
             }
@@ -1295,32 +1288,7 @@ extension OZMessagesViewController {
             view.bringSubviewToFront(ic)
         }
     }
-    
-    func setupTypingBubble(cell: TextMessageCell) {
-        func resetTypingBubble(textCell: TextMessageCell, bubble: OZTypingBubble) {
-            let offsetX = (textCell.textLabel.type != OZBubbleLabelType.noDraw ? textCell.textLabel.notchInsetX : 0)
-            bubble.center.x = textCell.textLabel.bounds.midX + offsetX
-            bubble.center.y = textCell.textLabel.bounds.midY
-            textCell.textLabel.textColor = .clear
-            textCell.timeLabel.isHidden = true
-            bubble.startAnimating()
-        }
-        
-        if let tBubble = cell.textLabel.viewWithTag(kTypingBubbleViewTag) as? OZTypingBubble {
-            resetTypingBubble(textCell: cell, bubble: tBubble)
-            return
-        }
-        let rect = cell.textLabel.bounds.insetBy(dx: 10, dy: 15)
-        let typingBubble = OZTypingBubble(frame: rect)
-        typingBubble.frame.size = CGSize(width: typingBubbleHeight * 3 + 5 * 2, height: typingBubbleHeight)
-        typingBubble.dotColor = typingBubbleColor
-        typingBubble.tag = kTypingBubbleViewTag
-        cell.textLabel.addSubview(typingBubble)
-        resetTypingBubble(textCell: cell, bubble: typingBubble)
-        
-        collectionView.scrollTo(edge: .bottom, animated: true)
-    }
-    
+
     func reloadAllView(_ state: OZMessagesViewState = .chat, oldState: OZMessagesViewState? = nil) {
         
         if state == .emoticon {
@@ -1420,6 +1388,46 @@ extension OZMessagesViewController {
     }
     
     
+    // MARK: - Typing Indicator Related
+    func getTypingIndicatorMessage() -> OZMessage {
+        var anImgName = ""
+        for case .profileIconName(let name, _, let userType) in messagesConfigurations {
+            if userType == .fromOther {
+                anImgName = name
+            }
+        }
+        let typeMessage = OZMessage(false, content: "typing", timestamp: Int(Date().timeIntervalSince1970), iconImage: anImgName, config: messagesConfigurations)
+        typingMessageId = typeMessage.identifier
+        
+        return typeMessage
+    }
+    
+    func setupTypingBubble(cell: TextMessageCell) {
+        func resetTypingBubble(textCell: TextMessageCell, bubble: OZTypingBubble) {
+            let offsetX = (textCell.textLabel.type != OZBubbleLabelType.noDraw ? textCell.textLabel.notchInsetX : 0)
+            bubble.center.x = textCell.textLabel.bounds.midX + offsetX
+            bubble.center.y = textCell.textLabel.bounds.midY
+            textCell.textLabel.textColor = .clear
+            textCell.timeLabel.isHidden = true
+            bubble.startAnimating()
+        }
+        
+        if let tBubble = cell.textLabel.viewWithTag(kTypingBubbleViewTag) as? OZTypingBubble {
+            resetTypingBubble(textCell: cell, bubble: tBubble)
+            return
+        }
+        let rect = cell.textLabel.bounds.insetBy(dx: 10, dy: 15)
+        let typingBubble = OZTypingBubble(frame: rect)
+        typingBubble.frame.size = CGSize(width: typingBubbleHeight * 3 + 5 * 2, height: typingBubbleHeight)
+        typingBubble.dotColor = typingBubbleColor
+        typingBubble.tag = kTypingBubbleViewTag
+        cell.textLabel.addSubview(typingBubble)
+        resetTypingBubble(textCell: cell, bubble: typingBubble)
+        
+        collectionView.scrollTo(edge: .bottom, animated: true)
+    }
+    
+
     
     // MARK: - Bottom button above keyboard
     fileprivate func keyboardShowLayout(isPadding: Bool = true, animated: Bool = true) {
@@ -1964,14 +1972,21 @@ extension OZMessagesViewController: OZMessageCellDelegate {
     func cellLayoutSubviews(cell: OZMessageCell) {
         
         /// for typing message
-        if typingCanVisible {
+        if typingCanVisible, let tCell = cell as? TextMessageCell {
             if isTyping, cell.message.type == .text, cell.message.alignment == .left,
-                cell.message.identifier == typingMessageId,
-                let tCell = cell as? TextMessageCell {
+                cell.message.identifier == typingMessageId {
+                
+                if let typeIndex = dataSource.data.firstIndex(where: {$0.identifier == typingMessageId}),
+                    typeIndex < dataSource.data.count - 1 {
+                    dataSource.data.remove(at: typeIndex)
+                    let typeMessage = getTypingIndicatorMessage()
+                    dataSource.data.append(typeMessage)
+                    collectionView.setNeedsReload()
+                }
+                
                 setupTypingBubble(cell: tCell)
             }
-            else if let tCell = cell as? TextMessageCell,
-                let tBubble = tCell.textLabel.viewWithTag(kTypingBubbleViewTag) {
+            else if let tBubble = tCell.textLabel.viewWithTag(kTypingBubbleViewTag) {
                 tBubble.removeFromSuperview()
             }
         }
