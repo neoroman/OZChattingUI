@@ -1,3 +1,26 @@
+/*
+MIT License
+
+Copyright (c) 2020 OZChattingUI, Henry Kim <neoroman@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
 //
 //  OZMessageCell.swift
 //  OZChattingUI
@@ -12,7 +35,7 @@ import NVActivityIndicatorView
 
 public var kTextFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
 
-// MARK: - TextMessageCell
+// MARK: -
 open class TextMessageCell: OZMessageCell {
     public var textLabel = OZBubbleLabel()
     public var iconImage = UIImageView()
@@ -151,7 +174,7 @@ open class TextMessageCell: OZMessageCell {
     }
 }
 
-// MARK: - StatusMessageCell
+// MARK: -
 open class StatusMessageCell: OZMessageCell {
     var textLabel = UILabel()
     var seperator = UIImageView()
@@ -220,7 +243,7 @@ open class StatusMessageCell: OZMessageCell {
     }
 }
 
-// MARK: - IncomingStatusMessageCell
+// MARK: -
 open class IncomingStatusMessageCell: OZMessageCell {
     var textLabel = UILabel()
     var iconImage = UIImageView()
@@ -307,7 +330,7 @@ open class IncomingStatusMessageCell: OZMessageCell {
     }
 }
 
-// MARK: - ImageMessageCell
+// MARK: -
 open class ImageMessageCell: OZMessageCell {
     open var imageView = UIImageView()  /// Set from outsize of cell, eg. `setupDataProvider`
     public var iconImage = UIImageView()
@@ -421,7 +444,7 @@ open class ImageMessageCell: OZMessageCell {
     }
 }
 
-// MARK: - MultipleImageMessageCell
+// MARK: -
 open class MultipleImageMessageCell: OZMessageCell {
     open var imageContainer = UIView()
     open var imageViews: [UIImageView] = []
@@ -540,7 +563,7 @@ open class MultipleImageMessageCell: OZMessageCell {
     }
 }
 
-// MARK: - AudioMessageCell
+// MARK: -
 open class AudioMessageCell: OZMessageCell {
     open var pauseImg = UIImage()
     open var playImg = UIImage()

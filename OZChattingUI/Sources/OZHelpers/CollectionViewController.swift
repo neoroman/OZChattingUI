@@ -2,8 +2,8 @@
 //  CollectionViewController.swift
 //  OZChattingUI
 //
-//  Created by Luke Zhao on 2017-09-04.
-//  Copyright © 2017 lkzhao. All rights reserved.
+//  Created by Henry Kim on 2020/06/07.
+//  Copyright © 2020 ALTERANT. All rights reserved.
 //
 
 import UIKit

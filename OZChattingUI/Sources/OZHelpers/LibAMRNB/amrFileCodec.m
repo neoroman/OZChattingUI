@@ -398,7 +398,7 @@ int ReadPCMFrameData(short speech[], char *fpwave, int nChannels, int nBitsPerSa
 // bps决定样本(sample)大小
 // bps = 8 --> 8位 unsigned char
 //       16 --> 16位 unsigned short
-NSData *EncodePCMToAMR(char *data, int maxLen,int nChannels, int nBitsPerSample) {
+NSData *EncodePCMToAMR(char *data, int maxLen,int nChannels, int nBitsPerSample, int nReqMode) {
     char *oldBuf = data;
     /* input speech vector */
 	short speech[160];
@@ -410,7 +410,7 @@ NSData *EncodePCMToAMR(char *data, int maxLen,int nChannels, int nBitsPerSample)
 	void *enstate;
 	
 	/* requested mode */
-	enum Mode req_mode = MR122;
+	enum Mode req_mode = nReqMode; //MR122;
 	int dtx = 0;
 	
 	/* bitstream filetype */
@@ -497,13 +497,8 @@ int SkipCaffHead(char *buf) {
 
 // 此处将一个录制的pcm直接转换为amr格式
 // 调用方式为 EncodeWAVEToAMR(pcmData, 1, 16)
-NSData *EncodeWAVEToAMR(NSData *data, int nChannels, int nBitsPerSample) {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentPath = [paths objectAtIndex:0];
-    NSString *wavFile = [documentPath stringByAppendingPathComponent:[NSString stringWithFormat:@"11.caf"]];
-    
+NSData *EncodeWAVEToAMR(NSData *data, int nChannels, int nBitsPerSample, int nReqMode) {
     if (!data) {
-        // data = [NSData dataWithContentsOfFile:wavFile];
         return nil;
     }
     
@@ -519,5 +514,5 @@ NSData *EncodeWAVEToAMR(NSData *data, int nChannels, int nBitsPerSample) {
     // 这时取出来的是纯pcm数据
     buf += nPos;
     
-    return EncodePCMToAMR(buf, maxLen - nPos, nChannels, nBitsPerSample);
+    return EncodePCMToAMR(buf, maxLen - nPos, nChannels, nBitsPerSample, nReqMode);
 }

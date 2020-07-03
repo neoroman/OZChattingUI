@@ -1,3 +1,26 @@
+/*
+MIT License
+
+Copyright (c) 2020 OZChattingUI, Henry Kim <neoroman@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
 //
 //  OZAudioPlayer.swift
 //  OZChattingUI
@@ -202,10 +225,23 @@ open class OZAudioPlayer {
         return DecodeAMRToWAVE(data)
     }
     //let amrData = OZAudioPlayer.encodeWav2Amr(waveData: data, channels: 1, bitsPerSample: 16)
-    public static func encodeWav2Amr(waveData data: Data, channels: Int, bitsPerSample: Int) -> Data {
-        return EncodeWAVEToAMR(data, Int32(channels), Int32(bitsPerSample))
+    public static func encodeWav2Amr(waveData data: Data, channels: Int, bitsPerSample: Int, encodeMode: OZAMREncodeMode) -> Data {
+        return EncodeWAVEToAMR(data, Int32(channels), Int32(bitsPerSample), Int32(encodeMode.rawValue))
     }
 }
+
+public enum OZAMREncodeMode: Int {
+    case OZAMR_04_75 = 0/* 4.75 kbps */
+    case OZAMR_05_15    /* 5.15 kbps */
+    case OZAMR_05_90    /* 5.90 kbps */
+    case OZAMR_06_70    /* 6.70 kbps */
+    case OZAMR_07_40    /* 7.40 kbps */
+    case OZAMR_07_95    /* 7.95 kbps */
+    case OZAMR_10_20    /* 10.2 kbps */
+    case OZAMR_12_20    /* 12.2 kbps */
+    case OZAMR_MRDTX    /* DTX       */
+    case OZAMR_N_MODES  /* Not Used  */
+};
 
 
 public protocol OZAudioRecorderDelegate: class {

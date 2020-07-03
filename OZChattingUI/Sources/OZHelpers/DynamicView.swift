@@ -2,8 +2,8 @@
 //  DynamicView.swift
 //  OZChattingUI
 //
-//  Created by YiLun Zhao on 2016-02-21.
-//  Copyright © 2016 lkzhao. All rights reserved.
+//  Created by Henry Kim on 2020/06/07.
+//  Copyright © 2020 ALTERANT. All rights reserved.
 //
 
 import UIKit
