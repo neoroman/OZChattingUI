@@ -33,7 +33,13 @@ import UIKit
 
 open class OZTextView: UITextView {
 
-    public var inputTextViewFontColor = UIColor.black
+    public var inputTextViewFontColor = UIColor.black {
+        didSet {
+            if textColor != inputTextViewFontColor {
+                textColor = inputTextViewFontColor
+            }
+        }
+    }
     
     public enum VerticalAlignment: Int {
         case Top = 0, Middle, Bottom
@@ -74,7 +80,5 @@ open class OZTextView: UITextView {
         super.layoutSubviews()
         let size = self.contentSize //forces didSet to be called
         self.contentSize = size
-        
-        self.textColor = inputTextViewFontColor
     }
 }
