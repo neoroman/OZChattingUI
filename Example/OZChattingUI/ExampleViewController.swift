@@ -48,13 +48,15 @@ class ExampleViewController: OZMessagesViewController {
     var imageViewerLeftButton: UIButton?
 
     override func viewDidLoad() {
+        // Important !!!, we need to set delegate before calling super.viewDidLoad()
+        self.delegate = self
+
         super.viewDidLoad()
         
         if !isFromStoryboard {
             view.backgroundColor = .groupTableViewBackground
         }
 
-        self.delegate = self
         self.messagesConfigurations = addMessageConfiguration()
         
         if isFromStoryboard {

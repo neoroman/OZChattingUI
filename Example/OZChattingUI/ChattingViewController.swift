@@ -62,10 +62,11 @@ class ChattingViewController: OZMessagesViewController {
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
+        // Important !!!, we need to set delegate before calling super.viewDidLoad()
+        self.delegate = self
+
         super.viewDidLoad()
         
-        // Important !!!
-        self.delegate = self
         self.messagesConfigurations = addMessageConfiguration()
         
         setUI()
@@ -308,6 +309,7 @@ class ChattingViewController: OZMessagesViewController {
             OZMessagesConfigurationItem.showTypingIndicator(true, 10, .gray),
 
             // OZTextView
+            OZMessagesConfigurationItem.inputTextViewFont(UIFont.systemFont(ofSize: 16, weight: .light)),
             OZMessagesConfigurationItem.inputTextViewFontColor(UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)),
             OZMessagesConfigurationItem.inputTextUsingEnterToSend(false),
             

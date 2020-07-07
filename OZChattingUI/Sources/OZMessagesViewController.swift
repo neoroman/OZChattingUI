@@ -152,6 +152,10 @@ open class OZMessagesViewController: CollectionViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
 
+        guard delegate != nil else {
+            fatalError("Important !!!, we need to set delegate before calling super.viewDidLoad()")
+        }
+        
         view.clipsToBounds = true
         setupIBOutlets()
         setupUI()
@@ -1291,12 +1295,15 @@ extension OZMessagesViewController {
         // Connect Target
         if let fb = ozFileButton {
             fb.addTarget(self, action: #selector(addFileButtonPressed(_:)), for: .touchUpInside)
+            setColorOfFileButton()
         }
         if let mb = ozMicButton {
             mb.addTarget(self, action: #selector(micContainerButtonPressed(_:)), for: .touchUpInside)
+            setColorOfMicButton()
         }
         if let eb = ozEmoticonButton {
             eb.addTarget(self, action: #selector(emoticonButtonViewPressed(_:)), for: .touchUpInside)
+            setColorOfEmoticonButton()
         }
         
         resetButtons()
@@ -1408,6 +1415,33 @@ extension OZMessagesViewController {
             emoticonButtonToggle()
         }
         addFileButtonToggle(false)
+    }
+    
+    fileprivate func setColorOfFileButton() {
+        if let fb = ozFileButton, let fbi = fb.imageView, let fileImg = fbi.image {
+            for case .inputBoxFileButtonTintColor(let color, _) in messagesConfigurations {
+                fb.setImage(fileImg.withRenderingMode(.alwaysTemplate), for: .normal)
+                fb.tintColor = color
+            }
+        }
+    }
+    
+    fileprivate func setColorOfMicButton() {
+        if let mb = ozMicButton, let mbi = mb.imageView, let micImg = mbi.image {
+            for case .inputBoxMicButtonTintColor(let color, _) in messagesConfigurations {
+                mb.setImage(micImg.withRenderingMode(.alwaysTemplate), for: .normal)
+                mb.tintColor = color
+            }
+        }
+    }
+    
+    fileprivate func setColorOfEmoticonButton() {
+        if let eb = ozEmoticonButton, let ebi = eb.imageView, let emotImg = ebi.image {
+            for case .inputBoxEmoticonButtonTintColor(let color, _) in messagesConfigurations {
+                eb.setImage(emotImg.withRenderingMode(.alwaysTemplate), for: .normal)
+                eb.tintColor = color
+            }
+        }
     }
     
     
