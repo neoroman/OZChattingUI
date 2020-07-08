@@ -1519,7 +1519,22 @@ extension OZMessagesViewController {
         var minHeight = minTextViewHeight
         for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
             minHeight = height
+            if let thc = ozTextHeightConstraint,
+                minHeight < thc.constant {
+                minHeight = thc.constant
+                var isMaxHeightDeclared = false
+                for case .inputContainerMaximumHeight(let height) in messagesConfigurations {
+                    isMaxHeightDeclared = true
+                    if minHeight > height {
+                        minHeight = height
+                    }
+                }
+                if !isMaxHeightDeclared {
+                    fatalError("inputContainerMaximumHeight configuration not declared...")
+                }
+            }
         }
+
         let margin = UIEdgeInsets(top: 0,left: 0, bottom: normalHeight + minHeight, right: 0)
 
         guard let ecvh = ozEmoticonContainerViewHeight else {return}
@@ -1840,6 +1855,19 @@ extension OZMessagesViewController {
 
 // MARK: - UITextViewDelegate
 extension OZMessagesViewController: UITextViewDelegate {
+    private func adjustCollectionFrame() {
+        guard let ozic = ozInputContainer else { return }
+        
+        for case .customCollectionViewFrame(let yesOrNo, _, _) in messagesConfigurations {
+            if yesOrNo { return }
+        }
+        if collectionView.frame.size.height != ozic.frame.origin.y {
+            collectionView.frame.size.height = ozic.frame.origin.y
+            collectionView.scrollTo(edge: .bottom, animated: false)
+            collectionView.layoutIfNeeded()
+        }
+    }
+
     public func adjustTextViewHeight(_ textView: UITextView) {
         guard let thc = ozTextHeightConstraint else {return}
         
@@ -1871,7 +1899,7 @@ extension OZMessagesViewController: UITextViewDelegate {
             }) { (complete) in
             }
         }
-        else if thc.constant < maxHeight, thc.constant < size.height {
+        else if thc.constant < maxHeight, thc.constant != size.height {
             thc.constant = size.height
             self.view.setNeedsUpdateConstraints()
             //self.view.layoutIfNeeded()
@@ -1916,6 +1944,13 @@ extension OZMessagesViewController: UITextViewDelegate {
 
         if let dele = delegate {
             dele.messageTextViewEndEditing(textView: textView)
+        }
+        
+        // TODO: find more elegant way to do it...by Henry on 2020.07.08
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) {
+            if self.collectionView.frame.height < super.view.bounds.height - 200 {
+                self.keyboardHideLayout()
+            }
         }
     }
     
