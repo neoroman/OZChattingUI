@@ -1855,19 +1855,6 @@ extension OZMessagesViewController {
 
 // MARK: - UITextViewDelegate
 extension OZMessagesViewController: UITextViewDelegate {
-    private func adjustCollectionFrame() {
-        guard let ozic = ozInputContainer else { return }
-        
-        for case .customCollectionViewFrame(let yesOrNo, _, _) in messagesConfigurations {
-            if yesOrNo { return }
-        }
-        if collectionView.frame.size.height != ozic.frame.origin.y {
-            collectionView.frame.size.height = ozic.frame.origin.y
-            collectionView.scrollTo(edge: .bottom, animated: false)
-            collectionView.layoutIfNeeded()
-        }
-    }
-
     public func adjustTextViewHeight(_ textView: UITextView) {
         guard let thc = ozTextHeightConstraint else {return}
         
@@ -1891,7 +1878,7 @@ extension OZMessagesViewController: UITextViewDelegate {
             maxHeight = height
         }
                 
-        if thc.constant >= maxHeight {
+        if thc.constant > maxHeight {
             UIView.animate(withDuration: 0.35, delay: 0.1, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
                 thc.constant = maxHeight
                 self.view.setNeedsUpdateConstraints()
@@ -1899,7 +1886,7 @@ extension OZMessagesViewController: UITextViewDelegate {
             }) { (complete) in
             }
         }
-        else if thc.constant < maxHeight, thc.constant != size.height {
+        else if thc.constant <= maxHeight, thc.constant != size.height {
             thc.constant = size.height
             self.view.setNeedsUpdateConstraints()
             //self.view.layoutIfNeeded()
