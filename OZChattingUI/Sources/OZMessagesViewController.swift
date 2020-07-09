@@ -1538,62 +1538,61 @@ extension OZMessagesViewController {
         let margin = UIEdgeInsets(top: 0,left: 0, bottom: normalHeight + minHeight, right: 0)
 
         guard let ecvh = ozEmoticonContainerViewHeight else {return}
+        
         if animated, chatState == .chat {
-            UIView.animate(withDuration: keyboardAnimationDuration, animations: {
-                if ecvh.identifier == "inputTextContainerBottom" {
-                    normalHeight = -normalHeight
+            if ecvh.identifier == "inputTextContainerBottom" {
+                normalHeight = -normalHeight
+            }
+            ecvh.constant = normalHeight
+            self.view.setNeedsUpdateConstraints()
+            self.view.layoutIfNeeded()
+            
+            delay(0.05) {
+                var bounds = self.getBoundsBySaferArea().inset(by: margin)
+                var isCustomFrame = false
+                for case .customCollectionViewFrame(let yesOrNo, let rect, let row) in self.messagesConfigurations {
+                    if yesOrNo {
+                        isCustomFrame = yesOrNo
+                        bounds = rect
+                        let height = self.getHeightOfFrame(rect: rect, row: row)
+                        if rect.height < height {
+                            bounds.size.height = height
+                        }
+                    }
                 }
-                ecvh.constant = normalHeight
-                self.view.setNeedsUpdateConstraints()
-                self.view.layoutIfNeeded()
-            }) { (comp) in
-                delay(0.05) {
-                    var bounds = self.getBoundsBySaferArea().inset(by: margin)
-                    var isCustomFrame = false
-                    for case .customCollectionViewFrame(let yesOrNo, let rect, let row) in self.messagesConfigurations {
-                        if yesOrNo {
-                            isCustomFrame = yesOrNo
-                            bounds = rect
-                            let height = self.getHeightOfFrame(rect: rect, row: row)
-                            if rect.height < height {
-                                bounds.size.height = height
-                            }
-                        }
-                    }
-                    self.collectionView.frame = bounds
-
-                    for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-                        if !isCustomFrame { self.collectionView.contentInset = inset }
-                        else {
-                            let originInset = self.collectionView.contentInset
-                            let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
-                                                        bottom: originInset.bottom, right: inset.right)
-                            self.collectionView.contentInset = newInset
-                        }
-                        self.collectionView.reloadData()
-                    }
-                        
-                    if isBottom {
-                        self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
-                    }
+                self.collectionView.frame = bounds
+                
+                for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
+                    if !isCustomFrame { self.collectionView.contentInset = inset }
                     else {
-                        var isNotCase = true
-                        for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, let isShow) in self.messagesConfigurations {
-                            isNotCase = false
-                            if autoScrollToBottom {
-                                self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
-                            }
-                            if isShow,
-                                self.getThresholdOfScrollToBottomButtonShow() <= self.collectionView.contentSize.height {
-                                self.setupScrollToBottomButton(true)
-                            }
-                            else {
-                                self.scrollToBottomButton.alpha = 0
-                            }
-                        }
-                        if isNotCase {
+                        let originInset = self.collectionView.contentInset
+                        let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
+                                                    bottom: originInset.bottom, right: inset.right)
+                        self.collectionView.contentInset = newInset
+                    }
+                    self.collectionView.reloadData()
+                }
+                
+                if isBottom {
+                    self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
+                }
+                else {
+                    var isNotCase = true
+                    for case .autoScrollToBottomBeginTextInput(let autoScrollToBottom, let isShow) in self.messagesConfigurations {
+                        isNotCase = false
+                        if autoScrollToBottom {
                             self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
                         }
+                        if isShow,
+                            self.getThresholdOfScrollToBottomButtonShow() <= self.collectionView.contentSize.height {
+                            self.setupScrollToBottomButton(true)
+                        }
+                        else {
+                            self.scrollToBottomButton.alpha = 0
+                        }
+                    }
+                    if isNotCase {
+                        self.collectionView.scrollTo(edge: UIRectEdge.bottom, animated: false)
                     }
                 }
             }
@@ -1668,46 +1667,43 @@ extension OZMessagesViewController {
         }
 
         var isCustomFrame = false
-        UIView.animate(withDuration: keyboardAnimationDuration, animations: {
-            ecvh.constant = 0
-            self.view.setNeedsUpdateConstraints()
-            self.view.layoutIfNeeded()
-            
-            var bounds = self.getBoundsBySaferArea().inset(by: margin)
-            for case .customCollectionViewFrame(let yesOrNo, let rect, let row) in self.messagesConfigurations {
-                if yesOrNo {
-                    isCustomFrame = yesOrNo
-                    bounds = rect
-                    let height = self.getHeightOfFrame(rect: rect, row: row)
-                    if rect.height < height {
-                        bounds.size.height = height
-                    }
+        ecvh.constant = 0
+        self.view.setNeedsUpdateConstraints()
+        self.view.layoutIfNeeded()
+        
+        var bounds = self.getBoundsBySaferArea().inset(by: margin)
+        for case .customCollectionViewFrame(let yesOrNo, let rect, let row) in self.messagesConfigurations {
+            if yesOrNo {
+                isCustomFrame = yesOrNo
+                bounds = rect
+                let height = self.getHeightOfFrame(rect: rect, row: row)
+                if rect.height < height {
+                    bounds.size.height = height
                 }
             }
-            
-            for case .autoScrollToBottomBeginTextInput(_, let isShow) in self.messagesConfigurations {
-                if isShow,
-                    self.getThresholdOfScrollToBottomButtonShow() <= self.collectionView.contentSize.height {
-                    self.setupScrollToBottomButton(true)
-                }
-                else {
-                    self.scrollToBottomButton.alpha = 0
-                }
+        }
+        
+        for case .autoScrollToBottomBeginTextInput(_, let isShow) in self.messagesConfigurations {
+            if isShow,
+                self.getThresholdOfScrollToBottomButtonShow() <= self.collectionView.contentSize.height {
+                self.setupScrollToBottomButton(true)
             }
-
-            self.collectionView.frame = bounds
-        }) { (comp) in
-
-            for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-                if !isCustomFrame { self.collectionView.contentInset = inset }
-                else {
-                    let originInset = self.collectionView.contentInset
-                    let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
-                                                bottom: originInset.bottom, right: inset.right)
-                    self.collectionView.contentInset = newInset
-                }
-                self.collectionView.reloadData()
+            else {
+                self.scrollToBottomButton.alpha = 0
             }
+        }
+        
+        self.collectionView.frame = bounds
+        
+        for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
+            if !isCustomFrame { self.collectionView.contentInset = inset }
+            else {
+                let originInset = self.collectionView.contentInset
+                let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
+                                            bottom: originInset.bottom, right: inset.right)
+                self.collectionView.contentInset = newInset
+            }
+            self.collectionView.setNeedsReload()
         }
         
         if let dele = delegate {
