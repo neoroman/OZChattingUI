@@ -32,21 +32,14 @@ THE SOFTWARE.
 import UIKit
 
 open class OZTextView: UITextView {
-
-    public var inputTextViewFontColor = UIColor.black {
-        didSet {
-            if textColor != inputTextViewFontColor {
-                textColor = inputTextViewFontColor
-            }
-        }
-    }
     
     public enum VerticalAlignment: Int {
         case Top = 0, Middle, Bottom
     }
 
-    public var verticalAlignment: VerticalAlignment = .Middle
+    var verticalAlignment: VerticalAlignment = .Middle
 
+    /* TOOD: Remove it for sure by Henry on 2020.07.09
     //override contentSize property and observe using didSet
     override open var contentSize: CGSize {
         didSet {
@@ -81,4 +74,5 @@ open class OZTextView: UITextView {
         let size = self.contentSize //forces didSet to be called
         self.contentSize = size
     }
+     */
 }

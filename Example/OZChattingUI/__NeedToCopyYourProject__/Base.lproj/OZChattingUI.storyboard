@@ -32,7 +32,7 @@
                                         <rect key="frame" x="-103.5" y="0.0" width="621" height="560"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ov4-aV-u9K" customClass="OZTextView" customModule="OZChattingUI">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ov4-aV-u9K" customClass="OZTextView" customModule="OZChattingUI">
                                         <rect key="frame" x="45" y="10" width="359" height="36"/>
                                         <color key="backgroundColor" red="0.95624989270000005" green="0.95627218479999998" blue="0.95626014469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <edgeInsets key="layoutMargins" top="8" left="22" bottom="8" right="8"/>

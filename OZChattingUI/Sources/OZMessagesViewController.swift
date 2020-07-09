@@ -1640,6 +1640,20 @@ extension OZMessagesViewController {
         var minHeight = minTextViewHeight
         for case .inputContainerMinimumHeight(let height) in messagesConfigurations {
             minHeight = height
+            if let thc = ozTextHeightConstraint,
+                minHeight < thc.constant {
+                minHeight = thc.constant
+                var isMaxHeightDeclared = false
+                for case .inputContainerMaximumHeight(let height) in messagesConfigurations {
+                    isMaxHeightDeclared = true
+                    if minHeight > height {
+                        minHeight = height
+                    }
+                }
+                if !isMaxHeightDeclared {
+                    fatalError("inputContainerMaximumHeight configuration not declared...")
+                }
+            }
         }
         if let ozic = ozInputTextView, ozic.isHidden {
             minHeight = 0
@@ -1886,7 +1900,8 @@ extension OZMessagesViewController: UITextViewDelegate {
             }) { (complete) in
             }
         }
-        else if thc.constant <= maxHeight, thc.constant != size.height {
+        else if thc.constant <= maxHeight, size.height <= maxHeight,
+            thc.constant != size.height {
             thc.constant = size.height
             self.view.setNeedsUpdateConstraints()
             //self.view.layoutIfNeeded()

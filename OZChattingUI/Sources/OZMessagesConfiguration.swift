@@ -178,6 +178,7 @@ public enum OZMessagesConfigurationItem {
     case inputContainerMaximumHeight(CGFloat)
 
     /// Input text vertical alignemnt in OZTextView
+    @available(*, deprecated, message: "This will be removed in v0.9.3")
     case inputTextVerticalAlignment(OZTextView.VerticalAlignment)
 
     /// Input text view font color in OZTextView
