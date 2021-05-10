@@ -1959,12 +1959,8 @@ extension OZMessagesViewController: UITextViewDelegate {
             isUsingEnterForSending = yesOrNo
         }
         if isUsingEnterForSending {
-            if text == "\n", let fullText = textView.text {
-                self.send(msg: fullText)
-                if let itv = ozInputTextView {
-                    itv.text = ""
-                }
-                self.adjustTextViewHeight(textView)
+            if text == "\n", let dele = delegate {
+                dele.messageTextViewDidEnterPressed(textView: textView)
                 return false;
             }
         }

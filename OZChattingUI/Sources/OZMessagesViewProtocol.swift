@@ -93,6 +93,7 @@ public protocol OZMessagesViewControllerDelegate {
     func messageInputTextViewWillHide(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat)
     func messageTextViewBeginEditing(textView: UITextView)
     func messageTextViewDidChanged(textView: UITextView)
+    func messageTextViewDidEnterPressed(textView: UITextView)
     func messageTextViewEndEditing(textView: UITextView)
     
     
@@ -124,6 +125,7 @@ public extension OZMessagesViewControllerDelegate {
     func messageInputTextViewWillHide(insetMarget: UIEdgeInsets, keyboardHeight: CGFloat) { }
     func messageTextViewBeginEditing(textView: UITextView) { }
     func messageTextViewDidChanged(textView: UITextView) { }
+    func messageTextViewDidEnterPressed(textView: UITextView) {}
     func messageTextViewEndEditing(textView: UITextView) { }
     func messageMicButtonTapped(viewController: OZMessagesViewController, sender: Any) -> Bool { return true }
     func messageMicWillRequestRecordPermission(viewController: OZVoiceRecordViewController) { }

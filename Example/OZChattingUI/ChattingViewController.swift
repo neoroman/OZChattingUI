@@ -504,6 +504,22 @@ extension ChattingViewController: OZMessagesViewControllerDelegate {
         }
     }
     
+    func messageTextViewDidEnterPressed(textView: UITextView) {
+        for case .inputTextUsingEnterToSend(let yesOrNo) in messagesConfigurations {
+            guard let ozitv = ozInputTextView, yesOrNo else { return }
+            
+            if let fullText = ozitv.text {
+                let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
+                if trimmed.count > 0 {
+                    rotateLoadingImage(3)
+                    send(msg: trimmed)
+                }
+                ozitv.text.removeAll()
+                adjustTextViewHeight(ozitv)
+            }
+        }
+    }
+    
     func messageTextViewEndEditing(textView: UITextView) {
         if let aText = textView.text, aText.trimmingCharacters(in: .whitespacesAndNewlines).count <= 0 {
             sendButton.isEnabled = false

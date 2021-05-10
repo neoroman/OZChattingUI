@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BA6514282648FE3000F25124 /* OZMessagesViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6514272648FE3000F25124 /* OZMessagesViewProtocol.swift */; };
+		BA65142A2648FE3600F25124 /* OZMessagesConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6514292648FE3600F25124 /* OZMessagesConfiguration.swift */; };
 		BA94A71F247CF6E2000AE9CB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BA94A71E247CF6E2000AE9CB /* Info.plist */; };
-		BAA5DB4F247FBEE300495149 /* OZMessagesConfigurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA5DB4E247FBEE300495149 /* OZMessagesConfigurations.swift */; };
 		BABC606F2463C48C00C2D82C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BABC606E2463C48C00C2D82C /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BAFE5E75247CEF81002B0A4B /* OZMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */; };
 		BAFE5E76247CEF81002B0A4B /* OZEmoticonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E4E247CEF81002B0A4B /* OZEmoticonViewController.swift */; };
@@ -22,8 +23,6 @@
 		BAFE5E7F247CEF81002B0A4B /* OZMessagesExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E59247CEF81002B0A4B /* OZMessagesExtension.swift */; };
 		BAFE5E81247CEF81002B0A4B /* OZEmoticonList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E5D247CEF81002B0A4B /* OZEmoticonList.swift */; };
 		BAFE5E82247CEF81002B0A4B /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E5E247CEF81002B0A4B /* TestData.swift */; };
-		BAFE5E83247CEF81002B0A4B /* OZDateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E5F247CEF81002B0A4B /* OZDateHelper.swift */; };
-		BAFE5E84247CEF81002B0A4B /* OZChoosePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E61247CEF81002B0A4B /* OZChoosePopup.swift */; };
 		BAFE5E85247CEF81002B0A4B /* interf_dec.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFE5E63247CEF81002B0A4B /* interf_dec.h */; };
 		BAFE5E86247CEF81002B0A4B /* amrFileCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFE5E64247CEF81002B0A4B /* amrFileCodec.h */; };
 		BAFE5E87247CEF81002B0A4B /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFE5E65247CEF81002B0A4B /* libopencore-amrnb.a */; };
@@ -44,8 +43,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BA6514272648FE3000F25124 /* OZMessagesViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesViewProtocol.swift; sourceTree = "<group>"; };
+		BA6514292648FE3600F25124 /* OZMessagesConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesConfiguration.swift; sourceTree = "<group>"; };
 		BA94A71E247CF6E2000AE9CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BAA5DB4E247FBEE300495149 /* OZMessagesConfigurations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesConfigurations.swift; sourceTree = "<group>"; };
 		BABC602E2463BAF100C2D82C /* OZChattingUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OZChattingUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BABC606E2463C48C00C2D82C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		BAEE1AA3246436B200EE3414 /* CollectionKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,8 +63,6 @@
 		BAFE5E59247CEF81002B0A4B /* OZMessagesExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesExtension.swift; sourceTree = "<group>"; };
 		BAFE5E5D247CEF81002B0A4B /* OZEmoticonList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZEmoticonList.swift; sourceTree = "<group>"; };
 		BAFE5E5E247CEF81002B0A4B /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
-		BAFE5E5F247CEF81002B0A4B /* OZDateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZDateHelper.swift; sourceTree = "<group>"; };
-		BAFE5E61247CEF81002B0A4B /* OZChoosePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZChoosePopup.swift; sourceTree = "<group>"; };
 		BAFE5E63247CEF81002B0A4B /* interf_dec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_dec.h; sourceTree = "<group>"; };
 		BAFE5E64247CEF81002B0A4B /* amrFileCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amrFileCodec.h; sourceTree = "<group>"; };
 		BAFE5E65247CEF81002B0A4B /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrnb.a"; sourceTree = "<group>"; };
@@ -149,9 +147,10 @@
 			children = (
 				BAFE5E4F247CEF81002B0A4B /* OZChattingUI.h */,
 				BAFE5E51247CEF81002B0A4B /* OZMessages.swift */,
-				BAA5DB4E247FBEE300495149 /* OZMessagesConfigurations.swift */,
+				BA6514292648FE3600F25124 /* OZMessagesConfiguration.swift */,
 				BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */,
 				BAFE5E57247CEF81002B0A4B /* OZMessagesViewController.swift */,
+				BA6514272648FE3000F25124 /* OZMessagesViewProtocol.swift */,
 				BAFE5E50247CEF81002B0A4B /* OZEmoticons.swift */,
 				BAFE5E56247CEF81002B0A4B /* OZEmoticonCell.swift */,
 				BAFE5E4E247CEF81002B0A4B /* OZEmoticonViewController.swift */,
@@ -176,8 +175,6 @@
 			children = (
 				BAFE5E5D247CEF81002B0A4B /* OZEmoticonList.swift */,
 				BAFE5E5E247CEF81002B0A4B /* TestData.swift */,
-				BAFE5E5F247CEF81002B0A4B /* OZDateHelper.swift */,
-				BAFE5E60247CEF81002B0A4B /* OZPopup */,
 				BAFE5E62247CEF81002B0A4B /* LibAMRNB */,
 				BAFE5E68247CEF81002B0A4B /* DynamicView.swift */,
 				BAFE5E69247CEF81002B0A4B /* OZCircleProgressView.swift */,
@@ -193,14 +190,6 @@
 				BAFE5E74247CEF81002B0A4B /* OZTextView.swift */,
 			);
 			path = OZHelpers;
-			sourceTree = "<group>";
-		};
-		BAFE5E60247CEF81002B0A4B /* OZPopup */ = {
-			isa = PBXGroup;
-			children = (
-				BAFE5E61247CEF81002B0A4B /* OZChoosePopup.swift */,
-			);
-			path = OZPopup;
 			sourceTree = "<group>";
 		};
 		BAFE5E62247CEF81002B0A4B /* LibAMRNB */ = {
@@ -341,7 +330,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BAFE5E84247CEF81002B0A4B /* OZChoosePopup.swift in Sources */,
 				BAFE5E93247CEF81002B0A4B /* OZProgressBarView.swift in Sources */,
 				BAFE5E7E247CEF81002B0A4B /* OZVoiceRecordViewController.swift in Sources */,
 				BAFE5E90247CEF81002B0A4B /* OZAudioPlayer.swift in Sources */,
@@ -352,8 +340,8 @@
 				BAFE5E81247CEF81002B0A4B /* OZEmoticonList.swift in Sources */,
 				BAFE5E79247CEF81002B0A4B /* OZMessages.swift in Sources */,
 				BAFE5E82247CEF81002B0A4B /* TestData.swift in Sources */,
-				BAFE5E83247CEF81002B0A4B /* OZDateHelper.swift in Sources */,
 				BAFE5E94247CEF81002B0A4B /* CollectionViewController.swift in Sources */,
+				BA65142A2648FE3600F25124 /* OZMessagesConfiguration.swift in Sources */,
 				BAFE5E7F247CEF81002B0A4B /* OZMessagesExtension.swift in Sources */,
 				BAFE5E8B247CEF81002B0A4B /* OZCircleProgressView.swift in Sources */,
 				BAFE5E8A247CEF81002B0A4B /* DynamicView.swift in Sources */,
@@ -362,9 +350,9 @@
 				BAFE5E75247CEF81002B0A4B /* OZMessageCell.swift in Sources */,
 				BAFE5E7C247CEF81002B0A4B /* OZEmoticonCell.swift in Sources */,
 				BAFE5E78247CEF81002B0A4B /* OZEmoticons.swift in Sources */,
+				BA6514282648FE3000F25124 /* OZMessagesViewProtocol.swift in Sources */,
 				BAFE5E8F247CEF81002B0A4B /* OZBubbleLabel.swift in Sources */,
 				BAFE5E92247CEF81002B0A4B /* OZMimeType.swift in Sources */,
-				BAA5DB4F247FBEE300495149 /* OZMessagesConfigurations.swift in Sources */,
 				BAFE5E76247CEF81002B0A4B /* OZEmoticonViewController.swift in Sources */,
 				BAFE5E95247CEF81002B0A4B /* OZTextView.swift in Sources */,
 			);
