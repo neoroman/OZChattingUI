@@ -364,7 +364,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = N6EG7RK539;
+						DevelopmentTeam = SG7HRF2BK6;
 						LastSwiftMigration = 1130;
 					};
 				};
@@ -667,7 +667,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = N6EG7RK539;
+				DEVELOPMENT_TEAM = SG7HRF2BK6;
 				INFOPLIST_FILE = OZChattingUI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -686,7 +686,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = N6EG7RK539;
+				DEVELOPMENT_TEAM = SG7HRF2BK6;
 				INFOPLIST_FILE = OZChattingUI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
