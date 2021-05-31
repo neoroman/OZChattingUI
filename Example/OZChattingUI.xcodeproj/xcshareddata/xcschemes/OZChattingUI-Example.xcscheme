@@ -62,6 +62,16 @@
                ReferencedContainer = "container:OZChattingUI.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BA795DD12664BA2200F55B7E"
+               BuildableName = "OZChattingUI_ExampleTests.xctest"
+               BlueprintName = "OZChattingUI_ExampleTests"
+               ReferencedContainer = "container:OZChattingUI.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -40,6 +40,7 @@
 		BA5F32C32482D7EA00FF8E62 /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5F32C12482D7E900FF8E62 /* ChattingViewController.swift */; };
 		BA5F32C42482D7EA00FF8E62 /* BubbleLabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5F32C22482D7E900FF8E62 /* BubbleLabelExtension.swift */; };
 		BA714F07247D0FEA00D7F455 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA714F04247D0FEA00D7F455 /* LaunchScreen.storyboard */; };
+		BA795DD52664BA2200F55B7E /* OZChattingUI_ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA795DD42664BA2200F55B7E /* OZChattingUI_ExampleTests.swift */; };
 		BAA31F822488B7D600DE982B /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA31F812488B7D600DE982B /* StartViewController.swift */; };
 		BAA31F852489BEF700DE982B /* CommonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA31F842489BEF700DE982B /* CommonData.swift */; };
 		BAA5DB512480B24800495149 /* send@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAA5DB502480B24800495149 /* send@2x.png */; };
@@ -71,6 +72,16 @@
 		BAFE5DE7247CEE5E002B0A4B /* OZEmoticonList.plist in Resources */ = {isa = PBXBuildFile; fileRef = BAFE5DAE247CEE5E002B0A4B /* OZEmoticonList.plist */; };
 		BAFE5E00247CEE5E002B0A4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5DC8247CEE5E002B0A4B /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BA795DD72664BA2200F55B7E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
+			remoteInfo = OZChattingUI_Example;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0603B351033DDB9FB61A8064 /* Pods-OZChattingUI_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OZChattingUI_Example.release.xcconfig"; path = "Target Support Files/Pods-OZChattingUI_Example/Pods-OZChattingUI_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -111,6 +122,9 @@
 		BA5F32C12482D7E900FF8E62 /* ChattingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChattingViewController.swift; sourceTree = "<group>"; };
 		BA5F32C22482D7E900FF8E62 /* BubbleLabelExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleLabelExtension.swift; sourceTree = "<group>"; };
 		BA714F05247D0FEA00D7F455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BA795DD22664BA2200F55B7E /* OZChattingUI_ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OZChattingUI_ExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA795DD42664BA2200F55B7E /* OZChattingUI_ExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OZChattingUI_ExampleTests.swift; sourceTree = "<group>"; };
+		BA795DD62664BA2200F55B7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BAA31F812488B7D600DE982B /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		BAA31F842489BEF700DE982B /* CommonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonData.swift; sourceTree = "<group>"; };
 		BAA5DB502480B24800495149 /* send@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send@2x.png"; sourceTree = "<group>"; };
@@ -154,6 +168,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BA795DCF2664BA2200F55B7E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -162,6 +183,7 @@
 			children = (
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for OZChattingUI */,
+				BA795DD32664BA2200F55B7E /* OZChattingUI_ExampleTests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				6BB633EF40B6792DE962F6FB /* Pods */,
 				D87B5C352C52BB15ABCF175C /* Frameworks */,
@@ -172,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACD01AFB9204008FA782 /* OZChattingUI_Example.app */,
+				BA795DD22664BA2200F55B7E /* OZChattingUI_ExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -254,6 +277,15 @@
 				BA5F32A32482A48B00FF8E62 /* oz1017@2x.png */,
 			);
 			path = Emoticons;
+			sourceTree = "<group>";
+		};
+		BA795DD32664BA2200F55B7E /* OZChattingUI_ExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				BA795DD42664BA2200F55B7E /* OZChattingUI_ExampleTests.swift */,
+				BA795DD62664BA2200F55B7E /* Info.plist */,
+			);
+			path = OZChattingUI_ExampleTests;
 			sourceTree = "<group>";
 		};
 		BAA31F832488C48F00DE982B /* Extensions */ = {
@@ -352,13 +384,31 @@
 			productReference = 607FACD01AFB9204008FA782 /* OZChattingUI_Example.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BA795DD12664BA2200F55B7E /* OZChattingUI_ExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA795DD92664BA2200F55B7E /* Build configuration list for PBXNativeTarget "OZChattingUI_ExampleTests" */;
+			buildPhases = (
+				BA795DCE2664BA2200F55B7E /* Sources */,
+				BA795DCF2664BA2200F55B7E /* Frameworks */,
+				BA795DD02664BA2200F55B7E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BA795DD82664BA2200F55B7E /* PBXTargetDependency */,
+			);
+			name = OZChattingUI_ExampleTests;
+			productName = OZChattingUI_ExampleTests;
+			productReference = BA795DD22664BA2200F55B7E /* OZChattingUI_ExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		607FACC81AFB9204008FA782 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
@@ -366,6 +416,11 @@
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = SG7HRF2BK6;
 						LastSwiftMigration = 1130;
+					};
+					BA795DD12664BA2200F55B7E = {
+						CreatedOnToolsVersion = 12.5;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
 			};
@@ -383,6 +438,7 @@
 			projectRoot = "";
 			targets = (
 				607FACCF1AFB9204008FA782 /* OZChattingUI_Example */,
+				BA795DD12664BA2200F55B7E /* OZChattingUI_ExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -444,6 +500,13 @@
 				BA5F32AA2482A48B00FF8E62 /* oz1006@2x.png in Resources */,
 				BAFE5DDA247CEE5E002B0A4B /* voicemsBtnRecordPress@2x.png in Resources */,
 				BA5F32B52482A48B00FF8E62 /* oz1015@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA795DD02664BA2200F55B7E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,7 +581,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BA795DCE2664BA2200F55B7E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA795DD52664BA2200F55B7E /* OZChattingUI_ExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BA795DD82664BA2200F55B7E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 607FACCF1AFB9204008FA782 /* OZChattingUI_Example */;
+			targetProxy = BA795DD72664BA2200F55B7E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		BA5F32BE2482D7A800FF8E62 /* OZChattingUI2.storyboard */ = {
@@ -698,6 +777,59 @@
 			};
 			name = Release;
 		};
+		BA795DDA2664BA2200F55B7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OZChattingUI_ExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "kr.alterant.OZChattingUI-ExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OZChattingUI_Example.app/OZChattingUI_Example";
+			};
+			name = Debug;
+		};
+		BA795DDB2664BA2200F55B7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OZChattingUI_ExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "kr.alterant.OZChattingUI-ExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OZChattingUI_Example.app/OZChattingUI_Example";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -715,6 +847,15 @@
 			buildConfigurations = (
 				607FACF01AFB9204008FA782 /* Debug */,
 				607FACF11AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA795DD92664BA2200F55B7E /* Build configuration list for PBXNativeTarget "OZChattingUI_ExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA795DDA2664BA2200F55B7E /* Debug */,
+				BA795DDB2664BA2200F55B7E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

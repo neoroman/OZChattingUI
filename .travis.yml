@@ -1,5 +1,5 @@
 language: swift # or objective-c
-osx_image: xcode11
+osx_image: xcode12
 script:
   - xcodebuild -scheme OZChattingUI-Example -workspace Example/OZChattingUI.xcworkspace -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone XS,OS=12.1' build test
 after_success:
