@@ -3,4 +3,4 @@ osx_image: xcode11
 script:
   - xcodebuild -schemeOZChattingUI-Example -workspace Example/OZChattingUI.xcworkspace -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=10.0' build test
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -t 8cd20cd4-e9a6-4729-8357-1f5a72058a1e
