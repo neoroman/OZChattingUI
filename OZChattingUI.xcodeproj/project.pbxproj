@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		BA6514282648FE3000F25124 /* OZMessagesViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6514272648FE3000F25124 /* OZMessagesViewProtocol.swift */; };
 		BA65142A2648FE3600F25124 /* OZMessagesConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6514292648FE3600F25124 /* OZMessagesConfiguration.swift */; };
-		BA795DE32664CEC700F55B7E /* OZChattingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA795DE22664CEC700F55B7E /* OZChattingUITests.swift */; };
-		BA795DE52664CEC700F55B7E /* OZChattingUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BABC602E2463BAF100C2D82C /* OZChattingUI.framework */; };
 		BA795DEE2664D11400F55B7E /* OZChattingUI-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BA795DED2664D11400F55B7E /* OZChattingUI-Info.plist */; };
 		BABC606F2463C48C00C2D82C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BABC606E2463C48C00C2D82C /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BAFE5E75247CEF81002B0A4B /* OZMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E4D247CEF81002B0A4B /* OZMessageCell.swift */; };
@@ -44,22 +42,9 @@
 		BAFE5E95247CEF81002B0A4B /* OZTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFE5E74247CEF81002B0A4B /* OZTextView.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		BA795DE62664CEC700F55B7E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BABC60252463BAF100C2D82C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BABC602D2463BAF100C2D82C;
-			remoteInfo = OZChattingUI;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		BA6514272648FE3000F25124 /* OZMessagesViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesViewProtocol.swift; sourceTree = "<group>"; };
 		BA6514292648FE3600F25124 /* OZMessagesConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OZMessagesConfiguration.swift; sourceTree = "<group>"; };
-		BA795DE02664CEC700F55B7E /* OZChattingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OZChattingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA795DE22664CEC700F55B7E /* OZChattingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OZChattingUITests.swift; sourceTree = "<group>"; };
-		BA795DE42664CEC700F55B7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA795DED2664D11400F55B7E /* OZChattingUI-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OZChattingUI-Info.plist"; sourceTree = "<group>"; };
 		BABC602E2463BAF100C2D82C /* OZChattingUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OZChattingUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BABC606E2463C48C00C2D82C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -98,14 +83,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		BA795DDD2664CEC700F55B7E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BA795DE52664CEC700F55B7E /* OZChattingUI.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		BABC602B2463BAF100C2D82C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -129,15 +106,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		BA795DE12664CEC700F55B7E /* OZChattingUITests */ = {
-			isa = PBXGroup;
-			children = (
-				BA795DE22664CEC700F55B7E /* OZChattingUITests.swift */,
-				BA795DE42664CEC700F55B7E /* Info.plist */,
-			);
-			path = OZChattingUITests;
-			sourceTree = "<group>";
-		};
 		BA94A71D247CF6E2000AE9CB /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,7 +120,6 @@
 			children = (
 				BAFE5E01247CEEE8002B0A4B /* OZChattingUI */,
 				BA94A71D247CF6E2000AE9CB /* Supporting */,
-				BA795DE12664CEC700F55B7E /* OZChattingUITests */,
 				BABC602F2463BAF100C2D82C /* Products */,
 				E11A707CEC4D0DAB90AC7110 /* Pods */,
 				7B735F3F49F4E0D7AF7DEFC6 /* Frameworks */,
@@ -163,7 +130,6 @@
 			isa = PBXGroup;
 			children = (
 				BABC602E2463BAF100C2D82C /* OZChattingUI.framework */,
-				BA795DE02664CEC700F55B7E /* OZChattingUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -270,24 +236,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		BA795DDF2664CEC700F55B7E /* OZChattingUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BA795DEA2664CEC700F55B7E /* Build configuration list for PBXNativeTarget "OZChattingUITests" */;
-			buildPhases = (
-				BA795DDC2664CEC700F55B7E /* Sources */,
-				BA795DDD2664CEC700F55B7E /* Frameworks */,
-				BA795DDE2664CEC700F55B7E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BA795DE72664CEC700F55B7E /* PBXTargetDependency */,
-			);
-			name = OZChattingUITests;
-			productName = OZChattingUITests;
-			productReference = BA795DE02664CEC700F55B7E /* OZChattingUITests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		BABC602D2463BAF100C2D82C /* OZChattingUI */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BABC60362463BAF100C2D82C /* Build configuration list for PBXNativeTarget "OZChattingUI" */;
@@ -318,9 +266,6 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = ALTERANT;
 				TargetAttributes = {
-					BA795DDF2664CEC700F55B7E = {
-						CreatedOnToolsVersion = 12.5;
-					};
 					BABC602D2463BAF100C2D82C = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -340,19 +285,11 @@
 			projectRoot = "";
 			targets = (
 				BABC602D2463BAF100C2D82C /* OZChattingUI */,
-				BA795DDF2664CEC700F55B7E /* OZChattingUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		BA795DDE2664CEC700F55B7E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		BABC602C2463BAF100C2D82C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -390,14 +327,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		BA795DDC2664CEC700F55B7E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BA795DE32664CEC700F55B7E /* OZChattingUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		BABC602A2463BAF100C2D82C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -432,14 +361,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		BA795DE72664CEC700F55B7E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BABC602D2463BAF100C2D82C /* OZChattingUI */;
-			targetProxy = BA795DE62664CEC700F55B7E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		BAFE5E53247CEF81002B0A4B /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -452,44 +373,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		BA795DE82664CEC700F55B7E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = OZChattingUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.alterant.OZChattingUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		BA795DE92664CEC700F55B7E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = OZChattingUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.alterant.OZChattingUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		BABC60342463BAF100C2D82C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -667,15 +550,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BA795DEA2664CEC700F55B7E /* Build configuration list for PBXNativeTarget "OZChattingUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BA795DE82664CEC700F55B7E /* Debug */,
-				BA795DE92664CEC700F55B7E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		BABC60282463BAF100C2D82C /* Build configuration list for PBXProject "OZChattingUI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
