@@ -30,7 +30,6 @@ THE SOFTWARE.
 //
 
 #import <Foundation/Foundation.h>
-#import "amrFileCodec.h"
 
 //! Project version number for OZChattingUI.
 FOUNDATION_EXPORT double OZChattingUIVersionNumber;

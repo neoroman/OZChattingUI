@@ -30,11 +30,16 @@ Pod::Spec.new do |s|
   s.swift_versions = '5.0'
 
   s.pod_target_xcconfig = {
-     "SWIFT_VERSION" => "5.0"
+     "SWIFT_VERSION" => "5.0",
+     "IPHONEOS_DEPLOYMENT_TARGET" => "10.0",
+     "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64",
+     "ONLY_ACTIVE_ARCH" => "YES"
   }
 
+  s.user_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
+
   s.source_files = 'OZChattingUI/Sources/**/*'
-  s.vendored_libraries = 'OZChattingUI/Sources/OZHelpers/LibAMRNB/libopencore-amrnb.a'
+  # s.vendored_libraries = 'OZChattingUI/Sources/OZHelpers/LibAMRNB/libopencore-amrnb.a'
 
   # s.resource_bundles = {
   #   'OZChattingUI' => ['OZChattingUI/Assets/*.png']

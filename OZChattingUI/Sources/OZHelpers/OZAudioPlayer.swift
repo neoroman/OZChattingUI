@@ -121,28 +121,23 @@ open class OZAudioPlayer {
     public static func getAudioPlayer(fileURL: URL) -> AVAudioPlayer? {
         var aPlayer: AVAudioPlayer!
         do {
-            if let wavData = OZAudioPlayer.getWaveDataFromAMR(fileURL: fileURL) {
-                aPlayer = try AVAudioPlayer(data:wavData , fileTypeHint: AVFileType.wav.rawValue)
-            }
-            else {
-                aPlayer = try AVAudioPlayer(contentsOf: fileURL)
-            }
+          aPlayer = try AVAudioPlayer(contentsOf: fileURL)
         }catch{}
         return aPlayer
     }
     public static func getAudioPlayer(data: Data) -> AVAudioPlayer? {
         var aPlayer: AVAudioPlayer!
-        let mimeType = OZSwime.mimeType(data: data)
-        do {
-            if let aMime = mimeType, aMime.type == .amr {
-                let wavData = OZAudioPlayer.decodeAmr2Wav(amrData: data)
-                aPlayer = try AVAudioPlayer(data:wavData , fileTypeHint: AVFileType.wav.rawValue)
-            }
-            else {
-                aPlayer = try AVAudioPlayer(data: data)
-            }
-        } catch {}
-        return aPlayer
+      //let mimeType = OZSwime.mimeType(data: data)
+      do {
+        /*
+         if let aMime = mimeType, aMime.type == .amr {
+         let wavData = OZAudioPlayer.decodeAmr2Wav(amrData: data)
+         aPlayer = try AVAudioPlayer(data:wavData , fileTypeHint: AVFileType.wav.rawValue)
+         }
+         */
+        aPlayer = try AVAudioPlayer(data: data)
+      } catch {}
+      return aPlayer
     }
 
     // MARK: - Check file path
@@ -183,51 +178,6 @@ open class OZAudioPlayer {
         guard let aMime = mimeType, aMime.type == .amr else { return false }
         return true
     }
-    public static func getWaveDataFromAMR(fileURL: URL) -> Data? {
-        var mimeType: OZMimeType!
-        var amrData: Data!
-        do {
-            amrData = try Data(contentsOf: fileURL)
-            mimeType = OZSwime.mimeType(data: amrData)
-        } catch {
-            #if DEBUG
-            print("OZVoiceVC:getWaveDataFromAMR(fileURL:)::::cannot parse mime-type of \(fileURL.relativePath)")
-            #endif
-        }
-        guard let aMime = mimeType, aMime.type == .amr, let aData = amrData else { return nil }
-        
-        return OZAudioPlayer.decodeAmr2Wav(amrData: aData)
-    }
-    public static func getAmrDuration(fileURL: URL) -> TimeInterval {
-        var mimeType: OZMimeType!
-        var amrData: Data!
-        do {
-            amrData = try Data(contentsOf: fileURL)
-            mimeType = OZSwime.mimeType(data: amrData)
-        } catch {
-            #if DEBUG
-            print("OZVoiceVC:getAmrDuration(fileURL:)::::cannot parse mime-type of \(fileURL.relativePath)")
-            #endif
-        }
-        guard let aMime = mimeType, aMime.type == .amr, let aData = amrData else { return 0 }
-        guard let aPlayer = OZAudioPlayer.getAudioPlayer(data: aData) else { return 0 }
-        
-        return aPlayer.duration
-    }
-    public static func getAmrDuration(data: Data) -> TimeInterval {
-        let mimeType = OZSwime.mimeType(data: data)
-        guard let aMime = mimeType, aMime.type == .amr else { return 0 }
-        guard let aPlayer = OZAudioPlayer.getAudioPlayer(data: data) else { return 0 }
-        return aPlayer.duration
-    }
-    
-    public static func decodeAmr2Wav(amrData data: Data) -> Data {
-        return DecodeAMRToWAVE(data)
-    }
-    //let amrData = OZAudioPlayer.encodeWav2Amr(waveData: data, channels: 1, bitsPerSample: 16)
-    public static func encodeWav2Amr(waveData data: Data, channels: Int, bitsPerSample: Int, encodeMode: OZAMREncodeMode) -> Data {
-        return EncodeWAVEToAMR(data, Int32(channels), Int32(bitsPerSample), Int32(encodeMode.rawValue))
-    }
 }
 
 public enum OZAMREncodeMode: Int {
@@ -244,7 +194,7 @@ public enum OZAMREncodeMode: Int {
 };
 
 
-public protocol OZAudioRecorderDelegate: class {
+public protocol OZAudioRecorderDelegate: AnyObject {
     func audioRecorderDidStartRecording(_ audioRecorder: OZAudioRecorder)
     func audioRecorderDidCancelRecording(_ audioRecorder: OZAudioRecorder)
     func audioRecorderDidStopRecording(_ audioRecorder: OZAudioRecorder, withURL url: URL?)
@@ -417,11 +367,11 @@ extension OZAudioRecorder {
      If is playing, stop play, else start play.
 
      - parameter data: AMR audio data
-     */
     public func playAmr(_ amrData: Data) {
         let decodedData = OZAudioPlayer.decodeAmr2Wav(amrData: amrData)
         play(decodedData)
     }
+   */
 
     public func stopPlay() {
         player?.stop()
@@ -456,11 +406,11 @@ extension OZAudioRecorder {
      - parameter data: AMR audio data
 
      - returns: an optional NSTimeInterval instance.
-     */
     public class func amrAudioDuration(from amrData: Data) -> TimeInterval? {
         let decodedData = OZAudioPlayer.decodeAmr2Wav(amrData: amrData)
         return audioDuration(from: decodedData)
     }
+   */
 }
 
 internal struct OZAudioRecorderConstants {

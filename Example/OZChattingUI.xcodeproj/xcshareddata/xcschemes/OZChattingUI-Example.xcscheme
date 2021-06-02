@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1130"
+   LastUpgradeVersion = "1250"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -17,6 +17,20 @@
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
                BuildableName = "OZChattingUI_Example.app"
                BlueprintName = "OZChattingUI_Example"
+               ReferencedContainer = "container:OZChattingUI.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BA795DD12664BA2200F55B7E"
+               BuildableName = "OZChattingUI_ExampleTests.xctest"
+               BlueprintName = "OZChattingUI_ExampleTests"
                ReferencedContainer = "container:OZChattingUI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -38,16 +52,6 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BA795DD12664BA2200F55B7E"
-               BuildableName = "OZChattingUI_ExampleTests.xctest"
-               BlueprintName = "OZChattingUI_ExampleTests"
-               ReferencedContainer = "container:OZChattingUI.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
