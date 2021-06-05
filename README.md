@@ -1,6 +1,6 @@
 # OZChattingUI
 
-[![CI Status](https://img.shields.io/travis/neoroman@alterant.kr/OZChattingUI.svg?style=flat)](https://travis-ci.org/neoroman@alterant.kr/OZChattingUI)
+[![CI Status](https://www.travis-ci.com/neoroman/OZChattingUI.svg?branch=master)](https://www.travis-ci.com/neoroman/OZChattingUI)
 [![codecov](https://codecov.io/gh/neoroman/OZChattingUI/branch/master/graph/badge.svg?token=SV3KFCAXG4)](https://codecov.io/gh/neoroman/OZChattingUI)
 [![Version](https://img.shields.io/cocoapods/v/OZChattingUI.svg?style=flat)](https://cocoapods.org/pods/OZChattingUI)
 [![License](https://img.shields.io/cocoapods/l/OZChattingUI.svg?style=flat)](https://cocoapods.org/pods/OZChattingUI)
