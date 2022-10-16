@@ -32,11 +32,11 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = {
      "SWIFT_VERSION" => "5.0",
      "IPHONEOS_DEPLOYMENT_TARGET" => "10.0",
-     "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64",
+     "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64 i386",
      "ONLY_ACTIVE_ARCH" => "YES"
   }
 
-  s.user_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
+  s.user_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64 i386" }
 
   s.source_files = 'OZChattingUI/Sources/**/*'
   # s.vendored_libraries = 'OZChattingUI/Sources/OZHelpers/LibAMRNB/libopencore-amrnb.a'
