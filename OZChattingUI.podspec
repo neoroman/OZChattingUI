@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OZChattingUI'
-  s.version          = '0.9.4'
+  s.version          = '0.9.5'
   s.summary          = 'OZChattingUI.framework is chatting UI with CollectionKit.'
 
 # This description is used to generate tags and improve search results.
@@ -26,12 +26,12 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/neoroman/OZChattingUI.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/neoroman'
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '11.0'
   s.swift_versions = '5.0'
 
   s.pod_target_xcconfig = {
      "SWIFT_VERSION" => "5.0",
-     "IPHONEOS_DEPLOYMENT_TARGET" => "10.0",
+     "IPHONEOS_DEPLOYMENT_TARGET" => "11.0",
      "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64 i386",
      "ONLY_ACTIVE_ARCH" => "YES"
   }
