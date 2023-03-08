@@ -1506,6 +1506,10 @@ extension OZMessagesViewController {
         }
         
         var normalHeight = keyboardHeight - bottomPadding
+        // TODO: do this more elegant way...
+        if let tbvc = self.tabBarController {
+            normalHeight -= tbvc.tabBar.bounds.size.height
+        }
         if normalHeight < 10 {
             if #available(iOS 11.0, *),
                 let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom, bottomPadding > 0 {
