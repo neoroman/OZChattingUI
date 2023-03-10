@@ -41,7 +41,11 @@ class StartViewController: UITableViewController {
         return .lightContent
     }
 
-    let cells = ["Basic Example", "Basic Example (storyboard)", "Advanced Example (storyboard)", "Advanced Example (storyboard)\n + custom frame", "Source Code", "CocoaPods"]
+    let cells = ["Basic Example", "Basic Example (storyboard)", 
+                 "Advanced Example (storyboard)", 
+                 "Advanced Example + TabBar (storyboard)", 
+                 "Advanced Example (storyboard)\n + custom frame", 
+                 "Source Code", "CocoaPods"]
     
     // MARK: - View Life Cycle
     
@@ -97,47 +101,75 @@ class StartViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = cells[indexPath.row]
         switch cell {
-        case "Basic Example":
-            let vc = ExampleViewController()
-            vc.title = cell
-            navigationController?.pushViewController(vc, animated: true)
-        case "Basic Example (storyboard)":
-            let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
-            if let vc = storyboard.instantiateViewController(withIdentifier: "ExampleViewController") as? ExampleViewController {
-                navigationController?.pushViewController(vc, animated: true)
+            case "Basic Example":
+                let vc = ExampleViewController()
                 vc.title = cell
-                vc.isFromStoryboard = true
-            }
-        case "Advanced Example (storyboard)":
-            let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
-            if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
                 navigationController?.pushViewController(vc, animated: true)
-                vc.title = cell
-            }
-        case "Advanced Example (storyboard)\n + custom frame":
-            let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
-            if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
-                navigationController?.pushViewController(vc, animated: true)
-                vc.title = cell
-                vc.isCustomFrame = true
-            }
-        case "Real Advanced Example":
-            let message = "ChattingViewController not implemented yet."
-            let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-            let viewController = UIApplication.shared.keyWindow?.rootViewController
-            viewController?.present(alert, animated: true, completion: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
-                alert.dismiss(animated: true, completion: nil)
-            })
-        case "Source Code":
-            guard let url = URL(string: "https://github.com/neoroman/OZChattingUI") else { return }
-            openURL(url)
-        case "CocoaPods":
-            guard let url = URL(string: "https://cocoapods.org/pods/OZChattingUI") else { return }
-            openURL(url)
-        default:
-            assertionFailure("You need to impliment the action for this cell: \(cell)")
-            return
+            case "Basic Example (storyboard)":
+                let storyboard = UIStoryboard(name: "OZChattingUI", bundle: Bundle.main)
+                if let vc = storyboard.instantiateViewController(withIdentifier: "ExampleViewController") as? ExampleViewController {
+                    navigationController?.pushViewController(vc, animated: true)
+                    vc.title = cell
+                    vc.isFromStoryboard = true
+                }
+            case "Advanced Example (storyboard)":
+                let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
+                if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
+                    navigationController?.pushViewController(vc, animated: true)
+                    vc.title = cell
+                }
+            case "Advanced Example + TabBar (storyboard)":
+                let tabVC = UITabBarController();
+                let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
+                if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
+                    vc.tabBarItem = UITabBarItem(title: "tab1", image: UIImage(named: "oz1024"), tag: 0) 
+                    let vc2 = UIViewController();
+                    vc2.view.frame = vc.view.frame;
+                    vc2.view.backgroundColor = UIColor.yellow
+                    vc2.tabBarItem = UITabBarItem(title: "tab2", image: UIImage(named: "oz1013"), tag: 0)
+                    let vc3 = UIViewController();
+                    vc3.view.frame = vc.view.frame;
+                    vc3.view.backgroundColor = UIColor.brown
+                    vc3.tabBarItem = UITabBarItem(title: "tab3", image: UIImage(named: "oz1003"), tag: 0)
+                    let vc4 = UIViewController();
+                    vc4.view.frame = vc.view.frame;
+                    vc4.view.backgroundColor = UIColor.gray
+                    vc4.tabBarItem = UITabBarItem(title: "tab4", image: UIImage(named: "oz1004"), tag: 0)
+                    tabVC.viewControllers = [vc, vc2, vc3, vc4];
+                    tabVC.selectedIndex = 0
+                    navigationController?.pushViewController(tabVC, animated: true)
+                    tabVC.title = cell
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now()+3.1) {
+                        if let timer = vc.receiveTimer {
+                            timer.invalidate()
+                        }
+                    }
+                }
+            case "Advanced Example (storyboard)\n + custom frame":
+                let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
+                if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
+                    navigationController?.pushViewController(vc, animated: true)
+                    vc.title = cell
+                    vc.isCustomFrame = true
+                }
+            case "Real Advanced Example":
+                let message = "ChattingViewController not implemented yet."
+                let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+                let viewController = UIApplication.shared.keyWindow?.rootViewController
+                viewController?.present(alert, animated: true, completion: nil)
+                DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+                    alert.dismiss(animated: true, completion: nil)
+                })
+            case "Source Code":
+                guard let url = URL(string: "https://github.com/neoroman/OZChattingUI") else { return }
+                openURL(url)
+            case "CocoaPods":
+                guard let url = URL(string: "https://cocoapods.org/pods/OZChattingUI") else { return }
+                openURL(url)
+            default:
+                assertionFailure("You need to impliment the action for this cell: \(cell)")
+                return
         }
     }
     

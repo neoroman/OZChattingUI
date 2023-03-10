@@ -78,7 +78,7 @@ open class OZMessagesViewController: CollectionViewController {
     public var ozEmoticonContainer: UIView?
     public var ozEmoticonContainerViewHeight: NSLayoutConstraint?
     public var ozVoiceContainer: UIView?
-    
+
     fileprivate var keyboardHeight: CGFloat = 0.0
     fileprivate var keyboardAnimationDuration: TimeInterval = 2.5
     fileprivate var isKeyboardShow: Bool = false
@@ -1508,7 +1508,7 @@ extension OZMessagesViewController {
         var normalHeight = keyboardHeight - bottomPadding
         // TODO: do this more elegant way...
         if let tbvc = self.tabBarController {
-            normalHeight -= tbvc.tabBar.bounds.size.height
+            normalHeight -= tbvc.tabBar.frame.size.height - bottomPadding
         }
         if normalHeight < 10 {
             if #available(iOS 11.0, *),
@@ -1632,7 +1632,7 @@ extension OZMessagesViewController {
                 }
             }
         }
-        
+
         if let dele = delegate {
             dele.messageInputTextViewWillShow(insetMarget: margin, keyboardHeight: keyboardHeight)
         }
