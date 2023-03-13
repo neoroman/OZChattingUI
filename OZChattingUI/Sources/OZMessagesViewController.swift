@@ -502,19 +502,20 @@ open class OZMessagesViewController: CollectionViewController {
         super.viewDidLayoutSubviews()
         
         let isAtBottom = collectionView.contentOffset.y >= collectionView.offsetFrame.maxY - 10
-        if !collectionView.hasReloaded, !collectionView.isReloading {
+        if !collectionView.hasReloaded, !collectionView.isReloading, collectionView.frame != .zero {
             collectionView.reloadData() { // 1st call
                 return CGPoint(x: self.collectionView.contentOffset.x,
                                y: self.collectionView.offsetFrame.maxY)
             }
         }
-        if isAtBottom, !collectionView.hasReloaded, !collectionView.isReloading {
+        if isAtBottom, !collectionView.hasReloaded, !collectionView.isReloading, collectionView.frame != .zero {
             collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x,
                                                     y: collectionView.offsetFrame.maxY), animated: false)
         }
-        if isKeyboardShow || chatState == .emoticon {
-            keyboardShowLayout(isPadding: true, animated: false)
-        }
+        // TODO: should fix it... for emoticon
+//        if isKeyboardShow || chatState == .emoticon {
+//            keyboardShowLayout(isPadding: true, animated: false)
+//        }
     }
     
     // MARK: - Navigation
