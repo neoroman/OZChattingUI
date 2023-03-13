@@ -121,9 +121,9 @@ class StartViewController: UITableViewController {
             case "Advanced Example + TabBar (storyboard)":
                 let tabVC = UITabBarController();
                 let storyboard = UIStoryboard(name: "OZChattingUI2", bundle: Bundle.main)
-                if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
+                if let vc = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController,
+                   let vc2 = storyboard.instantiateViewController(withIdentifier: "OZChattingUI2") as? ChattingViewController {
                     vc.tabBarItem = UITabBarItem(title: "tab1", image: UIImage(named: "oz1024"), tag: 0) 
-                    let vc2 = UIViewController();
                     vc2.view.frame = vc.view.frame;
                     vc2.view.backgroundColor = UIColor.yellow
                     vc2.tabBarItem = UITabBarItem(title: "tab2", image: UIImage(named: "oz1013"), tag: 0)
@@ -140,10 +140,25 @@ class StartViewController: UITableViewController {
                     navigationController?.pushViewController(tabVC, animated: true)
                     tabVC.title = cell
                     
+                    DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+                        let cv = vc.collectionView                        
+                        if let ozic = vc.ozInputContainer {
+                            cv.translatesAutoresizingMaskIntoConstraints = false
+                            cv.topAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+                            cv.bottomAnchor.constraint(equalTo: ozic.topAnchor, constant: 0).isActive = true
+                            cv.leadingAnchor.constraint(equalTo: vc.view.leadingAnchor, constant: 0).isActive = true
+                            cv.trailingAnchor.constraint(equalTo: vc.view.trailingAnchor, constant: 0).isActive = true
+                        }
+                    }
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now()+3.1) {
                         if let timer = vc.receiveTimer {
                             timer.invalidate()
                         }
+                        if let timer = vc2.receiveTimer {
+                            timer.invalidate()
+                        }
+
                     }
                 }
             case "Advanced Example (storyboard)\n + custom frame":

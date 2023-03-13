@@ -302,13 +302,7 @@ open class OZMessagesViewController: CollectionViewController {
         
         if forceReload {
             for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-                if !isCustomFrame { self.collectionView.contentInset = inset }
-                else {
-                    let originInset = self.collectionView.contentInset
-                    let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
-                                                bottom: originInset.bottom, right: inset.right)
-                    self.collectionView.contentInset = newInset
-                }
+                self.collectionView.contentInset = inset
             }
             
             collectionView.reloadData() { // 1st call
@@ -947,7 +941,7 @@ extension OZMessagesViewController {
     }
     
     // MARK: - ***** Receive Message Here !!!! *****
-    open func receive(msg: String? = nil,
+    public func receive(msg: String? = nil,
                       type: OZMessageType = .text,
                       activeType: OZMessageDeviceType? = .call,
                       duration: Int = 0,
@@ -1568,13 +1562,7 @@ extension OZMessagesViewController {
                 self.collectionView.frame = bounds
                 
                 for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-                    if !isCustomFrame { self.collectionView.contentInset = inset }
-                    else {
-                        let originInset = self.collectionView.contentInset
-                        let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
-                                                    bottom: originInset.bottom, right: inset.right)
-                        self.collectionView.contentInset = newInset
-                    }
+                    self.collectionView.contentInset = inset
                     self.collectionView.reloadData()
                 }
                 
@@ -1701,13 +1689,7 @@ extension OZMessagesViewController {
         self.collectionView.frame = bounds
         
         for case .collectionViewEdgeInsets(let inset) in self.messagesConfigurations {
-            if !isCustomFrame { self.collectionView.contentInset = inset }
-            else {
-                let originInset = self.collectionView.contentInset
-                let newInset = UIEdgeInsets(top: originInset.top, left: inset.left,
-                                            bottom: originInset.bottom, right: inset.right)
-                self.collectionView.contentInset = newInset
-            }
+            self.collectionView.contentInset = inset
             self.collectionView.setNeedsReload()
         }
         
